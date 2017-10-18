@@ -2,16 +2,12 @@ var SELECTED_VARIABLE = "perc_debt_collect";
 var margin = {top: 10, right: 10, bottom: 10, left: 10}
 var CATEGORY = "medical";
 var bodyWidth = $("body").width();
+var bodyHeight = $("body").height();
 var width = (bodyWidth*.7) - margin.left -margin.right,
-    height = (width*.8) - margin.top-margin.bottom,
+    height = (width*.8) - margin.top-margin.bottom,     
+
     centered,
     selectedState;
-var zoom = d3.zoom()
-    // .translate([0, 0])
-    // .scale(1)
-    .scaleExtent([1, 8])
-    .on("zoom", zoomed);
-
 var COLORS = 
   {
     "q0-6": "#cae0e7",
@@ -28,9 +24,7 @@ d3.queue()
     .defer(d3.csv, "data/county_" + CATEGORY + ".csv")
     .defer(d3.csv, "data/state_"+ CATEGORY + ".csv")
     .await(ready);
-function zoomed() {
-  g.attr('transform', 'translate(' + d3.event.transform.x + ',' + d3.event.transform.y + ') scale(' + d3.event.transform.k + ')');
-}
+
 function transformData(geography){
   var geography_nested = d3.nest()
     .key(function(d) { return d.id })
@@ -91,6 +85,12 @@ function ready(error, us, county, state) {
         }
       }
     }
+  var zoom = d3.zoom()
+      // .translate([0, 0])
+      // .scale(1)
+      .scaleExtent([0, 8])
+      .on("zoom", zoomed);
+
   var min = d3.min(tmp_county, function(d) {
     return d.properties[SELECTED_VARIABLE]
   })
@@ -104,7 +104,7 @@ function ready(error, us, county, state) {
     .append("svg")
     .attr("width", width)
     .attr("height", height)
-    .attr('transform', 'translate(' + width/3 + ',' + height/2 + ')')
+    .attr('transform', 'translate(' + 10 + ',' + 100 + ')')
 
   svg.append("rect")
       .attr("width", width)
@@ -134,6 +134,22 @@ function ready(error, us, county, state) {
       .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
       .attr("id", "state-borders")
       .attr("d", path)
+  /*ADD TABLE*/
+  var columns = ["Column 1", "Column 2"]
+  var rows = [1,2,3]
+  var table = d3.select("#table-div").append("table"),
+      thead = table.append("thead"),
+      tbody = table.append("tbody");
+      thead.append("tr")
+       .selectAll("th")
+       .data(columns)
+       .enter()
+       .append("th")
+       .text(function (column) { return column; });
+  var rows = tbody.selectAll("tr")
+       .data(data)
+       .enter()
+       .append("tr");
 
   function clicked(d) {
   // zoomed()
@@ -166,6 +182,12 @@ function ready(error, us, county, state) {
         .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
         .style("stroke-width", 1.5 / k + "px");
   }
+
+  function zoomed() {
+    g.attr('transform', 'translate(' + d3.event.transform.x + ',' + d3.event.transform.y + ') scale(' + d3.event.transform.k + ')');
+  }
+
+
 };
 
 
@@ -173,7 +195,7 @@ $(window).resize(function() {
   sizeChange()
   function sizeChange() {
       d3.select("g").attr("transform", "scale(" + $("body").width()/1400 + ")");
-      $("svg").height($("#map").width()*0.7);
+      $("svg").height($("body").width()*0.8);
   }
 
 

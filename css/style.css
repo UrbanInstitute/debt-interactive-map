@@ -5,6 +5,7 @@
   stroke-width: 0.5px;
   stroke-linejoin: round;
   stroke-linecap: round;
+  cursor: pointer;
 }
 
 #state-borders {
@@ -19,7 +20,54 @@
   fill: none;
   pointer-events: all;
 }
-
-#map {
-
+table {
+  width: 100%;
 }
+
+.left-table table {
+    border-collapse: collapse;
+    text-align: left;
+}
+
+table td:first-child {
+  width: 35%;
+}
+.left-table table td, .left-table table th {
+    padding: 3px 10px;
+}
+
+.left-table table thead th {
+    background: 0;
+/*    background-color: #006D2C;
+*/    color: #FFF;
+    font-size: 15px;
+    font-weight: 700;
+    border-left: 1px solid #0070A8;
+}
+
+/*.left-table table thead th:first-child {
+    border: none;
+}*/
+
+.left-table table tbody td {
+    color: #00496B;
+    border-left: 1px solid #E1EEF4;
+    font-size: 12px;
+    border-bottom: 1px solid #E1EEF4;
+    font-weight: 400;
+    width: 100%;
+}
+
+.left-table table tbody td:first-child {
+    border-left: none;
+}
+
+.left-table table tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.left-table tr:hover td {
+    background-color: #069;
+    color: white;
+}
+
