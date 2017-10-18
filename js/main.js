@@ -60,28 +60,9 @@ function ready(error, us, county, state) {
   county.forEach(function(d,i){ 
     countyData.forEach(function(e, j) { 
       if (d.key == e.id) {
-          e.state = d.values[0].state;
-          e.county = d.values[0].county;
-          e.debt_collect_all = d.values[0].debt_collect_all;
-          e.median_collect_all = d.values[0].median_collect_all;
-          e.medical_debt_collect_all = d.values[0].medical_debt_collect_all;
-          e.median_medical_collect_all = d.values[0].median_medical_collect_all;
-          e.debt_collect_nonwhite = d.values[0].debt_collect_nonwhite;
-          e.median_collect_nonwhite = d.values[0].median_collect_nonwhite;
-          e.medical_debt_collect_nonwhite = d.values[0].medical_debt_collect_nonwhite;
-          e.median_medical_collect_nonwhite = d.values[0].median_medical_collect_nonwhite;
-          e.debt_collect_white = d.values[0].debt_collect_white;
-          e.median_collect_white = d.values[0].median_collect_white;
-          e.medical_debt_collect_white = d.values[0].medical_debt_collect_white;
-          e.median_medical_collect_white = d.values[0].median_medical_collect_white;
-          e.pop_white = d.values[0].pop_white;
-          e.pop_ins_all = d.values[0].pop_ins_all;
-          e.pop_white_ins = d.values[0].pop_white_ins;
-          e.pop_nonwhite_ins = d.values[0].pop_nonwhite_ins;
-          e.income_all = d.values[0].income_all;
-          e.income_white = d.values[0].income_white;
-          e.income_nonwhite = d.values[0].income_nonwhite;
-          e.ACS5yrdataflag = d.values[0].ACS5yrdataflag;
+       for (var property in d["values"][0]) {
+          e[property] = d.values[0][property]
+        }
       }
     })
   })
@@ -90,88 +71,39 @@ function ready(error, us, county, state) {
       state.forEach(function(d,i){ 
         stateData.forEach(function(e, j) { 
           if (d.key == e.id) {
-              e.state = d.values[0].state;
-              e.abbr = d.values[0].abbr;
-              e.debt_collect_all_st = d.values[0].debt_collect_all_st;
-              e.median_collect_all_st = d.values[0].median_collect_all_st;
-              e.medical_debt_collect_all_st = d.values[0].medical_debt_collect_all_st;
-              e.median_medical_collect_all_st = d.values[0].median_medical_collect_all_st;
-              e.debt_collect_nonwhite_st= d.values[0].debt_collect_nonwhite_st;
-              e.median_collect_nonwhite_st = d.values[0].median_collect_nonwhite_st;
-              e.medical_debt_collect_nonwhite_st = d.values[0].medical_debt_collect_nonwhite_st;
-              e.median_medical_collect_nonwhite_st = d.values[0].median_medical_collect_nonwhite_st;
-              e.debt_collect_white_st = d.values[0].debt_collect_white_st;
-              e.median_collect_white_st = d.values[0].median_collect_white_st;
-              e.medical_debt_collect_white_st = d.values[0].medical_debt_collect_white_st;
-              e.median_medical_collect_white_st = d.values[0].median_medical_collect_white_st;
-              e.pop_white_st = d.values[0].pop_white_st;
-              e.pop_ins_all_st = d.values[0].pop_ins_all_st;
-              e.pop_white_ins_st = d.values[0].pop_white_ins_st;
-              e.pop_nonwhite_ins_st = d.values[0].pop_nonwhite_ins_st;
-              e.income_all_st = d.values[0].income_all_st;
-              e.income_white_st = d.values[0].income_white_st;
-              e.income_nonwhite_st = d.values[0].income_nonwhite_st;
+            for (var property in d["values"][0]) {
+              e[property] = d.values[0][property]
+            }
           }
         })
       })
+      console.log(countyData)
     var tmp_county = topojson.feature(us, us.objects.counties).features;
     for (var i =0; i<tmp_county.length; i++){
       var mergeID = +tmp_county[i]["id"]
       for (var j = 0; j<countyData.length;j++){
         if(+countyData[j]["id"] == mergeID){
-          tmp_county[i]["properties"]["state"] = countyData[j]["state"]
-          tmp_county[i]["properties"]["county"] = countyData[j]["county"]
-          tmp_county[i]["properties"]["debt_collect_all"] = +countyData[j]["debt_collect_all"]
-          tmp_county[i]["properties"]["median_collect_all"] = +countyData[j]["median_collect_all"]
-          tmp_county[i]["properties"]["medical_debt_collect_all"] = +countyData[j]["medical_debt_collect_all"]
-          tmp_county[i]["properties"]["median_medical_collect_all"] = +countyData[j]["median_medical_collect_all"]
-          tmp_county[i]["properties"]["debt_collect_nonwhite"] = +countyData[j]["debt_collect_nonwhite"]
-          tmp_county[i]["properties"]["median_collect_nonwhite"] = +countyData[j]["median_collect_nonwhite"]
-          tmp_county[i]["properties"]["medical_debt_collect_nonwhite"] = +countyData[j]["medical_debt_collect_nonwhite"]
-          tmp_county[i]["properties"]["median_medical_collect_nonwhite"] = +countyData[j]["median_medical_collect_nonwhite"]
-          tmp_county[i]["properties"]["median_collect_white"] = +countyData[j]["median_collect_white"]
-          tmp_county[i]["properties"]["pop_white"] = +countyData[j]["pop_white"]
-          tmp_county[i]["properties"]["pop_ins_all"] = +countyData[j]["pop_ins_all"]
-          tmp_county[i]["properties"]["pop_white_ins"] = +countyData[j]["pop_white_ins"]
-          tmp_county[i]["properties"]["pop_nonwhite_ins"] = +countyData[j]["pop_nonwhite_ins"]
-          tmp_county[i]["properties"]["income_all"] = +countyData[j]["income_all"]
-          tmp_county[i]["properties"]["income_white"] = +countyData[j]["income_white"]
-          tmp_county[i]["properties"]["income_nonwhite"] = +countyData[j]["income_nonwhite"]
-          tmp_county[i]["properties"]["ACS5yrdataflag"] = +countyData[j]["ACS5yrdataflag"]
-
+            for (var property in countyData[j]) {
+              var data = (isNaN(countyData[j][property]) == true) ? countyData[j][property] : +countyData[j][property];
+              tmp_county[i]["properties"][property] = data;
+            }
           break;
         }
       }
     }
-    console.log(stateData)
     var tmp_state = topojson.feature(us, us.objects.states).features;
     for (var i =0; i<tmp_state.length; i++){
       var mergeIDState = +tmp_state[i]["id"]
       for (var j = 0; j<stateData.length;j++){
         if(+stateData[j]["id"] == mergeIDState){
-          tmp_state[i]["properties"]["state"] = stateData[j]["state"]
-          tmp_state[i]["properties"]["abbr"] = stateData[j]["abbr"]
-          tmp_state[i]["properties"]["debt_collect_all_st"] = +stateData[j]["debt_collect_all_st"]
-          tmp_state[i]["properties"]["median_collect_all_st"] = +stateData[j]["median_collect_all_st"]
-          tmp_state[i]["properties"]["medical_debt_collect_all_st"] = +stateData[j]["medical_debt_collect_all_st"]
-          tmp_state[i]["properties"]["median_medical_collect_all_st"] = +stateData[j]["median_medical_collect_all_st"]
-          tmp_state[i]["properties"]["debt_collect_nonwhite_st"] = +stateData[j]["debt_collect_nonwhite_st"]
-          tmp_state[i]["properties"]["median_collect_nonwhite_st"] = +stateData[j]["median_collect_nonwhite_st"]
-          tmp_state[i]["properties"]["medical_debt_collect_nonwhite_st"] = +stateData[j]["medical_debt_collect_nonwhite_st"]
-          tmp_state[i]["properties"]["median_medical_collect_nonwhite_st"] = +stateData[j]["median_medical_collect_nonwhite_st"]
-          tmp_state[i]["properties"]["median_collect_white_st"] = +stateData[j]["median_collect_white_st"]
-          tmp_state[i]["properties"]["pop_white_st"] = +stateData[j]["pop_white_st"]
-          tmp_state[i]["properties"]["pop_ins_all_st"] = +stateData[j]["pop_ins_all_st"]
-          tmp_state[i]["properties"]["pop_white_ins_st"] = +stateData[j]["pop_white_ins_st"]
-          tmp_state[i]["properties"]["pop_nonwhite_ins_st"] = +stateData[j]["pop_nonwhite_ins_st"]
-          tmp_state[i]["properties"]["income_all_st"] = +stateData[j]["income_all_st"]
-          tmp_state[i]["properties"]["income_white_st"] = +stateData[j]["income_white_st"]
-          tmp_state[i]["properties"]["income_nonwhite_st"] = +stateData[j]["income_nonwhite_st"]
+          for (var property in stateData[j]) {
+            var data = (isNaN(stateData[j][property]) == true) ? stateData[j][property] : +stateData[j][property];
+            tmp_state[i]["properties"][property] = data;
+          }
           break;
         }
       }
     }
-    console.log(tmp_state)
   g.append("g")
     .attr("class", "counties")
     .selectAll("path")
@@ -180,9 +112,9 @@ function ready(error, us, county, state) {
     .attr("d", path)
     .attr("id", function (d) { return d.properties.id; })
     .style("fill", function(d){
-        return (COLORS[quantize(d.properties[SELECTED_VARIABLE])] == undefined) ? "#adabac" : COLORS[quantize(d.properties[SELECTED_VARIABLE])];
+        return (isNaN(d.properties[SELECTED_VARIABLE]) == true) ? "#adabac" : COLORS[quantize(d.properties[SELECTED_VARIABLE])];
     })
-    .on('click', function(d) {console.log('click')
+    .on('click', function(d) {
       clicked(d)
     })
     .call(zoom)
