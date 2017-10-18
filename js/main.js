@@ -2,6 +2,11 @@ var SELECTED_VARIABLE = "debt_collect_all";
 var width = 960,
     height = 600,
     centered;
+var zoom = d3.zoom()
+    // .translate([0, 0])
+    // .scale(1)
+    .scaleExtent([1, 8])
+    .on("zoom", zoomed);
 var svg = d3.select("body")
   .append("svg")
   .attr("width", width)
@@ -10,9 +15,10 @@ svg.append("rect")
     .attr("width", width)
     .attr("height", height)
     .attr("class", "background")
-    .on("click", clicked);
-var path = d3.geoPath();
+    // .on("click", clicked);
+var path = d3.geoPath()
 var g = svg.append("g")
+
 
 var quantize = d3.scaleQuantize()
   .domain([0, 1])
@@ -32,6 +38,11 @@ d3.queue()
     .defer(d3.json, "https://d3js.org/us-10m.v1.json")
     .defer(d3.csv, "data/county_medical_debt.csv")
     .await(ready);
+function zoomed() {
+  console.log('zoomed')
+  g
+   .attr('transform', 'translate(' + d3.event.transform.x + ',' + d3.event.transform.y + ') scale(' + d3.event.transform.k + ')');
+}
 function transformData(county){
   var county_nested = d3.nest()
     .key(function(d) { return d.id })
@@ -39,22 +50,23 @@ function transformData(county){
   return county_nested
 }
 
-function clicked(d) {console.log(d)
+function clicked(d) {
+  // zoomed()
   var x, y, k;
 
-  if (d && centered !== d) { console.log('1')
+  if (d.properties.state && centered !== d.properties.state) { console.log(d)
     var centroid = path.centroid(d);
     x = centroid[0];
     y = centroid[1];
     k = 4;
-    centered = d;
+    centered = d.properties.state;
   } 
-  // else {console.log('2')
-  //   x = width / 2;
-  //   y = height / 2;
-  //   k = 1;
-  //   centered = null;
-  // }
+  else {console.log('2')
+    x = width / 2;
+    y = height / 2;
+    k = 1;
+    centered = null;
+  }
 
   g.selectAll("path")
       .classed("active", centered && function(d) { return d === centered; });
@@ -73,6 +85,8 @@ function ready(error, us, county) {
     county.forEach(function(d,i){
       countyData.forEach(function(e, j) { 
         if (d.key == e.id) { 
+            e.state = d.values[0].state;
+            e.county = d.values[0].county;
             e.debt_collect_all = d.values[0].debt_collect_all;
             e.median_collect_all = d.values[0].median_collect_all;
             e.medical_debt_collect_all = d.values[0].medical_debt_collect_all;
@@ -98,11 +112,12 @@ function ready(error, us, county) {
     })
     console.log(countyData)
   var tmp = topojson.feature(us, us.objects.counties).features;
-
   for (var i =0; i<tmp.length; i++){
     var mergeID = +tmp[i]["id"]
     for (var j = 0; j<countyData.length;j++){
       if(+countyData[j]["id"] == mergeID){
+        tmp[i]["properties"]["state"] = countyData[j]["state"]
+        tmp[i]["properties"]["county"] = countyData[j]["county"]
         tmp[i]["properties"]["debt_collect_all"] = +countyData[j]["debt_collect_all"]
         tmp[i]["properties"]["median_collect_all"] = +countyData[j]["median_collect_all"]
         tmp[i]["properties"]["medical_debt_collect_all"] = +countyData[j]["medical_debt_collect_all"]
@@ -138,11 +153,13 @@ function ready(error, us, county) {
     .on('click', function(d) {console.log('click')
       clicked(d)
     })
+    .call(zoom)
 
   g.append("path")
       .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
       .attr("id", "state-borders")
       .attr("d", path)
+
 
 };
 
