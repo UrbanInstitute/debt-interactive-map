@@ -1,4 +1,5 @@
-var SELECTED_VARIABLE = "debt_collect_all";
+var SELECTED_VARIABLE = "perc_debt_collect";
+var CATEGORY = "debt";
 var width = 960,
     height = 600,
     centered,
@@ -37,13 +38,11 @@ var COLORS =
 //   if (error) throw error;
 d3.queue()
     .defer(d3.json, "https://d3js.org/us-10m.v1.json")
-    .defer(d3.csv, "data/county_medical_debt.csv")
-    .defer(d3.csv, "data/state_medical_debt.csv")
+    .defer(d3.csv, "data/county_" + CATEGORY + ".csv")
+    .defer(d3.csv, "data/state_"+ CATEGORY + ".csv")
     .await(ready);
 function zoomed() {
-  console.log('zoomed')
-  g
-   .attr('transform', 'translate(' + d3.event.transform.x + ',' + d3.event.transform.y + ') scale(' + d3.event.transform.k + ')');
+  g.attr('transform', 'translate(' + d3.event.transform.x + ',' + d3.event.transform.y + ') scale(' + d3.event.transform.k + ')');
 }
 function transformData(geography){
   var geography_nested = d3.nest()
@@ -55,42 +54,43 @@ function transformData(geography){
 
 function ready(error, us, county, state) {
   if (error) throw error;
-  var county = transformData(county)
   var countyData = us.objects.counties.geometries
-  county.forEach(function(d,i){ 
+  var stateData = us.objects.states.geometries
+
+  var county_data = transformData(county)
+  county_data.forEach(function(d,i){ 
     countyData.forEach(function(e, j) { 
-      if (d.key == e.id) {
+      if (d.key == e.id) { 
        for (var property in d["values"][0]) {
           e[property] = d.values[0][property]
         }
       }
     })
   })
-  var state = transformData(state)
-    var stateData = us.objects.states.geometries
-      state.forEach(function(d,i){ 
-        stateData.forEach(function(e, j) { 
-          if (d.key == e.id) {
-            for (var property in d["values"][0]) {
-              e[property] = d.values[0][property]
-            }
-          }
-        })
-      })
-      console.log(countyData)
-    var tmp_county = topojson.feature(us, us.objects.counties).features;
-    for (var i =0; i<tmp_county.length; i++){
-      var mergeID = +tmp_county[i]["id"]
-      for (var j = 0; j<countyData.length;j++){
-        if(+countyData[j]["id"] == mergeID){
-            for (var property in countyData[j]) {
-              var data = (isNaN(countyData[j][property]) == true) ? countyData[j][property] : +countyData[j][property];
-              tmp_county[i]["properties"][property] = data;
-            }
-          break;
+  var state_data = transformData(state)
+  state_data.forEach(function(d,i){ 
+    stateData.forEach(function(e, j) { 
+      if (d.key == e.id) {
+        for (var property in d["values"][0]) {
+          e[property] = d.values[0][property]
         }
       }
+    })
+  })
+
+  var tmp_county = topojson.feature(us, us.objects.counties).features;
+  for (var i =0; i<tmp_county.length; i++){
+    var mergeID = +tmp_county[i]["id"]
+    for (var j = 0; j<countyData.length;j++){
+      if(+countyData[j]["id"] == mergeID){
+          for (var property in countyData[j]) {
+            var data = (isNaN(countyData[j][property]) == true) ? countyData[j][property] : +countyData[j][property];
+            tmp_county[i]["properties"][property] = data;
+          }
+        break;
+      }
     }
+  }
     var tmp_state = topojson.feature(us, us.objects.states).features;
     for (var i =0; i<tmp_state.length; i++){
       var mergeIDState = +tmp_state[i]["id"]
@@ -128,7 +128,7 @@ function clicked(d) {
   // zoomed()
   var x, y, k;
 
-  if (d.properties.state && centered !== d.properties.state) { console.log(d)
+  if (d.properties.state && centered !== d.properties.state) { 
     for (var i = 0; i < tmp_state.length; i++) {
       if (tmp_state[i]["properties"]["state"] == d.properties.state){
         selectedState = tmp_state[i]
@@ -140,7 +140,7 @@ function clicked(d) {
     k = 4;
     centered = selectedState.properties.state;
   } 
-  else {console.log('2')
+  else {
     x = width / 2;
     y = height / 2;
     k = 1;
