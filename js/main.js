@@ -1,7 +1,9 @@
 var SELECTED_VARIABLE = "perc_debt_collect";
-var CATEGORY = "debt";
-var width = 960,
-    height = 600,
+var margin = {top: 10, right: 10, bottom: 10, left: 10}
+var CATEGORY = "medical";
+var bodyWidth = $("body").width();
+var width = (bodyWidth*.7) - margin.left -margin.right,
+    height = (width*.8) - margin.top-margin.bottom,
     centered,
     selectedState;
 var zoom = d3.zoom()
@@ -9,22 +11,7 @@ var zoom = d3.zoom()
     // .scale(1)
     .scaleExtent([1, 8])
     .on("zoom", zoomed);
-var svg = d3.select("body")
-  .append("svg")
-  .attr("width", width)
-  .attr("height", height)
-svg.append("rect")
-    .attr("width", width)
-    .attr("height", height)
-    .attr("class", "background")
-    // .on("click", clicked);
-var path = d3.geoPath()
-var g = svg.append("g")
 
-
-var quantize = d3.scaleQuantize()
-  .domain([0, 1])
-  .range(d3.range(6).map(function(i) { return "q" + i + "-6"; }));
 var COLORS = 
   {
     "q0-6": "#cae0e7",
@@ -104,6 +91,30 @@ function ready(error, us, county, state) {
         }
       }
     }
+  var min = d3.min(tmp_county, function(d) {
+    return d.properties[SELECTED_VARIABLE]
+  })
+  var max = d3.max(tmp_county, function(d) { 
+    return d.properties[SELECTED_VARIABLE]
+  })
+  var quantize = d3.scaleQuantize()
+    .domain([min, max])
+    .range(d3.range(6).map(function(i) { return "q" + i + "-6"; }))
+  var svg = d3.select("#map")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr('transform', 'translate(' + width/3 + ',' + height/2 + ')')
+
+  svg.append("rect")
+      .attr("width", width)
+      .attr("height", height)
+      .attr("class", "background")
+
+      // .on("click", clicked);
+  var path = d3.geoPath()
+  var g = svg.append("g")
+    .attr("transform", "scale(" + $("body").width()/1400 + ")");
   g.append("g")
     .attr("class", "counties")
     .selectAll("path")
@@ -124,37 +135,48 @@ function ready(error, us, county, state) {
       .attr("id", "state-borders")
       .attr("d", path)
 
-function clicked(d) {
+  function clicked(d) {
   // zoomed()
-  var x, y, k;
+    var x, y, k;
 
-  if (d.properties.state && centered !== d.properties.state) { 
-    for (var i = 0; i < tmp_state.length; i++) {
-      if (tmp_state[i]["properties"]["state"] == d.properties.state){
-        selectedState = tmp_state[i]
+    if (d.properties.state && centered !== d.properties.state) { 
+      for (var i = 0; i < tmp_state.length; i++) {
+        if (tmp_state[i]["properties"]["state"] == d.properties.state){
+          selectedState = tmp_state[i]
+        }
       }
+      var centroid = path.centroid(selectedState); //replace with variable d to center by county 
+      x = centroid[0];
+      y = centroid[1];
+      k = 4;
+      centered = selectedState.properties.state;
+    } 
+    else {
+      x = width / 2;
+      y = height / 2;
+      k = 1;
+      centered = null;
     }
-    var centroid = path.centroid(selectedState); //replace with variable d to center by county 
-    x = centroid[0];
-    y = centroid[1];
-    k = 4;
-    centered = selectedState.properties.state;
-  } 
-  else {
-    x = width / 2;
-    y = height / 2;
-    k = 1;
-    centered = null;
+
+    g.selectAll("path")
+        .classed("active", centered && function(d) { return d === centered; });
+
+    g.transition()
+        .duration(750)
+        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+        .style("stroke-width", 1.5 / k + "px");
+  }
+};
+
+
+$(window).resize(function() {
+  sizeChange()
+  function sizeChange() {
+      d3.select("g").attr("transform", "scale(" + $("body").width()/1400 + ")");
+      $("svg").height($("#map").width()*0.7);
   }
 
-  g.selectAll("path")
-      .classed("active", centered && function(d) { return d === centered; });
 
-  g.transition()
-      .duration(750)
-      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
-      .style("stroke-width", 1.5 / k + "px");
-}
+})
 
-};
 

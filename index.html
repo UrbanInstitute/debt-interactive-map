@@ -10,8 +10,8 @@
 <!--    <link rel="stylesheet" type="text/css" href="css/jquery-ui.css"/>
  --><!--   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
  -->
-<!--     <link rel="stylesheet" type="text/css" href="css/urban-header.css">
- -->  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic,900" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" type="text/css" href="css/urban-header.css">
+  <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic,900" rel="stylesheet" type="text/css">
   <script src="js/vendor/jquery-2.2.1.min.js"></script>
   <script src="js/vendor/jquery-ui.min.js"></script>
 
@@ -19,6 +19,29 @@
 
 
 <body>
+<!--URBAN HEADER-->
+  <div id="header-pinned" class="no-touch">   
+    <a target="_blank" href="http://www.urban.org" title="Home" rel="home" class="site-logo"></a>
+    <div class="title"><span class="feature-link"><a href="http://www.urban.org/features" target="_blank" class="title-linkback" alt="Urban Institute logo">Features</a> <span>: :</span> Casey Consumer Debt </span><a href="index.html" class="title-linkback linkback-title"></a>
+    </div>
+    <div class="share-icons english">
+        <div class="shareThisP">
+            <span onclick="toggle_visibility('shareBox');">
+                <div class="shareThisB"></div>
+            </span>
+            <div class="shareThisW" id="shareBox">
+              <div class="addthis_toolbox addthis_default_style  "addthis:title="" addthis:url="">
+                <a href="" target="_blank" class="addthis_button_facebook at300b" title="Facebook" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-facebook" style="background-color: rgb(48, 88, 145);"><span class="at_a11y">Share on facebook</span></span></a>
+               <a href="" title="Tweet" onclick="toggle_visibility('shareBox');"><span class="at4-icon aticon-twitter" style="background-color: rgb(44, 168, 210);"><span class="at_a11y">Share on twitter</span></span></a>
+                <div class="atclear">
+                </div>
+              </div>
+            </div>
+        </div>
+    </div>
+  </div>
+  <!--END HEADER-->
+  <div id="map"></div>
 </body>
 
 <script src="https://d3js.org/d3.v4.min.js"></script>
