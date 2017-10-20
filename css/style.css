@@ -1,4 +1,7 @@
-
+body {
+  font-family: "Lato", sans-serif;
+  font-size: 13px;
+}
 
 .counties {
   stroke: #fff;
@@ -33,7 +36,7 @@ table {
 }
 
 table td:first-child {
-  width: 35%;
+  width: 28.3%;
 }
 .left-table table td, .left-table table th {
     padding: 3px 10px;

@@ -162,21 +162,107 @@ function ready(error, us, county, state) {
       // .attr("d", path)
 
   /*ADD TABLE*/
-  var columns = ["Column 1", "Column 2"]
-  var rows = [1,2,3]
+  var columns = ["Overall", "White", "Non-White"]
+  var rows = ["% has any debt in collections, 2016","","", "Median amount all collections among those with, 2016", "","", "% has medical debt in collections, 2016", "","", "Median amount medical collections among those with, 2016", "", "","% population white", "", "","% population with health insurance, 2015 (ACS)", "","", "Average household income, 2015 (ACS)", "",""]
+  var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_wh", "perc_pop_ins", "avg_income"]
   var table = d3.select("#table-div").append("table"),
-      thead = table.append("thead"),
       tbody = table.append("tbody");
-      thead.append("tr")
-       .selectAll("th")
-       .data(columns)
-       .enter()
-       .append("th")
-       .text(function (column) { return column; });
-  var rows = tbody.selectAll("tr")
-       .data(data)
-       .enter()
-       .append("tr");
+  var us_data = state_data[0]["values"][0]
+  console.log(us_data)
+  var tr = table.selectAll('tr')
+      .data(rows)
+      .enter().append('tr')
+      .attr("class", function(d,i) {
+        if (i%3 == 0 ) {
+          return "cell-header"
+        }else if (i%3==2) {
+          return "cell-data"
+        }else {
+          return "cell-column"
+        }
+      })
+  d3.selectAll(".cell-header")
+    .each(function() {
+      d3.select(this)
+        .append("th")
+        .text(function(d,i) {
+          return d
+        })
+        .attr("colspan", 3)
+    })
+  d3.selectAll(".cell-column")
+    .each(function() {
+      d3.select(this).selectAll("td")
+        .data(columns)
+        .enter().append("td")
+        .text(function(d) {
+          return d
+        })
+    })
+  d3.selectAll(".cell-data")
+    .each(function(d,i) {
+      var rowVariable = [rowData[i]],
+          rowVariable_nw = rowVariable + "_nw";
+          rowVariable_wh = rowVariable + "_wh";
+      // var column_data = [us_data].filter(function(d,i){
+      //   return rowData[i]
+      // })
+      // console.log(column_data)
+      d3.select(this).selectAll("td")
+        .data(columns)
+        .enter().append("td")
+        .text(function(d,i) {
+          if (i==0) {console.log(d)
+            return ((us_data[rowVariable]) == undefined) ? "-" : formatNumber(us_data[rowVariable]);
+          }else if (i==1){
+            return ((us_data[rowVariable_wh]) == undefined) ? "-" : formatNumber(us_data[rowVariable_wh]);
+          }else if (i==2) {console.log((us_data[rowVariable_nw]))
+            return ((us_data[rowVariable_nw]) == undefined) ? "-" : formatNumber(us_data[rowVariable_nw]);
+          }
+        })
+    })
+
+  function formatNumber(d) { console.log
+    var percent = d3.format(",.1%"),
+        number = d3.format("$,.0f");
+    return (d<1) ? percent(d) : number(d);
+  }
+
+  // var row = tr.append("tr")
+  // row.selectAll("td")
+  //   .data(columns)
+  //   .enter().append("td")
+  //   .text(function(d) {
+  //     return d
+  //   })
+
+  // var td = tr.selectAll('td')
+  //     .data(columns)
+  //     .enter().append('td')
+  //     .attr('colspan', 3)
+  //     .each(function(d) {
+  //       d3.select(this).style(d.style);
+  //     })
+  //     .text(function(d) {return d.text;});
+  // var rows = tbody.selectAll("tr")
+  //      .data(rows)
+  //      .enter()
+  //      .append("tr")
+  // rows.each(function(d,i){
+  //   d3.select(this)
+  //     .append("th")
+  //     .text("hello")
+  // })
+
+  // rows.each(function(d,i) {
+  //   d3.select(this).selectAll("td")
+  //     .data(columns)
+  //     .enter()
+  //     .append("td")
+  //     .text(function(d){
+  //       console.log(d)
+  //     })
+  // })
 
   function clicked(d) {
   // zoomed()
