@@ -128,12 +128,39 @@ function ready(error, us, county, state) {
     .on('click', function(d) {
       clicked(d)
     })
+    .on('mouseover', function(d) {
+      var state = d.properties.state
+      hoverState(state)
+    })
+    .on('mouseout', function() {
+      d3.selectAll(".hover").classed("hover", false)
+    })
     .call(zoom)
 
-  g.append("path")
-      .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
-      .attr("id", "state-borders")
-      .attr("d", path)
+  g.append("g")
+    .attr("class", "state-borders")
+    .selectAll("path")
+    .data(tmp_state)
+    .enter().append("path")
+    .attr("d", path)
+
+    .attr("id", function(d){
+      return d.properties.abbr
+    })
+
+
+  function hoverState(state) {
+    var filteredData = tmp_state.filter(function(d){
+      return d.properties.state == state
+    })
+    d3.select("path#" + filteredData[0]["properties"]["abbr"])
+      .classed('hover', true)
+  }
+
+      // .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
+      // .attr("id", "state-borders")
+      // .attr("d", path)
+
   /*ADD TABLE*/
   var columns = ["Column 1", "Column 2"]
   var rows = [1,2,3]

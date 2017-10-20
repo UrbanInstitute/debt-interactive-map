@@ -8,7 +8,7 @@
   cursor: pointer;
 }
 
-#state-borders {
+.state-borders {
   fill: none;
   stroke: #fff;
   stroke-width: 1.5px;
@@ -16,6 +16,9 @@
   stroke-linecap: round;
 }
 
+path.hover {
+  stroke-width: 4px !important;
+}
 .background {
   fill: none;
   pointer-events: all;
