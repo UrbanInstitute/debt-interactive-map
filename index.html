@@ -8,8 +8,8 @@
    <title>Casey Consumer Debt</title>
    <link rel="stylesheet" type="text/css" href="css/style.css"/>
 <!--    <link rel="stylesheet" type="text/css" href="css/jquery-ui.css"/>
- --><!--   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
  -->
+   <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" type="text/css" href="css/urban-header.css">
   <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic,900" rel="stylesheet" type="text/css">
   <script src="js/vendor/jquery-2.2.1.min.js"></script>
@@ -41,9 +41,15 @@
     </div>
   </div>
   <!--END HEADER-->
-  <table border="0" cellpadding="10" style="overflow-y: scroll;">
+
+<table border="0" cellpadding="10" style="overflow-y: scroll;">
     <tr>
-      <td><div id="table-div" class="left-table"></div></td>
+      <td>
+      <div class="ui-widget">
+        <label for="searchBox">Search Location: </label>
+        <input id="searchBox">
+      </div>
+      <div id="table-div" class="left-table"></div></td>
       <td><div id="map"></div></td>
     </tr>
   </table>

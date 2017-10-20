@@ -19,6 +19,7 @@ var COLORS =
   }
 // d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
 //   if (error) throw error;
+
 d3.queue()
     .defer(d3.json, "https://d3js.org/us-10m.v1.json")
     .defer(d3.csv, "data/county_" + CATEGORY + ".csv")
@@ -85,6 +86,36 @@ function ready(error, us, county, state) {
         }
       }
     }
+$( function() {
+    var availableTags = [
+      // "ActionScript",
+      // "AppleScript",
+      // "Asp",
+      // "BASIC",
+      // "C",
+      // "C++",
+      // "Clojure",
+      // "COBOL",
+      // "ColdFusion",
+      // "Erlang",
+      // "Fortran",
+      // "Groovy",
+      // "Haskell",
+      // "Java",
+      // "JavaScript",
+      // "Lisp",
+      // "Perl",
+      // "PHP",
+      // "Python",
+      // "Ruby",
+      // "Scala",
+      // "Scheme"
+    ];
+    console.log(tmp_state)
+    $( "#searchBox" ).autocomplete({ 
+      source: availableTags
+    });
+  } );
   var zoom = d3.zoom()
       // .translate([0, 0])
       // .scale(1)
