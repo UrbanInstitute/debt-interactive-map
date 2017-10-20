@@ -87,33 +87,15 @@ function ready(error, us, county, state) {
       }
     }
 $( function() {
-    var availableTags = [
-      // "ActionScript",
-      // "AppleScript",
-      // "Asp",
-      // "BASIC",
-      // "C",
-      // "C++",
-      // "Clojure",
-      // "COBOL",
-      // "ColdFusion",
-      // "Erlang",
-      // "Fortran",
-      // "Groovy",
-      // "Haskell",
-      // "Java",
-      // "JavaScript",
-      // "Lisp",
-      // "Perl",
-      // "PHP",
-      // "Python",
-      // "Ruby",
-      // "Scala",
-      // "Scheme"
-    ];
-    console.log(tmp_state)
+    var searchArray = [];
+    for (var i = 0; i<tmp_state.length; i++){
+     searchArray.push(tmp_state[i]["properties"]["state"])
+    }
+    for (var i = 0; i<tmp_county.length; i++){
+     searchArray.push(tmp_county[i]["properties"]["county"])
+    }
     $( "#searchBox" ).autocomplete({ 
-      source: availableTags
+      source: searchArray
     });
   } );
   var zoom = d3.zoom()
