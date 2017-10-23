@@ -1,4 +1,5 @@
 var SELECTED_VARIABLE = "perc_debt_collect";
+var COLORRANGE = ["#cfe8f3", "#73bfe2","#1696d2", "#0a4c6a", "#000000"];
 var margin = {top: 10, right: 10, bottom: 10, left: 10}
 var CATEGORY = "medical";
 var bodyWidth = $("body").width();
@@ -10,12 +11,11 @@ var width = (bodyWidth*.7) - margin.left -margin.right,
     selectedState;
 var COLORS = 
   {
-    "q0-6": "#cae0e7",
-    "q1-6": "#95c0cf",
-    "q2-6": "#60a1b6",
-    "q3-6": "#008bb0",
-    "q4-6": "#1d5669",
-    "q5-6": "#0e2b35"
+    "q0-5": "#cfe8f3",
+    "q1-5": "#73bfe2",
+    "q2-5": "#1696d2",
+    "q3-5": "#0a4c6a",
+    "q4-5": "#000000",
   }
 // d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
 //   if (error) throw error;
@@ -36,6 +36,7 @@ function transformData(geography){
 
 function ready(error, us, county, state) {
   if (error) throw error;
+  /*SETTING UP THE DATA*/
   var countyData = us.objects.counties.geometries
   var stateData = us.objects.states.geometries
 
@@ -73,20 +74,21 @@ function ready(error, us, county, state) {
       }
     }
   }
-    var tmp_state = topojson.feature(us, us.objects.states).features;
-    for (var i =0; i<tmp_state.length; i++){
-      var mergeIDState = +tmp_state[i]["id"]
-      for (var j = 0; j<stateData.length;j++){
-        if(+stateData[j]["id"] == mergeIDState){
-          for (var property in stateData[j]) {
-            var data = (isNaN(stateData[j][property]) == true) ? stateData[j][property] : +stateData[j][property];
-            tmp_state[i]["properties"][property] = data;
-          }
-          break;
+  var tmp_state = topojson.feature(us, us.objects.states).features;
+  for (var i =0; i<tmp_state.length; i++){
+    var mergeIDState = +tmp_state[i]["id"]
+    for (var j = 0; j<stateData.length;j++){
+      if(+stateData[j]["id"] == mergeIDState){
+        for (var property in stateData[j]) {
+          var data = (isNaN(stateData[j][property]) == true) ? stateData[j][property] : +stateData[j][property];
+          tmp_state[i]["properties"][property] = data;
         }
+        break;
       }
     }
-$( function() {
+  }
+  /*END*/
+  $( function() {
     var searchArray = [];
     for (var i = 0; i<tmp_state.length; i++){
      searchArray.push(tmp_state[i]["properties"]["state"])
@@ -95,7 +97,8 @@ $( function() {
      searchArray.push(tmp_county[i]["properties"]["county"] + ", " + tmp_county[i]["properties"]["abbr"])
     }
     $( "#searchBox" ).autocomplete({ 
-      source: searchArray
+      source: searchArray,
+      appendTo: ".search-div"
     });
   } );
   var zoom = d3.zoom()
@@ -112,7 +115,10 @@ $( function() {
   })
   var quantize = d3.scaleQuantize()
     .domain([min, max])
-    .range(d3.range(6).map(function(i) { return "q" + i + "-6"; }))
+    .range(d3.range(5).map(function(i) { return "q" + i + "-5"; }))
+
+  /*ADD MAP*/
+
   var svg = d3.select("#map")
     .append("svg")
     .attr("width", width)
@@ -161,7 +167,55 @@ $( function() {
       return d.properties.abbr
     })
 
+/*LEGEND*/
+ var legendSvg = d3.select("#legend")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height/5)
+    .attr('transform', 'translate(' + 10 + ',' + 100 + ')')
 
+  var legend = legendSvg.append("g")
+    .attr("width", width/3)
+    .attr("height", 50)
+    .attr("transform", "translate("+width/3+"," + 10 + ")")
+  var keyHeight =   15;
+  var keyWidth =  50;
+ for (i=0; i<=5; i++){
+  if(i !== 5){  console.log(COLORRANGE[i])
+    legend.append("rect")
+      .attr("width",keyWidth)
+      .attr("height",keyHeight)
+      .attr("class","rect"+i)
+      .attr("x",keyWidth*i)
+      .style("fill", COLORRANGE[i])
+      // .on("mouseover",function(){ mouseEvent({type: "Legend", "class": (d3.select(this).attr("class"))}, "hover") })
+      // .on("mouseleave", function(){
+      //   d3.selectAll(".demphasized").classed("demphasized",false)
+      // })
+  //     .on("click",function(){ mouseEvent(dataID, {type: "Legend", "class": "q" + (this.getAttribute("x")/keyWidth) + "-4"}, "click") })
+    legend.append("text")
+      .attr("y", 20)
+      .attr("class","legend-labels")
+      .attr("x",keyWidth*i)
+      .text(function(){
+        return "bp-" + i
+        //console.log((i ==0) ? MIN : BREAKS[SELECTED_VARIABLE(1)])
+        //return (i ==0) ? MIN : BREAKS[SELECTED_VARIABLE[i-1]]
+        // var array = BREAKS[SELECTED_VARIABLE]
+        // return (i==0) ? legendFormat(MINVALUE[SELECTED_VARIABLE]) : legendFormat((array[i-1]))
+      })
+   }
+   if (i == 5) { 
+    legend.append("text")
+      .attr("y", 20)
+      .attr("class","legend-labels")
+      .attr("x",keyWidth*i)
+      .text(function(){
+        return "bp-5"
+        //  return legendFormat(MAXVALUE[SELECTED_VARIABLE])
+      })
+   }
+  }
   function hoverState(state) {
     var filteredData = tmp_state.filter(function(d){
       return d.properties.state == state
@@ -176,13 +230,16 @@ $( function() {
 
   /*ADD TABLE*/
   var columns = ["Overall", "White", "Non-White"]
-  var rows = ["% has any debt in collections, 2016","","", "Median amount all collections among those with, 2016", "","", "% has medical debt in collections, 2016", "","", "Median amount medical collections among those with, 2016", "", "","% population white", "", "","% population with health insurance, 2015 (ACS)", "","", "Average household income, 2015 (ACS)", "",""]
+  var groups = ["% has any debt in collections, 2016", "Median amount all collections among those with, 2016", "% has medical debt in collections, 2016", "Median amount medical collections among those with, 2016","% population white", "% population with health insurance, 2015 (ACS)","Average household income, 2015 (ACS)"]
+  var rowNumbers = [1,2,3]
   var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_wh", "perc_pop_ins", "avg_income"]
   var table = d3.select("#table-div").append("table"),
-      tbody = table.append("tbody");
+      tbody = table.selectAll('tbody')
+        .data(groups)
+        .enter().append("tbody");
   var us_data = state_data[0]["values"][0]
-  var tr = table.selectAll('tr')
-      .data(rows)
+  var tr = tbody.selectAll('tr')
+      .data(rowNumbers)
       .enter().append('tr')
       .attr("class", function(d,i) {
         if (i%3 == 0 ) {
@@ -198,7 +255,7 @@ $( function() {
       d3.select(this)
         .append("th")
         .text(function(d,i) {
-          return d
+          return groups[i]
         })
         .attr("colspan", 3)
     })

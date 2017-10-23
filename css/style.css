@@ -3,6 +3,10 @@ body {
   font-size: 13px;
 }
 
+.search-div {
+  width: 150px;
+  position: relative;
+}
 .counties {
   stroke: #fff;
   stroke-width: 0.5px;
@@ -59,9 +63,11 @@ table td:first-child {
     color: #00496B;
     border-left: 1px solid #E1EEF4;
     font-size: 12px;
-    border-bottom: 1px solid #E1EEF4;
     font-weight: 400;
-    width: 100%;
+}
+
+.left-table tbody {
+  border-bottom: 1px solid #E1EEF4;
 }
 
 .left-table table tbody td:first-child {
@@ -72,8 +78,11 @@ table td:first-child {
     border-bottom: none;
 }
 
-.left-table tr:hover td {
+.left-table tbody:hover {
     background-color: #069;
     color: white;
 }
-
+.left-table tbody:hover td {
+    background-color: #069;
+    color: white;
+}
