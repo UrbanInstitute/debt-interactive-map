@@ -1,6 +1,6 @@
 var SELECTED_VARIABLE = "perc_debt_collect";
 var COLORRANGE = ["#cfe8f3", "#73bfe2","#1696d2", "#0a4c6a", "#000000"];
-var zoomLevel = "national";
+var zoomLevel;
 var margin = {top: 10, right: 10, bottom: 10, left: 10}
 var CATEGORY = "medical";
 var bodyWidth = $("body").width();
@@ -10,6 +10,9 @@ var width = (bodyWidth*.7) - margin.left -margin.right,
 
     centered,
     selectedState;
+function setZoom(level) {
+  zoomLevel = level;
+}
 var COLORS = 
   {
     "q0-5": "#cfe8f3",
@@ -134,7 +137,6 @@ function ready(error, us, county, state) {
 
         },
         afterTagRemoved: function(event,ui) {
-          console.log(ui.tag)
         }
     });
   });
@@ -176,18 +178,21 @@ function ready(error, us, county, state) {
     .data(tmp_county)
     .enter().append("path")
     .attr("d", path)
-    .attr("id", function (d) { return d.properties.id; })
+    .attr("id", function (d) { return d.properties.abbr + d.properties.id; })
     .style("fill", function(d){
         return (isNaN(d.properties[SELECTED_VARIABLE]) == true) ? "#adabac" : COLORS[quantize(d.properties[SELECTED_VARIABLE])];
     })
     .on('click', function(d) { 
       var state = d.properties.state;
-      var filteredData = tmp_state.filter(function(d){ 
+      var stateData = tmp_state.filter(function(d){ 
         return d.properties.state == state
       })
-      console.log(filteredData)
-      var selectedData = filteredData[0]["properties"]
-      zoomMap(d, selectedData, "state")
+      var selectedState = stateData[0]["properties"]
+      var selectedCounty = (d["properties"])
+      var level = (zoomLevel == "state") ? "county": "state";
+      var data2 = (level == "state") ? selectedState : selectedCounty;
+      console.log(selectedState)
+      zoomMap(d, data2, level)
     })
     .on('mouseover', function(d) {
       var state = d.properties.state
@@ -281,7 +286,6 @@ function ready(error, us, county, state) {
         .enter().append("tbody")
         .attr("class", "group")
         .on('click', function(d) {
-          console.log(d)
           d3.selectAll('tbody')
             .classed('selected', false)
           d3.select(this)
@@ -306,7 +310,7 @@ function ready(error, us, county, state) {
   d3.selectAll(".cell-header")
     .append("th")
     .attr("colspan", 3)
-    .each(function(d,i) {console.log(i)
+    .each(function(d,i) {
       d3.select(this)
         .text(function() { 
           return groups[i]
@@ -390,8 +394,13 @@ function ready(error, us, county, state) {
   }
   function zoomMap(d, data, zoomLevel) { console.log(d)
     var x, y, k;
-    if (d.properties.state && centered !== d.properties.state && zoomLevel != "national") { 
-      zoomLevel = zoomLevel;
+    // if (d.properties.state && centered !== d.properties.state && zoomLevel != "national") { 
+    if (zoomLevel != "national") { 
+      d3.select("path#" + d["properties"]["abbr"]).classed("selected", true)
+      if (zoomLevel == "county") {console.log("path#" + d.abbr + d.id)
+        d3.select("path#" + d["properties"]["abbr"] + d.id).classed("selected", true)
+      }
+      setZoom(zoomLevel)
       for (var i = 0; i < tmp_state.length; i++) {
         if (tmp_state[i]["properties"]["state"] == d.properties.state){
           selectedState = tmp_state[i]
@@ -402,9 +411,9 @@ function ready(error, us, county, state) {
       y = centroid[1];
       k = 4;
       centered = selectedState.properties.state;
+      console.log(zoomLevel)
       updateTable(data)
-    } 
-    else {
+    } else { console.log(zoomLevel)
       x = width / 2;
       y = height / 2;
       k = 1;

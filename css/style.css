@@ -24,7 +24,12 @@ body {
 }
 
 path.hover {
-  stroke-width: 4px !important;
+  stroke: #000000
+}
+
+path.selected {
+  stroke: #000000;
+  stroke-width: 2px;
 }
 .background {
   fill: none;
