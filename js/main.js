@@ -1,5 +1,6 @@
 var SELECTED_VARIABLE = "perc_debt_collect";
 var COLORRANGE = ["#cfe8f3", "#73bfe2","#1696d2", "#0a4c6a", "#000000"];
+var zoomedIn = false;
 var margin = {top: 10, right: 10, bottom: 10, left: 10}
 var CATEGORY = "medical";
 var bodyWidth = $("body").width();
@@ -96,11 +97,19 @@ function ready(error, us, county, state) {
     for (var i = 0; i<tmp_county.length; i++){
      searchArray.push(tmp_county[i]["properties"]["county"] + ", " + tmp_county[i]["properties"]["abbr"])
     }
-    $( "#searchBox" ).autocomplete({ 
-      source: searchArray,
-      appendTo: ".search-div"
+    // $( "#searchBox" ).autocomplete({ 
+    //   source: searchArray,
+    //   appendTo: ".search-div"
+    // });
+    $('#searchBox').tagit({
+        availableTags: searchArray, // this param is of course optional. it's for autocomplete.
+        // configure the name of the input field (will be submitted with form), default: item[tags]
+        itemName: 'item',
+        fieldName: 'tags',
+        appendTo: ".search-div"
+
     });
-  } );
+  });
   var zoom = d3.zoom()
       // .translate([0, 0])
       // .scale(1)
@@ -130,8 +139,6 @@ function ready(error, us, county, state) {
       .attr("width", width)
       .attr("height", height)
       .attr("class", "background")
-
-      // .on("click", clicked);
   var path = d3.geoPath()
   var g = svg.append("g")
     .attr("transform", "scale(" + $("body").width()/1400 + ")");
@@ -151,7 +158,8 @@ function ready(error, us, county, state) {
         return d.properties.state == state
       })
       var selectedData = filteredData[0]["properties"]
-      clicked(d, selectedData)
+      console.log(zoom)
+      clicked(d, selectedData, zoomedIn)
     })
     .on('mouseover', function(d) {
       var state = d.properties.state
@@ -354,7 +362,8 @@ function ready(error, us, county, state) {
   }
   function clicked(d, data) {
     var x, y, k;
-    if (d.properties.state && centered !== d.properties.state) { 
+    if (d.properties.state && centered !== d.properties.state && zoomedIn == false) { 
+      zoomedIn == true;
       for (var i = 0; i < tmp_state.length; i++) {
         if (tmp_state[i]["properties"]["state"] == d.properties.state){
           selectedState = tmp_state[i]
@@ -369,6 +378,7 @@ function ready(error, us, county, state) {
 
     } 
     else {
+      zoomedIn = false;
       x = width / 2;
       y = height / 2;
       k = 1;
