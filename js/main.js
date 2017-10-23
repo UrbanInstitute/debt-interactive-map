@@ -1,6 +1,6 @@
 var SELECTED_VARIABLE = "perc_debt_collect";
 var COLORRANGE = ["#cfe8f3", "#73bfe2","#1696d2", "#0a4c6a", "#000000"];
-var zoomedIn = false;
+var zoomLevel = "national";
 var margin = {top: 10, right: 10, bottom: 10, left: 10}
 var CATEGORY = "medical";
 var bodyWidth = $("body").width();
@@ -97,17 +97,45 @@ function ready(error, us, county, state) {
     for (var i = 0; i<tmp_county.length; i++){
      searchArray.push(tmp_county[i]["properties"]["county"] + ", " + tmp_county[i]["properties"]["abbr"])
     }
-    // $( "#searchBox" ).autocomplete({ 
-    //   source: searchArray,
-    //   appendTo: ".search-div"
-    // });
-    $('#searchBox').tagit({
-        availableTags: searchArray, // this param is of course optional. it's for autocomplete.
-        // configure the name of the input field (will be submitted with form), default: item[tags]
-        itemName: 'item',
-        fieldName: 'tags',
-        appendTo: ".search-div"
+    $( "#searchBox" ).autocomplete({ 
+      appendTo: ".search-div"
+    });
+    $('input[name="tags"').tagit({
+        availableTags: searchArray,
+        allowSpaces: true,
+        autocomplete:{
+          // availableTags: searchArray, // this param is of course optional. it's for autocomplete.
+          // configure the name of the input field (will be submitted with form), default: item[tags]
+          itemName: 'item',
+          fieldName: 'tags',
+          onlyAvailableTags: true,
+          tagLimit: 2,
+          appendTo: ".search-div"
+        },
+        beforeTagAdded: function(event, ui) {
+          if(searchArray.indexOf(ui.tagLabel) == -1){ 
+            return false;
+          }
+          if(ui.tagLabel == "not found"){
+              return false;
+          }
+        },
+        afterTagAdded: function(event, ui) {
+          var tag = (ui.tag[0]["textContent"]);
+          var location = (tag.search(",") > 0) ? tag.split(",")[0] : tag.slice(0,-1);
+          var geoData = (tag.search(",") > 0) ? tmp_county : tmp_state;
+          var geoType = (tag.search(",") > 0) ? "county" : "state";
+          var filteredData = geoData.filter(function(d) {
+            return d.properties[geoType] == location;
+          })
+          var data1 = filteredData[0]
+          var data2 = filteredData[0]["properties"]
+          zoomMap(data1, data2, geoType)
 
+        },
+        afterTagRemoved: function(event,ui) {
+          console.log(ui.tag)
+        }
     });
   });
   var zoom = d3.zoom()
@@ -157,9 +185,9 @@ function ready(error, us, county, state) {
       var filteredData = tmp_state.filter(function(d){ 
         return d.properties.state == state
       })
+      console.log(filteredData)
       var selectedData = filteredData[0]["properties"]
-      console.log(zoom)
-      clicked(d, selectedData, zoomedIn)
+      zoomMap(d, selectedData, "state")
     })
     .on('mouseover', function(d) {
       var state = d.properties.state
@@ -360,10 +388,10 @@ function ready(error, us, county, state) {
           })
       })
   }
-  function clicked(d, data) {
+  function zoomMap(d, data, zoomLevel) { console.log(d)
     var x, y, k;
-    if (d.properties.state && centered !== d.properties.state && zoomedIn == false) { 
-      zoomedIn == true;
+    if (d.properties.state && centered !== d.properties.state && zoomLevel != "national") { 
+      zoomLevel = zoomLevel;
       for (var i = 0; i < tmp_state.length; i++) {
         if (tmp_state[i]["properties"]["state"] == d.properties.state){
           selectedState = tmp_state[i]
@@ -375,10 +403,8 @@ function ready(error, us, county, state) {
       k = 4;
       centered = selectedState.properties.state;
       updateTable(data)
-
     } 
     else {
-      zoomedIn = false;
       x = width / 2;
       y = height / 2;
       k = 1;

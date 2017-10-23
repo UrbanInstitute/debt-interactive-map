@@ -4,7 +4,7 @@ body {
 }
 
 .search-div {
-  width: 150px;
+  width: 180px;
   position: relative;
 }
 .counties {
@@ -74,11 +74,7 @@ table td:first-child {
     background-color: #069;
     color: white;
 }
-/*tbody:first-child.selected,
-tbody:first-child.selected td {
-    background-color: #069;
-    color: white;
-}*/
+
 
 .left-table table tbody td:first-child {
     border-left: none;
