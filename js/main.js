@@ -40,6 +40,7 @@ function ready(error, us, county, state) {
   var stateData = us.objects.states.geometries
 
   var county_data = transformData(county)
+
   county_data.forEach(function(d,i){ 
     countyData.forEach(function(e, j) { 
       if (d.key == e.id) { 
@@ -59,12 +60,11 @@ function ready(error, us, county, state) {
       }
     })
   })
-
   var tmp_county = topojson.feature(us, us.objects.counties).features;
   for (var i =0; i<tmp_county.length; i++){
     var mergeID = +tmp_county[i]["id"]
     for (var j = 0; j<countyData.length;j++){
-      if(+countyData[j]["id"] == mergeID){
+      if(+countyData[j]["id"] == mergeID){ 
           for (var property in countyData[j]) {
             var data = (isNaN(countyData[j][property]) == true) ? countyData[j][property] : +countyData[j][property];
             tmp_county[i]["properties"][property] = data;
@@ -92,7 +92,7 @@ $( function() {
      searchArray.push(tmp_state[i]["properties"]["state"])
     }
     for (var i = 0; i<tmp_county.length; i++){
-     searchArray.push(tmp_county[i]["properties"]["county"])
+     searchArray.push(tmp_county[i]["properties"]["county"] + ", " + tmp_county[i]["properties"]["abbr"])
     }
     $( "#searchBox" ).autocomplete({ 
       source: searchArray
@@ -181,7 +181,6 @@ $( function() {
   var table = d3.select("#table-div").append("table"),
       tbody = table.append("tbody");
   var us_data = state_data[0]["values"][0]
-  console.log(us_data)
   var tr = table.selectAll('tr')
       .data(rows)
       .enter().append('tr')
@@ -225,17 +224,17 @@ $( function() {
         .data(columns)
         .enter().append("td")
         .text(function(d,i) {
-          if (i==0) {console.log(d)
+          if (i==0) {
             return ((us_data[rowVariable]) == undefined) ? "-" : formatNumber(us_data[rowVariable]);
           }else if (i==1){
             return ((us_data[rowVariable_wh]) == undefined) ? "-" : formatNumber(us_data[rowVariable_wh]);
-          }else if (i==2) {console.log((us_data[rowVariable_nw]))
+          }else if (i==2) {
             return ((us_data[rowVariable_nw]) == undefined) ? "-" : formatNumber(us_data[rowVariable_nw]);
           }
         })
     })
 
-  function formatNumber(d) { console.log
+  function formatNumber(d) { 
     var percent = d3.format(",.1%"),
         number = d3.format("$,.0f");
     return (d<1) ? percent(d) : number(d);
