@@ -107,6 +107,7 @@ function ready(error, us, county, state) {
       .scaleExtent([0, 8])
       .on("zoom", zoomed);
 
+
   var min = d3.min(tmp_county, function(d) {
     return d.properties[SELECTED_VARIABLE]
   })
@@ -144,8 +145,13 @@ function ready(error, us, county, state) {
     .style("fill", function(d){
         return (isNaN(d.properties[SELECTED_VARIABLE]) == true) ? "#adabac" : COLORS[quantize(d.properties[SELECTED_VARIABLE])];
     })
-    .on('click', function(d) {
-      clicked(d)
+    .on('click', function(d) { 
+      var state = d.properties.state;
+      var filteredData = tmp_state.filter(function(d){ 
+        return d.properties.state == state
+      })
+      var selectedData = filteredData[0]["properties"]
+      clicked(d, selectedData)
     })
     .on('mouseover', function(d) {
       var state = d.properties.state
@@ -181,7 +187,7 @@ function ready(error, us, county, state) {
   var keyHeight =   15;
   var keyWidth =  50;
  for (i=0; i<=5; i++){
-  if(i !== 5){  console.log(COLORRANGE[i])
+  if(i !== 5){  
     legend.append("rect")
       .attr("width",keyWidth)
       .attr("height",keyHeight)
@@ -235,8 +241,19 @@ function ready(error, us, county, state) {
   var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_wh", "perc_pop_ins", "avg_income"]
   var table = d3.select("#table-div").append("table"),
       tbody = table.selectAll('tbody')
-        .data(groups)
-        .enter().append("tbody");
+        .data(rowData)
+        .enter().append("tbody")
+        .attr("class", "group")
+        .on('click', function(d) {
+          console.log(d)
+          d3.selectAll('tbody')
+            .classed('selected', false)
+          d3.select(this)
+            .classed('selected', true)
+          updateMap(d)
+        })
+  table.select('tbody:first-child').classed('selected', true)
+  
   var us_data = state_data[0]["values"][0]
   var tr = tbody.selectAll('tr')
       .data(rowNumbers)
@@ -251,13 +268,13 @@ function ready(error, us, county, state) {
         }
       })
   d3.selectAll(".cell-header")
-    .each(function() {
+    .append("th")
+    .attr("colspan", 3)
+    .each(function(d,i) {console.log(i)
       d3.select(this)
-        .append("th")
-        .text(function(d,i) {
+        .text(function() { 
           return groups[i]
         })
-        .attr("colspan", 3)
     })
   d3.selectAll(".cell-column")
     .each(function() {
@@ -290,53 +307,53 @@ function ready(error, us, county, state) {
           }
         })
     })
-
+  /*END TABLE*/
   function formatNumber(d) { 
     var percent = d3.format(",.1%"),
         number = d3.format("$,.0f");
     return (d<1) ? percent(d) : number(d);
   }
 
-  // var row = tr.append("tr")
-  // row.selectAll("td")
-  //   .data(columns)
-  //   .enter().append("td")
-  //   .text(function(d) {
-  //     return d
-  //   })
+  function updateMap(variable) {
+    var min = d3.min(tmp_county, function(d) {
+      return d.properties[variable]
+    })
+    var max = d3.max(tmp_county, function(d) { 
+      return d.properties[variable]
+    })
+    var quantize = d3.scaleQuantize()
+      .domain([min, max])
+      .range(d3.range(5).map(function(i) { return "q" + i + "-5"; }))
 
-  // var td = tr.selectAll('td')
-  //     .data(columns)
-  //     .enter().append('td')
-  //     .attr('colspan', 3)
-  //     .each(function(d) {
-  //       d3.select(this).style(d.style);
-  //     })
-  //     .text(function(d) {return d.text;});
-  // var rows = tbody.selectAll("tr")
-  //      .data(rows)
-  //      .enter()
-  //      .append("tr")
-  // rows.each(function(d,i){
-  //   d3.select(this)
-  //     .append("th")
-  //     .text("hello")
-  // })
+    d3.select(".counties").selectAll("path")
+    .transition()
+    .duration(800)
+    .style("fill", function(d){
+        return (isNaN(d.properties[variable]) == true) ? "#adabac" : COLORS[quantize(d.properties[variable])];
+    })
+  }
 
-  // rows.each(function(d,i) {
-  //   d3.select(this).selectAll("td")
-  //     .data(columns)
-  //     .enter()
-  //     .append("td")
-  //     .text(function(d){
-  //       console.log(d)
-  //     })
-  // })
-
-  function clicked(d) {
-  // zoomed()
+  function updateTable(data) {
+    console.log(data)
+    d3.selectAll(".cell-data")
+      .each(function(d,i) { 
+        var rowVariable = [rowData[i]],
+            rowVariable_nw = rowVariable + "_nw";
+            rowVariable_wh = rowVariable + "_wh";
+        d3.select(this).selectAll("td")
+          .text(function(d,i) { 
+            if (i==0) { 
+              return ((data[rowVariable]) == undefined) ? "-" : formatNumber(data[rowVariable]);
+            }else if (i==1){
+              return ((data[rowVariable_wh]) == undefined) ? "-" : formatNumber(data[rowVariable_wh]);
+            }else if (i==2) {
+              return ((data[rowVariable_nw]) == undefined) ? "-" : formatNumber(data[rowVariable_nw]);
+            }
+          })
+      })
+  }
+  function clicked(d, data) {
     var x, y, k;
-
     if (d.properties.state && centered !== d.properties.state) { 
       for (var i = 0; i < tmp_state.length; i++) {
         if (tmp_state[i]["properties"]["state"] == d.properties.state){
@@ -348,12 +365,17 @@ function ready(error, us, county, state) {
       y = centroid[1];
       k = 4;
       centered = selectedState.properties.state;
+      updateTable(data)
+
     } 
     else {
       x = width / 2;
       y = height / 2;
       k = 1;
       centered = null;
+      var us_data = state_data[0]["values"][0]
+      updateTable(us_data)
+
     }
 
     g.selectAll("path")

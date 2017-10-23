@@ -68,7 +68,17 @@ table td:first-child {
 
 .left-table tbody {
   border-bottom: 1px solid #E1EEF4;
+  cursor: pointer;
 }
+.group.selected, .group.selected td {
+    background-color: #069;
+    color: white;
+}
+/*tbody:first-child.selected,
+tbody:first-child.selected td {
+    background-color: #069;
+    color: white;
+}*/
 
 .left-table table tbody td:first-child {
     border-left: none;
