@@ -163,7 +163,7 @@ function ready(error, us, county, state) {
     .append("svg")
     .attr("width", width)
     .attr("height", height)
-    .attr('transform', 'translate(' + 10 + ',' + 100 + ')')
+    .attr('transform', 'translate(' + 10 + ',' + 0 + ')')
 
   svg.append("rect")
       .attr("width", width)
@@ -219,7 +219,7 @@ function ready(error, us, county, state) {
     .append("svg")
     .attr("width", width)
     .attr("height", height/5)
-    .attr('transform', 'translate(' + 10 + ',' + 100 + ')')
+    .attr('transform', 'translate(' + 10 + ',' + 0 + ')')
 
   var legend = legendSvg.append("g")
     .attr("width", width/3)
@@ -401,12 +401,13 @@ function ready(error, us, county, state) {
           })
       })
   }
-  function zoomMap(d, data, zoomLevel) { console.log(zoomLevel)
+  function zoomMap(d, data, zoomLevel) { 
     var x, y, k;
     // if (d.properties.state && centered !== d.properties.state && zoomLevel != "national") { 
     if (zoomLevel != "national") { 
       d3.selectAll("path").classed("selected", false)
       d3.select("path#" + d["properties"]["abbr"]).classed("selected", true)
+      d3.select("#location").html(d["properties"]["state"])
       setZoom(true)
       for (var i = 0; i < tmp_state.length; i++) {
         if (tmp_state[i]["properties"]["state"] == d.properties.state){
@@ -427,6 +428,7 @@ function ready(error, us, county, state) {
           .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
           .style("stroke-width", 1.5 / k + "px");
       if (zoomLevel == "county") { 
+          d3.select("#location").html(d["properties"]["county"] + ", " + d["properties"]["abbr"])
           d3.selectAll("g.counties > path").classed("selected", false)
           d3.select("path#" + d["properties"]["abbr"] + d.id)
             .classed("selected", true)
