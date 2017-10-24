@@ -133,16 +133,24 @@ function ready(error, us, county, state) {
             if (geoType == "county"){
               return d.properties["county"] == county && d.properties["abbr"] == state
             }else {
-              return d.properties["abbr"] == state;
+              return d.properties["state"] == state;
             }
           })
-          console.log(filteredData)
           var data1 = filteredData[0]
           var data2 = filteredData[0]["properties"]
           zoomMap(data1, data2, geoType)
 
         },
         afterTagRemoved: function(event,ui) {
+           var tag = (ui.tag[0]["textContent"]);
+           if (tag.search(",") > 0) {
+            d3.selectAll(".counties > path.selected")
+              .classed("selected", false)
+           }else {
+            d3.select("#location").html("National")
+            zoomMap(null, null, "national")
+
+           }
         }
     });
   });
@@ -326,6 +334,16 @@ function ready(error, us, county, state) {
   table.select('tbody:first-child').classed('selected', true)
   
   var us_data = state_data[0]["values"][0]
+  for (var key in us_data) {
+      if (us_data.hasOwnProperty(key)) { 
+          if (+us_data[key] == NaN || +us_data[key] == 0){
+            us_data[key = us_data[key]]
+          }else {console.log(+us_data[key])
+            us_data[key] = +us_data[key]
+          }
+      }
+  }
+
   var tr = tbody.selectAll('tr')
       .data(rowNumbers)
       .enter().append('tr')
@@ -400,7 +418,7 @@ function ready(error, us, county, state) {
     })
   }
 
-  function updateTable(data) {
+  function updateTable(data) { 
     d3.selectAll(".cell-data")
       .each(function(d,i) { 
         var rowVariable = [rowData[i]],
@@ -455,12 +473,18 @@ function ready(error, us, county, state) {
           updateTable(data)
       }
     } else { 
-      x = width / 2;
+      x = width / 1.4;
       y = height / 2;
-      k = 1;
+      k = .7;
       centered = null;
-      var us_data = state_data[0]["values"][0]
       updateTable(us_data)
+      g.selectAll("path")
+          .classed("active", centered && function(d) { return d === centered; });
+
+      g.transition()
+          .duration(750)
+          .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+          .style("stroke-width", 1.5 / k + "px");
 
     }
   }
