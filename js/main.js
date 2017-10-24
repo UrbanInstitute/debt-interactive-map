@@ -1,6 +1,6 @@
 var SELECTED_VARIABLE = "perc_debt_collect";
 var COLORRANGE = ["#cfe8f3", "#73bfe2","#1696d2", "#0a4c6a", "#000000"];
-var zoomLevel;
+var zoomState;
 var margin = {top: 10, right: 10, bottom: 10, left: 10}
 var CATEGORY = "medical";
 var bodyWidth = $("body").width();
@@ -10,8 +10,8 @@ var width = (bodyWidth*.7) - margin.left -margin.right,
 
     centered,
     selectedState;
-function setZoom(level) {
-  zoomLevel = level;
+function setZoom(zoomedIn) {
+  zoomState = zoomedIn;
 }
 var COLORS = 
   {
@@ -32,7 +32,7 @@ d3.queue()
 
 function transformData(geography){
   var geography_nested = d3.nest()
-    .key(function(d) { return d.id })
+    .key(function(d) {return d.id })
     .entries(geography);
   return geography_nested
 }
@@ -70,7 +70,7 @@ function ready(error, us, county, state) {
     var mergeID = +tmp_county[i]["id"]
     for (var j = 0; j<countyData.length;j++){
       if(+countyData[j]["id"] == mergeID){ 
-          for (var property in countyData[j]) {
+          for (var property in countyData[j]) { 
             var data = (isNaN(countyData[j][property]) == true) ? countyData[j][property] : +countyData[j][property];
             tmp_county[i]["properties"][property] = data;
           }
@@ -178,7 +178,7 @@ function ready(error, us, county, state) {
     .data(tmp_county)
     .enter().append("path")
     .attr("d", path)
-    .attr("id", function (d) { return d.properties.abbr + d.properties.id; })
+    .attr("id", function (d) { return d.properties.abbr + d.id; })
     .style("fill", function(d){
         return (isNaN(d.properties[SELECTED_VARIABLE]) == true) ? "#adabac" : COLORS[quantize(d.properties[SELECTED_VARIABLE])];
     })
@@ -189,9 +189,8 @@ function ready(error, us, county, state) {
       })
       var selectedState = stateData[0]["properties"]
       var selectedCounty = (d["properties"])
-      var level = (zoomLevel == "state") ? "county": "state";
+      var level = (zoomState == true) ? "county": "state";
       var data2 = (level == "state") ? selectedState : selectedCounty;
-      console.log(selectedState)
       zoomMap(d, data2, level)
     })
     .on('mouseover', function(d) {
@@ -263,12 +262,26 @@ function ready(error, us, county, state) {
       })
    }
   }
+  d3.selection.prototype.moveToFront = function() {  
+    return this.each(function(){
+      this.parentNode.appendChild(this);
+    });
+  };
+  d3.selection.prototype.moveToBack = function() {  
+      return this.each(function() { 
+          var firstChild = this.parentNode.firstChild; 
+          if (firstChild) { 
+              this.parentNode.insertBefore(this, firstChild); 
+          } 
+      });
+  };
   function hoverState(state) {
     var filteredData = tmp_state.filter(function(d){
       return d.properties.state == state
     })
     d3.select("path#" + filteredData[0]["properties"]["abbr"])
       .classed('hover', true)
+      .moveToFront()
   }
 
       // .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
@@ -330,10 +343,6 @@ function ready(error, us, county, state) {
       var rowVariable = [rowData[i]],
           rowVariable_nw = rowVariable + "_nw";
           rowVariable_wh = rowVariable + "_wh";
-      // var column_data = [us_data].filter(function(d,i){
-      //   return rowData[i]
-      // })
-      // console.log(column_data)
       d3.select(this).selectAll("td")
         .data(columns)
         .enter().append("td")
@@ -374,7 +383,6 @@ function ready(error, us, county, state) {
   }
 
   function updateTable(data) {
-    console.log(data)
     d3.selectAll(".cell-data")
       .each(function(d,i) { 
         var rowVariable = [rowData[i]],
@@ -383,24 +391,22 @@ function ready(error, us, county, state) {
         d3.select(this).selectAll("td")
           .text(function(d,i) { 
             if (i==0) { 
-              return ((data[rowVariable]) == undefined) ? "-" : formatNumber(data[rowVariable]);
-            }else if (i==1){
-              return ((data[rowVariable_wh]) == undefined) ? "-" : formatNumber(data[rowVariable_wh]);
+              return ((data[rowVariable]) == undefined || (typeof data[rowVariable]) == 'string') ? "-" : formatNumber(data[rowVariable]);
+            }else if (i==1){ 
+              return ((data[rowVariable_wh]) == undefined || (typeof data[rowVariable_wh]) == 'string') ? "-" : formatNumber(data[rowVariable_wh]);
             }else if (i==2) {
-              return ((data[rowVariable_nw]) == undefined) ? "-" : formatNumber(data[rowVariable_nw]);
+              return ((data[rowVariable_nw]) == undefined || (typeof data[rowVariable_nw]) == 'string') ? "-" : formatNumber(data[rowVariable_nw]);
             }
           })
       })
   }
-  function zoomMap(d, data, zoomLevel) { console.log(d)
+  function zoomMap(d, data, zoomLevel) { 
     var x, y, k;
     // if (d.properties.state && centered !== d.properties.state && zoomLevel != "national") { 
-    if (zoomLevel != "national") { 
+    if (zoomLevel == "state") { 
+      d3.selectAll("path").classed("selected", false)
       d3.select("path#" + d["properties"]["abbr"]).classed("selected", true)
-      if (zoomLevel == "county") {console.log("path#" + d.abbr + d.id)
-        d3.select("path#" + d["properties"]["abbr"] + d.id).classed("selected", true)
-      }
-      setZoom(zoomLevel)
+      setZoom(true)
       for (var i = 0; i < tmp_state.length; i++) {
         if (tmp_state[i]["properties"]["state"] == d.properties.state){
           selectedState = tmp_state[i]
@@ -411,9 +417,21 @@ function ready(error, us, county, state) {
       y = centroid[1];
       k = 4;
       centered = selectedState.properties.state;
-      console.log(zoomLevel)
       updateTable(data)
-    } else { console.log(zoomLevel)
+      g.selectAll("path")
+          .classed("active", centered && function(d) { return d === centered; });
+
+      g.transition()
+          .duration(750)
+          .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+          .style("stroke-width", 1.5 / k + "px");
+    } else if (zoomLevel == "county") { 
+        d3.selectAll("g.counties > path").classed("selected", false)
+        d3.select("path#" + d["properties"]["abbr"] + d.id)
+          .classed("selected", true)
+          .moveToFront()
+        updateTable(data)
+    }else { console.log(zoomLevel)
       x = width / 2;
       y = height / 2;
       k = 1;
@@ -422,14 +440,6 @@ function ready(error, us, county, state) {
       updateTable(us_data)
 
     }
-
-    g.selectAll("path")
-        .classed("active", centered && function(d) { return d === centered; });
-
-    g.transition()
-        .duration(750)
-        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
-        .style("stroke-width", 1.5 / k + "px");
   }
 
   function zoomed() {

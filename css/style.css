@@ -15,7 +15,7 @@ body {
   cursor: pointer;
 }
 
-.state-borders {
+.state-borders > path {
   fill: none;
   stroke: #fff;
   stroke-width: 1.5px;
@@ -24,7 +24,8 @@ body {
 }
 
 path.hover {
-  stroke: #000000
+  stroke: #000000;
+  stroke-width: 2px;
 }
 
 path.selected {
