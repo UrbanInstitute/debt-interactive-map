@@ -1,4 +1,4 @@
-var SELECTED_VARIABLE = "perc_debt_collect";
+var SELECTED_VARIABLE;
 var COLORRANGE = ["#cfe8f3", "#73bfe2","#1696d2", "#0a4c6a", "#000000"];
 var zoomState;
 var zoomNational;
@@ -11,11 +11,16 @@ var width = (bodyWidth*.7) - margin.left -margin.right,
 
     centered,
     selectedState;
+function setVariable(variable) {
+  SELECTED_VARIABLE = variable;
+}
 function setZoom(national, state) {
   zoomNational = national;
   zoomState = state;
 }
 setZoom(true,false)
+setVariable("perc_debt_collect")
+console.log(SELECTED_VARIABLE)
 var COLORS = 
   {
     "q0-5": "#cfe8f3",
@@ -440,6 +445,9 @@ function ready(error, us, county, state) {
     var max = d3.max(tmp_county, function(d) { 
       return d.properties[variable]
     })
+    console.log(min)
+    console.log(max)
+    console.log(variable)
     var quantize = d3.scaleQuantize()
       .domain([min, max])
       .range(d3.range(5).map(function(i) { return "q" + i + "-5"; }))
