@@ -188,8 +188,9 @@ function ready(error, us, county, state) {
         return d.properties.state == state
       })
       var selectedState = stateData[0]["properties"]
+      var previousState = (d3.select(".state-borders > path.selected").node() != null) ? d3.select(".state-borders > path.selected").attr("id") : ""
       var selectedCounty = (d["properties"])
-      var level = (zoomState == true) ? "county": "state";
+      var level = (zoomState == true && previousState == d["properties"]["abbr"]) ? "county": "state";
       var data2 = (level == "state") ? selectedState : selectedCounty;
       zoomMap(d, data2, level)
     })
@@ -400,10 +401,10 @@ function ready(error, us, county, state) {
           })
       })
   }
-  function zoomMap(d, data, zoomLevel) { 
+  function zoomMap(d, data, zoomLevel) { console.log(zoomLevel)
     var x, y, k;
     // if (d.properties.state && centered !== d.properties.state && zoomLevel != "national") { 
-    if (zoomLevel == "state") { 
+    if (zoomLevel != "national") { 
       d3.selectAll("path").classed("selected", false)
       d3.select("path#" + d["properties"]["abbr"]).classed("selected", true)
       setZoom(true)
@@ -425,13 +426,14 @@ function ready(error, us, county, state) {
           .duration(750)
           .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
           .style("stroke-width", 1.5 / k + "px");
-    } else if (zoomLevel == "county") { 
-        d3.selectAll("g.counties > path").classed("selected", false)
-        d3.select("path#" + d["properties"]["abbr"] + d.id)
-          .classed("selected", true)
-          .moveToFront()
-        updateTable(data)
-    }else { console.log(zoomLevel)
+      if (zoomLevel == "county") { 
+          d3.selectAll("g.counties > path").classed("selected", false)
+          d3.select("path#" + d["properties"]["abbr"] + d.id)
+            .classed("selected", true)
+            .moveToFront()
+          updateTable(data)
+      }
+    } else { console.log(zoomLevel)
       x = width / 2;
       y = height / 2;
       k = 1;
