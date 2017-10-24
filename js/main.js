@@ -103,6 +103,7 @@ function ready(error, us, county, state) {
     $( "#searchBox" ).autocomplete({ 
       appendTo: ".search-div"
     });
+
     $('input[name="tags"').tagit({
         availableTags: searchArray,
         allowSpaces: true,
@@ -206,6 +207,9 @@ function ready(error, us, county, state) {
       var selectedCounty = (d["properties"])
       var level = (zoomState == true && previousState == d["properties"]["abbr"]) ? "county": "state";
       var data2 = (level == "state") ? selectedState : selectedCounty;
+      var county = data2["county"]
+      var abbr = data2["abbr"]
+      addTag(state, county, abbr)
       zoomMap(d, data2, level)
     })
     .on('mouseover', function(d) {
@@ -338,7 +342,7 @@ function ready(error, us, county, state) {
       if (us_data.hasOwnProperty(key)) { 
           if (+us_data[key] == NaN || +us_data[key] == 0){
             us_data[key = us_data[key]]
-          }else {console.log(+us_data[key])
+          }else {
             us_data[key] = +us_data[key]
           }
       }
@@ -417,7 +421,27 @@ function ready(error, us, county, state) {
         return (isNaN(d.properties[variable]) == true) ? "#adabac" : COLORS[quantize(d.properties[variable])];
     })
   }
-
+  function addTag(state, county, abbr) {
+      d3.selectAll('li.tagit-choice').remove()
+      var newTag = $("ul.tagit").append('<li id="state" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable"></li>')
+      $('li#state').insertBefore(".tagit-new").append('<span class="tagit-label">' + state + '</span>')
+      $('li#state').append('<a class="tagit-close"</a>')
+      $("li#state > a.tagit-close").append('<span class="text-icon"</span>')
+      $("li#state > a.tagit-close").append('<span class="ui-icon ui-icon-close"</span>')
+      $("li#state").on('click', function() {
+        d3.select(this).remove()
+      })
+    if (county != undefined) {
+      var newTag = $("ul.tagit").append('<li id="county" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable"></li>')
+      $('li#county').insertBefore(".tagit-new").append('<span class="tagit-label">' + county + ', ' + abbr + '</span>')
+      $('li#county').append('<a class="tagit-close"</a>')
+      $("li#county > a.tagit-close").append('<span class="text-icon"</span>')
+      $("li#county > a.tagit-close").append('<span class="ui-icon ui-icon-close"</span>')
+      $("li#county").on('click', function() {
+        d3.select(this).remove()
+      })
+      }
+  }
   function updateTable(data) { 
     d3.selectAll(".cell-data")
       .each(function(d,i) { 
