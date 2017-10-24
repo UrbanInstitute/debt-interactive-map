@@ -4,13 +4,10 @@ var zoomState;
 var zoomNational;
 var margin = {top: 10, right: 10, bottom: 10, left: 10}
 var CATEGORY = "medical";
-var bodyWidth = $("body").width();
-var bodyHeight = $("body").height();
-var width = (bodyWidth*.7) - margin.left -margin.right,
-    height = (width*.8) - margin.top-margin.bottom,     
-
-    centered,
-    selectedState;
+var bodyWidth;
+function setBodyWidth(width) {
+  bodyWidth = width;
+}
 function setVariable(variable) {
   SELECTED_VARIABLE = variable;
 }
@@ -18,8 +15,14 @@ function setZoom(national, state) {
   zoomNational = national;
   zoomState = state;
 }
+setBodyWidth($('body').width())
 setZoom(true,false)
 setVariable("perc_debt_collect")
+
+var width = (bodyWidth*.7) - margin.left -margin.right,
+    height = (width*.7) - margin.top-margin.bottom,     
+    centered,
+    selectedState;
 console.log(SELECTED_VARIABLE)
 var COLORS = 
   {
@@ -31,7 +34,7 @@ var COLORS =
   }
 // d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
 //   if (error) throw error;
-
+console.log(bodyWidth)
 d3.queue()
     .defer(d3.json, "https://d3js.org/us-10m.v1.json")
     .defer(d3.csv, "data/county_" + CATEGORY + ".csv")
@@ -46,7 +49,7 @@ function transformData(geography){
 }
 
 
-function ready(error, us, county, state) {
+function ready(error, us, county, state) { console.log(bodyWidth)
   if (error) throw error;
   /*SETTING UP THE DATA*/
   var countyData = us.objects.counties.geometries
@@ -186,13 +189,15 @@ function ready(error, us, county, state) {
     .range(d3.range(5).map(function(i) { return "q" + i + "-5"; }))
 
   /*ADD MAP*/
-
   var svg = d3.select("#map")
     .append("svg")
     .attr("width", width)
     .attr("height", height)
     .attr('transform', 'translate(' + 10 + ',' + 0 + ')')
 
+$(window).resize(function() {
+
+})
   svg.append("rect")
       .attr("width", width)
       .attr("height", height)
@@ -253,7 +258,7 @@ function ready(error, us, county, state) {
         var state = d3.select(".state-borders > path.selected").datum().properties.state
         d3.select("#location").html(state)
       }
-      d3.selectAll(".selected").moveToFront()
+      d3.selectAll("path.selected").moveToFront()
       d3.selectAll(".hover").classed("hover", false)
     })
     .call(zoom)
@@ -354,6 +359,7 @@ function ready(error, us, county, state) {
       // .attr("d", path)
 
   /*ADD TABLE*/
+  $("#table-div").empty()
   var columns = ["Overall", "White", "Non-White"]
   var groups = ["% has any debt in collections, 2016", "Median amount all collections among those with, 2016", "% has medical debt in collections, 2016", "Median amount medical collections among those with, 2016","% population white", "% population with health insurance, 2015 (ACS)","Average household income, 2015 (ACS)"]
   var rowNumbers = [1,2,3]
@@ -563,19 +569,32 @@ function ready(error, us, county, state) {
   function zoomed() {
     g.attr('transform', 'translate(' + d3.event.transform.x + ',' + d3.event.transform.y + ') scale(' + d3.event.transform.k + ')');
   }
+  $(window).resize(function() { console.log('resize')
+    setBodyWidth($('body').width())
+    d3.select("g").attr("transform", "scale(" + $("body").width()/1400 + ")");
+    $("table").height($("table").width()*0.8);
+
+    var width = $('body').width()*.7
+    var height = width*.7
+    console.log(width)
+    d3.select("#map").select('svg')
+      .attr('width', width)
+      .attr('height', height)
+    svg.select("rect")
+      .attr('width', width)
+      .attr('height', height)
+    d3.select("#legend").select("svg")
+      .attr("width", width)
+      .attr("height", height/5)
+    legendSvg.select("g")
+    .attr("width", width/3)
+    .attr("transform", "translate("+width/3+"," + 10 + ")")
+  })
 
 
 };
 
 
-$(window).resize(function() {
-  sizeChange()
-  function sizeChange() {
-      d3.select("g").attr("transform", "scale(" + $("body").width()/1400 + ")");
-      $("svg").height($("body").width()*0.8);
-  }
 
-
-})
 
 
