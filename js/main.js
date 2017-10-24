@@ -156,6 +156,7 @@ function ready(error, us, county, state) {
               .classed("selected", false)
            }else {
             d3.select("#location").html("National")
+            setZoom(true, false)
             zoomMap(null, null, "national")
 
            }
@@ -451,6 +452,10 @@ function ready(error, us, county, state) {
       $("li#state > a.tagit-close").append('<span class="ui-icon ui-icon-close"</span>')
       $("li#state").on('click', function() {
         d3.select(this).remove()
+        d3.selectAll("path.selected")
+          .classed("selected", false)
+        d3.select("#location").html("National")
+        setZoom(true,false)
         zoomMap(null, null, "national")
       })
     if (county != undefined) {
@@ -461,6 +466,7 @@ function ready(error, us, county, state) {
       $("li#county > a.tagit-close").append('<span class="ui-icon ui-icon-close"</span>')
       $("li#county").on('click', function() {
         d3.select(this).remove()
+        d3.select("#location").html(state)
         d3.selectAll(".counties > path.selected")
           .classed("selected", false)
       })
