@@ -195,10 +195,15 @@ function ready(error, us, county, state) {
       zoomMap(d, data2, level)
     })
     .on('mouseover', function(d) {
-      var state = d.properties.state
-      hoverState(state)
+      var previousState = (d3.select(".state-borders > path.selected").node() != null) ? d3.select(".state-borders > path.selected").attr("id") : ""
+      var hoveredState = d.properties.abbr
+      var geography = (zoomState == true && previousState == hoveredState) ? "county" : "state";
+      var county = (geography == "county") ? d.properties.county : ""
+      var state = d.properties.abbr
+      hoverLocation(county, state, geography)
     })
     .on('mouseout', function() {
+      d3.selectAll(".selected").moveToFront()
       d3.selectAll(".hover").classed("hover", false)
     })
     .call(zoom)
@@ -276,11 +281,17 @@ function ready(error, us, county, state) {
           } 
       });
   };
-  function hoverState(state) {
-    var filteredData = tmp_state.filter(function(d){
-      return d.properties.state == state
+  function hoverLocation(county, state, geography) {
+    var data = (geography == "county") ? tmp_county : tmp_state
+    var filteredData = data.filter(function(d){
+      if (geography == "county") {
+        return d.properties.county == county && d.properties.abbr == state
+      }else {
+        return d.properties.abbr == state
+      }
     })
-    d3.select("path#" + filteredData[0]["properties"]["abbr"])
+    var id = (geography == "county") ? filteredData[0]["id"] : ""
+    d3.select("path#" + filteredData[0]["properties"]["abbr"] + id)
       .classed('hover', true)
       .moveToFront()
   }
@@ -406,7 +417,9 @@ function ready(error, us, county, state) {
     // if (d.properties.state && centered !== d.properties.state && zoomLevel != "national") { 
     if (zoomLevel != "national") { 
       d3.selectAll("path").classed("selected", false)
-      d3.select("path#" + d["properties"]["abbr"]).classed("selected", true)
+      d3.select("path#" + d["properties"]["abbr"])
+        .classed("selected", true)
+        .moveToFront()
       d3.select("#location").html(d["properties"]["state"])
       setZoom(true)
       for (var i = 0; i < tmp_state.length; i++) {
@@ -435,7 +448,7 @@ function ready(error, us, county, state) {
             .moveToFront()
           updateTable(data)
       }
-    } else { console.log(zoomLevel)
+    } else { 
       x = width / 2;
       y = height / 2;
       k = 1;
