@@ -217,8 +217,16 @@ function ready(error, us, county, state) {
       var data2 = (level == "state") ? selectedState : selectedCounty;
       var county = data2["county"]
       var abbr = data2["abbr"]
-      addTag(state, county, abbr)
-      zoomMap(d, data2, level)
+      if (d3.select(this).classed('selected') == true) {
+        d3.select(this).classed('selected', false)
+        if (level == "county") { console.log(level)
+          $('ul.tagit > li:nth-child(2)').remove()
+          updateTable(selectedState)
+        }
+      }else {
+        addTag(state, county, abbr)
+        zoomMap(d, data2, level)
+      }
     })
     .on('mouseover', function(d) {
       var previousState = (d3.select(".state-borders > path.selected").node() != null) ? d3.select(".state-borders > path.selected").attr("id") : ""
@@ -451,7 +459,8 @@ function ready(error, us, county, state) {
       $("li#state > a.tagit-close").append('<span class="text-icon"</span>')
       $("li#state > a.tagit-close").append('<span class="ui-icon ui-icon-close"</span>')
       $("li#state").on('click', function() {
-        d3.select(this).remove()
+        d3.selectAll('li.tagit-choice').remove()
+
         d3.selectAll("path.selected")
           .classed("selected", false)
         d3.select("#location").html("National")
@@ -472,7 +481,7 @@ function ready(error, us, county, state) {
       })
       }
   }
-  function updateTable(data) { 
+  function updateTable(data) { console.log(data)
     d3.selectAll(".cell-data")
       .each(function(d,i) { 
         var rowVariable = [rowData[i]],
@@ -480,7 +489,7 @@ function ready(error, us, county, state) {
             rowVariable_wh = rowVariable + "_wh";
         d3.select(this).selectAll("td")
           .text(function(d,i) { 
-            if (i==0) { 
+            if (i==0) { console.log(data[rowVariable])
               return ((data[rowVariable]) == undefined || (typeof data[rowVariable]) == 'string') ? "-" : formatNumber(data[rowVariable]);
             }else if (i==1){ 
               return ((data[rowVariable_wh]) == undefined || (typeof data[rowVariable_wh]) == 'string') ? "-" : formatNumber(data[rowVariable_wh]);
