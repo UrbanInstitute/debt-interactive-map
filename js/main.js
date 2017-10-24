@@ -125,12 +125,18 @@ function ready(error, us, county, state) {
         },
         afterTagAdded: function(event, ui) {
           var tag = (ui.tag[0]["textContent"]);
-          var location = (tag.search(",") > 0) ? tag.split(",")[0] : tag.slice(0,-1);
+          var county = (tag.search(",") > 0) ? tag.split(",")[0] : "";
+          var state = (tag.search(",") > 0) ? (tag.split(", ")[1]).slice(0,-1) : tag.slice(0,-1);
           var geoData = (tag.search(",") > 0) ? tmp_county : tmp_state;
           var geoType = (tag.search(",") > 0) ? "county" : "state";
           var filteredData = geoData.filter(function(d) {
-            return d.properties[geoType] == location;
+            if (geoType == "county"){
+              return d.properties["county"] == county && d.properties["abbr"] == state
+            }else {
+              return d.properties["abbr"] == state;
+            }
           })
+          console.log(filteredData)
           var data1 = filteredData[0]
           var data2 = filteredData[0]["properties"]
           zoomMap(data1, data2, geoType)
