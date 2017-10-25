@@ -38,7 +38,6 @@ var COLORS =
   }
 // d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
 //   if (error) throw error;
-console.log(bodyWidth)
 d3.queue()
     .defer(d3.json, "https://d3js.org/us-10m.v1.json")
     .defer(d3.csv, "data/county_" + CATEGORY + ".csv")
@@ -53,7 +52,7 @@ function transformData(geography){
 }
 
 
-function ready(error, us, county, state) { console.log(bodyWidth)
+function ready(error, us, county, state) { 
   if (error) throw error;
   /*SETTING UP THE DATA*/
   var countyData = us.objects.counties.geometries
@@ -73,7 +72,7 @@ function ready(error, us, county, state) { console.log(bodyWidth)
   var state_data = transformData(state)
   state_data.forEach(function(d,i){ 
     stateData.forEach(function(e, j) { 
-      if (d.key == e.id) {
+      if (+d.key == e.id) {
         for (var property in d["values"][0]) {
           e[property] = d.values[0][property]
         }
@@ -95,9 +94,9 @@ function ready(error, us, county, state) { console.log(bodyWidth)
   }
   var tmp_state = topojson.feature(us, us.objects.states).features;
   for (var i =0; i<tmp_state.length; i++){
-    var mergeIDState = +tmp_state[i]["id"]
+    var mergeIDState = tmp_state[i]["id"]
     for (var j = 0; j<stateData.length;j++){
-      if(+stateData[j]["id"] == mergeIDState){
+      if(stateData[j]["id"] == mergeIDState){ 
         for (var property in stateData[j]) {
           var data = (isNaN(stateData[j][property]) == true) ? stateData[j][property] : +stateData[j][property];
           tmp_state[i]["properties"][property] = data;
@@ -162,7 +161,6 @@ function ready(error, us, county, state) { console.log(bodyWidth)
         },
         afterTagRemoved: function(event,ui) {
            var tag = (ui.tag[0]["textContent"]);
-           console.log(tag)
            if (tag.search(",") > 0) {
             d3.selectAll(".counties > path.selected")
               .classed("selected", false)
@@ -233,7 +231,7 @@ $(window).resize(function() {
       var abbr = data2["abbr"]
       if (d3.select(this).classed('selected') == true) {
         d3.select(this).classed('selected', false)
-        if (level == "county") { console.log(level)
+        if (level == "county") {
           $('ul.tagit > li:nth-child(2)').remove()
           updateTable(selectedState)
         }
@@ -346,14 +344,14 @@ $(window).resize(function() {
     var filteredData = data.filter(function(d){
       if (geography == "county") {
         return d.properties.county == county && d.properties.abbr == state
-      }else {
+      }else { 
         return d.properties.abbr == state
       }
     })
-    d3.select("#location").html(function() { console.log((geography=="county") ? filteredData[0]["properties"]["county"] + ", " + filteredData[0]["properties"]["abbr"] : filteredData[0]["properties"]["state"])
+    d3.select("#location").html(function() { 
       return (geography=="county") ? filteredData[0]["properties"]["county"] + ", " + filteredData[0]["properties"]["abbr"] : filteredData[0]["properties"]["state"]
     })
-    var id = (geography == "county") ? filteredData[0]["id"] : ""
+    var id = (geography == "county") ? filteredData[0]["properties"]["id"] : ""
     d3.select("path#" + filteredData[0]["properties"]["abbr"] + id)
       .classed('hover', true)
       .moveToFront()
@@ -379,7 +377,9 @@ $(window).resize(function() {
             .classed('selected', false)
           d3.select(this)
             .classed('selected', true)
+          setVariable(d)
           updateMap(d)
+          updateBars(d)
         })
   table.select('tbody').classed('selected', true)
   
@@ -452,9 +452,6 @@ $(window).resize(function() {
   var y = d3.scaleLinear()
       .rangeRound([barHeight, 0]);
   state_data.forEach(function(d) { 
-   d.location = d.values[0]["state"]
-  })
-  state_data.forEach(function(d) { 
     d.national = +d.values[0][SELECTED_VARIABLE]
   })
   state_data.forEach(function(d) { 
@@ -466,7 +463,6 @@ $(window).resize(function() {
   x.domain([[us_data].map(function(d){
     return d.abbr
   })]);
-
   y.domain([0, d3.max(state_data, function(d) {
     return d.national
   })])
@@ -522,6 +518,7 @@ $(window).resize(function() {
     .each(function(d,i) {
       var parentClass = d3.select(this.parentNode).attr('class');
       d3.select(this)
+        .attr("class", "bar " + parentClass)
         .attr("width", x.bandwidth())
         .attr("y", function() {  
           if (parentClass.search(0) > -1 || parentClass.search(1) > -1) {
@@ -571,6 +568,62 @@ $(window).resize(function() {
     .style("fill", function(d){
         return (isNaN(d.properties[variable]) == true) ? "#adabac" : COLORS[quantize(d.properties[variable])];
     })
+  }
+  function updateBars(variable) {
+    var WHITE = variable + "_wh"
+    var NONWHITE = variable + "_nw"
+    state_data.forEach(function(d) { 
+      d.national = +d.values[0][variable]
+    })
+    state_data.forEach(function(d) { 
+      d.WHITE = +d.values[0][WHITE];
+    })
+    state_data.forEach(function(d) { 
+      d.NONWHITE = +d.values[0][NONWHITE]
+    })
+    x.domain([[us_data].map(function(d){
+      return d.abbr
+    })]);
+    y.domain([0, d3.max(state_data, function(d) {
+      return d.national
+    })])
+    console.log(y.domain())
+    if (zoomNational == true) { console.log('hi')
+      d3.select(".g-1").style("opacity", 0)
+      d3.selectAll(".bar")
+        .each(function(d,i) {
+          var parentClass = d3.select(this.parentNode).attr('class');
+          d3.select(this)
+            .data([us_data])
+            .attr("x", function(d) { 
+              return d.abbr
+             })
+            .transition()
+            .duration(300)
+            .attr("y", function() {  
+              if (parentClass.search(0) > -1 || parentClass.search(1) > -1) {
+                return (d[variable] == undefined) ? barHeight :y(d[variable])
+              }else if (parentClass.search(2) > -1) { console.log(d[WHITE])
+                return (d[WHITE] == undefined) ? barHeight : y(d[WHITE]);
+              }else{
+                return (d[NONWHITE] == undefined) ? barHeight : y(d[NONWHITE])
+              }
+            })
+            .attr("height", function() {
+              if (parentClass.search(0) > -1 || parentClass.search(1) > -1) {
+                return (d[variable] == undefined) ? 0 : barHeight - y(d[variable])
+              }else if (parentClass.search(2) > -1){
+                return (d[WHITE] == undefined) ? 0 : barHeight - y(d[WHITE])
+              }else{
+                return (d[NONWHITE] == undefined) ? 0 :barHeight - y(d[NONWHITE])
+              }
+            })
+            .attr("fill", function(d) {
+             return "#fdbf11"
+            })
+        })
+    }
+    console.log(variable)
   }
   function addTag(state, county, abbr) { 
       d3.selectAll('li.tagit-choice').remove()
