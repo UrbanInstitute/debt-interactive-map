@@ -3,12 +3,18 @@ body {
   font-size: 13px;
 }
 
-
+path.domain {
+  stroke: none;
+}
 #location {
   font-size: 18px;
   font-weight: 600;
   margin: 30px 0;
   text-transform: uppercase;
+}
+
+.tick > line {
+  stroke: none;
 }
 .search-div {
   width: 180px;

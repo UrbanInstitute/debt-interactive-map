@@ -1,4 +1,6 @@
 var SELECTED_VARIABLE;
+var WHITE;
+var NONWHITE;
 var COLORRANGE = ["#cfe8f3", "#73bfe2","#1696d2", "#0a4c6a", "#000000"];
 var zoomState;
 var zoomNational;
@@ -10,6 +12,8 @@ function setBodyWidth(width) {
 }
 function setVariable(variable) {
   SELECTED_VARIABLE = variable;
+  WHITE = variable + "_wh"
+  NONWHITE= variable + "_nw"
 }
 function setZoom(national, state) {
   zoomNational = national;
@@ -440,46 +444,36 @@ $(window).resize(function() {
     })
   /*END TABLE*/
   /*BAR CHARTS*/
-  var white = SELECTED_VARIABLE + "_wh"
-  var nonwhite = SELECTED_VARIABLE + "_nw"
+
   var barHeight = height/3
   var x = d3.scaleBand()
     .rangeRound([0, width/5])
     .padding(0.1)
   var y = d3.scaleLinear()
-      .range([barHeight, 0]);
-  var yWh = d3.scaleLinear()
-      .range([barHeight, 0]);
- var yNw = d3.scaleLinear()
-      .range([barHeight, 0]);
-  x.domain([us_data].map(function(d) {console.log(d.state) ; return d.state; }));
-  // y.domain([0, d3.max(state_data, function(d) { 
-  //   var tmp;
-  //   for (var i=state_data.length-1; i>=0; i--) {
-  //     tmp = state_data[i]["values"][0][SELECTED_VARIABLE]
-  //     return tmp
-  //   }
-  // })]);
-  y.domain([0, d3.max(state_data, function(d) {
-    state_data.forEach(function(d) { 
-      d.value = d.values[0][SELECTED_VARIABLE]
-    })
-    return d.value
-  })])
-  yWh.domain([0, d3.max(state_data, function(d) {
-    state_data.forEach(function(d) { 
-      d.value = d.values[0][white]
-    })
-    return d.value
-  })])
-  yNw.domain([0, d3.max(state_data, function(d) {
-    state_data.forEach(function(d) { 
-      d.value = d.values[0][nonwhite]
-    })
-    return d.value
-  })])
+      .rangeRound([barHeight, 0]);
+  state_data.forEach(function(d) { 
+   d.location = d.values[0]["state"]
+  })
+  state_data.forEach(function(d) { 
+    d.national = +d.values[0][SELECTED_VARIABLE]
+  })
+  state_data.forEach(function(d) { 
+    d.WHITE = +d.values[0][WHITE];
+  })
+  state_data.forEach(function(d) { 
+    d.NONWHITE = +d.values[0][NONWHITE]
+  })
+  x.domain([[us_data].map(function(d){
+    return d.abbr
+  })]);
 
-  console.log(yWh.domain())
+  y.domain([0, d3.max(state_data, function(d) {
+    return d.national
+  })])
+  // y.domain([0, d3.max(state_data, function(d) {
+  //   return d[WHITE] < d[NONWHITE] ? d[WHITE] : d[NONWHITE]
+  // })])
+
   var formatPercent = d3.format(".0%")
   var xAxis = d3.axisBottom()
       .scale(x)
@@ -499,11 +493,12 @@ $(window).resize(function() {
       d3.select(this)
         .attr("transform", function() {
           if (i==0){
-            return "translate(" + 0 + "," + margin.top + ")"
+            return "translate(" + 0 + "," + -35 + ")"
           }else {
-            return "translate(" + ((width/5) * (i+1)) + "," + margin.top + ")";
+            return "translate(" + ((width/5) * (i+1)) + "," + -35 + ")";
           } 
-        });
+        })
+        .attr("class", "g-" + i)
     })
   barG.append("g")
     .attr("class", "x axis")
@@ -512,44 +507,45 @@ $(window).resize(function() {
   barG.append("g")
     .append("text")
     .attr("x", 0)
-    .attr("y", barHeight*.8)
+    .attr("y", barHeight*1.1)
     .attr("dy", ".71em")
     .attr("text-anchor", "start")
     .attr("font-size", "1.1em")
     .text(function(d) { return d});
-  console.log('hi')
-  barG.selectAll("rect")
-    .data(us_data)
+  barG.selectAll(".bar")
+    .data([us_data])
     .enter()
     .append("rect")
-    .attr("class", "bar")
-    .each(function(d,i) { console.log(i)
+    .attr("x", function(d) { 
+      return d.abbr
+    })
+    .each(function(d,i) {
+      var parentClass = d3.select(this.parentNode).attr('class');
       d3.select(this)
-        .attr("x", function(d) { return x(d.state); })
-        .attr("width", x.rangeBand())
-        .attr("y", function(d) {
-          if (i == 0) {
-            return d[SELECTED_VARIABLE]
-          }else if (i == 1) {
-            return d[white]
-          }else if (i== 2){
-            return d[nonwhite]
+        .attr("width", x.bandwidth())
+        .attr("y", function() {  
+          if (parentClass.search(0) > -1 || parentClass.search(1) > -1) {
+            return y(d[SELECTED_VARIABLE])
+          }else if (parentClass.search(2) > -1) {
+            return y(d[WHITE])
+          }else{
+            return y(d[NONWHITE])
           }
         })
-        .attr("height", function(d) {
-          if (i == 0) {
+        .attr("height", function() {
+          if (parentClass.search(0) > -1 || parentClass.search(1) > -1) {
             return barHeight - y(d[SELECTED_VARIABLE])
-          }else if (i == 1) {
-            return barHeight - y(d[white])
-          }else if (i== 2){
-            return barHeight - y(d[nonwhite])
+          }else if (parentClass.search(2) > -1){
+            return barHeight - y(d[WHITE])
+          }else{
+            return barHeight - y(d[NONWHITE])
           }
         })
         .attr("fill", function(d) {
-         // return color(d.percent)
-         return "#000000"
+         return "#fdbf11"
         })
     })
+  d3.select(".g-1").style("opacity", 0)
 
   function formatNumber(d) { 
     var percent = d3.format(",.1%"),
@@ -564,9 +560,7 @@ $(window).resize(function() {
     var max = d3.max(tmp_county, function(d) { 
       return d.properties[variable]
     })
-    console.log(min)
-    console.log(max)
-    console.log(variable)
+  
     var quantize = d3.scaleQuantize()
       .domain([min, max])
       .range(d3.range(5).map(function(i) { return "q" + i + "-5"; }))
@@ -608,7 +602,7 @@ $(window).resize(function() {
       })
       }
   }
-  function updateTable(data) { console.log(data)
+  function updateTable(data) { 
     d3.selectAll(".cell-data")
       .each(function(d,i) { 
         var rowVariable = [rowData[i]],
