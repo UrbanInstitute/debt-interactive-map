@@ -278,7 +278,7 @@ $(window).resize(function() {
  var legendSvg = d3.select("#legend")
     .append("svg")
     .attr("width", width)
-    .attr("height", height/5)
+    .attr("height", 50)
     .attr('transform', 'translate(' + 10 + ',' + 0 + ')')
 
   var legend = legendSvg.append("g")
@@ -323,6 +323,7 @@ $(window).resize(function() {
       })
    }
   }
+
   d3.selection.prototype.moveToFront = function() {  
     return this.each(function(){
       this.parentNode.appendChild(this);
@@ -438,6 +439,118 @@ $(window).resize(function() {
         })
     })
   /*END TABLE*/
+  /*BAR CHARTS*/
+  var white = SELECTED_VARIABLE + "_wh"
+  var nonwhite = SELECTED_VARIABLE + "_nw"
+  var barHeight = height/3
+  var x = d3.scaleBand()
+    .rangeRound([0, width/5])
+    .padding(0.1)
+  var y = d3.scaleLinear()
+      .range([barHeight, 0]);
+  var yWh = d3.scaleLinear()
+      .range([barHeight, 0]);
+ var yNw = d3.scaleLinear()
+      .range([barHeight, 0]);
+  x.domain([us_data].map(function(d) {console.log(d.state) ; return d.state; }));
+  // y.domain([0, d3.max(state_data, function(d) { 
+  //   var tmp;
+  //   for (var i=state_data.length-1; i>=0; i--) {
+  //     tmp = state_data[i]["values"][0][SELECTED_VARIABLE]
+  //     return tmp
+  //   }
+  // })]);
+  y.domain([0, d3.max(state_data, function(d) {
+    state_data.forEach(function(d) { 
+      d.value = d.values[0][SELECTED_VARIABLE]
+    })
+    return d.value
+  })])
+  yWh.domain([0, d3.max(state_data, function(d) {
+    state_data.forEach(function(d) { 
+      d.value = d.values[0][white]
+    })
+    return d.value
+  })])
+  yNw.domain([0, d3.max(state_data, function(d) {
+    state_data.forEach(function(d) { 
+      d.value = d.values[0][nonwhite]
+    })
+    return d.value
+  })])
+
+  console.log(yWh.domain())
+  var formatPercent = d3.format(".0%")
+  var xAxis = d3.axisBottom()
+      .scale(x)
+  var yAxis = d3.axisLeft()
+      .scale(y)
+      .tickFormat(formatPercent);
+  var stateCategories = ["National", "State", "White", "Nonwhite"]
+  var barSvg = d3.select("#bar-chart")
+    .append("svg")
+    .attr('width', width)
+    .attr('height', barHeight)
+  var barG = barSvg.selectAll("g")
+    .data(stateCategories)
+    .enter()
+    .append('g')
+    .each(function(d,i) {
+      d3.select(this)
+        .attr("transform", function() {
+          if (i==0){
+            return "translate(" + 0 + "," + margin.top + ")"
+          }else {
+            return "translate(" + ((width/5) * (i+1)) + "," + margin.top + ")";
+          } 
+        });
+    })
+  barG.append("g")
+    .attr("class", "x axis")
+    .attr("transform", "translate(0," + barHeight+ ")")
+    .call(xAxis)
+  barG.append("g")
+    .append("text")
+    .attr("x", 0)
+    .attr("y", barHeight*.8)
+    .attr("dy", ".71em")
+    .attr("text-anchor", "start")
+    .attr("font-size", "1.1em")
+    .text(function(d) { return d});
+  console.log('hi')
+  barG.selectAll("rect")
+    .data(us_data)
+    .enter()
+    .append("rect")
+    .attr("class", "bar")
+    .each(function(d,i) { console.log(i)
+      d3.select(this)
+        .attr("x", function(d) { return x(d.state); })
+        .attr("width", x.rangeBand())
+        .attr("y", function(d) {
+          if (i == 0) {
+            return d[SELECTED_VARIABLE]
+          }else if (i == 1) {
+            return d[white]
+          }else if (i== 2){
+            return d[nonwhite]
+          }
+        })
+        .attr("height", function(d) {
+          if (i == 0) {
+            return barHeight - y(d[SELECTED_VARIABLE])
+          }else if (i == 1) {
+            return barHeight - y(d[white])
+          }else if (i== 2){
+            return barHeight - y(d[nonwhite])
+          }
+        })
+        .attr("fill", function(d) {
+         // return color(d.percent)
+         return "#000000"
+        })
+    })
+
   function formatNumber(d) { 
     var percent = d3.format(",.1%"),
         number = d3.format("$,.0f");
