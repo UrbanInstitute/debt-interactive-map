@@ -595,7 +595,7 @@ $(window).resize(function() {
       return d.national
     })])
     // y.domain([0, d3.max(data, function(d) {
-    //   return (d.WHITE < d.NONWHITE) ? d.WHITE : d.NONWHITE
+    //   return (d.white < d.nonwhite) ? d.white : d.nonwhite
     // })])
     if (zoomNational == true) { 
 
@@ -686,7 +686,9 @@ $(window).resize(function() {
           d3.selectAll(".g-1").style("opacity", 0)
           d3.selectAll(".g-2").style("opacity", 1)
           d3.select(".g-2").select(".g-text > text")
-            .text("State")
+            .text(function() {
+              return [filteredData[0]["properties"]["state"]]
+            })
           d3.select(".bar.g-0")
             .transition()
             .duration(300)
@@ -714,7 +716,13 @@ $(window).resize(function() {
               d3.selectAll(".g-1").style("opacity", 1)
               d3.selectAll(".g-2").style("opacity", 1)
               d3.select(".g-2").select(".g-text > text")
-                .text("County")
+                .text(function() {
+                  return [filteredData[0]["properties"]["county"]]
+                })              
+              d3.select(".g-1").select(".g-text > text")
+                .text(function() {
+                  return [stateData[0]["properties"]["state"]]
+                })
               d3.select(".bar.g-0")
                 .transition()
                 .duration(300)
@@ -734,37 +742,6 @@ $(window).resize(function() {
                 .attr("height", function(d) {
                     return (d[variable] == undefined) ? 0 : barHeight - y(d[variable])
                 })
-              // d3.selectAll(".bar:not(.g-0):not(.g-1)")
-              // // .data([filteredData[0]["properties"]])
-              //   .each(function(d,i) { 
-              //     var parentClass = d3.select(this.parentNode).attr('class')
-              //     var bar = d3.select(this)
-              //       .data([filteredData[0]["properties"]])
-              //     bar
-              //       .transition()
-              //       .duration(300)
-              //       .attr("y", function(d) {  
-              //         if (parentClass.search(2) > -1) { 
-              //           return (isNaN(d[variable]) == false) ? y(d[variable]) : barHeight;
-              //         }else if (parentClass.search(3) > -1) {
-              //           return (isNaN(d[WHITE]) == false) ? y(d[WHITE]) : barHeight;
-              //         } else if (parentClass.search(4) > -1) { 
-              //           return (isNaN(d[NONWHITE]) == false) ? y(d[NONWHITE]) : barHeight;
-              //         }
-              //       })
-              //       .attr("height", function(d) {
-              //         if (parentClass.search(2) > -1) { 
-              //           return (isNaN(d[variable]) == false) ? barHeight - y(d[variable]) : 0;
-              //         }else if (parentClass.search(3) > -1) {
-              //           return (isNaN(d[WHITE]) == false) ? barHeight - y(d[WHITE]) : 0;
-              //         } else if (parentClass.search(4) > -1) {
-              //          return (isNaN(d[NONWHITE]) == false) ? barHeight - y(d[NONWHITE]) : 0;
-              //         }
-              //       })
-              //       .attr("fill", function(d) {
-              //        return "#000000"
-              //       })
-              //     })
           }
         }
 
