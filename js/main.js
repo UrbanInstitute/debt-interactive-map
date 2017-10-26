@@ -460,20 +460,18 @@ $(window).resize(function() {
     d.national = +d.values[0][SELECTED_VARIABLE]
   })
   state_data.forEach(function(d) { 
-    d.WHITE = +d.values[0][WHITE];
+    d.white = +d.values[0][WHITE];
   })
   state_data.forEach(function(d) { 
-    d.NONWHITE = +d.values[0][NONWHITE]
+    d.white = +d.values[0][NONWHITE]
   })
+  console.log(state_data)
   x.domain([[us_data].map(function(d){ 
     return d.abbr
   })]);
   y.domain([0, d3.max(state_data, function(d) {
     return d.national
   })])
-  // y.domain([0, d3.max(state_data, function(d) {
-  //   return d[WHITE] < d[NONWHITE] ? d[WHITE] : d[NONWHITE]
-  // })])
 
   var formatPercent = d3.format(".0%")
   var xAxis = d3.axisBottom()
@@ -585,10 +583,10 @@ $(window).resize(function() {
       d.national = +d.values[0][variable]
     })
     data.forEach(function(d) { 
-      d.WHITE = +d.values[0][WHITE];
+      d.white = +d.values[0][WHITE];
     })
     data.forEach(function(d) { 
-      d.NONWHITE = +d.values[0][NONWHITE]
+      d.nonwhite = +d.values[0][NONWHITE]
     })
     x.domain([[us_data].map(function(d){
       return d.abbr
@@ -638,7 +636,6 @@ $(window).resize(function() {
             })
         })
     } else if (zoomNational == false) {
-
         var countyID = (d3.select(".counties > path.selected").node() == null) ? "" : d3.select(".counties > path.selected").attr("id");
         var county = countyID.slice(2,)
         var state = (d3.select(".state-borders > path.selected").attr("id"))
@@ -654,7 +651,7 @@ $(window).resize(function() {
         // x.domain([[filteredData[0].properties].map(function(d){console.log(d.abbr)
         //   return d.abbr
         // })]);
-        if (countyID == "") { 
+        if (countyID == "") { console.log('hi')
           d3.selectAll(".g-1").style("opacity", 0)
           d3.selectAll(".g-2").style("opacity", 1)
           d3.select(".g-2").select(".g-text > text")
@@ -680,20 +677,20 @@ $(window).resize(function() {
                 .duration(300)
                 .attr("y", function() {  
                   if (parentClass.search(2) > -1) { 
-                    return (d[variable] == undefined) ? barHeight : y(d[variable]);
+                    return (isNaN(d[variable]) == false) ? y(d[variable]) : barHeight;
                   }else if (parentClass.search(3) > -1) {
-                    return (d[WHITE] == undefined) ? barHeight : y(d[WHITE])
+                    return (isNaN(d[WHITE]) == false) ? y(d[WHITE]) : barHeight;
                   } else if (parentClass.search(4) > -1) {
-                    return (d[NONWHITE] == undefined) ? barHeight : y(d[NONWHITE])
+                    return (isNaN(d[NONWHITE]) == false) ? y(d[NONWHITE]) : barHeight;
                   }
                 })
                 .attr("height", function() {
                   if (parentClass.search(2) > -1) { 
-                    return (d[variable] == undefined) ? 0 : barHeight - y(d[variable]);
+                    return (isNaN(d[variable]) == false) ? barHeight - y(d[variable]) : 0;
                   }else if (parentClass.search(3) > -1) {
-                    return (d[WHITE] == undefined) ? 0 : barHeight - y(d[WHITE]);
+                    return (isNaN(d[WHITE]) == false) ? barHeight - y(d[WHITE]) : 0;
                   } else if (parentClass.search(4) > -1) {
-                    return (d[NONWHITE] == undefined) ? 0 : barHeight - y(d[NONWHITE]);
+                    return (isNaN(d[NONWHITE]) == false) ? barHeight - y(d[NONWHITE]) : 0;
                   }
                 })
                 .attr("fill", function(d) {
@@ -709,10 +706,10 @@ $(window).resize(function() {
                 d.national = +d.values[0][variable]
               })
               state_data.forEach(function(d) { 
-                d.WHITE = +d.values[0][WHITE];
+                d.white = +d.values[0][WHITE];
               })
               state_data.forEach(function(d) { 
-                d.NONWHITE = +d.values[0][NONWHITE]
+                d.nonwhite = +d.values[0][NONWHITE]
               })
               d3.selectAll(".g-1").style("opacity", 1)
               d3.selectAll(".g-2").style("opacity", 1)
@@ -736,6 +733,37 @@ $(window).resize(function() {
                 })
                 .attr("height", function(d) {
                     return (d[variable] == undefined) ? 0 : barHeight - y(d[variable])
+                })
+              d3.selectAll(".bar:not(.g-0):not(.g-1)")
+              // .data([filteredData[0]["properties"]])
+              .each(function(d,i) { console.log([filteredData[0]["properties"]])
+                var parentClass = d3.select(this.parentNode).attr('class')
+                var bar = d3.select(this)
+                  .data([filteredData[0]["properties"]])
+                bar
+                  .transition()
+                  .duration(300)
+                  .attr("y", function() {  
+                    if (parentClass.search(2) > -1) { console.log((isNaN(d[variable]) == false) ? y(d[variable]) : barHeight)
+                      return (isNaN(d[variable]) == false) ? y(d[variable]) : barHeight;
+                    }else if (parentClass.search(3) > -1) {console.log((isNaN(d[WHITE]) == false) ? y(d[WHITE]) : barHeight)
+                      return (isNaN(d[WHITE]) == false) ? y(d[WHITE]) : barHeight;
+                    } else if (parentClass.search(4) > -1) { console.log( (isNaN(d[NONWHITE]) == false) ? y(d[NONWHITE]) : barHeight)
+                      return (isNaN(d[NONWHITE]) == false) ? y(d[NONWHITE]) : barHeight;
+                    }
+                  })
+                  .attr("height", function() {
+                    if (parentClass.search(2) > -1) { 
+                      return (isNaN(d[variable]) == false) ? barHeight - y(d[variable]) : 0;
+                    }else if (parentClass.search(3) > -1) {
+                      return (isNaN(d[WHITE]) == false) ? barHeight - y(d[WHITE]) : 0;
+                    } else if (parentClass.search(4) > -1) {
+                     return (isNaN(d[NONWHITE]) == false) ? barHeight - y(d[NONWHITE]) : 0;
+                    }
+                  })
+                  .attr("fill", function(d) {
+                   return "#000000"
+                  })
                 })
           }
         }
