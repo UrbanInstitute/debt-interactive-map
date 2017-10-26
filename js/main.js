@@ -465,7 +465,6 @@ $(window).resize(function() {
   state_data.forEach(function(d) { 
     d.white = +d.values[0][NONWHITE]
   })
-  console.log(state_data)
   x.domain([[us_data].map(function(d){ 
     return d.abbr
   })]);
@@ -575,7 +574,7 @@ $(window).resize(function() {
     })
     updateBars(variable)
   }
-  function updateBars(variable) { console.log(zoomCounty)
+  function updateBars(variable) { 
     var WHITE = variable + "_wh"
     var NONWHITE = variable + "_nw"
     var data = (zoomCounty == true) ? county_data : state_data
@@ -595,11 +594,10 @@ $(window).resize(function() {
     y.domain([0, d3.max(data, function(d) {
       return d.national
     })])
-    console.log(y.domain())
     // y.domain([0, d3.max(data, function(d) {
     //   return (d.WHITE < d.NONWHITE) ? d.WHITE : d.NONWHITE
     // })])
-    if (zoomNational == true) { console.log('hi')
+    if (zoomNational == true) { 
 
       d3.selectAll(".g-1, .g-2").style("opacity", 0)
       d3.selectAll(".bar")
@@ -651,7 +649,40 @@ $(window).resize(function() {
         // x.domain([[filteredData[0].properties].map(function(d){console.log(d.abbr)
         //   return d.abbr
         // })]);
-        if (countyID == "") { console.log('hi')
+       
+        d3.selectAll(".bar:not(.g-0):not(.g-1)")
+          // .data([filteredData[0]["properties"]])
+          .each(function(d,i) { 
+            var parentClass = d3.select(this.parentNode).attr('class')
+            var bar = d3.select(this)
+              .data([filteredData[0]["properties"]]);
+            bar
+              .transition()
+              .duration(300)
+              .attr("y", function(d) {  
+                if (parentClass.search(2) > -1) { 
+                  return (isNaN(d[variable]) == false) ? y(d[variable]) : barHeight;
+                }else if (parentClass.search(3) > -1) {
+                  return (isNaN(d[WHITE]) == false) ? y(d[WHITE]) : barHeight;
+                } else if (parentClass.search(4) > -1) { console.log((isNaN(d[NONWHITE]) == false) ? y(d[NONWHITE]) : barHeight)
+                  return (isNaN(d[NONWHITE]) == false) ? y(d[NONWHITE]) : barHeight;
+                }
+              })
+              .attr("height", function(d) {
+                if (parentClass.search(2) > -1) { 
+                  return (isNaN(d[variable]) == false) ? barHeight - y(d[variable]) : 0;
+                }else if (parentClass.search(3) > -1) {
+                  return (isNaN(d[WHITE]) == false) ? barHeight - y(d[WHITE]) : 0;
+                } else if (parentClass.search(4) > -1) { 
+                  return (isNaN(d[NONWHITE]) == false) ? barHeight - y(d[NONWHITE]) : 0;
+                }
+              })
+              .attr("fill", function(d) {
+               return "#000000"
+              })
+          })
+
+        if (countyID == "") { 
           d3.selectAll(".g-1").style("opacity", 0)
           d3.selectAll(".g-2").style("opacity", 1)
           d3.select(".g-2").select(".g-text > text")
@@ -665,39 +696,8 @@ $(window).resize(function() {
             .attr("height", function(d) {
                 return (d[variable] == undefined) ? 0 : barHeight - y(d[variable])
             })
-       
-          d3.selectAll(".bar:not(.g-0):not(.g-1)")
-            // .data([filteredData[0]["properties"]])
-            .each(function(d,i) { 
-              var parentClass = d3.select(this.parentNode).attr('class')
-              var bar = d3.select(this)
-                .data([filteredData[0]["properties"]])
-              bar
-                .transition()
-                .duration(300)
-                .attr("y", function() {  
-                  if (parentClass.search(2) > -1) { 
-                    return (isNaN(d[variable]) == false) ? y(d[variable]) : barHeight;
-                  }else if (parentClass.search(3) > -1) {
-                    return (isNaN(d[WHITE]) == false) ? y(d[WHITE]) : barHeight;
-                  } else if (parentClass.search(4) > -1) {
-                    return (isNaN(d[NONWHITE]) == false) ? y(d[NONWHITE]) : barHeight;
-                  }
-                })
-                .attr("height", function() {
-                  if (parentClass.search(2) > -1) { 
-                    return (isNaN(d[variable]) == false) ? barHeight - y(d[variable]) : 0;
-                  }else if (parentClass.search(3) > -1) {
-                    return (isNaN(d[WHITE]) == false) ? barHeight - y(d[WHITE]) : 0;
-                  } else if (parentClass.search(4) > -1) {
-                    return (isNaN(d[NONWHITE]) == false) ? barHeight - y(d[NONWHITE]) : 0;
-                  }
-                })
-                .attr("fill", function(d) {
-                 return "#000000"
-                })
-              })
-          } else if (countyID !== "") { console.log('hi')
+
+          } else if (countyID !== "") { 
               var stateData = tmp_state.filter(function(d){
                   return d.properties.abbr == state
               })
@@ -734,37 +734,37 @@ $(window).resize(function() {
                 .attr("height", function(d) {
                     return (d[variable] == undefined) ? 0 : barHeight - y(d[variable])
                 })
-              d3.selectAll(".bar:not(.g-0):not(.g-1)")
-              // .data([filteredData[0]["properties"]])
-              .each(function(d,i) { console.log([filteredData[0]["properties"]])
-                var parentClass = d3.select(this.parentNode).attr('class')
-                var bar = d3.select(this)
-                  .data([filteredData[0]["properties"]])
-                bar
-                  .transition()
-                  .duration(300)
-                  .attr("y", function() {  
-                    if (parentClass.search(2) > -1) { console.log((isNaN(d[variable]) == false) ? y(d[variable]) : barHeight)
-                      return (isNaN(d[variable]) == false) ? y(d[variable]) : barHeight;
-                    }else if (parentClass.search(3) > -1) {console.log((isNaN(d[WHITE]) == false) ? y(d[WHITE]) : barHeight)
-                      return (isNaN(d[WHITE]) == false) ? y(d[WHITE]) : barHeight;
-                    } else if (parentClass.search(4) > -1) { console.log( (isNaN(d[NONWHITE]) == false) ? y(d[NONWHITE]) : barHeight)
-                      return (isNaN(d[NONWHITE]) == false) ? y(d[NONWHITE]) : barHeight;
-                    }
-                  })
-                  .attr("height", function() {
-                    if (parentClass.search(2) > -1) { 
-                      return (isNaN(d[variable]) == false) ? barHeight - y(d[variable]) : 0;
-                    }else if (parentClass.search(3) > -1) {
-                      return (isNaN(d[WHITE]) == false) ? barHeight - y(d[WHITE]) : 0;
-                    } else if (parentClass.search(4) > -1) {
-                     return (isNaN(d[NONWHITE]) == false) ? barHeight - y(d[NONWHITE]) : 0;
-                    }
-                  })
-                  .attr("fill", function(d) {
-                   return "#000000"
-                  })
-                })
+              // d3.selectAll(".bar:not(.g-0):not(.g-1)")
+              // // .data([filteredData[0]["properties"]])
+              //   .each(function(d,i) { 
+              //     var parentClass = d3.select(this.parentNode).attr('class')
+              //     var bar = d3.select(this)
+              //       .data([filteredData[0]["properties"]])
+              //     bar
+              //       .transition()
+              //       .duration(300)
+              //       .attr("y", function(d) {  
+              //         if (parentClass.search(2) > -1) { 
+              //           return (isNaN(d[variable]) == false) ? y(d[variable]) : barHeight;
+              //         }else if (parentClass.search(3) > -1) {
+              //           return (isNaN(d[WHITE]) == false) ? y(d[WHITE]) : barHeight;
+              //         } else if (parentClass.search(4) > -1) { 
+              //           return (isNaN(d[NONWHITE]) == false) ? y(d[NONWHITE]) : barHeight;
+              //         }
+              //       })
+              //       .attr("height", function(d) {
+              //         if (parentClass.search(2) > -1) { 
+              //           return (isNaN(d[variable]) == false) ? barHeight - y(d[variable]) : 0;
+              //         }else if (parentClass.search(3) > -1) {
+              //           return (isNaN(d[WHITE]) == false) ? barHeight - y(d[WHITE]) : 0;
+              //         } else if (parentClass.search(4) > -1) {
+              //          return (isNaN(d[NONWHITE]) == false) ? barHeight - y(d[NONWHITE]) : 0;
+              //         }
+              //       })
+              //       .attr("fill", function(d) {
+              //        return "#000000"
+              //       })
+              //     })
           }
         }
 
