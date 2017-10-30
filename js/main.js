@@ -218,16 +218,19 @@ function ready(error, us, county, state) {
         return (isNaN(d.properties[SELECTED_VARIABLE]) == true) ? "#adabac" : COLORS[quantize(d.properties[SELECTED_VARIABLE])];
     })
     .on('click', function(d) { 
+            console.log(d)
       var state = d.properties.state;
       var stateData = tmp_state.filter(function(d){ 
         return d.properties.state == state
       })
-      var selectedState = stateData[0]["properties"]
+      var selectedState = stateData[0]
+      console.log(selectedState)
       var previousState = (d3.select(".state-borders > path.selected").node() != null) ? d3.select(".state-borders > path.selected").attr("id") : ""
       var selectedCounty = (d["properties"])
       var level = (zoomState == true && previousState == d["properties"]["abbr"]) ? "county": "state";
-      var county = d["county"]
-      var abbr = d["abbr"]
+      console.log(level)
+      var county = d.properties["county"]
+      var abbr = d.properties["abbr"]
       if (d3.select(this).classed('selected') == true) {
         d3.select(this).classed('selected', false)
         if (level == "county") {
@@ -242,7 +245,16 @@ function ready(error, us, county, state) {
         updateBars(SELECTED_VARIABLE, d)
       }
     })
-    .on('mouseover', function(d) { 
+    .on('mouseover', function(d) { console.log(zoomNational)
+      if (zoomNational == true) { 
+        $(".state-borders").css("pointer-events", "all")
+        $(".counties").css("pointer-events", "none")
+        hoverLocation("", d.properties.abbr, "state");
+        updateBars(SELECTED_VARIABLE, d) 
+      }else {
+        $(".state-borders").css("pointer-events", "none")
+        $(".counties").css("pointer-events", "all")
+      }
       var previousState = (d3.select(".state-borders > path.selected").node() != null) ? d3.select(".state-borders > path.selected").attr("id") : ""
       var hoveredState = d.properties.abbr
       var geography = (zoomState == true && previousState == hoveredState) ? "county" : "state";
@@ -275,15 +287,19 @@ function ready(error, us, county, state) {
       return d.properties.abbr
     })
     .on('click', function(d) {
-      var state = d.state;
-      var county = d.county;
+      console.log(d)
+      var state = d.properties.state;
+      // var county = d.properties.county;
       var abbr = d.abbr;
       var level = "state"
-      addTag(state, county, abbr)
+      setZoom(false, true, false)
+      $(".state-borders").css("pointer-events", "none")
+      $(".counties").css("pointer-events", "all")
+      addTag(state, null, abbr)
       zoomMap(d, d, level)
       updateBars(SELECTED_VARIABLE, d)
     })
-    .on('mouseover', function(d) { 
+    .on('mouseover', function(d) { console.log(zoomNational)
       if (zoomNational == true) { 
         $(".state-borders").css("pointer-events", "all")
         $(".counties").css("pointer-events", "none")
@@ -777,7 +793,7 @@ function ready(error, us, county, state) {
         }
 
   }
-  function addTag(state, county, abbr) { 
+  function addTag(state, county, abbr) { console.log(state)
       d3.selectAll('li.tagit-choice').remove()
       var newTag = $("ul.tagit").append('<li id="state" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable"></li>')
       $('li#state').insertBefore(".tagit-new").append('<span class="tagit-label">' + state + '</span>')
@@ -794,7 +810,7 @@ function ready(error, us, county, state) {
         setZoom(true,false, false)
         zoomMap(null, null, "national")
       })
-    if (county != undefined) {
+    if (county != undefined) { console.log(county)
       var newTag = $("ul.tagit").append('<li id="county" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable"></li>')
       $('li#county').insertBefore(".tagit-new").append('<span class="tagit-label">' + county + ', ' + abbr + '</span>')
       $('li#county').append('<a class="tagit-close"</a>')
@@ -811,11 +827,12 @@ function ready(error, us, county, state) {
         d3.selectAll(".counties > path.selected")
           .classed("selected", false)
         updateBars(SELECTED_VARIABLE, filteredData[0])
-        updateTable(filteredData[0]["properties"])
+        updateTable(filteredData[0])
       })
-      }
+    }
   }
-  function updateTable(data) { 
+  function updateTable(data) { console.log(zoomNational)
+    var data = (zoomNational == true) ? data : data["properties"];
     d3.selectAll(".cell-data")
       .each(function(d,i) { 
         var rowVariable = [rowData[i]],
@@ -869,9 +886,9 @@ function ready(error, us, county, state) {
           d3.select("path#" + d["properties"]["abbr"] + d.id)
             .classed("selected", true)
             .moveToFront()
-          updateTable(data)
+          // updateTable(data)
       }
-    } else { 
+    } else { console.log(us_data)
       x = width / 1.4;
       y = height / 1.4;
       k = .7;
