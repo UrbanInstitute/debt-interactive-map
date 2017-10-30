@@ -7,9 +7,9 @@ var zoomNational;
 var zoomCounty;
 var margin = {top: 10, right: 10, bottom: 10, left: 10}
 var CATEGORY = "medical";
-var bodyWidth;
-function setBodyWidth(width) {
-  bodyWidth = width;
+var tdMap;
+function setWidth(width) {
+  tdMap = width;
 }
 function setVariable(variable) {
   SELECTED_VARIABLE = variable;
@@ -21,11 +21,11 @@ function setZoom(national, state, county) {
   zoomState = state;
   zoomCounty = county;
 }
-setBodyWidth($('body').width())
+setWidth($('.td-map').width())
 setZoom(true,false, false)
 setVariable("perc_debt_collect")
 
-var width = (bodyWidth*.7) - margin.left -margin.right,
+var width = (tdMap) - margin.left -margin.right,
     height = (width*.7) - margin.top-margin.bottom,     
     centered,
     selectedState;
@@ -198,7 +198,7 @@ function ready(error, us, county, state) {
     .append("svg")
     .attr("width", width)
     .attr("height", height)
-    .attr('transform', 'translate(' + 10 + ',' + 0 + ')')
+    .attr('transform', 'translate(' + (-10) + ',' + 0 + ')')
 
   svg.append("rect")
       .attr("width", width)
@@ -206,7 +206,7 @@ function ready(error, us, county, state) {
       .attr("class", "background")
   var path = d3.geoPath()
   var g = svg.append("g")
-    .attr("transform", "scale(" + $("body").width()/1400 + ")");
+    .attr("transform", "scale(" + $(".td-map").width()/960 + ")");
   g.append("g")
     .attr("class", "counties")
     .selectAll("path")
@@ -327,12 +327,12 @@ function ready(error, us, county, state) {
  var legendSvg = d3.select("#legend")
     .append("svg")
     .attr("width", width)
-    .attr("height", 50)
+    // .attr("height", 50)
     .attr('transform', 'translate(' + 10 + ',' + 0 + ')')
 
   var legend = legendSvg.append("g")
     .attr("width", width/3)
-    .attr("height", 50)
+    // .attr("height", 50)
     .attr("transform", "translate("+width/3+"," + 10 + ")")
   var keyHeight =   15;
   var keyWidth =  50;
@@ -906,11 +906,11 @@ function ready(error, us, county, state) {
     g.attr('transform', 'translate(' + d3.event.transform.x + ',' + d3.event.transform.y + ') scale(' + d3.event.transform.k + ')');
   }
   $(window).resize(function() { 
-    setBodyWidth($('body').width())
-    d3.select("g").attr("transform", "scale(" + $("body").width()/1400 + ")");
+    setWidth($('.td-map').width())
+    d3.select("g").attr("transform", "scale(" + $(".td-map").width()/960 + ")");
     $("table").height($("table").width()*0.8);
 
-    var width = $('body').width()*.7
+    var width = $('.td-map').width()
     var height = width*.7
     d3.select("#map").select('svg')
       .attr('width', width)
