@@ -127,10 +127,7 @@ function ready(error, us, county, state) {
       }
       console.log(searchArray);
      dropdown = searchArray
-    }
-    createSearchArray("")
-    function getArray() {
-      return dropdown;
+     $('input[name="tags"').tagit("option", {availableTags: dropdown})
     }
 
     $( "#searchBox" ).autocomplete({ 
@@ -138,7 +135,7 @@ function ready(error, us, county, state) {
     });
 
     $('input[name="tags"').tagit({
-        availableTags: getArray(),
+        availableTags: dropdown,
         allowSpaces: true,
         autocomplete:{
           // availableTags: searchArray, // this param is of course optional. it's for autocomplete.
@@ -149,7 +146,7 @@ function ready(error, us, county, state) {
           tagLimit: 2,
           appendTo: ".search-div"
         },
-        beforeTagAdded: function(event, ui) {
+        beforeTagAdded: function(event, ui) {console.log('hi')
           if(dropdown.indexOf(ui.tagLabel) == -1){ 
             return false;
           }
@@ -197,6 +194,9 @@ function ready(error, us, county, state) {
           updateBars(SELECTED_VARIABLE)
         }
     });
+
+    createSearchArray("")
+
   // });
   var zoom = d3.zoom()
       // .translate([0, 0])
