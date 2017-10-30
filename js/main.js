@@ -129,14 +129,16 @@ function ready(error, us, county, state) {
      dropdown = searchArray
     }
     createSearchArray("")
-
+    function getArray() {
+      return dropdown;
+    }
 
     $( "#searchBox" ).autocomplete({ 
       appendTo: ".search-div"
     });
 
     $('input[name="tags"').tagit({
-        availableTags: dropdown,
+        availableTags: getArray(),
         allowSpaces: true,
         autocomplete:{
           // availableTags: searchArray, // this param is of course optional. it's for autocomplete.
