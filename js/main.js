@@ -397,7 +397,7 @@ function ready(error, us, county, state) {
     d3.select("#location").html(function() { 
       return (geography=="county") ? filteredData[0]["properties"]["county"] + ", " + filteredData[0]["properties"]["abbr"] : filteredData[0]["properties"]["state"]
     })
-    var id = (geography == "county") ? filteredData[0]["properties"]["id"] : ""
+    var id = (geography == "county") ? filteredData[0]["id"] : ""
     d3.select("path#" + filteredData[0]["properties"]["abbr"] + id)
       .classed('hover', true)
       .moveToFront()
