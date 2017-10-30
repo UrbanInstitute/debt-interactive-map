@@ -53,8 +53,16 @@ table {
   margin-top: 10px;
   margin-bottom: 10px;
 }
+
+.ui-widget {
+  font-family: "Lato", sans-serif !important;
+}
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+  color: #000 !important;
+}
 .ui-widget.ui-widget-content {
   border: 0px !important;
+  background-color: #ffffff !important;
 }
 .tagit.ui-widget.ui-widget-content.ui-corner-all {
   background-color: #f5f5f5 !important;

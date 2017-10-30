@@ -140,7 +140,7 @@ function ready(error, us, county, state) {
               return false;
           }
         },
-        afterTagAdded: function(event, ui) {
+        afterTagAdded: function(event, ui) { console.log('hi')
           var tag = (ui.tag[0]["textContent"]);
           var county = (tag.search(",") > 0) ? tag.split(",")[0] : "";
           var state = (tag.search(",") > 0) ? (tag.split(", ")[1]).slice(0,-1) : tag.slice(0,-1);
@@ -153,9 +153,8 @@ function ready(error, us, county, state) {
               return d.properties["state"] == state;
             }
           })
-          var data1 = filteredData[0]
-          var data2 = filteredData[0]["properties"]
-          zoomMap(data1, data2, geoType)
+          var data = filteredData[0]
+          zoomMap(data, geoType)
           if (county != "") {
             addTag(data2["state"], county, state)
           }
@@ -170,7 +169,7 @@ function ready(error, us, county, state) {
            }else {
             d3.select("#location").html("National")
             setZoom(true, false, false)
-            zoomMap(null, null, "national")
+            zoomMap(null, "national")
            }
           updateBars(SELECTED_VARIABLE)
         }
@@ -240,7 +239,7 @@ function ready(error, us, county, state) {
       }else {
         var county = (level == "state") ? null : county;
         addTag(state, county, abbr)
-        zoomMap(d, d, level)
+        zoomMap(d, level)
         updateBars(SELECTED_VARIABLE, d)
       }
     })
@@ -294,7 +293,7 @@ function ready(error, us, county, state) {
       $(".state-borders").css("pointer-events", "none")
       $(".counties").css("pointer-events", "all")
       addTag(state, null, abbr)
-      zoomMap(d, d, level)
+      zoomMap(d, level)
       updateBars(SELECTED_VARIABLE, d)
     })
     .on('mouseover', function(d) {
@@ -805,7 +804,7 @@ function ready(error, us, county, state) {
           .classed("selected", false)
         d3.select("#location").html("National")
         setZoom(true,false, false)
-        zoomMap(null, null, "national")
+        zoomMap(null, "national")
       })
     if (county != undefined) { 
       var newTag = $("ul.tagit").append('<li id="county" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable"></li>')
@@ -847,7 +846,9 @@ function ready(error, us, county, state) {
           })
       })
   }
-  function zoomMap(d, data, zoomLevel) { 
+  function zoomMap(d,zoomLevel) { 
+    console.log(data)
+    console.log(d)
     var x, y, k;
     // if (d.properties.state && centered !== d.properties.state && zoomLevel != "national") { 
     if (zoomLevel != "national") { 
@@ -867,7 +868,7 @@ function ready(error, us, county, state) {
       y = centroid[1];
       k = 4;
       centered = selectedState.properties.state;
-      updateTable(data)
+      updateTable(d)
       g.selectAll("path")
           .classed("active", centered && function(d) { return d === centered; });
 
