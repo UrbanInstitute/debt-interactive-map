@@ -493,8 +493,8 @@ function ready(error, us, county, state) {
 
   var barHeight = height/3
   var x = d3.scaleBand()
-    .rangeRound([0, width/5])
-    .padding(0.2)
+    .rangeRound([0, width/9])
+    .padding(0.1)
   var y = d3.scaleLinear()
       .rangeRound([barHeight, 0]);
   state_data.forEach(function(d) { 
@@ -519,31 +519,52 @@ function ready(error, us, county, state) {
   var yAxis = d3.axisLeft()
       .scale(y)
       .tickFormat(formatPercent);
-  var barCategories = ["National", "State", "State", "White", "Nonwhite"]
+  // var barCategories = ["National", "State", "State", "White", "Nonwhite"]
+  var groups = ["National", "State", "County"]
+  var categories = ["Overall", "White", "Nonwhite"]
   var barSvg = d3.select("#bar-chart")
     .append("svg")
     .attr('width', width)
     .attr('height', barHeight)
   var barG = barSvg.selectAll("g")
-    .data(barCategories)
+    .data(groups)
     .enter()
     .append('g')
-    .each(function(d,i) {
-      d3.select(this)
-        .attr("transform", function() {
-          if (i<2){
-            return "translate(" + (width/6) *i + "," + -35 + ")"
-          }else {
-            return "translate(" + ((width/6) * (i+1)) + "," + -35 + ")";
-          } 
-        })
-        .attr("class", "g-" + i)
+    .attr("transform", function(d,i) {
+      return "translate(" + (width/3 * i + 10) + "," + (-30) + ")"
     })
-  barG.append("g")
+    .attr("id", function(d) { console.log(d);
+      return d
+    })
+    // .each(function(d,i) {
+    //   d3.select(this)
+    //     .attr("transform", function() {
+    //       if (i<2){
+    //         return "translate(" + (width/6) *i + "," + -35 + ")"
+    //       }else {
+    //         return "translate(" + ((width/6) * (i+1)) + "," + -35 + ")";
+    //       } 
+    //     })
+    //     .attr("class", "g-" + i)
+  //   // })
+  var subBarG = barG.selectAll("g")
+    .data(categories)
+    .enter()
+    .append("g")
+    .attr("class", function(d) {
+      return "category " + d
+    })
+    .attr("transform", function(d,i) {
+      return "translate(" + (width/9 * i ) + "," + 0 + ")"
+    })
+  subBarG.append("g")
     .attr("class", "x axis")
-    .attr("transform", "translate(0," + barHeight+ ")")
+    .attr("transform", function(d,i) {
+      return "translate(" + 0 +"," + barHeight+ ")"
+    })
     .call(xAxis)
-  barG.append("g")
+  subBarG
+    .append("g")
     .attr("class", "g-text")
     .append("text")
     .attr("x", 0)
@@ -551,43 +572,39 @@ function ready(error, us, county, state) {
     .attr("dy", ".71em")
     .attr("text-anchor", "start")
     .attr("font-size", "1.1em")
-    .text(function(d) { return d});
-  barG.selectAll(".bar")
+    .text(function(d) { console.log(d); return d});
+  subBarG.selectAll("rect")
     .data([us_data])
     .enter()
     .append("rect")
-    .attr("x", function(d) { 
+    .attr("x", function(d) { console.log(d)
       return d.abbr
     })
-    .each(function(d,i) {
-      var parentClass = d3.select(this.parentNode).attr('class');
-      d3.select(this)
-        .attr("class", "bar " + parentClass)
-        .attr("width", x.bandwidth())
-        .attr("y", function() {  
-          if (parentClass.search(0) > -1 || parentClass.search(1) > -1) {
+    .attr("class", "rect")
+    .attr("width", x.bandwidth())
+        .attr("y", function(d) { console.log(d) 
+          var parentClass = d3.select(this.parentNode).attr('class');
+          if (parentClass.search("Overall") > -1) {
             return y(d[SELECTED_VARIABLE])
-          }else if (parentClass.search(2) > -1) {
-            return y(d[WHITE])
-          }else{
+          }else if (parentClass.search("Non") > -1) {
             return y(d[NONWHITE])
-          }
-        })
-        .attr("height", function() {
-          if (parentClass.search(0) > -1 || parentClass.search(1) > -1) {
-            return barHeight - y(d[SELECTED_VARIABLE])
-          }else if (parentClass.search(2) > -1){
-            return barHeight - y(d[WHITE])
           }else{
-            return barHeight - y(d[NONWHITE])
+            return y(d[WHITE])
           }
         })
-        .attr("fill", function(d) {
-         return "#fdbf11"
+        .attr("height", function(d) {
+          var parentClass = d3.select(this.parentNode).attr('class');
+          if (parentClass.search("Overall") > -1) {
+            return barHeight - y(d[SELECTED_VARIABLE])
+          }else if (parentClass.search("Non") > -1){
+            return barHeight - y(d[NONWHITE])
+          }else{
+            return barHeight - y(d[WHITE])
+          }
         })
-    })
+        .style("fill", "#fdbf11")
 
-  d3.selectAll(".g-1, .g-2").style("opacity", 0)
+  d3.selectAll("#State, #County").style("opacity", 0)
 
   function formatNumber(d) { 
     var percent = d3.format(",.1%"),
