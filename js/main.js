@@ -218,13 +218,11 @@ function ready(error, us, county, state) {
         return (isNaN(d.properties[SELECTED_VARIABLE]) == true) ? "#adabac" : COLORS[quantize(d.properties[SELECTED_VARIABLE])];
     })
     .on('click', function(d) { 
-            console.log(d)
       var state = d.properties.state;
       var stateData = tmp_state.filter(function(d){ 
         return d.properties.state == state
       })
       var selectedState = stateData[0]
-      console.log(selectedState)
       var previousState = (d3.select(".state-borders > path.selected").node() != null) ? d3.select(".state-borders > path.selected").attr("id") : ""
       var selectedCounty = (d["properties"])
       var level = (zoomState == true && previousState == d["properties"]["abbr"]) ? "county": "state";
@@ -240,12 +238,13 @@ function ready(error, us, county, state) {
           updateBars(SELECTED_VARIABLE, d)
         }
       }else {
+        var county = (level == "state") ? null : county;
         addTag(state, county, abbr)
         zoomMap(d, d, level)
         updateBars(SELECTED_VARIABLE, d)
       }
     })
-    .on('mouseover', function(d) { console.log(zoomNational)
+    .on('mouseover', function(d) { 
       if (zoomNational == true) { 
         $(".state-borders").css("pointer-events", "all")
         $(".counties").css("pointer-events", "none")
@@ -287,7 +286,6 @@ function ready(error, us, county, state) {
       return d.properties.abbr
     })
     .on('click', function(d) {
-      console.log(d)
       var state = d.properties.state;
       // var county = d.properties.county;
       var abbr = d.abbr;
@@ -299,7 +297,7 @@ function ready(error, us, county, state) {
       zoomMap(d, d, level)
       updateBars(SELECTED_VARIABLE, d)
     })
-    .on('mouseover', function(d) { console.log(zoomNational)
+    .on('mouseover', function(d) {
       if (zoomNational == true) { 
         $(".state-borders").css("pointer-events", "all")
         $(".counties").css("pointer-events", "none")
@@ -750,7 +748,6 @@ function ready(error, us, county, state) {
               var stateData = tmp_state.filter(function(d){
                   return d.properties.abbr == state
               })
-              console.log(stateData)
               state_data.forEach(function(d) { 
                 d.national = +d.values[0][variable]
               })
@@ -793,7 +790,7 @@ function ready(error, us, county, state) {
         }
 
   }
-  function addTag(state, county, abbr) { console.log(state)
+  function addTag(state, county, abbr) { 
       d3.selectAll('li.tagit-choice').remove()
       var newTag = $("ul.tagit").append('<li id="state" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable"></li>')
       $('li#state').insertBefore(".tagit-new").append('<span class="tagit-label">' + state + '</span>')
@@ -810,7 +807,7 @@ function ready(error, us, county, state) {
         setZoom(true,false, false)
         zoomMap(null, null, "national")
       })
-    if (county != undefined) { console.log(county)
+    if (county != undefined) { 
       var newTag = $("ul.tagit").append('<li id="county" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable"></li>')
       $('li#county').insertBefore(".tagit-new").append('<span class="tagit-label">' + county + ', ' + abbr + '</span>')
       $('li#county').append('<a class="tagit-close"</a>')
@@ -831,7 +828,7 @@ function ready(error, us, county, state) {
       })
     }
   }
-  function updateTable(data) { console.log(zoomNational)
+  function updateTable(data) { 
     var data = (zoomNational == true) ? data : data["properties"];
     d3.selectAll(".cell-data")
       .each(function(d,i) { 
@@ -851,7 +848,6 @@ function ready(error, us, county, state) {
       })
   }
   function zoomMap(d, data, zoomLevel) { 
-    console.log(data)
     var x, y, k;
     // if (d.properties.state && centered !== d.properties.state && zoomLevel != "national") { 
     if (zoomLevel != "national") { 
@@ -888,7 +884,7 @@ function ready(error, us, county, state) {
             .moveToFront()
           // updateTable(data)
       }
-    } else { console.log(us_data)
+    } else { 
       x = width / 1.4;
       y = height / 1.4;
       k = .7;
