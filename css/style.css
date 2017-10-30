@@ -19,7 +19,7 @@ table.main-table {
   margin-left: auto;
   margin-right: auto;
 }
-td:nth-child(1) {
+td.td-table {
   vertical-align: top;
 }
 td.td-map {
@@ -97,6 +97,7 @@ tr.cell-header {
 }
 tr.cell-column {
   height: 30px;
+  text-transform: uppercase;
 }
 tr.cell-data {
   height: 30px;
@@ -164,7 +165,9 @@ table td:first-child {
 .left-table table td, .left-table table th {
     padding: 3px 10px;
 }
-
+th {
+  font-weight: 400;
+}
 .left-table table thead th {
     background: 0;
 /*    background-color: #006D2C;
@@ -180,18 +183,27 @@ table td:first-child {
 
 .left-table table tbody td {
     color: #00496B;
-    border-left: 1px solid #E1EEF4;
-    font-size: 12px;
+/*    border-left: 1px solid #E1EEF4;
+*/   font-size: 14px;
     font-weight: 400;
 }
+.left-table table tbody .cell-data > td {
+   font-size: 16px;
+}
+
 
 .left-table tbody {
   border-bottom: 1px solid #E1EEF4;
   cursor: pointer;
 }
 .group.selected, .group.selected td {
-    background-color: #069;
-    color: white;
+  background-color: #000;
+  color: #fff;
+}
+
+.group.selected > .cell-data > td  {
+    color: #fdbf11;
+
 }
 
 
@@ -204,10 +216,15 @@ table td:first-child {
 }
 
 .left-table tbody:hover {
-    background-color: #069;
+    background-color: #000;
     color: white;
 }
 .left-table tbody:hover td {
-    background-color: #069;
+    background-color: #000;
     color: white;
+}
+
+.left-table tbody:hover .cell-data > td {
+    background-color: #000;
+    color: #fdbf11;
 }

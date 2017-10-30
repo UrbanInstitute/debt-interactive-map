@@ -146,17 +146,18 @@ function ready(error, us, county, state) {
           var state = (tag.search(",") > 0) ? (tag.split(", ")[1]).slice(0,-1) : tag.slice(0,-1);
           var geoData = (tag.search(",") > 0) ? tmp_county : tmp_state;
           var geoType = (tag.search(",") > 0) ? "county" : "state";
-          var filteredData = geoData.filter(function(d) {
+          var filteredData = geoData.filter(function(d) { 
             if (geoType == "county"){
               return d.properties["county"] == county && d.properties["abbr"] == state
             }else {
               return d.properties["state"] == state;
             }
           })
+          console.log(filteredData)
           var data = filteredData[0]
           zoomMap(data, geoType)
-          if (county != "") {
-            addTag(data2["state"], county, state)
+          if (county != "") { 
+            addTag(data["properties"]["state"], county, state)
           }
 
         },
@@ -447,9 +448,9 @@ function ready(error, us, county, state) {
         if (i%3 == 0 ) {
           return "cell-header"
         }else if (i%3==2) {
-          return "cell-data"
-        }else {
           return "cell-column"
+        }else {
+          return "cell-data"
         }
       })
   d3.selectAll(".cell-header")
@@ -536,17 +537,7 @@ function ready(error, us, county, state) {
     .attr("id", function(d) { console.log(d);
       return d
     })
-    // .each(function(d,i) {
-    //   d3.select(this)
-    //     .attr("transform", function() {
-    //       if (i<2){
-    //         return "translate(" + (width/6) *i + "," + -35 + ")"
-    //       }else {
-    //         return "translate(" + ((width/6) * (i+1)) + "," + -35 + ")";
-    //       } 
-    //     })
-    //     .attr("class", "g-" + i)
-  //   // })
+
   var subBarG = barG.selectAll("g")
     .data(categories)
     .enter()
@@ -582,7 +573,7 @@ function ready(error, us, county, state) {
     })
     .attr("class", "rect")
     .attr("width", x.bandwidth())
-        .attr("y", function(d) { console.log(d) 
+        .attr("y", function(d) { 
           var parentClass = d3.select(this.parentNode).attr('class');
           if (parentClass.search("Overall") > -1) {
             return y(d[SELECTED_VARIABLE])
@@ -806,7 +797,7 @@ function ready(error, us, county, state) {
         }
 
   }
-  function addTag(state, county, abbr) { 
+  function addTag(state, county, abbr) { console.log(state)
       d3.selectAll('li.tagit-choice').remove()
       var newTag = $("ul.tagit").append('<li id="state" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable"></li>')
       $('li#state').insertBefore(".tagit-new").append('<span class="tagit-label">' + state + '</span>')
