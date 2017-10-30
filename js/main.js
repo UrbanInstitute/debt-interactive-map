@@ -916,9 +916,10 @@ function ready(error, us, county, state) {
           // updateTable(data)
       }
     } else { 
-      x = width / 1.4;
-      y = height / 1.4;
-      k = .7;
+      setZoom(true, false, false)
+      x = width / 1.9;
+      y = height / 2;
+      k = .9;
       centered = null;
       updateTable(us_data)
       g.selectAll("path")
