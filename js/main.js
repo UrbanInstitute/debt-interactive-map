@@ -8,6 +8,7 @@ var zoomCounty;
 var margin = {top: 10, right: 10, bottom: 10, left: 10}
 var CATEGORY = "medical";
 var tdMap;
+var dropdown;
 function setWidth(width) {
   tdMap = width;
 }
@@ -108,20 +109,34 @@ function ready(error, us, county, state) {
   }
   /*END*/
 
-  // $( function() {
-    var searchArray = [];
-    for (var i = 0; i<tmp_state.length; i++){
-     searchArray.push(tmp_state[i]["properties"]["state"])
+    function createSearchArray(filter) {
+      var searchArray = [];
+      if (zoomNational == true) {
+        for (var i = 0; i<tmp_state.length; i++){
+         searchArray.push(tmp_state[i]["properties"]["state"])
+        }
+        for (var i = 0; i<tmp_county.length; i++){
+         searchArray.push(tmp_county[i]["properties"]["county"] + ", " + tmp_county[i]["properties"]["abbr"])
+        }
+      }else if (zoomState == true) { console.log(filter)
+        for (var i = 0; i<tmp_county.length; i++){ 
+          if (tmp_county[i]["properties"]["abbr"] == filter) {console.log(filter)
+            searchArray.push(tmp_county[i]["properties"]["county"] + ", " + tmp_county[i]["properties"]["abbr"])
+          }
+        }
+      }
+      console.log(searchArray);
+     dropdown = searchArray
     }
-    for (var i = 0; i<tmp_county.length; i++){
-     searchArray.push(tmp_county[i]["properties"]["county"] + ", " + tmp_county[i]["properties"]["abbr"])
-    }
+    createSearchArray("")
+
+
     $( "#searchBox" ).autocomplete({ 
       appendTo: ".search-div"
     });
 
     $('input[name="tags"').tagit({
-        availableTags: searchArray,
+        availableTags: dropdown,
         allowSpaces: true,
         autocomplete:{
           // availableTags: searchArray, // this param is of course optional. it's for autocomplete.
@@ -133,14 +148,15 @@ function ready(error, us, county, state) {
           appendTo: ".search-div"
         },
         beforeTagAdded: function(event, ui) {
-          if(searchArray.indexOf(ui.tagLabel) == -1){ 
+          if(dropdown.indexOf(ui.tagLabel) == -1){ 
             return false;
           }
           if(ui.tagLabel == "not found"){
               return false;
           }
         },
-        afterTagAdded: function(event, ui) { console.log('hi')
+        afterTagAdded: function(event, ui) { 
+          console.log($('input[name="tags"').tagit('assignedTags'))
           var tag = (ui.tag[0]["textContent"]);
           var county = (tag.search(",") > 0) ? tag.split(",")[0] : "";
           var state = (tag.search(",") > 0) ? (tag.split(", ")[1]).slice(0,-1) : tag.slice(0,-1);
@@ -153,15 +169,19 @@ function ready(error, us, county, state) {
               return d.properties["state"] == state;
             }
           })
-          console.log(filteredData)
           var data = filteredData[0]
           zoomMap(data, geoType)
           if (county != "") { 
             addTag(data["properties"]["state"], county, state)
+          }else {
+            var filter = data["properties"]["abbr"]
+            createSearchArray(filter)
           }
 
         },
         afterTagRemoved: function(event,ui) { 
+          console.log($('input[name="tags"').tagit('assignedTags'))
+
            var tag = (ui.tag[0]["textContent"]);
            if (tag.search(",") > 0) {
             d3.selectAll(".counties > path.selected")
@@ -534,7 +554,7 @@ function ready(error, us, county, state) {
     .attr("transform", function(d,i) {
       return "translate(" + (width/3 * i + 10) + "," + (-30) + ")"
     })
-    .attr("id", function(d) { console.log(d);
+    .attr("id", function(d) { 
       return d
     })
 
@@ -563,12 +583,12 @@ function ready(error, us, county, state) {
     .attr("dy", ".71em")
     .attr("text-anchor", "start")
     .attr("font-size", "1.1em")
-    .text(function(d) { console.log(d); return d});
+    .text(function(d) { return d});
   subBarG.selectAll("rect")
     .data([us_data])
     .enter()
     .append("rect")
-    .attr("x", function(d) { console.log(d)
+    .attr("x", function(d) { 
       return d.abbr
     })
     .attr("class", "rect")
