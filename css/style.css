@@ -31,9 +31,17 @@ table {
   border-collapse: collapse;
   border: 0;
 }
-
+.group-label-2 {
+  fill: #0a4c6a;
+  font-size: 16px;
+  font-weight: 600;
+}
 #legend {
-  height: 50px;
+  float: left;
+  width: 50px;
+}
+#map {
+  float: left;
 }
 .map-div {
   margin: 20px 25px;
@@ -137,12 +145,12 @@ tr.cell-data {
 }
 
 path.hover {
-  stroke: #000000;
+  stroke: #fdbf11;
   stroke-width: 2px;
 }
 
 path.selected {
-  stroke: #000000;
+  stroke: #fdbf11;
   stroke-width: 2px;
 }
 .background {

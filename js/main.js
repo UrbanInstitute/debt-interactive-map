@@ -1,3 +1,4 @@
+var BREAKS ={"perc_debt_collect":[0.219, .309, .389, .489], "med_debt_collect":[1199, 1499, 1799, 2299], "perc_debt_med":[.109,.179,.259,.339], "med_debt_med":[499,699,949,1250], "perc_pop_wh":[.129,.279,.459,.669], "perc_pop_ins":[.079,.129,.179,.259], "avg_income":[52649,63849,77899,101049]}
 var SELECTED_VARIABLE;
 var WHITE;
 var NONWHITE;
@@ -26,7 +27,7 @@ setWidth($('.td-map').width())
 setZoom(true,false, false)
 setVariable("perc_debt_collect")
 
-var width = (tdMap) - margin.left -margin.right,
+var width = ((tdMap) - margin.left -margin.right)*.9,
     height = (width*.7) - margin.top-margin.bottom,     
     centered,
     selectedState;
@@ -218,7 +219,7 @@ function ready(error, us, county, state) {
     return d.properties[SELECTED_VARIABLE]
   })
   var quantize = d3.scaleQuantize()
-    .domain([min, max])
+    .domain(BREAKS[SELECTED_VARIABLE])
     .range(d3.range(5).map(function(i) { return "q" + i + "-5"; }))
 
   /*ADD MAP*/
@@ -234,7 +235,7 @@ function ready(error, us, county, state) {
       .attr("class", "background")
   var path = d3.geoPath()
   var g = svg.append("g")
-    .attr("transform", "scale(" + $(".td-map").width()/960 + ")");
+    .attr("transform", "scale(" + $(".td-map").width()/1060 + ")");
   g.append("g")
     .attr("class", "counties")
     .selectAll("path")
@@ -282,12 +283,7 @@ function ready(error, us, county, state) {
         $(".counties").css("pointer-events", "none")
         hoverLocation("", d.properties.abbr, "state");
         updateBars(SELECTED_VARIABLE, d) 
-      }
-      // else if (hoveredState != prevousState) {
-      //   $(".state-borders").css("pointer-events", "all")
-      //   $(".counties").css("pointer-events", "none")
-      // }
-      else{
+      }else{
         if (geography == "state") { 
           hoverLocation(county, state, geography)
           updateBars(SELECTED_VARIABLE, d3.select("path#" + hoveredState).datum())
@@ -298,17 +294,20 @@ function ready(error, us, county, state) {
         // $(".state-borders").css("pointer-events", "none")
         // $(".counties").css("pointer-events", "all")
 
-
       }
     })
     .on('mouseout', function(d) { 
-      if (d3.select(".counties > path.selected").node() != undefined) {
+      if (d3.select(".counties > path.selected").node() != undefined) { //IF A COUNTY IS SELECTED
         var county = d3.select(".counties > path.selected").datum().properties.county
         var abbr = d3.select(".counties > path.selected").datum().properties.abbr
         d3.select("#location").html(county + ", " + abbr)
-      }else if (d3.select(".state-borders > path.selected").node() != undefined) {
+        setZoom(false, false, true)
+        updateBars(SELECTED_VARIABLE, d3.select(".counties > path.selected").datum())
+      }else if (d3.select(".state-borders > path.selected").node() != undefined) { //IF A STATE IS SELECTED
         var state = d3.select(".state-borders > path.selected").datum().properties.state
         d3.select("#location").html(state)
+        setZoom(false, true, false)
+        updateBars(SELECTED_VARIABLE, d3.select(".state-borders > path.selected").datum())
       }
       d3.selectAll("path.selected").moveToFront()
       d3.selectAll(".hover").classed("hover", false)
@@ -365,23 +364,19 @@ function ready(error, us, county, state) {
 /*LEGEND*/
  var legendSvg = d3.select("#legend")
     .append("svg")
-    .attr("width", width)
-    // .attr("height", 50)
-    .attr('transform', 'translate(' + 10 + ',' + 0 + ')')
+    .attr("height", height/2)
 
   var legend = legendSvg.append("g")
-    .attr("width", width/3)
-    // .attr("height", 50)
-    .attr("transform", "translate("+width/3+"," + 10 + ")")
-  var keyHeight =   15;
-  var keyWidth =  50;
+    .attr("transform", "translate("+10+"," + 10 + ")")
+  var keyWidth =   15;
+  var keyHeight =  30;
  for (i=0; i<=5; i++){
   if(i !== 5){  
     legend.append("rect")
       .attr("width",keyWidth)
       .attr("height",keyHeight)
       .attr("class","rect"+i)
-      .attr("x",keyWidth*i)
+      .attr("y",keyHeight*i)
       .style("fill", COLORRANGE[i])
       // .on("mouseover",function(){ mouseEvent({type: "Legend", "class": (d3.select(this).attr("class"))}, "hover") })
       // .on("mouseleave", function(){
@@ -389,25 +384,27 @@ function ready(error, us, county, state) {
       // })
   //     .on("click",function(){ mouseEvent(dataID, {type: "Legend", "class": "q" + (this.getAttribute("x")/keyWidth) + "-4"}, "click") })
     legend.append("text")
-      .attr("y", 20)
+      .attr("x", 20)
       .attr("class","legend-labels")
-      .attr("x",keyWidth*i)
+      .attr("y",keyHeight*i)
       .text(function(){
-        return "bp-" + i
-        //console.log((i ==0) ? MIN : BREAKS[SELECTED_VARIABLE(1)])
-        //return (i ==0) ? MIN : BREAKS[SELECTED_VARIABLE[i-1]]
-        // var array = BREAKS[SELECTED_VARIABLE]
-        // return (i==0) ? legendFormat(MINVALUE[SELECTED_VARIABLE]) : legendFormat((array[i-1]))
+        var min = d3.min(tmp_county, function(d) { 
+          return d.properties[SELECTED_VARIABLE]
+        })
+        var array = BREAKS[SELECTED_VARIABLE]
+        return (i==0) ? formatNumber(min) : formatNumber((array[i-1]))
       })
    }
    if (i == 5) { 
     legend.append("text")
-      .attr("y", 20)
+      .attr("x", 20)
       .attr("class","legend-labels")
-      .attr("x",keyWidth*i)
+      .attr("y",keyHeight*i)
       .text(function(){
-        return "bp-5"
-        //  return legendFormat(MAXVALUE[SELECTED_VARIABLE])
+        var max = d3.max(tmp_county, function(d) { 
+          return d.properties[SELECTED_VARIABLE]
+        })
+        return formatNumber(max)
       })
    }
   }
@@ -531,8 +528,8 @@ function ready(error, us, county, state) {
   /*END TABLE*/
   /*BAR CHARTS*/
 
-  var barSvgHeight = height/5
-  var barHeight = barSvgHeight*.7
+  var barSvgHeight = height/4
+  var barHeight = barSvgHeight*.5
   var x = d3.scaleBand()
     .rangeRound([0, width/11])
   var y = d3.scaleLinear()
@@ -550,7 +547,15 @@ function ready(error, us, county, state) {
     return d.abbr
   })]);
   y.domain([0, d3.max(state_data, function(d) {
-    return Math.max(d.national, d.nonwhite, d.white)
+    if (isNaN(d.nonwhite) == true && isNaN(d.white) == true){
+      return d.national
+    }else if (isNaN(d.nonwhite) == true && isNaN(d.white) == false) {
+      return Math.max(d.white, d.national)
+    }else if (isNaN(d.white) == true && isNaN(d.nonwhite) == false) {
+      return Math.max(d.nonwhite, d.national)
+    }else {
+      return Math.max(d.white, d.nonwhite, d.national)
+    }
   })])
 
     // y.domain([0, d3.max(data, function(d) {
@@ -589,12 +594,24 @@ function ready(error, us, county, state) {
     .enter()
     .append('g')
     .attr("transform", function(d,i) {
-      return "translate(" + (width/3 * i + 10) + "," + (0) + ")"
+      return "translate(" + (width/3 * i + 10) + "," + (17) + ")"
     })
     .attr("id", function(d) { 
       return d
     })
-
+  barG.append("text")
+    .text(function(d) {
+      return d;
+    })
+    .attr("class", function(d) {
+      return "group-label " + d
+    })
+  barG.append("text")
+    .attr("class", "group-label-2")
+    .attr("transform", function(d,i) {
+      var width = (d3.select(".group-label." + d).node().getBoundingClientRect().width) + 5
+      return "translate(" + width + "," + 0 + ")"
+    })
   // var subBarText = barG.selectAll("g")
   //   .data(categories)
   //   .enter()
@@ -613,7 +630,7 @@ function ready(error, us, county, state) {
       return "category " + d
     })
     .attr("transform", function(d,i) {
-      return "translate(" + (width/10 * i ) + "," + 0 + ")"
+      return "translate(" + (width/10 * i ) + "," + 10 + ")"
     })
   subBarG.selectAll("text")
     .data([us_data])
@@ -637,7 +654,7 @@ function ready(error, us, county, state) {
   //add background rects
   
   var rectG = subBarG.append("g")
-    .attr("class", function(d) { console.log(d)
+    .attr("class", function(d) { 
       return "rect-g " + d})
     .attr("transform", function(d,i) {
       return "translate(" + 0 +"," + 15+ ")"
@@ -746,9 +763,29 @@ function ready(error, us, county, state) {
     })
   
     var quantize = d3.scaleQuantize()
-      .domain([min, max])
+      .domain(BREAKS[variable])
       .range(d3.range(5).map(function(i) { return "q" + i + "-5"; }))
 
+    d3.selectAll(".legend-labels")
+      .each(function(d,i) {
+        d3.select(this)
+          .text(function(){
+            var min = d3.min(tmp_county, function(d) {
+              return d.properties[variable]
+            })
+            var max = d3.max(tmp_county, function(d) {
+              return d.properties[variable]
+            })
+            var array = BREAKS[SELECTED_VARIABLE]
+            if (i==0) {
+              return formatNumber(min)
+            }else if (i==5) {
+              return formatNumber(max)
+            }else {
+              return formatNumber(array[i-1])
+            }
+        })
+      })
     d3.select(".counties").selectAll("path")
     .transition()
     .duration(800)
@@ -783,7 +820,15 @@ function ready(error, us, county, state) {
     })]);
 
     y.domain([0, d3.max(data, function(d) {
-      return Math.max(d.white, d.nonwhite, d.national)
+      if (isNaN(d.nonwhite) == true && isNaN(d.white) == true){
+        return d.national
+      }else if (isNaN(d.nonwhite) == true && isNaN(d.white) == false) {
+        return Math.max(d.white, d.national)
+      }else if (isNaN(d.white) == true && isNaN(d.nonwhite) == false) {
+        return Math.max(d.nonwhite, d.national)
+      }else {
+        return Math.max(d.white, d.nonwhite, d.national)
+      }
     })])
     // y.domain([0, d3.max(data, function(d) {
     //   if (d.white == undefined && d.nonwhite == undefined) {
@@ -834,7 +879,7 @@ function ready(error, us, county, state) {
             .data([us_data])
             .text(function(d) {
               var parentClass = d3.select(this.parentNode).attr('class');
-              if (parentClass.search("Overall") > -1) { console.log(d[variable])
+              if (parentClass.search("Overall") > -1) { 
                 return ((d[variable]) != undefined) ? formatNumber(d[variable]) : ""
               }else if (parentClass.search("Non") > -1) {
                 return ((d[NONWHITE]) != undefined) ? formatNumber(d[NONWHITE]) : ""
@@ -888,6 +933,8 @@ function ready(error, us, county, state) {
         var State = d3.select("#State").selectAll(".category")
         var selectedState = d3.select("path#" + selected["properties"]["abbr"]).datum()
         var stateData = selectedState["properties"]
+        
+        d3.select("#State").select(".group-label-2").text(stateData["state"])
         State
           .each(function() {
             d3.select(this).select(".bar")
@@ -918,7 +965,7 @@ function ready(error, us, county, state) {
               .data([stateData])
               .text(function(d) {
                 var parentClass = d3.select(this.parentNode).attr('class');
-                if (parentClass.search("Overall") > -1) { console.log(d[variable])
+                if (parentClass.search("Overall") > -1) { 
                   return ((d[variable]) != undefined) ? formatNumber(d[variable]) : ""
                 }else if (parentClass.search("Non") > -1) {
                   return ((d[NONWHITE]) != undefined) ? formatNumber(d[NONWHITE]) : ""
@@ -944,6 +991,8 @@ function ready(error, us, county, state) {
               // })
             var County = d3.select("#County").selectAll(".category")
             var countyData = selected["properties"]
+            d3.select("#County").select(".group-label-2").text(countyData["county"])
+
             County
               .each(function() {
                 d3.select(this).select(".bar")
@@ -1112,10 +1161,10 @@ function ready(error, us, county, state) {
   }
   $(window).resize(function() { 
     setWidth($('.td-map').width())
-    d3.select("g").attr("transform", "scale(" + $(".td-map").width()/960 + ")");
+    d3.select("g").attr("transform", "scale(" + $(".td-map").width()/1060 + ")");
     $("table").height($("table").width()*0.8);
 
-    var width = $('.td-map').width()
+    var width = ($('.td-map').width()) * .9 - margin.left -margin.right
     var height = width*.7
     d3.select("#map").select('svg')
       .attr('width', width)
@@ -1123,12 +1172,10 @@ function ready(error, us, county, state) {
     svg.select("rect")
       .attr('width', width)
       .attr('height', height)
-    d3.select("#legend").select("svg")
-      .attr("width", width)
-      .attr("height", height/5)
-    legendSvg.select("g")
-    .attr("width", width/3)
-    .attr("transform", "translate("+width/3+"," + 10 + ")")
+    // d3.select("#legend").select("svg")
+    //   .attr("width", width)
+    //   .attr("height", height/2)
+ 
   })
 
 
