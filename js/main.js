@@ -65,7 +65,7 @@ function ready(error, us, county, state) {
     countyData.forEach(function(e, j) { 
       if (d.key == e.id) { 
         for (var property in d["values"][0]) {
-          if ((d.values[0][property]).search("<") > -1 || (d.values[0][property]).search("/") > -1) {
+          if (isNaN(+d.values[0][property]) == true && property != "state" && property != "abbr" && property != "county") {
             e[property] == null
           }else {
             e[property] = d.values[0][property]
@@ -79,7 +79,7 @@ function ready(error, us, county, state) {
     stateData.forEach(function(e, j) { 
       if (+d.key == e.id) {
         for (var property in d["values"][0]) {
-          if ((d.values[0][property]).search("<") > -1) {
+          if (isNaN(+d.values[0][property]) == true && property != "state" && property != "abbr" && property != "county") {
             e[property] == null
           }else { 
             e[property] = d.values[0][property]
@@ -348,7 +348,7 @@ function ready(error, us, county, state) {
           d3.selectAll("path.selected").moveToFront()
         }else {
           d3.selectAll(".hover").classed("hover", false)
-          updateBars(SELECTED_VARIABLE, undefined, true)
+          updateBars(SELECTED_VARIABLE, undefined)
         }
       }
     })
@@ -710,13 +710,15 @@ function ready(error, us, county, state) {
     .style("fill", function(d){
         return ((d.properties[variable]) == null) ? "#adabac" : COLORS[quantize(d.properties[variable])];
     })
-    updateBars(variable)
+    var selected = (d3.select("path.selected").node() != null) ? (d3.select("path.selected").datum()) : undefined
+
+    console.log(selected)
+    updateBars(variable, selected)
   }
-  function updateBars(variable, selected, mouseout) {
+  function updateBars(variable, selected) {
     var WHITE = variable + "_wh"
     var NONWHITE = variable + "_nw"
     var data = (zoomCounty == true) ? county_data : state_data;
-    console.log(data)
     var barHeight = height/3
     var x = d3.scaleBand()
       .rangeRound([0, width/9])
@@ -822,11 +824,13 @@ function ready(error, us, county, state) {
       if (zoomNational == true && selected == undefined) {  
         d3.selectAll("#State, #County").style("opacity", 0)
       } else if (zoomNational == false || selected != undefined) { //IF MOUSE IS OVER A STATE OR COUNTY IN WHICHEVER VIEW
+        console.log(selected)
         var countyID = (d3.select(".counties > path.selected").node() == null) ? "" : d3.select(".counties > path.selected").attr("id");
         var countyIDHov = (d3.select(".counties > path.hover").node() == null) ? "" : d3.select(".counties > path.hover").attr("id");
         var county = countyID.slice(2,)
         var state = selected["properties"]["abbr"]
         var data = (county == "") ? tmp_state : tmp_county
+        console.log(data)
         // var filteredData = data.filter(function(d){
         //   if (data == tmp_county) {
         //     return d.properties.id == county //&& d.properties.abbr == state
