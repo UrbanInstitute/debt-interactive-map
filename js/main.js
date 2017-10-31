@@ -152,7 +152,7 @@ function ready(error, us, county, state) {
           tagLimit: 2,
           appendTo: ".search-div"
         },
-        beforeTagAdded: function(event, ui) {console.log('hi')
+        beforeTagAdded: function(event, ui) {
           if(dropdown.indexOf(ui.tagLabel) == -1){ 
             return false;
           }
@@ -161,7 +161,7 @@ function ready(error, us, county, state) {
           }
         },
         afterTagAdded: function(event, ui) { 
-          console.log($('input[name="tags"').tagit('assignedTags'))
+          // console.log($('input[name="tags"').tagit('assignedTags'))
           var tag = (ui.tag[0]["textContent"]);
           var county = (tag.search(",") > 0) ? tag.split(",")[0] : "";
           var state = (tag.search(",") > 0) ? (tag.split(", ")[1]).slice(0,-1) : tag.slice(0,-1);
@@ -185,7 +185,7 @@ function ready(error, us, county, state) {
 
         },
         afterTagRemoved: function(event,ui) { 
-          console.log($('input[name="tags"').tagit('assignedTags'))
+          // console.log($('input[name="tags"').tagit('assignedTags'))
 
            var tag = (ui.tag[0]["textContent"]);
            if (tag.search(",") > 0) {
@@ -254,12 +254,11 @@ function ready(error, us, county, state) {
       var previousState = (d3.select(".state-borders > path.selected").node() != null) ? d3.select(".state-borders > path.selected").attr("id") : ""
       var selectedCounty = (d["properties"])
       var level = (zoomState == true && previousState == d["properties"]["abbr"]) ? "county": "state";
-      console.log(level)
       var county = d.properties["county"]
       var abbr = d.properties["abbr"]
       if (d3.select(this).classed('selected') == true) {
         d3.select(this).classed('selected', false)
-        if (level == "county") {
+        if (level == "county") { 
           $('ul.tagit > li:nth-child(2)').remove()
           setZoom(false, true, false)
           updateTable(selectedState)
@@ -278,7 +277,7 @@ function ready(error, us, county, state) {
       var geography = (zoomState == true && previousState == hoveredState) ? "county" : "state";
       var county = (geography == "county") ? d.properties.county : ""
       var state = d.properties.abbr
-      if (zoomNational == true ) { console.log(d)
+      if (zoomNational == true ) { 
         $(".state-borders").css("pointer-events", "all")
         $(".counties").css("pointer-events", "none")
         hoverLocation("", d.properties.abbr, "state");
@@ -289,7 +288,7 @@ function ready(error, us, county, state) {
       //   $(".counties").css("pointer-events", "none")
       // }
       else{
-        if (geography == "state") { console.log(hoveredState)
+        if (geography == "state") { 
           hoverLocation(county, state, geography)
           updateBars(SELECTED_VARIABLE, d3.select("path#" + hoveredState).datum())
         }else {
@@ -337,7 +336,7 @@ function ready(error, us, county, state) {
       zoomMap(d, level)
       updateBars(SELECTED_VARIABLE, d)
     })
-    .on('mouseover', function(d) { console.log(zoomState)
+    .on('mouseover', function(d) { 
       if (zoomNational == true) { 
         // $(".state-borders").css("pointer-events", "all")
         // $(".counties").css("pointer-events", "none")
@@ -570,7 +569,6 @@ function ready(error, us, county, state) {
     //     }
     //   }
     // })])
-  console.log(y.domain())
 
   var formatPercent = d3.format(".0%")
   var xAxis = d3.axisBottom()
@@ -853,7 +851,6 @@ function ready(error, us, county, state) {
         var State = d3.select("#State").selectAll(".category")
         var selectedState = d3.select("path#" + selected["properties"]["abbr"]).datum()
         var stateData = selectedState["properties"]
-        console.log(stateData)
         State
           .each(function() {
             d3.select(this).select(".bar")
@@ -862,11 +859,11 @@ function ready(error, us, county, state) {
               .duration(300)
               .attr("y", function(d) {  
                 var parentClass = d3.select(this.parentNode).attr('class');
-                if (parentClass.search("Overall") > -1) { console.log(d[variable])
+                if (parentClass.search("Overall") > -1) { 
                   return ((d[variable]) != undefined) ? y(d[variable]) : barHeight;
-                }else if (parentClass.search("Non") > -1) {console.log(d[WHITE])
+                }else if (parentClass.search("Non") > -1) {
                   return ((d[NONWHITE]) != undefined) ? y(d[NONWHITE]) : barHeight;
-                }else {console.log(d[NONWHITE])
+                }else {
                   return ((d[WHITE]) != undefined) ? y(d[WHITE]) : barHeight;
                 }
               })
@@ -970,7 +967,7 @@ function ready(error, us, county, state) {
       })
     }
   }
-  function updateTable(data) { 
+  function updateTable(data) { console.log(data)
     var data = (zoomNational == true) ? data : data["properties"];
     d3.selectAll(".cell-data")
       .each(function(d,i) { 
@@ -989,7 +986,7 @@ function ready(error, us, county, state) {
           })
       })
   }
-  function zoomMap(d,zoomLevel) { 
+  function zoomMap(d,zoomLevel) { console.log(zoomLevel)
     var x, y, k;
     // if (d.properties.state && centered !== d.properties.state && zoomLevel != "national") { 
     if (zoomLevel != "national") { 
@@ -1011,7 +1008,8 @@ function ready(error, us, county, state) {
       y = centroid[1];
       k = 4;
       centered = selectedState.properties.state;
-      updateTable(d)
+      var data = (zoomLevel == "state") ? d3.select("path#" + selectedState.properties.abbr).datum() : d;
+      updateTable(data)
       g.selectAll("path")
           .classed("active", centered && function(d) { return d === centered; });
       g.transition()
