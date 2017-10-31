@@ -531,7 +531,7 @@ function ready(error, us, county, state) {
   /*END TABLE*/
   /*BAR CHARTS*/
 
-  var barHeight = height/3
+  var barHeight = height/5
   var x = d3.scaleBand()
     .rangeRound([0, width/9])
     .padding(0.1)
@@ -544,14 +544,15 @@ function ready(error, us, county, state) {
     d.white = +d.values[0][WHITE];
   })
   state_data.forEach(function(d) { 
-    d.white = +d.values[0][NONWHITE]
+    d.nonwhite = +d.values[0][NONWHITE]
   })
   x.domain([[us_data].map(function(d){ 
     return d.abbr
   })]);
   y.domain([0, d3.max(state_data, function(d) {
-    return d.national
+    return Math.max(d.national, d.nonwhite, d.white)
   })])
+
     // y.domain([0, d3.max(data, function(d) {
     //   if (d.white == undefined && d.nonwhite == undefined) {
     //     return d.national
@@ -727,12 +728,11 @@ function ready(error, us, county, state) {
     var WHITE = variable + "_wh"
     var NONWHITE = variable + "_nw"
     var data = (zoomCounty == true) ? county_data : state_data;
-    var barHeight = height/3
     var x = d3.scaleBand()
       .rangeRound([0, width/9])
       .padding(0.1)
-    var y = d3.scaleLinear()
-      .rangeRound([barHeight, 0]);
+    // var y = d3.scaleLinear()
+    //   .rangeRound([barHeight, 0]);
     data.forEach(function(d) { 
       d.national = +d.values[0][variable]
     })
@@ -747,8 +747,9 @@ function ready(error, us, county, state) {
     })]);
 
     y.domain([0, d3.max(data, function(d) {
-      return d.national
+      return Math.max(d.white, d.nonwhite, d.national)
     })])
+        console.log(y.domain())
     // y.domain([0, d3.max(data, function(d) {
     //   if (d.white == undefined && d.nonwhite == undefined) {
     //     return d.national
