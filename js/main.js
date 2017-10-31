@@ -1139,9 +1139,9 @@ function ready(error, us, county, state) {
       setZoom(true, false, false)
       $(".state-borders").css("pointer-events", "all")
       $(".counties").css("pointer-events", "none")
-      x = width / 1.9;
-      y = height / 2;
-      k = .9;
+      x = width / 1.8;
+      y = height / 1.7;
+      k = .8;
       centered = null;
       updateTable(us_data)
       g.selectAll("path")
