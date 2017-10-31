@@ -531,10 +531,10 @@ function ready(error, us, county, state) {
   /*END TABLE*/
   /*BAR CHARTS*/
 
-  var barHeight = height/5
+  var barSvgHeight = height/5
+  var barHeight = barSvgHeight*.7
   var x = d3.scaleBand()
-    .rangeRound([0, width/9])
-    .padding(0.1)
+    .rangeRound([0, width/11])
   var y = d3.scaleLinear()
       .rangeRound([barHeight, 0]);
   state_data.forEach(function(d) { 
@@ -583,18 +583,28 @@ function ready(error, us, county, state) {
   var barSvg = d3.select("#bar-chart")
     .append("svg")
     .attr('width', width)
-    .attr('height', barHeight)
+    .attr('height', barSvgHeight)
   var barG = barSvg.selectAll("g")
     .data(groups)
     .enter()
     .append('g')
     .attr("transform", function(d,i) {
-      return "translate(" + (width/3 * i + 10) + "," + (-30) + ")"
+      return "translate(" + (width/3 * i + 10) + "," + (0) + ")"
     })
     .attr("id", function(d) { 
       return d
     })
 
+  // var subBarText = barG.selectAll("g")
+  //   .data(categories)
+  //   .enter()
+  //   .append("g")
+  //   .attr("class", "g-label")
+  //   .attr("transform", function(d,i) {
+  //     return "translate(" + (width/9 * i ) + "," + 0 + ")"
+  //   })
+  // subBarText.append("text")
+  //   .text("hello")
   var subBarG = barG.selectAll("g")
     .data(categories)
     .enter()
@@ -603,15 +613,36 @@ function ready(error, us, county, state) {
       return "category " + d
     })
     .attr("transform", function(d,i) {
-      return "translate(" + (width/9 * i ) + "," + 0 + ")"
+      return "translate(" + (width/10 * i ) + "," + 0 + ")"
     })
-  subBarG.append("g")
-    .attr("class", "x axis")
+  subBarG.selectAll("text")
+    .data([us_data])
+    .enter()
+    .append("text")
+    .attr("class", "data-label")
     .attr("transform", function(d,i) {
-      return "translate(" + 0 +"," + barHeight+ ")"
+      return "translate(" + 0 +"," + 10+ ")"
     })
-    .call(xAxis)
-  subBarG
+    .text(function(d) { 
+      var parentClass = d3.select(this.parentNode).attr('class');
+      if (parentClass.search("Overall") > -1) {
+        return formatNumber(d[SELECTED_VARIABLE])
+      }else if (parentClass.search("Non") > -1) {
+        return formatNumber(d[NONWHITE])
+      }else{
+        return formatNumber(d[WHITE])
+      }
+    })
+
+  //add background rects
+  
+  var rectG = subBarG.append("g")
+    .attr("class", function(d) { console.log(d)
+      return "rect-g " + d})
+    .attr("transform", function(d,i) {
+      return "translate(" + 0 +"," + 15+ ")"
+    })
+  rectG
     .append("g")
     .attr("class", "g-text")
     .append("text")
@@ -621,8 +652,13 @@ function ready(error, us, county, state) {
     .attr("text-anchor", "start")
     .attr("font-size", "1.1em")
     .text(function(d) { return d});
-  //add background rects
-  subBarG.selectAll("rect")
+  rectG.append("g")
+    .attr("class", "x axis")
+    .attr("transform", function(d,i) {
+      return "translate(" + 0 +"," + barHeight+ ")"
+    })
+    .call(xAxis)
+  rectG.selectAll("rect")
     .data([us_data])
     .enter()
     .append("rect")
@@ -653,7 +689,7 @@ function ready(error, us, county, state) {
     })
     .style("fill", "#adabac")
   //add bars
-  subBarG.selectAll("rect:not(.background-rect)")
+  rectG.selectAll("rect:not(.background-rect)")
     .data([us_data])
     .enter()
     .append("rect")
@@ -723,7 +759,7 @@ function ready(error, us, county, state) {
 
     updateBars(variable, selected)
   }
-  function updateBars(variable, selected) { console.log(selected)
+  function updateBars(variable, selected) { 
     
     var WHITE = variable + "_wh"
     var NONWHITE = variable + "_nw"
@@ -749,7 +785,6 @@ function ready(error, us, county, state) {
     y.domain([0, d3.max(data, function(d) {
       return Math.max(d.white, d.nonwhite, d.national)
     })])
-        console.log(y.domain())
     // y.domain([0, d3.max(data, function(d) {
     //   if (d.white == undefined && d.nonwhite == undefined) {
     //     return d.national
@@ -795,6 +830,18 @@ function ready(error, us, county, state) {
                 return ((d[WHITE]) != undefined) ? barHeight - y(d[WHITE]) : 0;
               }
             })
+          d3.select(this).select(".data-label")
+            .data([us_data])
+            .text(function(d) {
+              var parentClass = d3.select(this.parentNode).attr('class');
+              if (parentClass.search("Overall") > -1) { console.log(d[variable])
+                return ((d[variable]) != undefined) ? formatNumber(d[variable]) : ""
+              }else if (parentClass.search("Non") > -1) {
+                return ((d[NONWHITE]) != undefined) ? formatNumber(d[NONWHITE]) : ""
+              }else{
+                return ((d[WHITE]) != undefined) ? formatNumber(d[WHITE]) : ""
+              }
+            })
         })
       // if (mouseout == true) { //NATIONAL VIEW AND MOUSE OUT STATES
 
@@ -838,17 +885,6 @@ function ready(error, us, county, state) {
         var county = countyID.slice(2,)
         var state = selected["properties"]["abbr"]
         var data = (county == "") ? tmp_state : tmp_county
-        // var filteredData = data.filter(function(d){
-        //   if (data == tmp_county) {
-        //     return d.properties.id == county //&& d.properties.abbr == state
-        //   }else { 
-        //     return d.properties.abbr == state
-        //   }
-        // })
-
-        // x.domain([[filteredData[0].properties].map(function(d){console.log(d.abbr)
-        //   return d.abbr
-        // })]);
         var State = d3.select("#State").selectAll(".category")
         var selectedState = d3.select("path#" + selected["properties"]["abbr"]).datum()
         var stateData = selectedState["properties"]
@@ -876,6 +912,18 @@ function ready(error, us, county, state) {
                   return ((d[NONWHITE]) != undefined) ? barHeight - y(d[NONWHITE]) : 0;
                 }else {
                   return ((d[WHITE]) != undefined) ? barHeight - y(d[WHITE]) : 0;
+                }
+              })
+            d3.select(this).select(".data-label")
+              .data([stateData])
+              .text(function(d) {
+                var parentClass = d3.select(this.parentNode).attr('class');
+                if (parentClass.search("Overall") > -1) { console.log(d[variable])
+                  return ((d[variable]) != undefined) ? formatNumber(d[variable]) : ""
+                }else if (parentClass.search("Non") > -1) {
+                  return ((d[NONWHITE]) != undefined) ? formatNumber(d[NONWHITE]) : ""
+                }else{
+                  return ((d[WHITE]) != undefined) ? formatNumber(d[WHITE]) : ""
                 }
               })
           })
@@ -920,6 +968,18 @@ function ready(error, us, county, state) {
                       return ((d[NONWHITE]) != undefined) ? barHeight - y(d[NONWHITE]) : 0;
                     }else {
                       return ((d[WHITE]) = undefined) ? barHeight - y(d[WHITE]) : 0;
+                    }
+                  })
+                d3.select(this).select(".data-label")
+                  .data([countyData])
+                  .text(function(d) {
+                    var parentClass = d3.select(this.parentNode).attr('class');
+                    if (parentClass.search("Overall") > -1) { 
+                      return ((d[variable]) != undefined) ? formatNumber(d[variable]) : ""
+                    }else if (parentClass.search("Non") > -1) {
+                      return ((d[NONWHITE]) != undefined) ? formatNumber(d[NONWHITE]) : ""
+                    }else{
+                      return ((d[WHITE]) != undefined) ? formatNumber(d[WHITE]) : ""
                     }
                   })
               })
@@ -968,7 +1028,7 @@ function ready(error, us, county, state) {
       })
     }
   }
-  function updateTable(data) { console.log(data)
+  function updateTable(data) { 
     var data = (zoomNational == true) ? data : data["properties"];
     d3.selectAll(".cell-data")
       .each(function(d,i) { 
@@ -987,7 +1047,7 @@ function ready(error, us, county, state) {
           })
       })
   }
-  function zoomMap(d,zoomLevel) { console.log(zoomLevel)
+  function zoomMap(d,zoomLevel) { 
     var x, y, k;
     // if (d.properties.state && centered !== d.properties.state && zoomLevel != "national") { 
     if (zoomLevel != "national") { 
