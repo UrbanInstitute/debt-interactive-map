@@ -114,7 +114,6 @@ function ready(error, us, county, state) {
       }
     }
   }
-  console.log(tmp_county)
   /*END*/
 
     function createSearchArray(filter) {
@@ -126,14 +125,13 @@ function ready(error, us, county, state) {
         for (var i = 0; i<tmp_county.length; i++){
          searchArray.push(tmp_county[i]["properties"]["county"] + ", " + tmp_county[i]["properties"]["abbr"])
         }
-      }else if (zoomState == true) { console.log(filter)
+      }else if (zoomState == true) { 
         for (var i = 0; i<tmp_county.length; i++){ 
-          if (tmp_county[i]["properties"]["abbr"] == filter) {console.log(filter)
+          if (tmp_county[i]["properties"]["abbr"] == filter) {
             searchArray.push(tmp_county[i]["properties"]["county"] + ", " + tmp_county[i]["properties"]["abbr"])
           }
         }
       }
-      console.log(searchArray);
      dropdown = searchArray
      $('input[name="tags"').tagit("option", {availableTags: dropdown})
     }
@@ -275,22 +273,34 @@ function ready(error, us, county, state) {
       }
     })
     .on('mouseover', function(d) { 
-      if (zoomNational == true) { 
-        $(".state-borders").css("pointer-events", "all")
-        $(".counties").css("pointer-events", "none")
-        hoverLocation("", d.properties.abbr, "state");
-        updateBars(SELECTED_VARIABLE, d) 
-      }else {
-        $(".state-borders").css("pointer-events", "none")
-        $(".counties").css("pointer-events", "all")
-      }
       var previousState = (d3.select(".state-borders > path.selected").node() != null) ? d3.select(".state-borders > path.selected").attr("id") : ""
       var hoveredState = d.properties.abbr
       var geography = (zoomState == true && previousState == hoveredState) ? "county" : "state";
       var county = (geography == "county") ? d.properties.county : ""
       var state = d.properties.abbr
-      hoverLocation(county, state, geography)
-      updateBars(SELECTED_VARIABLE, d)
+      if (zoomNational == true ) { console.log(d)
+        $(".state-borders").css("pointer-events", "all")
+        $(".counties").css("pointer-events", "none")
+        hoverLocation("", d.properties.abbr, "state");
+        updateBars(SELECTED_VARIABLE, d) 
+      }
+      // else if (hoveredState != prevousState) {
+      //   $(".state-borders").css("pointer-events", "all")
+      //   $(".counties").css("pointer-events", "none")
+      // }
+      else{
+        if (geography == "state") { console.log(hoveredState)
+          hoverLocation(county, state, geography)
+          updateBars(SELECTED_VARIABLE, d3.select("path#" + hoveredState).datum())
+        }else {
+          hoverLocation(county, state, geography)
+          updateBars(SELECTED_VARIABLE, d)
+        }
+        // $(".state-borders").css("pointer-events", "none")
+        // $(".counties").css("pointer-events", "all")
+
+
+      }
     })
     .on('mouseout', function(d) { 
       if (d3.select(".counties > path.selected").node() != undefined) {
@@ -321,21 +331,21 @@ function ready(error, us, county, state) {
       var abbr = d.abbr;
       var level = "state"
       setZoom(false, true, false)
-      $(".state-borders").css("pointer-events", "none")
-      $(".counties").css("pointer-events", "all")
+      // $(".state-borders").css("pointer-events", "none")
+      // $(".counties").css("pointer-events", "all")
       addTag(state, null, abbr)
       zoomMap(d, level)
       updateBars(SELECTED_VARIABLE, d)
     })
-    .on('mouseover', function(d) {
+    .on('mouseover', function(d) { console.log(zoomState)
       if (zoomNational == true) { 
-        $(".state-borders").css("pointer-events", "all")
-        $(".counties").css("pointer-events", "none")
+        // $(".state-borders").css("pointer-events", "all")
+        // $(".counties").css("pointer-events", "none")
         hoverLocation("", d.properties.abbr, "state");
         updateBars(SELECTED_VARIABLE, d) 
       }else {
-        $(".state-borders").css("pointer-events", "none")
-        $(".counties").css("pointer-events", "all")
+        // $(".state-borders").css("pointer-events", "none")
+        // $(".counties").css("pointer-events", "all")
 
       }
     })
@@ -712,10 +722,10 @@ function ready(error, us, county, state) {
     })
     var selected = (d3.select("path.selected").node() != null) ? (d3.select("path.selected").datum()) : undefined
 
-    console.log(selected)
     updateBars(variable, selected)
   }
-  function updateBars(variable, selected) {
+  function updateBars(variable, selected) { console.log(selected)
+    
     var WHITE = variable + "_wh"
     var NONWHITE = variable + "_nw"
     var data = (zoomCounty == true) ? county_data : state_data;
@@ -824,13 +834,11 @@ function ready(error, us, county, state) {
       if (zoomNational == true && selected == undefined) {  
         d3.selectAll("#State, #County").style("opacity", 0)
       } else if (zoomNational == false || selected != undefined) { //IF MOUSE IS OVER A STATE OR COUNTY IN WHICHEVER VIEW
-        console.log(selected)
         var countyID = (d3.select(".counties > path.selected").node() == null) ? "" : d3.select(".counties > path.selected").attr("id");
         var countyIDHov = (d3.select(".counties > path.hover").node() == null) ? "" : d3.select(".counties > path.hover").attr("id");
         var county = countyID.slice(2,)
         var state = selected["properties"]["abbr"]
         var data = (county == "") ? tmp_state : tmp_county
-        console.log(data)
         // var filteredData = data.filter(function(d){
         //   if (data == tmp_county) {
         //     return d.properties.id == county //&& d.properties.abbr == state
@@ -843,7 +851,9 @@ function ready(error, us, county, state) {
         //   return d.abbr
         // })]);
         var State = d3.select("#State").selectAll(".category")
-        var stateData = selected["properties"]
+        var selectedState = d3.select("path#" + selected["properties"]["abbr"]).datum()
+        var stateData = selectedState["properties"]
+        console.log(stateData)
         State
           .each(function() {
             d3.select(this).select(".bar")
@@ -852,11 +862,11 @@ function ready(error, us, county, state) {
               .duration(300)
               .attr("y", function(d) {  
                 var parentClass = d3.select(this.parentNode).attr('class');
-                if (parentClass.search("Overall") > -1) { 
+                if (parentClass.search("Overall") > -1) { console.log(d[variable])
                   return ((d[variable]) != undefined) ? y(d[variable]) : barHeight;
-                }else if (parentClass.search("Non") > -1) {
+                }else if (parentClass.search("Non") > -1) {console.log(d[WHITE])
                   return ((d[NONWHITE]) != undefined) ? y(d[NONWHITE]) : barHeight;
-                }else {
+                }else {console.log(d[NONWHITE])
                   return ((d[WHITE]) != undefined) ? y(d[WHITE]) : barHeight;
                 }
               })
@@ -888,7 +898,6 @@ function ready(error, us, county, state) {
               // })
             var County = d3.select("#County").selectAll(".category")
             var countyData = selected["properties"]
-            console.log(countyData)
             County
               .each(function() {
                 d3.select(this).select(".bar")
@@ -923,7 +932,7 @@ function ready(error, us, county, state) {
         }
 
   }
-  function addTag(state, county, abbr) { console.log(state)
+  function addTag(state, county, abbr) { 
       d3.selectAll('li.tagit-choice').remove()
       var newTag = $("ul.tagit").append('<li id="state" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable"></li>')
       $('li#state').insertBefore(".tagit-new").append('<span class="tagit-label">' + state + '</span>')
@@ -981,11 +990,11 @@ function ready(error, us, county, state) {
       })
   }
   function zoomMap(d,zoomLevel) { 
-    console.log(data)
-    console.log(d)
     var x, y, k;
     // if (d.properties.state && centered !== d.properties.state && zoomLevel != "national") { 
     if (zoomLevel != "national") { 
+      $(".state-borders").css("pointer-events", "none")
+      $(".counties").css("pointer-events", "all")
       d3.selectAll("path").classed("selected", false)
       d3.select("path#" + d["properties"]["abbr"])
         .classed("selected", true)
@@ -1020,6 +1029,8 @@ function ready(error, us, county, state) {
       }
     } else { 
       setZoom(true, false, false)
+      $(".state-borders").css("pointer-events", "all")
+      $(".counties").css("pointer-events", "none")
       x = width / 1.9;
       y = height / 2;
       k = .9;
