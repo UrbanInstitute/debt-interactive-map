@@ -27,7 +27,7 @@ setWidth($('.td-map').width())
 setZoom(true,false, false)
 setVariable("perc_debt_collect")
 
-var width = ((tdMap) - margin.left -margin.right)*.9,
+var width = ((tdMap) - margin.left -margin.right)*.86,
     height = (width*.7) - margin.top-margin.bottom,     
     centered,
     selectedState;
@@ -362,12 +362,13 @@ function ready(error, us, county, state) {
     })
 
 /*LEGEND*/
- var legendSvg = d3.select("#legend")
+ var legendSvg = d3.select("#map")
     .append("svg")
-    .attr("height", height/2)
+    .attr("height", height)
+    .attr("width", 50)
 
   var legend = legendSvg.append("g")
-    .attr("transform", "translate("+10+"," + 10 + ")")
+    .attr("transform", "translate("+0+"," + 10 + ")")
   var keyWidth =   15;
   var keyHeight =  30;
  for (i=0; i<=5; i++){
@@ -377,6 +378,7 @@ function ready(error, us, county, state) {
       .attr("height",keyHeight)
       .attr("class","rect"+i)
       .attr("y",keyHeight*i)
+      .attr("x", 38)
       .style("fill", COLORRANGE[i])
       // .on("mouseover",function(){ mouseEvent({type: "Legend", "class": (d3.select(this).attr("class"))}, "hover") })
       // .on("mouseleave", function(){
@@ -384,9 +386,10 @@ function ready(error, us, county, state) {
       // })
   //     .on("click",function(){ mouseEvent(dataID, {type: "Legend", "class": "q" + (this.getAttribute("x")/keyWidth) + "-4"}, "click") })
     legend.append("text")
-      .attr("x", 20)
+      .attr("x", 33)
       .attr("class","legend-labels")
       .attr("y",keyHeight*i)
+      .attr("text-anchor", "end")
       .text(function(){
         var min = d3.min(tmp_county, function(d) { 
           return d.properties[SELECTED_VARIABLE]
@@ -397,8 +400,9 @@ function ready(error, us, county, state) {
    }
    if (i == 5) { 
     legend.append("text")
-      .attr("x", 20)
+      .attr("x", 33)
       .attr("class","legend-labels")
+      .attr("text-anchor", "end")
       .attr("y",keyHeight*i)
       .text(function(){
         var max = d3.max(tmp_county, function(d) { 
@@ -1164,8 +1168,8 @@ function ready(error, us, county, state) {
     d3.select("g").attr("transform", "scale(" + $(".td-map").width()/1060 + ")");
     $("table").height($("table").width()*0.8);
 
-    var width = ($('.td-map').width()) * .9 - margin.left -margin.right
-    var height = width*.7
+    var width = ($('.td-map').width() - margin.left -margin.right) * .86,
+        height = (width*.7) - margin.top-margin.bottom
     d3.select("#map").select('svg')
       .attr('width', width)
       .attr('height', height)

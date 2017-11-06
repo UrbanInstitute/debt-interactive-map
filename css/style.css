@@ -7,11 +7,40 @@ path.domain {
   stroke: none;
 }
 
+#notes-div {
+  margin-top: 10px;
+}
+#notes {
+  width: 90%;
+  margin-left: auto;
+  margin-right: auto;
+  font-size: 11px;
+  font-style: italic;
+}
 #topic {
   margin-top: 15px;
   font-size: 18px;
   font-weight: 700;
   text-transform: uppercase;
+}
+
+.title {
+  width: 692px;
+  height: 22px;
+  font-family: Lato;
+  font-size: 18px;
+  text-align: left;
+  color: #000000;
+}
+
+.description {
+  width: 692px;
+  height: 129px;
+  opacity: 0.5;
+  font-family: Lato;
+  font-size: 14px;
+  text-align: left;
+  color: #000000;
 }
 
 table.main-table {
@@ -36,9 +65,12 @@ table {
   font-size: 16px;
   font-weight: 600;
 }
+.legend-labels {
+  font-size: 11px;
+}
 #legend {
-  float: left;
-  width: 50px;
+  float: right;
+  width: 0px;
 }
 #map {
   float: left;
