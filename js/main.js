@@ -27,7 +27,7 @@ setWidth($('.td-map').width())
 setZoom(true,false, false)
 setVariable("perc_debt_collect")
 
-var width = ((tdMap) - margin.left -margin.right)*.85,
+var width = ((tdMap) - margin.left -margin.right)*.98,
     height = (width*.7) - margin.top-margin.bottom,     
     centered,
     selectedState;
@@ -241,6 +241,7 @@ function ready(error, us, county, state) {
       .attr("class", "background")
   var path = d3.geoPath()
   var g = svg.append("g")
+    .attr("class", "map-g")
     .attr("transform", "scale(" + $(".td-map").width()/1060 + ")");
   g.append("g")
     .attr("class", "counties")
@@ -280,13 +281,13 @@ function ready(error, us, county, state) {
         updateBars(SELECTED_VARIABLE, d)
       }
     })
-    .on('mouseover', function(d) { 
+    .on('mouseover', function(d) {console.log(d)
       var previousState = (d3.select(".state-borders > path.selected").node() != null) ? d3.select(".state-borders > path.selected").attr("id") : ""
       var hoveredState = d.properties.abbr
       var geography = (zoomState == true && previousState == hoveredState) ? "county" : "state";
       var county = (geography == "county") ? d.properties.county : ""
       var state = d.properties.abbr
-      if (zoomNational == true ) { 
+      if (zoomNational == true ) { console.log(d)
         $(".state-borders").css("pointer-events", "all")
         $(".counties").css("pointer-events", "none")
         hoverLocation("", d.properties.abbr, "state");
@@ -344,7 +345,7 @@ function ready(error, us, county, state) {
       updateBars(SELECTED_VARIABLE, d)
     })
     .on('mouseover', function(d) { 
-      if (zoomNational == true) { 
+      if (zoomNational == true) { console.log(d)
         // $(".state-borders").css("pointer-events", "all")
         // $(".counties").css("pointer-events", "none")
         hoverLocation("", d.properties.abbr, "state");
@@ -369,14 +370,71 @@ function ready(error, us, county, state) {
       }
     })
 
-/*LEGEND*/
- var legendSvg = d3.select("#map")
-    .append("svg")
-    .attr("height", height)
-    .attr("width", 50)
+/*ZOOM IN/OUT BUTTONS*/
+var data = [{label: "+", x: width*.95, y: height / 2, id: "zoom_in"},
+            {label: "-", x: width*.95, y: height / 2.3, id: "zoom_out" }];
+var buttons = svg.selectAll(".zoomBtn")
+  .data(data)
+  .enter()
+  .append('g')
+  .attr('class', 'zoomBtn')
+  .attr('id', function(d) {
+    return d.id
+  })
+  .on('click', function(d) {
+    var factor = (this.id === 'zoom_in') ? 2 : .9;
+    zoomed(factor)
+  })
+var buttonG = buttons
+ .attr('transform', function(d) {
+  return 'translate(' + d.x + ',' + d.y + ')'
+  });
+var buttonRect = buttonG.append('rect')
+  .attr("width", 35)
+  .attr('height', 35)
+  .attr('x', 0)
+  .attr('y', 0)
+  .style('fill', '#fff')
+  .style('border-radius', "2px")
+buttonG.append('text')
+  .text(function(d) {
+    return d.label
+  })
+  .attr('x', 12.5)
+  .attr('y', 25.5)
+  .style('font-size', "28px")
 
-  var legend = legendSvg.append("g")
-    .attr("transform", "translate("+0+"," + 10 + ")")
+d3.select(".map-g")
+  .call(d3.zoom().on("zoom", function () {
+          d3.select(".map-g").attr("transform", d3.event.transform)
+  }))
+function zoomed(factor) { 
+      setZoom(true, false, false)
+      var centroid = [width/2, height/2], //replace with variable d to center by county 
+          x = centroid[0],
+          y = centroid[1],
+          k = factor;
+      // var data = (zoomLevel == "state") ? d3.select("path#" + selectedState.properties.abbr).datum() : d;
+      g.transition()
+          .duration(750)
+          .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+          .style("stroke-width", 1.5 / k + "px");
+}
+
+
+/*LEGEND*/
+ var legend = svg
+    .append("g")
+    .attr("height", height/2)
+    .attr("width", 50)
+    .attr('transform', 'translate(' + (width*.93) + ',' + 0 + ')')
+  legend.append("rect")
+    .attr("width", 65)
+    .attr("height", 160)
+    .style("fill", "#f5f5f5")
+    .style("opacity", 0.9)
+    .attr('transform', 'translate(' + (-5) + ',' + 0 + ')')
+
   legend.append("text")
   var keyWidth =   15;
   var keyHeight =  30;
@@ -1037,6 +1095,7 @@ function ready(error, us, county, state) {
 
   }
   function addTag(state, county, abbr) { 
+      ($(".ui-widget").css("height", 37))
       d3.selectAll('li.tagit-choice').remove()
       var newTag = $("ul.tagit").append('<li id="state" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable"></li>')
       $('li#state').insertBefore(".tagit-new").append('<span class="tagit-label">' + state + '</span>')
@@ -1173,7 +1232,7 @@ function ready(error, us, county, state) {
     d3.select("g").attr("transform", "scale(" + $(".td-map").width()/1060 + ")");
     $("table").height($("table").width()*0.8);
 
-    var width = ($('.td-map').width() - margin.left -margin.right) * .85,
+    var width = ($('.td-map').width() - margin.left -margin.right) * .98,
         height = (width*.7) - margin.top-margin.bottom
     d3.select("#map").select('svg')
       .attr('width', width)

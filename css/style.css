@@ -89,6 +89,20 @@ table {
   float: right;
   width: 0px;
 }
+#zoomBtn {
+  position: relative;
+  bottom: -500px;
+  width: 35px;
+  float: left;
+}
+.zoomBtn {
+  width: 100%;
+  float: left;
+  display: inline-block;
+  height: 35px;
+  pointer-events: all;
+  cursor: pointer;
+}
 #map {
   float: left;
   margin-bottom: 20px;
