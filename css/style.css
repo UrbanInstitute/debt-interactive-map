@@ -6,6 +6,7 @@ body {
 hr {
   height: 1px;
   background-color: #d2d2d2;
+  border: none;
 }
 path.domain {
   stroke: none;
@@ -29,7 +30,9 @@ path.domain {
   color: #000000;
   margin-bottom: 24px;
 }
-
+/*.tagit.ui-widget.ui-widget-content.ui-corner-all {
+  width: 221px !important;
+}*/
 .title {
   margin-top: 25px;
   width: 692px;
@@ -68,12 +71,19 @@ table {
   border: 0;
 }
 .group-label-2 {
-  fill: #0a4c6a;
-  font-size: 16px;
+  fill: #000;
+  font-size: 14px;
+  height: 17px;
   font-weight: 600;
 }
-.legend-labels {
+.g-text {
   font-size: 11px;
+}
+.data-label {
+  font-size: 12px;
+}
+.legend-labels {
+  font-size: 12px;
 }
 #legend {
   float: right;
@@ -92,9 +102,10 @@ table {
   background-color: #f5f5f5;
   height: 60px;
   margin-top: 30px;
-  width: 76.8%;
+  width: 292px;
   margin-left: auto;
   margin-right: auto;
+  padding-bottom: 14px;
 
 }
 .td-map, .td-table {
@@ -121,8 +132,7 @@ table {
 }
 
 .ui-widget {
-  padding-left: 10px;
-  padding-top: 10px;
+  padding-left: 20px;
 }
 
 .ui-widget > label {
@@ -172,8 +182,21 @@ tr.cell-column {
 
 .search-div {
   position: relative;
-  margin-top: 30px;
+  padding-top: 14px;
 
+}
+.image-div {
+  display: inline-block;
+  float: right;
+  height: 100%;
+}
+.image-div img {
+  margin-top: 19.5px;
+  padding-right: 21.5px;
+  width: 17.5px;
+  height: 17.5px;
+  cursor: pointer;
+  pointer-events: all;
 }
 .counties {
   stroke: #fff;
@@ -226,8 +249,8 @@ table {
 }
 
 .td-table {
-/*  width: 328px;
-*/}
+  width: 328px;
+}
 .left-table table th {
     padding: 5px 19px;
 }

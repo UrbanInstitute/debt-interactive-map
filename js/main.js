@@ -167,6 +167,7 @@ function ready(error, us, county, state) {
           }
         },
         afterTagAdded: function(event, ui) { 
+          ($(".ui-widget").css("height", 37))
           // console.log($('input[name="tags"').tagit('assignedTags'))
           var tag = (ui.tag[0]["textContent"]);
           var county = (tag.search(",") > 0) ? tag.split(",")[0] : "";
@@ -678,10 +679,9 @@ function ready(error, us, county, state) {
     .attr("class", "g-text")
     .append("text")
     .attr("x", 0)
-    .attr("y", barHeight*1.1)
+    .attr("y", barHeight + 10)
     .attr("dy", ".71em")
     .attr("text-anchor", "start")
-    .attr("font-size", "1.1em")
     .text(function(d) { return d});
   rectG.append("g")
     .attr("class", "x axis")
