@@ -272,6 +272,8 @@ function ready(error, us, county, state) {
         }
       }else {
         var county = (level == "state") ? null : county;
+        console.log(zoomState)
+        console.log(previousState)
         addTag(state, county, abbr)
         zoomMap(d, level)
         updateBars(SELECTED_VARIABLE, d)
@@ -306,7 +308,7 @@ function ready(error, us, county, state) {
         var county = d3.select(".counties > path.selected").datum().properties.county
         var abbr = d3.select(".counties > path.selected").datum().properties.abbr
         d3.select("#location").html(county + ", " + abbr)
-        setZoom(false, false, true)
+        setZoom(false, true, true)
         updateBars(SELECTED_VARIABLE, d3.select(".counties > path.selected").datum())
       }else if (d3.select(".state-borders > path.selected").node() != undefined) { //IF A STATE IS SELECTED
         var state = d3.select(".state-borders > path.selected").datum().properties.state
