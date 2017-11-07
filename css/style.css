@@ -3,6 +3,10 @@ body {
   font-size: 13px;
 }
 
+hr {
+  height: 1px;
+  background-color: #d2d2d2;
+}
 path.domain {
   stroke: none;
 }
@@ -18,13 +22,16 @@ path.domain {
   font-style: italic;
 }
 #topic {
-  margin-top: 15px;
+  height: 22px;
+  font-family: Lato;
   font-size: 18px;
-  font-weight: 700;
-  text-transform: uppercase;
+  text-align: left;
+  color: #000000;
+  margin-bottom: 24px;
 }
 
 .title {
+  margin-top: 25px;
   width: 692px;
   height: 22px;
   font-family: Lato;
@@ -44,7 +51,7 @@ path.domain {
 }
 
 table.main-table {
-  max-width: 1300px;
+  max-width: 1200px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -52,7 +59,7 @@ td.td-table {
   vertical-align: top;
 }
 td.td-map {
-  background-color: #ececec;
+  background-color: #f5f5f5;
   max-width: 800px;
 }
 table {
@@ -74,15 +81,18 @@ table {
 }
 #map {
   float: left;
+  margin-bottom: 20px;
 }
 .map-div {
   margin: 20px 25px;
 }
 .search-div-main {
   background-color: #f5f5f5;
-  height: 80px;
+  height: 60px;
   margin-top: 30px;
-
+  width: 76.8%;
+  margin-left: auto;
+  margin-right: auto;
 
 }
 .td-map, .td-table {
@@ -115,6 +125,12 @@ table {
 
 .ui-widget > label {
   font-family: "Lato";
+  width: 20px;
+  height: 15px;
+  opacity: 0.5;
+  font-size: 12px;
+  text-align: left;
+  color: #000000;
 }
 .ui-widget-content {
   background: #f5f5f5 !important;
@@ -128,20 +144,19 @@ table {
   background-color: #f5f5f5;
 }
 
-tr.cell-header {
-  height: 20px;
-}
+
 
 .group.selected {
-  max-height: 80px !important;
+  max-height: 82px !important;
 }
 tr.cell-column {
-  height: 30px;
+  height: 25px;
   text-transform: uppercase;
+  font-size: 11px;
+  letter-spacing: 1.6px;
+  opacity: .8;
 }
-tr.cell-data {
-  height: 30px;
-}
+
 #location {
   font-size: 18px;
   font-weight: 600;
@@ -189,6 +204,8 @@ path.selected {
   fill: none;
   pointer-events: all;
 }
+
+
 table {
   width: 100%;
   margin-top: 50px;
@@ -199,14 +216,31 @@ table {
     text-align: left;
 }
 
-table td:first-child {
-  width: 32%;
+.td-table {
+/*  width: 328px;
+*/}
+.left-table table th {
+    padding: 5px 19px;
 }
-.left-table table td, .left-table table th {
-    padding: 3px 10px;
+.cell-data > td {
+    width: 24px;
 }
+
+.cell-data > td:nth-child(2), .cell-column > td:nth-child(2){
+  padding: 0 10px;
+}
+.cell-data > td:nth-child(1), .cell-column > td:nth-child(1){
+  padding-left: 19px;
+}
+.cell-data > td:nth-child(3), .cell-column > td:nth-child(3){
+  padding-right: 19px;
+}
+
 th {
-  font-weight: 400;
+  height: 14px;
+  font-family: Lato;
+  font-size: 12px;
+  text-align: left;
 }
 .left-table table thead th {
     background: 0;
@@ -221,11 +255,12 @@ th {
     border: none;
 }*/
 
-.left-table table tbody td {
-    color: #00496B;
+.left-table tr.cell-data {
+    color: #000000;
+    height: 24px;
 /*    border-left: 1px solid #E1EEF4;
-*/   font-size: 14px;
-    font-weight: 400;
+*/   font-size: 16px;
+    font-weight: 600;
 }
 .left-table table tbody .cell-data > td {
    font-size: 16px;
@@ -233,8 +268,9 @@ th {
 
 
 .left-table tbody {
-  border-bottom: 1px solid #E1EEF4;
+  border-bottom: 1.1px solid #ececec;
   cursor: pointer;
+  width: 288px;
 }
 .group.selected, .group.selected td {
   background-color: #000;
@@ -249,6 +285,7 @@ th {
 
 .left-table table tbody td:first-child {
     border-left: none;
+    border-left-color: none;
 }
 
 .left-table table tbody tr:last-child td {

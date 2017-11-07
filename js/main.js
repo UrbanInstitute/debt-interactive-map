@@ -369,6 +369,7 @@ function ready(error, us, county, state) {
 
   var legend = legendSvg.append("g")
     .attr("transform", "translate("+0+"," + 10 + ")")
+  legend.append("text")
   var keyWidth =   15;
   var keyHeight =  30;
  for (i=0; i<=5; i++){
@@ -521,18 +522,18 @@ function ready(error, us, county, state) {
         .enter().append("td")
         .text(function(d,i) {
           if (i==0) {
-            return ((us_data[rowVariable]) == undefined) ? "-" : formatNumber(us_data[rowVariable]);
+            return ((us_data[rowVariable]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable]);
           }else if (i==1){
-            return ((us_data[rowVariable_wh]) == undefined) ? "-" : formatNumber(us_data[rowVariable_wh]);
+            return ((us_data[rowVariable_wh]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_wh]);
           }else if (i==2) {
-            return ((us_data[rowVariable_nw]) == undefined) ? "-" : formatNumber(us_data[rowVariable_nw]);
+            return ((us_data[rowVariable_nw]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_nw]);
           }
         })
     })
   /*END TABLE*/
   /*BAR CHARTS*/
 
-  var barSvgHeight = height/4
+  var barSvgHeight = height/3.5
   var barHeight = barSvgHeight*.5
   var x = d3.scaleBand()
     .rangeRound([0, width/11])
@@ -1091,11 +1092,11 @@ function ready(error, us, county, state) {
         d3.select(this).selectAll("td")
           .text(function(d,i) { 
             if (i==0) { 
-              return ((data[rowVariable]) == undefined || (typeof data[rowVariable]) == 'string') ? "-" : formatNumber(data[rowVariable]);
+              return ((data[rowVariable]) == undefined || (typeof data[rowVariable]) == 'string') ? "N/A" : formatNumber(data[rowVariable]);
             }else if (i==1){ 
-              return ((data[rowVariable_wh]) == undefined || (typeof data[rowVariable_wh]) == 'string') ? "-" : formatNumber(data[rowVariable_wh]);
+              return ((data[rowVariable_wh]) == undefined || (typeof data[rowVariable_wh]) == 'string') ? "N/A" : formatNumber(data[rowVariable_wh]);
             }else if (i==2) {
-              return ((data[rowVariable_nw]) == undefined || (typeof data[rowVariable_nw]) == 'string') ? "-" : formatNumber(data[rowVariable_nw]);
+              return ((data[rowVariable_nw]) == undefined || (typeof data[rowVariable_nw]) == 'string') ? "N/A" : formatNumber(data[rowVariable_nw]);
             }
           })
       })

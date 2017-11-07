@@ -70,6 +70,7 @@ body{
 
 #header-pinned .title {
     font-size: 20px;
+    height: 50px;
     margin-left: 80px;
 }
 
