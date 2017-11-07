@@ -35,7 +35,6 @@ path.domain {
 }*/
 .title {
   margin-top: 25px;
-  width: 692px;
   height: 22px;
   font-family: Lato;
   font-size: 18px;
@@ -44,7 +43,6 @@ path.domain {
 }
 
 .description {
-  width: 692px;
   height: 129px;
   opacity: 0.5;
   font-family: Lato;
@@ -55,20 +53,26 @@ path.domain {
 
 table.main-table {
   max-width: 1200px;
-  margin-left: auto;
-  margin-right: auto;
+  width: 100%;
+
 }
 td.td-table {
   vertical-align: top;
 }
 td.td-map {
   background-color: #f5f5f5;
-  max-width: 800px;
+  width: 70%;
 }
 table {
   max-height: 480px !important;
   border-collapse: collapse;
   border: 0;
+}
+#isMobile {
+  display: none;
+}
+#isPhone{
+  display: none;
 }
 .group-label-2 {
   fill: #000;
@@ -116,7 +120,8 @@ table {
   background-color: #f5f5f5;
   height: 60px;
   margin-top: 30px;
-  width: 292px;
+  max-width: 292px;
+  width: 88.5%;
   margin-left: auto;
   margin-right: auto;
   padding-bottom: 14px;
@@ -253,8 +258,10 @@ path.selected {
 
 
 table {
-  width: 100%;
   margin-top: 50px;
+}
+.left-table > table {
+  margin-top: 20px;
 }
 
 .left-table table {
@@ -263,7 +270,8 @@ table {
 }
 
 .td-table {
-  width: 328px;
+  max-width: 328px !important;
+  width: 27.9%;
 }
 .left-table table th {
     padding: 5px 19px;
@@ -351,4 +359,28 @@ th {
 .left-table tbody:hover .cell-data > td {
     background-color: #000;
     color: #fdbf11;
+}
+
+#intro-mobile {
+  display: none;
+  margin: 70px 30px 30px 30px;
+
+}
+@media (min-width : 1201px) {
+  table.main-table {
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    }
+}
+@media (max-width: 700px) {
+  #isMobile {
+    display: block;
+  }
+  .main-table {
+    display: none;
+  }
+  #intro-mobile {
+    display: block;
+  }
 }

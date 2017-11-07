@@ -9,6 +9,9 @@ var zoomCounty;
 var margin = {top: 10, right: 10, bottom: 10, left: 10}
 var CATEGORY = "medical";
 var tdMap;
+var IS_MOBILE = d3.select("#isMobile").style("display") == "block";
+var IS_PHONE = d3.select("#isPhone").style("display") == "block";
+
 var dropdown;
 function setWidth(width) {
   tdMap = width;
@@ -23,14 +26,15 @@ function setZoom(national, state, county) {
   zoomState = state;
   zoomCounty = county;
 }
-setWidth($('.td-map').width())
+setWidth($('body').width() * .7)
 setZoom(true,false, false)
 setVariable("perc_debt_collect")
-
-var width = ((tdMap) - margin.left -margin.right)*.98,
+console.log(tdMap)
+var width = ((tdMap) - margin.left -margin.right),
     height = (width*.7) - margin.top-margin.bottom,     
     centered,
     selectedState;
+    console.log($("body").width())
 var COLORS = 
   {
     "q0-5": "#cfe8f3",
@@ -242,7 +246,7 @@ function ready(error, us, county, state) {
   var path = d3.geoPath()
   var g = svg.append("g")
     .attr("class", "map-g")
-    .attr("transform", "scale(" + $(".td-map").width()/1060 + ")");
+    .attr("transform", "scale(" + width/1060 + ")");
   g.append("g")
     .attr("class", "counties")
     .selectAll("path")
@@ -425,9 +429,10 @@ function zoomed(factor) {
 /*LEGEND*/
  var legend = svg
     .append("g")
+    .attr("class", "g-legend")
     .attr("height", height/2)
     .attr("width", 50)
-    .attr('transform', 'translate(' + (width*.93) + ',' + 0 + ')')
+    .attr('transform', 'translate(' + (width*.9) + ',' + 0 + ')')
   legend.append("rect")
     .attr("width", 65)
     .attr("height", 160)
@@ -1228,15 +1233,21 @@ function zoomed(factor) {
   //   g.attr('transform', 'translate(' + d3.event.transform.x + ',' + d3.event.transform.y + ') scale(' + d3.event.transform.k + ')');
   // }
   $(window).resize(function() { 
-    setWidth($('.td-map').width())
-    d3.select("g").attr("transform", "scale(" + $(".td-map").width()/1060 + ")");
+    var width = (!IS_MOBILE) ? ($('body').width()*.7 - margin.left -margin.right) : $('body').width(),
+        height = (width*.7) - margin.top-margin.bottom,
+        barSvgHeight = height/3.5;
+
+    console.log(width)
+    setWidth(width)
+    d3.select("#bar-chart").attr('width', width).attr("height", barSvgHeight)
+    d3.select(".g-legend").attr('transform', 'translate(' + (width*.9) + ',' + 0 + ')')
+    d3.select("g").attr("transform", "scale(" + width/1060 + ")");
     $("table").height($("table").width()*0.8);
 
-    var width = ($('.td-map').width() - margin.left -margin.right) * .98,
-        height = (width*.7) - margin.top-margin.bottom
     d3.select("#map").select('svg')
       .attr('width', width)
       .attr('height', height)
+      console.log(width)
     svg.select("rect")
       .attr('width', width)
       .attr('height', height)
