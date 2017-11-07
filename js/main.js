@@ -1233,7 +1233,8 @@ function zoomed(factor) {
   //   g.attr('transform', 'translate(' + d3.event.transform.x + ',' + d3.event.transform.y + ') scale(' + d3.event.transform.k + ')');
   // }
   $(window).resize(function() { 
-    var width = (!IS_MOBILE) ? ($('body').width()*.7 - margin.left -margin.right) : $('body').width(),
+    console.log($('body').width()*.7)
+    var width = (!IS_MOBILE) ? ( ($('body').width() * .7) - margin.left -margin.right) : $('body').width(),
         height = (width*.7) - margin.top-margin.bottom,
         barSvgHeight = height/3.5;
 
@@ -1251,6 +1252,8 @@ function zoomed(factor) {
     svg.select("rect")
       .attr('width', width)
       .attr('height', height)
+   svg.select(".map-g")
+    .attr("transform", "scale(" + width/1060 + ")");
     // d3.select("#legend").select("svg")
     //   .attr("width", width)
     //   .attr("height", height/2)
