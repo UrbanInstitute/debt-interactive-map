@@ -1,4 +1,4 @@
-var BREAKS ={"perc_debt_collect":[0.219, .309, .389, .489], "med_debt_collect":[1199, 1499, 1799, 2299], "perc_debt_med":[.109,.179,.259,.339], "med_debt_med":[499,699,949,1250], "perc_pop_wh":[.129,.279,.459,.669], "perc_pop_ins":[.079,.129,.179,.259], "avg_income":[52649,63849,77899,101049]}
+var BREAKS ={"perc_debt_collect":[0.219, .309, .389, .489], "med_debt_collect":[1199, 1499, 1799, 2299], "perc_debt_med":[.109,.179,.259,.339], "med_debt_med":[499,699,949,1250], "perc_pop_nw":[.129,.279,.459,.669], "perc_pop_no_ins":[.079,.129,.179,.259], "avg_income":[52649,63849,77899,101049]}
 var SELECTED_VARIABLE;
 var WHITE;
 var NONWHITE;
@@ -209,7 +209,7 @@ function ready(error, us, county, state) {
       // .translate([0, 0])
       // .scale(1)
       .scaleExtent([0, 8])
-      .on("zoom", zoomed);
+  //     .on("zoom", zoomed);
 
 
   var min = d3.min(tmp_county, function(d) {
@@ -429,7 +429,7 @@ function ready(error, us, county, state) {
   };
   function hoverLocation(county, state, geography) {
     var data = (geography == "county") ? tmp_county : tmp_state
-    var filteredData = data.filter(function(d){
+    var filteredData = data.filter(function(d){ 
       if (geography == "county") {
         return d.properties.county == county && d.properties.abbr == state
       }else { 
@@ -454,13 +454,15 @@ function ready(error, us, county, state) {
   var columns = ["Overall", "White", "Non-White"]
   var groups = ["% has any debt in collections, 2016", "Median amount all collections among those with, 2016", "% has medical debt in collections, 2016", "Median amount medical collections among those with, 2016","% population white", "% population with health insurance, 2015 (ACS)","Average household income, 2015 (ACS)"]
   var rowNumbers = [1,2,3]
-  var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_wh", "perc_pop_ins", "avg_income"]
+  var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]
   var table = d3.select("#table-div")
     .append("table")
       tbody = table.selectAll('tbody')
         .data(rowData)
         .enter().append("tbody")
-        .attr("class", "group")
+        .attr("class", function(d, i) {
+          return "group group-" + i
+        })
         .on('click', function(d) {
           d3.selectAll('tbody')
             .classed('selected', false)
@@ -1104,7 +1106,7 @@ function ready(error, us, county, state) {
   function zoomMap(d,zoomLevel) { 
     var x, y, k;
     // if (d.properties.state && centered !== d.properties.state && zoomLevel != "national") { 
-    if (zoomLevel != "national") { 
+    if (zoomLevel != "national") { console.log('hi') 
       $(".state-borders").css("pointer-events", "none")
       $(".counties").css("pointer-events", "all")
       d3.selectAll("path").classed("selected", false)
@@ -1161,9 +1163,9 @@ function ready(error, us, county, state) {
 
   }
 
-  function zoomed() {
-    g.attr('transform', 'translate(' + d3.event.transform.x + ',' + d3.event.transform.y + ') scale(' + d3.event.transform.k + ')');
-  }
+  // function zoomed() { console.log('zoomed')
+  //   g.attr('transform', 'translate(' + d3.event.transform.x + ',' + d3.event.transform.y + ') scale(' + d3.event.transform.k + ')');
+  // }
   $(window).resize(function() { 
     setWidth($('.td-map').width())
     d3.select("g").attr("transform", "scale(" + $(".td-map").width()/1060 + ")");

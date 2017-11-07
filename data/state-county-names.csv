@@ -1,317 +1,317 @@
 state,county,id,state_id
-Alabama,Autauga,1001,1
-Alabama,Baldwin,1003,1
-Alabama,Barbour,1005,1
-Alabama,Bibb,1007,1
-Alabama,Blount,1009,1
-Alabama,Bullock,1011,1
-Alabama,Butler,1013,1
-Alabama,Calhoun,1015,1
-Alabama,Chambers,1017,1
-Alabama,Cherokee,1019,1
-Alabama,Chilton,1021,1
-Alabama,Choctaw,1023,1
-Alabama,Clarke,1025,1
-Alabama,Clay,1027,1
-Alabama,Cleburne,1029,1
-Alabama,Coffee,1031,1
-Alabama,Colbert,1033,1
-Alabama,Conecuh,1035,1
-Alabama,Coosa,1037,1
-Alabama,Covington,1039,1
-Alabama,Crenshaw,1041,1
-Alabama,Cullman,1043,1
-Alabama,Dale,1045,1
-Alabama,Dallas,1047,1
-Alabama,De Kalb,1049,1
-Alabama,Elmore,1051,1
-Alabama,Escambia,1053,1
-Alabama,Etowah,1055,1
-Alabama,Fayette,1057,1
-Alabama,Franklin,1059,1
-Alabama,Geneva,1061,1
-Alabama,Greene,1063,1
-Alabama,Hale,1065,1
-Alabama,Henry,1067,1
-Alabama,Houston,1069,1
-Alabama,Jackson,1071,1
-Alabama,Jefferson,1073,1
-Alabama,Lamar,1075,1
-Alabama,Lauderdale,1077,1
-Alabama,Lawrence,1079,1
-Alabama,Lee,1081,1
-Alabama,Limestone,1083,1
-Alabama,Lowndes,1085,1
-Alabama,Macon,1087,1
-Alabama,Madison,1089,1
-Alabama,Marengo,1091,1
-Alabama,Marion,1093,1
-Alabama,Marshall,1095,1
-Alabama,Mobile,1097,1
-Alabama,Monroe,1099,1
-Alabama,Montgomery,1101,1
-Alabama,Morgan,1103,1
-Alabama,Perry,1105,1
-Alabama,Pickens,1107,1
-Alabama,Pike,1109,1
-Alabama,Randolph,1111,1
-Alabama,Russell,1113,1
-Alabama,St Clair,1115,1
-Alabama,Shelby,1117,1
-Alabama,Sumter,1119,1
-Alabama,Talladega,1121,1
-Alabama,Tallapoosa,1123,1
-Alabama,Tuscaloosa,1125,1
-Alabama,Walker,1127,1
-Alabama,Washington,1129,1
-Alabama,Wilcox,1131,1
-Alabama,Winston,1133,1
-Alaska,Aleutians East,2013,2
-Alaska,Aleutians West,2016,2
-Alaska,Anchorage,2020,2
-Alaska,Bethel,2050,2
-Alaska,Bristol Bay,2060,2
-Alaska,Denali,2068,2
-Alaska,Dillingham,2070,2
-Alaska,Fairbanks North Star,2090,2
-Alaska,Haines,2100,2
-Alaska,Juneau,2110,2
-Alaska,Kenai Peninsula,2122,2
-Alaska,Ketchikan Gateway,2130,2
-Alaska,Kodiak Island,2150,2
-Alaska,Lake and Peninsula,2164,2
-Alaska,Matanuska Susitna,2170,2
-Alaska,Nome,2180,2
-Alaska,North Slope,2185,2
-Alaska,Northwest Arctic,2188,2
-Alaska,Prince Wales Ketchikan,2201,2
-Alaska,Sitka,2220,2
-Alaska,Skagway Hoonah Angoon,2232,2
-Alaska,Southeast Fairbanks,2240,2
-Alaska,Valdez Cordova,2261,2
-Alaska,Wade Hampton,2270,2
-Alaska,Wrangell Petersburg,2280,2
-Alaska,Yakutat,2282,2
-Alaska,Yukon Koyukuk,2290,2
-Arizona,Apache,4001,4
-Arizona,Cochise,4003,4
-Arizona,Coconino,4005,4
-Arizona,Gila,4007,4
-Arizona,Graham,4009,4
-Arizona,Greenlee,4011,4
-Arizona,La Paz,4012,4
-Arizona,Maricopa,4013,4
-Arizona,Mohave,4015,4
-Arizona,Navajo,4017,4
-Arizona,Pima,4019,4
-Arizona,Pinal,4021,4
-Arizona,Santa Cruz,4023,4
-Arizona,Yavapai,4025,4
-Arizona,Yuma,4027,4
-Arkansas,Arkansas,5001,5
-Arkansas,Ashley,5003,5
-Arkansas,Baxter,5005,5
-Arkansas,Benton,5007,5
-Arkansas,Boone,5009,5
-Arkansas,Bradley,5011,5
-Arkansas,Calhoun,5013,5
-Arkansas,Carroll,5015,5
-Arkansas,Chicot,5017,5
-Arkansas,Clark,5019,5
-Arkansas,Clay,5021,5
-Arkansas,Cleburne,5023,5
-Arkansas,Cleveland,5025,5
-Arkansas,Columbia,5027,5
-Arkansas,Conway,5029,5
-Arkansas,Craighead,5031,5
-Arkansas,Crawford,5033,5
-Arkansas,Crittenden,5035,5
-Arkansas,Cross,5037,5
-Arkansas,Dallas,5039,5
-Arkansas,Desha,5041,5
-Arkansas,Drew,5043,5
-Arkansas,Faulkner,5045,5
-Arkansas,Franklin,5047,5
-Arkansas,Fulton,5049,5
-Arkansas,Garland,5051,5
-Arkansas,Grant,5053,5
-Arkansas,Greene,5055,5
-Arkansas,Hempstead,5057,5
-Arkansas,Hot Spring,5059,5
-Arkansas,Howard,5061,5
-Arkansas,Independence,5063,5
-Arkansas,Izard,5065,5
-Arkansas,Jackson,5067,5
-Arkansas,Jefferson,5069,5
-Arkansas,Johnson,5071,5
-Arkansas,Lafayette,5073,5
-Arkansas,Lawrence,5075,5
-Arkansas,Lee,5077,5
-Arkansas,Lincoln,5079,5
-Arkansas,Little River,5081,5
-Arkansas,Logan,5083,5
-Arkansas,Lonoke,5085,5
-Arkansas,Madison,5087,5
-Arkansas,Marion,5089,5
-Arkansas,Miller,5091,5
-Arkansas,Mississippi,5093,5
-Arkansas,Monroe,5095,5
-Arkansas,Nevada,5099,5
-Arkansas,Newton,5101,5
-Arkansas,Ouachita,5103,5
-Arkansas,Perry,5105,5
-Arkansas,Phillips,5107,5
-Arkansas,Pike,5109,5
-Arkansas,Poinsett,5111,5
-Arkansas,Polk,5113,5
-Arkansas,Pope,5115,5
-Arkansas,Prairie,5117,5
-Arkansas,Pulaski,5119,5
-Arkansas,Randolph,5121,5
-Arkansas,St Francis,5123,5
-Arkansas,Saline,5125,5
-Arkansas,Scott,5127,5
-Arkansas,Searcy,5129,5
-Arkansas,Sebastian,5131,5
-Arkansas,Sevier,5133,5
-Arkansas,Sharp,5135,5
-Arkansas,Stone,5137,5
-Arkansas,Union,5139,5
-Arkansas,Van Buren,5141,5
-Arkansas,Washington,5143,5
-Arkansas,White,5145,5
-Arkansas,Woodruff,5147,5
-Arkansas,Yell,5149,5
-California,Alameda,6001,6
-California,Alpine,6003,6
-California,Amador,6005,6
-California,Butte,6007,6
-California,Calaveras,6009,6
-California,Colusa,6011,6
-California,Contra Costa,6013,6
-California,Del Norte,6015,6
-California,El Dorado,6017,6
-California,Fresno,6019,6
-California,Glenn,6021,6
-California,Humboldt,6023,6
-California,Imperial,6025,6
-California,Inyo,6027,6
-California,Kern,6029,6
-California,Kings,6031,6
-California,Lake,6033,6
-California,Lassen,6035,6
-California,Los Angeles,6037,6
-California,Madera,6039,6
-California,Marin,6041,6
-California,Mariposa,6043,6
-California,Mendocino,6045,6
-California,Merced,6047,6
-California,Modoc,6049,6
-California,Mono,6051,6
-California,Monterey,6053,6
-California,Napa,6055,6
-California,Nevada,6057,6
-California,Orange,6059,6
-California,Placer,6061,6
-California,Plumas,6063,6
-California,Riverside,6065,6
-California,Sacramento,6067,6
-California,San Benito,6069,6
-California,San Bernardino,6071,6
-California,San Diego,6073,6
-California,San Francisco,6075,6
-California,San Joaquin,6077,6
-California,San Luis Obispo,6079,6
-California,San Mateo,6081,6
-California,Santa Barbara,6083,6
-California,Santa Clara,6085,6
-California,Santa Cruz,6087,6
-California,Shasta,6089,6
-California,Sierra,6091,6
-California,Siskiyou,6093,6
-California,Solano,6095,6
-California,Sonoma,6097,6
-California,Stanislaus,6099,6
-California,Sutter,6101,6
-California,Tehama,6103,6
-California,Trinity,6105,6
-California,Tulare,6107,6
-California,Tuolumne,6109,6
-California,Ventura,6111,6
-California,Yolo,6113,6
-California,Yuba,6115,6
-Colorado,Adams,8001,8
-Colorado,Alamosa,8003,8
-Colorado,Arapahoe,8005,8
-Colorado,Archuleta,8007,8
-Colorado,Baca,8009,8
-Colorado,Bent,8011,8
-Colorado,Boulder,8013,8
-Colorado,Broomfield,8014,8
-Colorado,Chaffee,8015,8
-Colorado,Cheyenne,8017,8
-Colorado,Clear Creek,8019,8
-Colorado,Conejos,8021,8
-Colorado,Costilla,8023,8
-Colorado,Crowley,8025,8
-Colorado,Custer,8027,8
-Colorado,Delta,8029,8
-Colorado,Denver,8031,8
-Colorado,Dolores,8033,8
-Colorado,Douglas,8035,8
-Colorado,Eagle,8037,8
-Colorado,Elbert,8039,8
-Colorado,El Paso,8041,8
-Colorado,Fremont,8043,8
-Colorado,Garfield,8045,8
-Colorado,Gilpin,8047,8
-Colorado,Grand,8049,8
-Colorado,Gunnison,8051,8
-Colorado,Hinsdale,8053,8
-Colorado,Huerfano,8055,8
-Colorado,Jackson,8057,8
-Colorado,Jefferson,8059,8
-Colorado,Kiowa,8061,8
-Colorado,Kit Carson,8063,8
-Colorado,Lake,8065,8
-Colorado,La Plata,8067,8
-Colorado,Larimer,8069,8
-Colorado,Las Animas,8071,8
-Colorado,Lincoln,8073,8
-Colorado,Logan,8075,8
-Colorado,Mesa,8077,8
-Colorado,Mineral,8079,8
-Colorado,Moffat,8081,8
-Colorado,Montezuma,8083,8
-Colorado,Montrose,8085,8
-Colorado,Morgan,8087,8
-Colorado,Otero,8089,8
-Colorado,Ouray,8091,8
-Colorado,Park,8093,8
-Colorado,Phillips,8095,8
-Colorado,Pitkin,8097,8
-Colorado,Prowers,8099,8
-Colorado,Pueblo,8101,8
-Colorado,Rio Blanco,8103,8
-Colorado,Rio Grande,8105,8
-Colorado,Routt,8107,8
-Colorado,Saguache,8109,8
-Colorado,San Juan,8111,8
-Colorado,San Miguel,8113,8
-Colorado,Sedgwick,8115,8
-Colorado,Summit,8117,8
-Colorado,Teller,8119,8
-Colorado,Washington,8121,8
-Colorado,Weld,8123,8
-Colorado,Yuma,8125,8
-Connecticut,Fairfield,9001,9
-Connecticut,Hartford,9003,9
-Connecticut,Litchfield,9005,9
-Connecticut,Middlesex,9007,9
-Connecticut,New Haven,9009,9
-Connecticut,New London,9011,9
-Connecticut,Tolland,9013,9
-Connecticut,Windham,9015,9
+Alabama,Autauga,01001,1
+Alabama,Baldwin,01003,1
+Alabama,Barbour,01005,1
+Alabama,Bibb,01007,1
+Alabama,Blount,01009,1
+Alabama,Bullock,01011,1
+Alabama,Butler,01013,1
+Alabama,Calhoun,01015,1
+Alabama,Chambers,01017,1
+Alabama,Cherokee,01019,1
+Alabama,Chilton,01021,1
+Alabama,Choctaw,01023,1
+Alabama,Clarke,01025,1
+Alabama,Clay,01027,1
+Alabama,Cleburne,01029,1
+Alabama,Coffee,01031,1
+Alabama,Colbert,01033,1
+Alabama,Conecuh,01035,1
+Alabama,Coosa,01037,1
+Alabama,Covington,01039,1
+Alabama,Crenshaw,01041,1
+Alabama,Cullman,01043,1
+Alabama,Dale,01045,1
+Alabama,Dallas,01047,1
+Alabama,De Kalb,01049,1
+Alabama,Elmore,01051,1
+Alabama,Escambia,01053,1
+Alabama,Etowah,01055,1
+Alabama,Fayette,01057,1
+Alabama,Franklin,01059,1
+Alabama,Geneva,01061,1
+Alabama,Greene,01063,1
+Alabama,Hale,01065,1
+Alabama,Henry,01067,1
+Alabama,Houston,01069,1
+Alabama,Jackson,01071,1
+Alabama,Jefferson,01073,1
+Alabama,Lamar,01075,1
+Alabama,Lauderdale,01077,1
+Alabama,Lawrence,01079,1
+Alabama,Lee,01081,1
+Alabama,Limestone,01083,1
+Alabama,Lowndes,01085,1
+Alabama,Macon,01087,1
+Alabama,Madison,01089,1
+Alabama,Marengo,01091,1
+Alabama,Marion,01093,1
+Alabama,Marshall,01095,1
+Alabama,Mobile,01097,1
+Alabama,Monroe,01099,1
+Alabama,Montgomery,01101,1
+Alabama,Morgan,01103,1
+Alabama,Perry,01105,1
+Alabama,Pickens,01107,1
+Alabama,Pike,01109,1
+Alabama,Randolph,01111,1
+Alabama,Russell,01113,1
+Alabama,St Clair,01115,1
+Alabama,Shelby,01117,1
+Alabama,Sumter,01119,1
+Alabama,Talladega,01121,1
+Alabama,Tallapoosa,01123,1
+Alabama,Tuscaloosa,01125,1
+Alabama,Walker,01127,1
+Alabama,Washington,01129,1
+Alabama,Wilcox,01131,1
+Alabama,Winston,01133,1
+Alaska,Aleutians East,02013,2
+Alaska,Aleutians West,02016,2
+Alaska,Anchorage,02020,2
+Alaska,Bethel,02050,2
+Alaska,Bristol Bay,02060,2
+Alaska,Denali,02068,2
+Alaska,Dillingham,02070,2
+Alaska,Fairbanks North Star,02090,2
+Alaska,Haines,02100,2
+Alaska,Juneau,02110,2
+Alaska,Kenai Peninsula,02122,2
+Alaska,Ketchikan Gateway,02130,2
+Alaska,Kodiak Island,02150,2
+Alaska,Lake and Peninsula,02164,2
+Alaska,Matanuska Susitna,02170,2
+Alaska,Nome,02180,2
+Alaska,North Slope,02185,2
+Alaska,Northwest Arctic,02188,2
+Alaska,Prince Wales Ketchikan,02201,2
+Alaska,Sitka,02220,2
+Alaska,Skagway Hoonah Angoon,02232,2
+Alaska,Southeast Fairbanks,02240,2
+Alaska,Valdez Cordova,02261,2
+Alaska,Wade Hampton,02270,2
+Alaska,Wrangell Petersburg,02280,2
+Alaska,Yakutat,02282,2
+Alaska,Yukon Koyukuk,02290,2
+Arizona,Apache,04001,4
+Arizona,Cochise,04003,4
+Arizona,Coconino,04005,4
+Arizona,Gila,04007,4
+Arizona,Graham,04009,4
+Arizona,Greenlee,04011,4
+Arizona,La Paz,04012,4
+Arizona,Maricopa,04013,4
+Arizona,Mohave,04015,4
+Arizona,Navajo,04017,4
+Arizona,Pima,04019,4
+Arizona,Pinal,04021,4
+Arizona,Santa Cruz,04023,4
+Arizona,Yavapai,04025,4
+Arizona,Yuma,04027,4
+Arkansas,Arkansas,05001,5
+Arkansas,Ashley,05003,5
+Arkansas,Baxter,05005,5
+Arkansas,Benton,05007,5
+Arkansas,Boone,05009,5
+Arkansas,Bradley,05011,5
+Arkansas,Calhoun,05013,5
+Arkansas,Carroll,05015,5
+Arkansas,Chicot,05017,5
+Arkansas,Clark,05019,5
+Arkansas,Clay,05021,5
+Arkansas,Cleburne,05023,5
+Arkansas,Cleveland,05025,5
+Arkansas,Columbia,05027,5
+Arkansas,Conway,05029,5
+Arkansas,Craighead,05031,5
+Arkansas,Crawford,05033,5
+Arkansas,Crittenden,05035,5
+Arkansas,Cross,05037,5
+Arkansas,Dallas,05039,5
+Arkansas,Desha,05041,5
+Arkansas,Drew,05043,5
+Arkansas,Faulkner,05045,5
+Arkansas,Franklin,05047,5
+Arkansas,Fulton,05049,5
+Arkansas,Garland,05051,5
+Arkansas,Grant,05053,5
+Arkansas,Greene,05055,5
+Arkansas,Hempstead,05057,5
+Arkansas,Hot Spring,05059,5
+Arkansas,Howard,05061,5
+Arkansas,Independence,05063,5
+Arkansas,Izard,05065,5
+Arkansas,Jackson,05067,5
+Arkansas,Jefferson,05069,5
+Arkansas,Johnson,05071,5
+Arkansas,Lafayette,05073,5
+Arkansas,Lawrence,05075,5
+Arkansas,Lee,05077,5
+Arkansas,Lincoln,05079,5
+Arkansas,Little River,05081,5
+Arkansas,Logan,05083,5
+Arkansas,Lonoke,05085,5
+Arkansas,Madison,05087,5
+Arkansas,Marion,05089,5
+Arkansas,Miller,05091,5
+Arkansas,Mississippi,05093,5
+Arkansas,Monroe,05095,5
+Arkansas,Nevada,05099,5
+Arkansas,Newton,05101,5
+Arkansas,Ouachita,05103,5
+Arkansas,Perry,05105,5
+Arkansas,Phillips,05107,5
+Arkansas,Pike,05109,5
+Arkansas,Poinsett,05111,5
+Arkansas,Polk,05113,5
+Arkansas,Pope,05115,5
+Arkansas,Prairie,05117,5
+Arkansas,Pulaski,05119,5
+Arkansas,Randolph,05121,5
+Arkansas,St Francis,05123,5
+Arkansas,Saline,05125,5
+Arkansas,Scott,05127,5
+Arkansas,Searcy,05129,5
+Arkansas,Sebastian,05131,5
+Arkansas,Sevier,05133,5
+Arkansas,Sharp,05135,5
+Arkansas,Stone,05137,5
+Arkansas,Union,05139,5
+Arkansas,Van Buren,05141,5
+Arkansas,Washington,05143,5
+Arkansas,White,05145,5
+Arkansas,Woodruff,05147,5
+Arkansas,Yell,05149,5
+California,Alameda,06001,6
+California,Alpine,06003,6
+California,Amador,06005,6
+California,Butte,06007,6
+California,Calaveras,06009,6
+California,Colusa,06011,6
+California,Contra Costa,06013,6
+California,Del Norte,06015,6
+California,El Dorado,06017,6
+California,Fresno,06019,6
+California,Glenn,06021,6
+California,Humboldt,06023,6
+California,Imperial,06025,6
+California,Inyo,06027,6
+California,Kern,06029,6
+California,Kings,06031,6
+California,Lake,06033,6
+California,Lassen,06035,6
+California,Los Angeles,06037,6
+California,Madera,06039,6
+California,Marin,06041,6
+California,Mariposa,06043,6
+California,Mendocino,06045,6
+California,Merced,06047,6
+California,Modoc,06049,6
+California,Mono,06051,6
+California,Monterey,06053,6
+California,Napa,06055,6
+California,Nevada,06057,6
+California,Orange,06059,6
+California,Placer,06061,6
+California,Plumas,06063,6
+California,Riverside,06065,6
+California,Sacramento,06067,6
+California,San Benito,06069,6
+California,San Bernardino,06071,6
+California,San Diego,06073,6
+California,San Francisco,06075,6
+California,San Joaquin,06077,6
+California,San Luis Obispo,06079,6
+California,San Mateo,06081,6
+California,Santa Barbara,06083,6
+California,Santa Clara,06085,6
+California,Santa Cruz,06087,6
+California,Shasta,06089,6
+California,Sierra,06091,6
+California,Siskiyou,06093,6
+California,Solano,06095,6
+California,Sonoma,06097,6
+California,Stanislaus,06099,6
+California,Sutter,06101,6
+California,Tehama,06103,6
+California,Trinity,06105,6
+California,Tulare,06107,6
+California,Tuolumne,06109,6
+California,Ventura,06111,6
+California,Yolo,06113,6
+California,Yuba,06115,6
+Colorado,Adams,08001,8
+Colorado,Alamosa,08003,8
+Colorado,Arapahoe,08005,8
+Colorado,Archuleta,08007,8
+Colorado,Baca,08009,8
+Colorado,Bent,08011,8
+Colorado,Boulder,08013,8
+Colorado,Broomfield,08014,8
+Colorado,Chaffee,08015,8
+Colorado,Cheyenne,08017,8
+Colorado,Clear Creek,08019,8
+Colorado,Conejos,08021,8
+Colorado,Costilla,08023,8
+Colorado,Crowley,08025,8
+Colorado,Custer,08027,8
+Colorado,Delta,08029,8
+Colorado,Denver,08031,8
+Colorado,Dolores,08033,8
+Colorado,Douglas,08035,8
+Colorado,Eagle,08037,8
+Colorado,Elbert,08039,8
+Colorado,El Paso,08041,8
+Colorado,Fremont,08043,8
+Colorado,Garfield,08045,8
+Colorado,Gilpin,08047,8
+Colorado,Grand,08049,8
+Colorado,Gunnison,08051,8
+Colorado,Hinsdale,08053,8
+Colorado,Huerfano,08055,8
+Colorado,Jackson,08057,8
+Colorado,Jefferson,08059,8
+Colorado,Kiowa,08061,8
+Colorado,Kit Carson,08063,8
+Colorado,Lake,08065,8
+Colorado,La Plata,08067,8
+Colorado,Larimer,08069,8
+Colorado,Las Animas,08071,8
+Colorado,Lincoln,08073,8
+Colorado,Logan,08075,8
+Colorado,Mesa,08077,8
+Colorado,Mineral,08079,8
+Colorado,Moffat,08081,8
+Colorado,Montezuma,08083,8
+Colorado,Montrose,08085,8
+Colorado,Morgan,08087,8
+Colorado,Otero,08089,8
+Colorado,Ouray,08091,8
+Colorado,Park,08093,8
+Colorado,Phillips,08095,8
+Colorado,Pitkin,08097,8
+Colorado,Prowers,08099,8
+Colorado,Pueblo,08101,8
+Colorado,Rio Blanco,08103,8
+Colorado,Rio Grande,08105,8
+Colorado,Routt,08107,8
+Colorado,Saguache,08109,8
+Colorado,San Juan,08111,8
+Colorado,San Miguel,08113,8
+Colorado,Sedgwick,08115,8
+Colorado,Summit,08117,8
+Colorado,Teller,08119,8
+Colorado,Washington,08121,8
+Colorado,Weld,08123,8
+Colorado,Yuma,08125,8
+Connecticut,Fairfield,09001,9
+Connecticut,Hartford,09003,9
+Connecticut,Litchfield,09005,9
+Connecticut,Middlesex,09007,9
+Connecticut,New Haven,09009,9
+Connecticut,New London,09011,9
+Connecticut,Tolland,09013,9
+Connecticut,Windham,09015,9
 Delaware,Kent,10001,10
 Delaware,New Castle,10003,10
 Delaware,Sussex,10005,10

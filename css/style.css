@@ -205,6 +205,13 @@ path.selected {
   pointer-events: all;
 }
 
+.group-4 > .cell-data > td:nth-child(2), .group-4 .cell-data > td:nth-child(3) {
+  opacity: 0;
+}
+.group-4 > .cell-column > td:nth-child(2), .group-4 .cell-column > td:nth-child(3) {
+  opacity: 0;
+}
+
 
 table {
   width: 100%;
@@ -241,6 +248,7 @@ th {
   font-family: Lato;
   font-size: 12px;
   text-align: left;
+  font-weight: 400;
 }
 .left-table table thead th {
     background: 0;
