@@ -35,14 +35,7 @@ var width = ((tdMap) - margin.left -margin.right),
     centered,
     selectedState;
     console.log($("body").width())
-var COLORS = 
-  {
-    "q0-5": "#cfe8f3",
-    "q1-5": "#73bfe2",
-    "q2-5": "#1696d2",
-    "q3-5": "#0a4c6a",
-    "q4-5": "#000000",
-  }
+
 // d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
 //   if (error) throw error;
 d3.queue()
@@ -228,9 +221,9 @@ function ready(error, us, county, state) {
   var max = d3.max(tmp_county, function(d) { 
     return d.properties[SELECTED_VARIABLE]
   })
-  var quantize = d3.scaleQuantize()
+  var quantize = d3.scaleThreshold()
     .domain(BREAKS[SELECTED_VARIABLE])
-    .range(d3.range(5).map(function(i) { return "q" + i + "-5"; }))
+    .range(["#cfe8f3", "#73bfe2", "#1696d2", "#0a4c6a", "#000000"])  
 
   /*ADD MAP*/
   var svg = d3.select("#map")
@@ -255,7 +248,7 @@ function ready(error, us, county, state) {
     .attr("d", path)
     .attr("id", function (d) { return d.properties.abbr + d.id; })
     .style("fill", function(d){ 
-        return (isNaN(d.properties[SELECTED_VARIABLE]) == true) ? "#adabac" : COLORS[quantize(d.properties[SELECTED_VARIABLE])];
+        return (isNaN(d.properties[SELECTED_VARIABLE]) == true) ? "#adabac" : quantize(d.properties[SELECTED_VARIABLE]);
     })
     .on('click', function(d) { 
       var state = d.properties.state;
@@ -523,7 +516,7 @@ function zoomed(factor) {
   /*ADD TABLE*/
   $("#table-div").empty()
   var columns = ["Overall", "White", "Non-White"]
-  var groups = ["% has any debt in collections, 2016", "Median amount all collections among those with, 2016", "% has medical debt in collections, 2016", "Median amount medical collections among those with, 2016","% population white", "% population with health insurance, 2015 (ACS)","Average household income, 2015 (ACS)"]
+  var groups = ["% has any debt in collections, 2016", "Median amount all collections among those with, 2016", "% has medical debt in collections, 2016", "Median amount medical collections among those with, 2016","% population not white", "% population without health insurance, 2015 (ACS)","Average household income, 2015 (ACS)"]
   var rowNumbers = [1,2,3]
   var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]
   var table = d3.select("#table-div")
@@ -839,10 +832,11 @@ function zoomed(factor) {
       return d.properties[variable]
     })
   
-    var quantize = d3.scaleQuantize()
+    var quantize = d3.scaleThreshold()
       .domain(BREAKS[variable])
-      .range(d3.range(5).map(function(i) { return "q" + i + "-5"; }))
-
+      .range(["#cfe8f3", "#73bfe2", "#1696d2", "#0a4c6a", "#000000"])        
+    console.log(variable)
+console.log(quantize.domain())
     d3.selectAll(".legend-labels")
       .each(function(d,i) {
         d3.select(this)
@@ -867,10 +861,9 @@ function zoomed(factor) {
     .transition()
     .duration(800)
     .style("fill", function(d){
-        return (isNaN(d.properties[variable]) == true) ? "#adabac" : COLORS[quantize(d.properties[variable])];
+        return (isNaN(d.properties[variable]) == true) ? "#adabac" : quantize(d.properties[variable]);
     })
     var selected = (d3.select("path.selected").node() != null) ? (d3.select("path.selected").datum()) : undefined
-
     updateBars(variable, selected)
   }
   function updateBars(variable, selected) { 
