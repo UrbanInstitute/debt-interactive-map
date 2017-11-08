@@ -34,7 +34,7 @@ function setZoom(national, state, county) {
 function selectedStatePh() {
 
 }
-var initialWidth = (IS_PHONE) ? $('body').width() * .64 : $(".divider").width() 
+var initialWidth = (IS_PHONE) ? $('body').width() : $(".divider").width() 
 setWidth(initialWidth)
 setZoom(true,false, false)
 setVariable("perc_debt_collect")
@@ -43,7 +43,7 @@ var width = (tdMap) - margin.top-margin.bottom,
     centered,
     selectedState,
     selectedStatePh
-
+console.log(width)
 // d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
 //   if (error) throw error;
 d3.queue()
@@ -248,6 +248,15 @@ function ready(error, us, county, state) {
     .range(["#cfe8f3", "#73bfe2", "#1696d2", "#0a4c6a", "#000000"])  
 
  /*ADD DROPDOWNS*/
+    var categoryData = [{label: "% has any debt in collections, 2016", variable: "perc_debt_collect"},
+    {label: "Median amount all collections among those with, 2016", variable: "med_debt_collect"},
+    {label: "% has medical debt in collections, 2016", variable: "perc_debt_med"},
+    {label: "Median amount medical collections among those with, 2016", variable: "med_debt_med"},
+    {label: "% population not white", variable: "perc_pop_nw"},
+    {label: "% population without health insurance, 2015 (ACS)", variable: "perc_pop_no_ins" },
+    {label: "Average household income, 2015 (ACS)", variable: "avg_income"}]
+    
+    var table = d3.select("#table-div")
     var stateMenu = d3.select(".state-menu")
       .append("select")
       .attr("id", "state-select")
@@ -273,7 +282,22 @@ function ready(error, us, county, state) {
       .text(function(d) {
         return d.county
       })
+   var categoryMenu = d3.select(".category-menu")
+        .append("select")
+        .attr("id", "category-select")
+      var optionsCategory = categoryMenu
+        .selectAll('option')
+        .data(categoryData)
+      optionsCategory.enter()
+        .append('option')
+        .text(function(d) {
+          return d.label
+        })
+        .attr('value', function(d) {
+          return d.variable
+        })
   function filterCountyMenu(selectedState) {
+    d3.selectAll(".dropdown-label").classed("disabled", false)
     var filteredCounties = county_data.filter(function(d) {
       return d.state == selectedState
     })
@@ -297,6 +321,13 @@ function ready(error, us, county, state) {
           .attr('value', function(d){ 
             return d.county
           })
+        d3.select("#county-select")
+          .append('option')
+          .text("Select a county")
+          .attr('value', '')
+          .attr("selected", "selected")
+          .attr("disabled", "disabled")
+          .attr("hidden", "hidden")
     $("#county-select").selectmenu("refresh");
   }
   $("#state-select")
@@ -315,6 +346,20 @@ function ready(error, us, county, state) {
     .selectmenu("menuWidget")
     .addClass("ui-menu-icons customicons")
   $("#county-select")
+    .selectmenu({
+      open: function(event,ui) {
+
+      },
+      close: function(event, ui) {
+
+      },
+      change: function(event, ui) {
+
+      }
+    })
+    .selectmenu("menuWidget")
+    .addClass("ui-menu-icons customicons")
+  $("#category-select")
     .selectmenu({
       open: function(event,ui) {
 

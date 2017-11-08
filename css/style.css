@@ -372,8 +372,23 @@ th {
 /**DROPDOWN **/
 
 .ui-selectmenu-button.ui-button {
-  width: 100% !important;
+  width: 65% !important;
+  float: right;
 }
+
+.dropdown-label {
+  float: left;
+  font-size: 18px;
+}
+
+.ui-selectmenu-text {
+  font-size: 16px !important;
+}
+
+.dropdown-label.disabled {
+  color: grey;
+}
+
 @media (min-width : 1201px) {
   table.main-table {
     max-width: 1200px;
@@ -406,13 +421,31 @@ th {
   #isPhone {
     display: block;
   }
+
+  .dropdown {
+    width: 100%;
+    float: left;
+    padding: 20px 0;
+    border-top: 1px solid grey;
+  }
+
+  .category-menu {
+    border-bottom: 1px solid grey;
+
+  }
+
   #dropdown-div {
     display: block;
+    width: 100%;
+    float: left;
+    margin: 0 30px;
   }
   .main-table {
     display: none;
   }
   #intro-mobile {
     display: block;
+    width: 100%;
+    float: left;
   }
 }
