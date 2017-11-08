@@ -365,6 +365,15 @@ th {
   margin: 70px 30px 30px 30px;
 
 }
+#dropdown-div {
+  display: none;
+}
+
+/**DROPDOWN **/
+
+.ui-selectmenu-button.ui-button {
+  width: 100% !important;
+}
 @media (min-width : 1201px) {
   table.main-table {
     max-width: 1200px;
@@ -394,7 +403,12 @@ th {
   }
 }
 @media (max-width: 700px) {
-
+  #isPhone {
+    display: block;
+  }
+  #dropdown-div {
+    display: block;
+  }
   .main-table {
     display: none;
   }

@@ -30,6 +30,10 @@ function setZoom(national, state, county) {
   zoomState = state;
   zoomCounty = county;
 }
+
+function selectedStatePh() {
+
+}
 var initialWidth = (IS_PHONE) ? $('body').width() * .64 : $(".divider").width() 
 setWidth(initialWidth)
 setZoom(true,false, false)
@@ -37,7 +41,8 @@ setVariable("perc_debt_collect")
 var width = (tdMap) - margin.top-margin.bottom,
     height = (width*.64) - margin.top-margin.bottom,     
     centered,
-    selectedState;
+    selectedState,
+    selectedStatePh
 
 // d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
 //   if (error) throw error;
@@ -62,38 +67,53 @@ function ready(error, us, county, state) {
   var stateData = us.objects.states.geometries
 
   var county_data = transformData(county)
-  county_data.forEach(function(d,i){ 
-    countyData.forEach(function(e, j) { 
-      if (d.key == e.id) { 
-        for (var property in d["values"][0]) {
-        //   if ((d.values[0][property]).search('<') > 0 && property != "state" && property != "abbr" && property != "county") {
-        //     console.log(d.values[0][property])
-        //     e[property] == "n<50"
-        // //  if (isNaN(+d.values[0][property]) == true && property != "state" && property != "abbr" && property != "county") {
-        //     // e[property] == null
-        //   }else if ((d.values[0][property]).search('/') > 0 && property != "state" && property != "abbr" && property != "county"){
-        //     e[property] == "N/A"
-        //   }else {
-            e[property] = d.values[0][property]
-          // }
-        }
+
+    county_data.forEach(function(d,i){ 
+      for (var property in d["values"][0]) {
+        d[property] = d.values[0][property]
       }
+      countyData.forEach(function(e, j) { 
+        if (d.key == e.id) { 
+          for (var property in d["values"][0]) {
+          //   if ((d.values[0][property]).search('<') > 0 && property != "state" && property != "abbr" && property != "county") {
+          //     console.log(d.values[0][property])
+          //     e[property] == "n<50"
+          // //  if (isNaN(+d.values[0][property]) == true && property != "state" && property != "abbr" && property != "county") {
+          //     // e[property] == null
+          //   }else if ((d.values[0][property]).search('/') > 0 && property != "state" && property != "abbr" && property != "county"){
+          //     e[property] == "N/A"
+          //   }else {
+              e[property] = d.values[0][property]
+            // }
+          }
+        }
+      })
     })
-  })
+
   var state_data = transformData(state)
-  state_data.forEach(function(d,i){ 
-    stateData.forEach(function(e, j) { 
-      if (+d.key == e.id) {
-        for (var property in d["values"][0]) {
-          // if (isNaN(+d.values[0][property]) == true && property != "state" && property != "abbr" && property != "county") {
-          //   e[property] == null
-          // }else { 
-            e[property] = d.values[0][property]
-          // }
-        }
+
+    state_data.forEach(function(d,i){ 
+      for (var property in d["values"][0]) {
+        d[property] = d.values[0][property]
       }
+      stateData.forEach(function(e, j) { 
+        if (+d.key == e.id) {
+          for (var property in d["values"][0]) {
+            // if (isNaN(+d.values[0][property]) == true && property != "state" && property != "abbr" && property != "county") {
+            //   e[property] == null
+            // }else { 
+              e[property] = d.values[0][property]
+            // }
+          }
+        }
+      })
     })
+
+  
+  var filteredCounties = county_data.filter(function(d) {
+    return d.state == "USA"
   })
+
   var tmp_county = topojson.feature(us, us.objects.counties).features;
   for (var i =0; i<tmp_county.length; i++){
     var mergeID = +tmp_county[i]["id"]
@@ -121,7 +141,6 @@ function ready(error, us, county, state) {
     }
   }
   /*END*/
-
     function createSearchArray(filter) {
       var searchArray = [];
       if (zoomNational == true) {
@@ -228,10 +247,88 @@ function ready(error, us, county, state) {
     .domain(BREAKS[SELECTED_VARIABLE])
     .range(["#cfe8f3", "#73bfe2", "#1696d2", "#0a4c6a", "#000000"])  
 
-  /*ADD MAP*/
-  if (IS_PHONE) {
+ /*ADD DROPDOWNS*/
+    var stateMenu = d3.select(".state-menu")
+      .append("select")
+      .attr("id", "state-select")
+    var optionsState = stateMenu
+      .selectAll('option')
+      .data(state_data)
+    optionsState.enter()
+      .append('option')
+      .text(function(d) {
+        return d.state
+      })
+      .attr('value', function(d) {
+        return d.state
+      })
+    var countyMenu = d3.select(".county-menu")
+      .append("select")
+      .attr("id", "county-select")
+    var optionsCounty = countyMenu
+      .selectAll('option')
+      .data(filteredCounties)
+    optionsCounty.enter()
+      .append('option')
+      .text(function(d) {
+        return d.county
+      })
+  function filterCountyMenu(selectedState) {
+    var filteredCounties = county_data.filter(function(d) {
+      return d.state == selectedState
+    })
+    console.log(filteredCounties)
+        var optionsCounty = countyMenu
+          .selectAll('option')
+          .data(filteredCounties)
+        optionsCounty.exit().remove()
+        var optionsCountyEnter = optionsCounty.enter()
+          .append('option')
+          .text(function (d) { 
+            return d.county; 
+          })
+          .attr('value', function(d){ 
+            return d.county
+          })
+        optionsCounty.merge(optionsCountyEnter)
+          .text(function (d) { 
+            return d.county; 
+          })
+          .attr('value', function(d){ 
+            return d.county
+          })
+    $("#county-select").selectmenu("refresh");
+  }
+  $("#state-select")
+    .selectmenu({
+      open: function(event,ui) {
 
-  }else {
+      },
+      close: function(event, ui) {
+        var selectedState = d3.select(".ui-state-active").text()
+        filterCountyMenu(selectedState)
+      },
+      change: function(event, ui) {
+
+      }
+    })
+    .selectmenu("menuWidget")
+    .addClass("ui-menu-icons customicons")
+  $("#county-select")
+    .selectmenu({
+      open: function(event,ui) {
+
+      },
+      close: function(event, ui) {
+
+      },
+      change: function(event, ui) {
+
+      }
+    })
+    .selectmenu("menuWidget")
+    .addClass("ui-menu-icons customicons")
+  /*ADD MAP*/
     var svg = d3.select("#map")
       .append("svg")
       .attr("width", width)
@@ -345,7 +442,7 @@ function ready(error, us, county, state) {
         updateBars(SELECTED_VARIABLE, d)
       })
       .on('mouseover', function(d) { 
-        if (zoomNational == true) {
+        if (zoomNational == true) { 
           // $(".state-borders").css("pointer-events", "all")
           // $(".counties").css("pointer-events", "none")
           hoverLocation("", d.properties.abbr, "state");
@@ -412,8 +509,9 @@ function ready(error, us, county, state) {
       .call(d3.zoom().on("zoom", function () {
               d3.select(".map-g").attr("transform", d3.event.transform)
       }))
-  }
-function zoomed(factor) { 
+
+
+  function zoomed(factor) { 
       setZoom(true, false, false)
       var centroid = [width/2, height/2], //replace with variable d to center by county 
           x = centroid[0],
@@ -424,11 +522,11 @@ function zoomed(factor) {
           .duration(750)
           .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
           .style("stroke-width", 1.5 / k + "px");
-}
+  }
 
 
 /*LEGEND*/
- var legend = svg
+  var legend = svg
     .append("g")
     .attr("class", "g-legend")
     .attr("height", height/2)
@@ -446,47 +544,48 @@ function zoomed(factor) {
   legend.append("text")
   var keyWidth =   15;
   var keyHeight =  30;
- for (i=0; i<=5; i++){
-  if(i !== 5){  
-    legend.append("rect")
-      .attr("width",keyWidth)
-      .attr("height",keyHeight)
-      .attr("class","rect"+i)
-      .attr("y",keyHeight*i)
-      .attr("x", 38)
-      .style("fill", COLORRANGE[i])
-      // .on("mouseover",function(){ mouseEvent({type: "Legend", "class": (d3.select(this).attr("class"))}, "hover") })
-      // .on("mouseleave", function(){
-      //   d3.selectAll(".demphasized").classed("demphasized",false)
-      // })
-  //     .on("click",function(){ mouseEvent(dataID, {type: "Legend", "class": "q" + (this.getAttribute("x")/keyWidth) + "-4"}, "click") })
-    legend.append("text")
-      .attr("x", 33)
-      .attr("class","legend-labels")
-      .attr("y",keyHeight*i)
-      .attr("text-anchor", "end")
-      .text(function(){
-        var min = d3.min(tmp_county, function(d) { 
-          return d.properties[SELECTED_VARIABLE]
+  for (i=0; i<=5; i++){
+    if(i !== 5){  
+      legend.append("rect")
+        .attr("width",keyWidth)
+        .attr("height",keyHeight)
+        .attr("class","rect"+i)
+        .attr("y",keyHeight*i)
+        .attr("x", 38)
+        .style("fill", COLORRANGE[i])
+        // .on("mouseover",function(){ mouseEvent({type: "Legend", "class": (d3.select(this).attr("class"))}, "hover") })
+        // .on("mouseleave", function(){
+        //   d3.selectAll(".demphasized").classed("demphasized",false)
+        // })
+    //     .on("click",function(){ mouseEvent(dataID, {type: "Legend", "class": "q" + (this.getAttribute("x")/keyWidth) + "-4"}, "click") })
+      legend.append("text")
+        .attr("x", 33)
+        .attr("class","legend-labels")
+        .attr("y",keyHeight*i)
+        .attr("text-anchor", "end")
+        .text(function(){
+          var min = d3.min(tmp_county, function(d) { 
+            return d.properties[SELECTED_VARIABLE]
+          })
+          var array = BREAKS[SELECTED_VARIABLE]
+          return (i==0) ? formatNumber(min) : formatNumber((array[i-1]))
         })
-        var array = BREAKS[SELECTED_VARIABLE]
-        return (i==0) ? formatNumber(min) : formatNumber((array[i-1]))
-      })
-   }
-   if (i == 5) { 
-    legend.append("text")
-      .attr("x", 33)
-      .attr("class","legend-labels")
-      .attr("text-anchor", "end")
-      .attr("y",keyHeight*i)
-      .text(function(){
-        var max = d3.max(tmp_county, function(d) { 
-          return d.properties[SELECTED_VARIABLE]
+     }
+     if (i == 5) { 
+      legend.append("text")
+        .attr("x", 33)
+        .attr("class","legend-labels")
+        .attr("text-anchor", "end")
+        .attr("y",keyHeight*i)
+        .text(function(){
+          var max = d3.max(tmp_county, function(d) { 
+            return d.properties[SELECTED_VARIABLE]
+          })
+          return formatNumber(max)
         })
-        return formatNumber(max)
-      })
-   }
-  }
+      }
+    }
+ 
 
   d3.selection.prototype.moveToFront = function() {  
     return this.each(function(){
@@ -524,122 +623,122 @@ function zoomed(factor) {
       // .attr("d", path)
 
   /*ADD TABLE*/
-  $("#table-div").empty()
-  var columns = ["Overall", "White", "Non-White"]
-  var groups = ["% has any debt in collections, 2016", "Median amount all collections among those with, 2016", "% has medical debt in collections, 2016", "Median amount medical collections among those with, 2016","% population not white", "% population without health insurance, 2015 (ACS)","Average household income, 2015 (ACS)"]
-  var rowNumbers = [1,2,3]
-  var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]
-  var table = d3.select("#table-div")
-    .append("table")
-      tbody = table.selectAll('tbody')
-        .data(rowData)
-        .enter().append("tbody")
-        .attr("class", function(d, i) {
-          return "group group-" + i
-        })
-        .on('click', function(d) {
-          d3.selectAll('tbody')
-            .classed('selected', false)
-          d3.select(this)
-            .classed('selected', true)
-          setVariable(d)
-          updateMap(d)
-        })
-  table.select('tbody').classed('selected', true)
-  
-  var us_data = state_data[0]["values"][0]
-  for (var key in us_data) {
-      if (us_data.hasOwnProperty(key)) { 
-          if (+us_data[key] == NaN || +us_data[key] == 0){
-            us_data[key = us_data[key]]
-          }else {
-            us_data[key] = +us_data[key]
-          }
-      }
-  }
-
-  var tr = tbody.selectAll('tr')
-      .data(rowNumbers)
-      .enter().append('tr')
-      .attr("class", function(d,i) {
-        if (i%3 == 0 ) {
-          return "cell-header"
-        }else if (i%3==2) {
-          return "cell-column"
-        }else {
-          return "cell-data"
+    $("#table-div").empty()
+    var columns = ["Overall", "White", "Non-White"]
+    var groups = ["% has any debt in collections, 2016", "Median amount all collections among those with, 2016", "% has medical debt in collections, 2016", "Median amount medical collections among those with, 2016","% population not white", "% population without health insurance, 2015 (ACS)","Average household income, 2015 (ACS)"]
+    var rowNumbers = [1,2,3]
+    var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]
+    var table = d3.select("#table-div")
+      .append("table")
+        tbody = table.selectAll('tbody')
+          .data(rowData)
+          .enter().append("tbody")
+          .attr("class", function(d, i) {
+            return "group group-" + i
+          })
+          .on('click', function(d) {
+            d3.selectAll('tbody')
+              .classed('selected', false)
+            d3.select(this)
+              .classed('selected', true)
+            setVariable(d)
+            updateMap(d)
+          })
+    table.select('tbody').classed('selected', true)
+    
+    var us_data = state_data[0]["values"][0]
+    for (var key in us_data) {
+        if (us_data.hasOwnProperty(key)) { 
+            if (+us_data[key] == NaN || +us_data[key] == 0){
+              us_data[key = us_data[key]]
+            }else {
+              us_data[key] = +us_data[key]
+            }
         }
-      })
-  d3.selectAll(".cell-header")
-    .append("th")
-    .attr("colspan", 3)
-    .each(function(d,i) {
-      d3.select(this)
-        .text(function() { 
-          return groups[i]
-        })
-    })
-  d3.selectAll(".cell-column")
-    .each(function() {
-      d3.select(this).selectAll("td")
-        .data(columns)
-        .enter().append("td")
-        .text(function(d) {
-          return d
-        })
-    })
-  d3.selectAll(".cell-data")
-    .each(function(d,i) {
-      var rowVariable = [rowData[i]],
-          rowVariable_nw = rowVariable + "_nw";
-          rowVariable_wh = rowVariable + "_wh";
-      d3.select(this).selectAll("td")
-        .data(columns)
-        .enter().append("td")
-        .text(function(d,i) {
-          if (i==0) {
-            return ((us_data[rowVariable]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable]);
-          }else if (i==1){
-            return ((us_data[rowVariable_wh]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_wh]);
-          }else if (i==2) {
-            return ((us_data[rowVariable_nw]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_nw]);
+    }
+
+    var tr = tbody.selectAll('tr')
+        .data(rowNumbers)
+        .enter().append('tr')
+        .attr("class", function(d,i) {
+          if (i%3 == 0 ) {
+            return "cell-header"
+          }else if (i%3==2) {
+            return "cell-column"
+          }else {
+            return "cell-data"
           }
         })
-    })
+    d3.selectAll(".cell-header")
+      .append("th")
+      .attr("colspan", 3)
+      .each(function(d,i) {
+        d3.select(this)
+          .text(function() { 
+            return groups[i]
+          })
+      })
+    d3.selectAll(".cell-column")
+      .each(function() {
+        d3.select(this).selectAll("td")
+          .data(columns)
+          .enter().append("td")
+          .text(function(d) {
+            return d
+          })
+      })
+    d3.selectAll(".cell-data")
+      .each(function(d,i) {
+        var rowVariable = [rowData[i]],
+            rowVariable_nw = rowVariable + "_nw";
+            rowVariable_wh = rowVariable + "_wh";
+        d3.select(this).selectAll("td")
+          .data(columns)
+          .enter().append("td")
+          .text(function(d,i) {
+            if (i==0) {
+              return ((us_data[rowVariable]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable]);
+            }else if (i==1){
+              return ((us_data[rowVariable_wh]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_wh]);
+            }else if (i==2) {
+              return ((us_data[rowVariable_nw]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_nw]);
+            }
+          })
+      })
+ 
   /*END TABLE*/
   /*BAR CHARTS*/
+    var barSvgHeight = 120
+    var barHeight = 51
+    var barWidth = (IS_MOBILE) ? 45 : 50;
+    var x = d3.scaleBand()
+      .rangeRound([0, barWidth])
 
-  var barSvgHeight = 120
-  var barHeight = 51
-  var barWidth = (IS_MOBILE) ? 45 : 50;
-  var x = d3.scaleBand()
-    .rangeRound([0, barWidth])
-
-  var y = d3.scaleLinear()
-      .rangeRound([barHeight, 0]);
-  state_data.forEach(function(d) { 
-    d.national = +d.values[0][SELECTED_VARIABLE]
-  })
-  state_data.forEach(function(d) { 
-    d.white = +d.values[0][WHITE];
-  })
-  state_data.forEach(function(d) { 
-    d.nonwhite = +d.values[0][NONWHITE]
-  })
-  x.domain([[us_data].map(function(d){ 
-    return d.abbr
-  })]);
-  y.domain([0, d3.max(state_data, function(d) {
-    if (isNaN(d.nonwhite) == true && isNaN(d.white) == true){
-      return d.national
-    }else if (isNaN(d.nonwhite) == true && isNaN(d.white) == false) {
-      return Math.max(d.white, d.national)
-    }else if (isNaN(d.white) == true && isNaN(d.nonwhite) == false) {
-      return Math.max(d.nonwhite, d.national)
-    }else {
-      return Math.max(d.white, d.nonwhite, d.national)
-    }
-  })])
+    var y = d3.scaleLinear()
+        .rangeRound([barHeight, 0]);
+    state_data.forEach(function(d) { 
+      d.national = +d.values[0][SELECTED_VARIABLE]
+    })
+    state_data.forEach(function(d) { 
+      d.white = +d.values[0][WHITE];
+    })
+    state_data.forEach(function(d) { 
+      d.nonwhite = +d.values[0][NONWHITE]
+    })
+    x.domain([[us_data].map(function(d){ 
+      return d.abbr
+    })]);
+    y.domain([0, d3.max(state_data, function(d) {
+      if (isNaN(d.nonwhite) == true && isNaN(d.white) == true){
+        return d.national
+      }else if (isNaN(d.nonwhite) == true && isNaN(d.white) == false) {
+        return Math.max(d.white, d.national)
+      }else if (isNaN(d.white) == true && isNaN(d.nonwhite) == false) {
+        return Math.max(d.nonwhite, d.national)
+      }else {
+        return Math.max(d.white, d.nonwhite, d.national)
+      }
+    })])
 
     // y.domain([0, d3.max(data, function(d) {
     //   if (d.white == undefined && d.nonwhite == undefined) {
@@ -659,177 +758,168 @@ function zoomed(factor) {
     //   }
     // })])
 
-  var formatPercent = d3.format(".0%")
-  var xAxis = d3.axisBottom()
-      .scale(x)
-  var yAxis = d3.axisLeft()
-      .scale(y)
-      .tickFormat(formatPercent);
-  // var barCategories = ["National", "State", "State", "White", "Nonwhite"]
-  var groups = ["National", "State", "County"]
-  var categories = ["Overall", "White", "Nonwhite"]
-  var barSvg = d3.select("#bar-chart")
-    .append("svg")
-    .attr('width', width)
-    .attr('height', barSvgHeight)
-  var barG = barSvg.selectAll("g")
-    .data(groups)
-    .enter()
-    .append('g')
-    .attr("transform", function(d,i) {
-      return "translate(" + ( (width/3 + 5) * i) + "," + (20) + ")";
-    })
-    .attr("id", function(d) { 
-      return d
-    })
-    .attr("class", "bar-group")
-  barG.append("text")
-    .text(function(d) {
-      return d;
-    })
-    .attr("class", function(d) {
-      return "group-label " + d
-    })
-  barG.append("text")
-    .attr("class", "group-label-2")
-    .attr("transform", function(d,i) {
-      var width = (d3.select(".group-label." + d).node().getBoundingClientRect().width) + 5
-      return "translate(" + width + "," + 0 + ")"
-    })
-  // var subBarText = barG.selectAll("g")
-  //   .data(categories)
-  //   .enter()
-  //   .append("g")
-  //   .attr("class", "g-label")
-  //   .attr("transform", function(d,i) {
-  //     return "translate(" + (width/9 * i ) + "," + 0 + ")"
-  //   })
-  // subBarText.append("text")
-  //   .text("hello")
-  var subBarG = barG.selectAll("g")
-    .data(categories)
-    .enter()
-    .append("g")
-    .attr("class", function(d) {
-      return "category " + d
-    })
-    .attr("transform", function(d,i) {
-      return (IS_MOBILE) ? "translate(" + (50 * i ) + "," + 10 + ")" : "translate(" + (60 * i ) + "," + 10 + ")"
-    })
-  subBarG.selectAll("text")
-    .data([us_data])
-    .enter()
-    .append("text")
-    .attr("class", "data-label")
-    .attr("transform", function(d,i) {
-      return "translate(" + 0 +"," + 10+ ")"
-    })
-    .text(function(d) { 
-      var parentClass = d3.select(this.parentNode).attr('class');
-      if (parentClass.search("Overall") > -1) {
-        return formatNumber(d[SELECTED_VARIABLE])
-      }else if (parentClass.search("Non") > -1) {
-        return formatNumber(d[NONWHITE])
-      }else{
-        return formatNumber(d[WHITE])
-      }
-    })
+    var formatPercent = d3.format(".0%")
+    var xAxis = d3.axisBottom()
+        .scale(x)
+    var yAxis = d3.axisLeft()
+        .scale(y)
+        .tickFormat(formatPercent);
+    // var barCategories = ["National", "State", "State", "White", "Nonwhite"]
+    var groups = ["National", "State", "County"]
+    var categories = ["Overall", "White", "Nonwhite"]
+    var barSvg = d3.select("#bar-chart")
+      .append("svg")
+      .attr('width', width)
+      .attr('height', barSvgHeight)
+    var barG = barSvg.selectAll("g")
+      .data(groups)
+      .enter()
+      .append('g')
+      .attr("transform", function(d,i) {
+        return "translate(" + ( (width/3 + 5) * i) + "," + (20) + ")";
+      })
+      .attr("id", function(d) { 
+        return d
+      })
+      .attr("class", "bar-group")
+    barG.append("text")
+      .text(function(d) {
+        return d;
+      })
+      .attr("class", function(d) {
+        return "group-label " + d
+      })
+    barG.append("text")
+      .attr("class", "group-label-2")
+      .attr("transform", function(d,i) {
+        var width = (d3.select(".group-label." + d).node().getBoundingClientRect().width) + 5
+        return "translate(" + width + "," + 0 + ")"
+      })
 
-  //add background rects
-  
-  var rectG = subBarG.append("g")
-    .attr("class", function(d) { 
-      return "rect-g " + d})
-    .attr("transform", function(d,i) {
-      return "translate(" + 0 +"," + 15+ ")"
-    })
-  rectG
-    .append("g")
-    .attr("class", "g-text")
-    .append("text")
-    .attr("x", 0)
-    .attr("y", barHeight + 10)
-    .attr("dy", ".71em")
-    .attr("text-anchor", "start")
-    .text(function(d) { return d});
-  rectG.append("g")
-    .attr("class", "x axis")
-    .attr("transform", function(d,i) {
-      return "translate(" + 0 +"," + barHeight+ ")"
-    })
-    .call(xAxis)
-  rectG.selectAll("rect")
-    .data([us_data])
-    .enter()
-    .append("rect")
-    .attr("x", function(d) { 
-      return d.abbr
-    })
-    .attr("class", "background-rect")
-    .attr("width", x.bandwidth())
-    // .attr("y", function(d) { 
-    //   var parentClass = d3.select(this.parentNode).attr('class');
-    //   if (parentClass.search("Overall") > -1) {
-    //     return y(d[SELECTED_VARIABLE])
-    //   }else if (parentClass.search("Non") > -1) {
-    //     return y(d[NONWHITE])
-    //   }else{
-    //     return y(d[WHITE])
-    //   }
-    // })
-    .attr("height", function(d) {
-      var parentClass = d3.select(this.parentNode).attr('class');
-      if (parentClass.search("Overall") > -1) {
-        return barHeight //- y(d[SELECTED_VARIABLE])
-      }else if (parentClass.search("Non") > -1){
-        return barHeight //- y(d[NONWHITE])
-      }else{
-        return barHeight //- y(d[WHITE])
-      }
-    })
-    .style("fill", "#adabac")
-  //add bars
-  rectG.selectAll("rect:not(.background-rect)")
-    .data([us_data])
-    .enter()
-    .append("rect")
-    .attr("x", function(d) { 
-      return d.abbr
-    })
-    .attr("class", "bar")
-    .attr("fill", function(d) { 
-      var parentClass = d3.select(this.parentNode).attr('class');
-      if (parentClass.search("Overall") > -1) {
-        return "#fdbf11"
-      }else if (parentClass.search("Non") > -1) {
-        return "#000000"
-      }else{
-        return "#1696d2"
-      }
-    })
-    .attr("width", x.bandwidth())
-    .attr("y", function(d) { 
-      var parentClass = d3.select(this.parentNode).attr('class');
-      if (parentClass.search("Overall") > -1) {
-        return y(d[SELECTED_VARIABLE])
-      }else if (parentClass.search("Non") > -1) {
-        return y(d[NONWHITE])
-      }else{
-        return y(d[WHITE])
-      }
-    })
-    .attr("height", function(d) {
-      var parentClass = d3.select(this.parentNode).attr('class');
-      if (parentClass.search("Overall") > -1) {
-        return barHeight - y(d[SELECTED_VARIABLE])
-      }else if (parentClass.search("Non") > -1){
-        return barHeight - y(d[NONWHITE])
-      }else{
-        return barHeight - y(d[WHITE])
-      }
-    })
+    var subBarG = barG.selectAll("g")
+      .data(categories)
+      .enter()
+      .append("g")
+      .attr("class", function(d) {
+        return "category " + d
+      })
+      .attr("transform", function(d,i) {
+        return (IS_MOBILE) ? "translate(" + (50 * i ) + "," + 10 + ")" : "translate(" + (60 * i ) + "," + 10 + ")"
+      })
+    subBarG.selectAll("text")
+      .data([us_data])
+      .enter()
+      .append("text")
+      .attr("class", "data-label")
+      .attr("transform", function(d,i) {
+        return "translate(" + 0 +"," + 10+ ")"
+      })
+      .text(function(d) { 
+        var parentClass = d3.select(this.parentNode).attr('class');
+        if (parentClass.search("Overall") > -1) {
+          return formatNumber(d[SELECTED_VARIABLE])
+        }else if (parentClass.search("Non") > -1) {
+          return formatNumber(d[NONWHITE])
+        }else{
+          return formatNumber(d[WHITE])
+        }
+      })
 
-  d3.selectAll("#State, #County").style("opacity", 0)
+    //add background rects
+    
+    var rectG = subBarG.append("g")
+      .attr("class", function(d) { 
+        return "rect-g " + d})
+      .attr("transform", function(d,i) {
+        return "translate(" + 0 +"," + 15+ ")"
+      })
+    rectG
+      .append("g")
+      .attr("class", "g-text")
+      .append("text")
+      .attr("x", 0)
+      .attr("y", barHeight + 10)
+      .attr("dy", ".71em")
+      .attr("text-anchor", "start")
+      .text(function(d) { return d});
+    rectG.append("g")
+      .attr("class", "x axis")
+      .attr("transform", function(d,i) {
+        return "translate(" + 0 +"," + barHeight+ ")"
+      })
+      .call(xAxis)
+    rectG.selectAll("rect")
+      .data([us_data])
+      .enter()
+      .append("rect")
+      .attr("x", function(d) { 
+        return d.abbr
+      })
+      .attr("class", "background-rect")
+      .attr("width", x.bandwidth())
+      // .attr("y", function(d) { 
+      //   var parentClass = d3.select(this.parentNode).attr('class');
+      //   if (parentClass.search("Overall") > -1) {
+      //     return y(d[SELECTED_VARIABLE])
+      //   }else if (parentClass.search("Non") > -1) {
+      //     return y(d[NONWHITE])
+      //   }else{
+      //     return y(d[WHITE])
+      //   }
+      // })
+      .attr("height", function(d) {
+        var parentClass = d3.select(this.parentNode).attr('class');
+        if (parentClass.search("Overall") > -1) {
+          return barHeight //- y(d[SELECTED_VARIABLE])
+        }else if (parentClass.search("Non") > -1){
+          return barHeight //- y(d[NONWHITE])
+        }else{
+          return barHeight //- y(d[WHITE])
+        }
+      })
+      .style("fill", "#adabac")
+    //add bars
+    rectG.selectAll("rect:not(.background-rect)")
+      .data([us_data])
+      .enter()
+      .append("rect")
+      .attr("x", function(d) { 
+        return d.abbr
+      })
+      .attr("class", "bar")
+      .attr("fill", function(d) { 
+        var parentClass = d3.select(this.parentNode).attr('class');
+        if (parentClass.search("Overall") > -1) {
+          return "#fdbf11"
+        }else if (parentClass.search("Non") > -1) {
+          return "#000000"
+        }else{
+          return "#1696d2"
+        }
+      })
+      .attr("width", x.bandwidth())
+      .attr("y", function(d) { 
+        var parentClass = d3.select(this.parentNode).attr('class');
+        if (parentClass.search("Overall") > -1) {
+          return y(d[SELECTED_VARIABLE])
+        }else if (parentClass.search("Non") > -1) {
+          return y(d[NONWHITE])
+        }else{
+          return y(d[WHITE])
+        }
+      })
+      .attr("height", function(d) {
+        var parentClass = d3.select(this.parentNode).attr('class');
+        if (parentClass.search("Overall") > -1) {
+          return barHeight - y(d[SELECTED_VARIABLE])
+        }else if (parentClass.search("Non") > -1){
+          return barHeight - y(d[NONWHITE])
+        }else{
+          return barHeight - y(d[WHITE])
+        }
+      })
+
+    d3.selectAll("#State, #County").style("opacity", 0)
 
   function formatNumber(d) { 
     var percent = d3.format(",.1%"),
@@ -1217,7 +1307,7 @@ function zoomed(factor) {
       $(".counties").css("pointer-events", "none")
       x = width / .9;
       y = height / 1.1;
-      k = .4;
+      k = .45;
       centered = null;
       updateTable(us_data)
       g.selectAll("path")
@@ -1236,19 +1326,19 @@ function zoomed(factor) {
   //   g.attr('transform', 'translate(' + d3.event.transform.x + ',' + d3.event.transform.y + ') scale(' + d3.event.transform.k + ')');
   // }
   $(window).resize(function() { 
+    var IS_MOBILE = d3.select("#isMobile").style("display") == "block";
+    var IS_PHONE = d3.select("#isPhone").style("display") == "block";
+
     if (IS_PHONE) {
 
 
     }else {
       var barWidth = (IS_MOBILE) ? 45 : 50;
-      var IS_MOBILE = d3.select("#isMobile").style("display") == "block";
-      var IS_PHONE = d3.select("#isPhone").style("display") == "block";
       var initialWidth = (IS_PHONE) ? $('body').width() * .64 : $(".divider").width() 
       setWidth(initialWidth)
       var width = (tdMap) - margin.top-margin.bottom,
           height = (width*.64) - margin.top-margin.bottom,  
           barSvgHeight = height/3.5;
-          console.log(width)
       d3.select("#bar-chart").attr('width', width).attr("height", barSvgHeight)
       d3.select(".g-legend").attr('transform', 'translate(' + (width*.9) + ',' + 0 + ')')
       d3.select("g").attr("transform", "scale(" + width/1060 + ")");
