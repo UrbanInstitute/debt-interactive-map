@@ -22,6 +22,13 @@ path.domain {
   font-size: 11px;
   font-style: italic;
 }
+
+#bar-chart-mobile {
+  width: 100%;
+  float: left;
+  margin: 20px 30px;
+}
+
 #topic {
   height: 22px;
   font-family: Lato;
@@ -370,7 +377,28 @@ th {
 }
 
 /**DROPDOWN **/
-
+.ui-state-default,
+.ui-widget-content .ui-state-default,
+.ui-widget-header .ui-state-default,
+.ui-button,
+html .ui-button.ui-state-disabled:hover,
+html .ui-button.ui-state-disabled:active {
+  border: none !important;
+  background: #fff !important;
+}
+.ui-state-hover,
+.ui-widget-content .ui-state-hover,
+.ui-widget-header .ui-state-hover,
+.ui-state-focus,
+.ui-widget-content .ui-state-focus,
+.ui-widget-header .ui-state-focus,
+.ui-button:hover,
+.ui-button:focus {
+  border: none !important;
+  background: #fff !important;
+  font-weight: normal;
+  color: #2b2b2b;
+}
 .ui-selectmenu-button.ui-button {
   width: 65% !important;
   float: right;
@@ -421,12 +449,16 @@ th {
   #isPhone {
     display: block;
   }
-
+  .y.axis > .tick {
+    display: none;
+  }
   .dropdown {
     width: 100%;
     float: left;
     padding: 20px 0;
     border-top: 1px solid grey;
+    cursor: pointer;
+    pointer-events: all;
   }
 
   .category-menu {
