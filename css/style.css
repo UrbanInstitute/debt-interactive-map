@@ -27,6 +27,7 @@ path.domain {
 }
 
 #bar-chart-mobile {
+  display: none;
   float: left;
   margin: 20px 30px;
 }
@@ -448,6 +449,9 @@ html .ui-button.ui-state-disabled:active {
 }
 @media (max-width: 700px) {
   #isPhone {
+    display: block;
+  }
+  #bar-chart-mobile {
     display: block;
   }
   .y.axis > .tick {
