@@ -8,6 +8,9 @@ hr {
   background-color: #d2d2d2;
   border: none;
 }
+
+
+
 path.domain {
   stroke: none;
 }
@@ -24,7 +27,6 @@ path.domain {
 }
 
 #bar-chart-mobile {
-  width: 100%;
   float: left;
   margin: 20px 30px;
 }
@@ -50,7 +52,6 @@ path.domain {
 }
 
 .description {
-  height: 129px;
   opacity: 0.5;
   font-family: Lato;
   font-size: 14px;
@@ -468,7 +469,6 @@ html .ui-button.ui-state-disabled:active {
 
   #dropdown-div {
     display: block;
-    width: 100%;
     float: left;
     margin: 0 30px;
   }
@@ -477,7 +477,6 @@ html .ui-button.ui-state-disabled:active {
   }
   #intro-mobile {
     display: block;
-    width: 100%;
     float: left;
   }
 }
