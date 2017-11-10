@@ -162,11 +162,13 @@ function ready(error, us, county, state) {
         }
       }
      dropdown = searchArray
-     $('input[name="tags"').tagit("option", {availableTags: dropdown})
+     $('input[name="tags"').tagit("option", {
+        availableTags: dropdown,
+      })
     }
 
-    $( "#searchBox" ).autocomplete({ 
-      appendTo: ".search-div"
+    $( "#searchBox" ).autocomplete({
+      appendTo: ".search-div",
     });
 
     $('input[name="tags"').tagit({
@@ -179,9 +181,14 @@ function ready(error, us, county, state) {
           fieldName: 'tags',
           onlyAvailableTags: true,
           tagLimit: 2,
-          appendTo: ".search-div"
+          appendTo: ".search-div",
+          open: function(event, ui) {console.log('hi');
+            $("#ui-id-2").width($(".search-div").width())
+            $("#ui-id-2").css("left", "0px")
+            $("#ui-id-2").css("top", "68px")
+          },
         },
-        beforeTagAdded: function(event, ui) {
+        beforeTagAdded: function(event, ui) { 
           if(dropdown.indexOf(ui.tagLabel) == -1){ 
             return false;
           }
@@ -1520,7 +1527,7 @@ function ready(error, us, county, state) {
       $("li#state > a.tagit-close").append('<span class="text-icon"</span>')
       $("li#state > a.tagit-close").append('<span class="ui-icon ui-icon-close"</span>')
       setZoom(false,true, false)
-      $("li#state").on('click', function() {
+      $("li#state").on('click', function() { console.log('click')
         d3.selectAll('li.tagit-choice').remove()
 
         d3.selectAll("path.selected")
@@ -1581,7 +1588,7 @@ function ready(error, us, county, state) {
           })
       })
   }
-  function zoomMap(d,zoomLevel) { 
+  function zoomMap(d,zoomLevel) { console.log('zoom')
     var x, y, k;
     // if (d.properties.state && centered !== d.properties.state && zoomLevel != "national") { 
     if (zoomLevel != "national") { 
@@ -1624,9 +1631,9 @@ function ready(error, us, county, state) {
       setZoom(true, false, false)
       $(".state-borders").css("pointer-events", "all")
       $(".counties").css("pointer-events", "none")
-      x = width / .9;
-      y = height / 1.1;
-      k = .45;
+      x = width / 1.15;
+      y = height / 1.2;
+      k = .6;
       centered = null;
       updateTable(us_data)
       g.selectAll("path")
