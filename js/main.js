@@ -182,7 +182,7 @@ function ready(error, us, county, state) {
           onlyAvailableTags: true,
           tagLimit: 2,
           appendTo: ".search-div",
-          open: function(event, ui) {console.log('hi');
+          open: function(event, ui) {
             $("#ui-id-2").width($(".search-div").width())
             $("#ui-id-2").css("left", "0px")
             $("#ui-id-2").css("top", "68px")
@@ -223,16 +223,19 @@ function ready(error, us, county, state) {
         },
         afterTagRemoved: function(event,ui) { 
            var tag = (ui.tag[0]["textContent"]);
-           if (tag.search(",") > 0) {
+           if (tag.search(",") > 0) { console.log('1')
             d3.selectAll(".counties > path.selected")
               .classed("selected", false)
             setZoom(false, true, false)
-           }else {
+           }else { console.log('2')
             d3.select("#location").html("National")
+            d3.selectAll(".state-borders > path.selected")
+              .classed("selected", false)
             setZoom(true, false, false)
             zoomMap(null, "national")
            }
           updateBars(SELECTED_VARIABLE)
+          createSearchArray("")
         }
     });
 
