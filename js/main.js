@@ -39,10 +39,11 @@ setWidth(initialWidth)
 setZoom(true,false, false)
 setVariable("perc_debt_collect")
 var width = (tdMap) - margin.top-margin.bottom,
-    height = (IS_PHONE) ? (width*1.5) - margin.top-margin.bottom : (width*.64) - margin.top-margin.bottom,     
+    height = (IS_PHONE) ? (width) - margin.top-margin.bottom : (width*.64) - margin.top-margin.bottom,     
     centered,
     selectedState,
-    selectedStatePh
+    selectedStatePh,
+    selectedCountyPh
 console.log(width)
 // d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
 //   if (error) throw error;
@@ -110,7 +111,7 @@ function ready(error, us, county, state) {
     })
 
   
-  var filteredState = state_data.filter(function(d) {
+  var us_data_ph = state_data.filter(function(d) {
     return d.state == "USA"
   })
   var filteredCounties = county_data.filter(function(d) {
@@ -300,11 +301,9 @@ function ready(error, us, county, state) {
           return d.variable
         })
   function filterCountyMenu(selectedState) {
-    d3.selectAll(".dropdown-label").classed("disabled", false)
     var filteredCounties = county_data.filter(function(d) {
       return d.state == selectedState
     })
-    console.log(filteredCounties)
         var optionsCounty = countyMenu
           .selectAll('option')
           .data(filteredCounties)
@@ -324,13 +323,19 @@ function ready(error, us, county, state) {
           .attr('value', function(d){ 
             return d.county
           })
-        d3.select("#county-select")
-          .append('option')
-          .text("Select a county")
-          .attr('value', '')
-          .attr("selected", "selected")
-          .attr("disabled", "disabled")
-          .attr("hidden", "hidden")
+        if (selectedState != "USA") { console.log(selectedState)
+          d3.selectAll(".dropdown-label").classed("disabled", false)
+          d3.select("#county-select")
+            .append('option')
+            .text("Select a county")
+            .attr('value', '')
+            .attr("selected", "selected")
+            .attr("disabled", "disabled")
+            .attr("hidden", "hidden")
+        }else {
+          d3.select(".county-menu").select(".dropdown-label").classed("disabled", true)
+
+        }
     $("#county-select").selectmenu("refresh");
   }
   $("#state-select")
@@ -339,10 +344,23 @@ function ready(error, us, county, state) {
 
       },
       close: function(event, ui) {
-        var selectedState = d3.select(".ui-state-active").text()
-        filterCountyMenu(selectedState)
+
       },
       change: function(event, ui) {
+        var selectedState = ui.item.value
+        if (selectedState != "USA") {
+          $(".bar-State").css("display", "block")
+          $(".bar-County").css("display", "none")
+          var selectedLocation = ui.item.value
+          var selectedCategory = $("#category-select").val()
+          updateBars(selectedCategory, selectedLocation)
+        }else {
+          $(".bar-County").css("display", "none")
+          $(".bar-State").css("display", "none")
+
+        }
+
+        filterCountyMenu(selectedState)
 
       }
     })
@@ -357,6 +375,12 @@ function ready(error, us, county, state) {
 
       },
       change: function(event, ui) {
+        $(".bar-County").css("display", "block")
+        console.log(ui.item.value)
+        var selectedLocation = ui.item.value
+        var selectedCategory = $("#category-select").val()
+        updateBars(selectedCategory, selectedLocation)
+
 
       }
     })
@@ -371,6 +395,22 @@ function ready(error, us, county, state) {
 
       },
       change: function(event, ui) {
+        console.log(ui.item.value)
+        var selectedCategory = ui.item.value
+        var selectedLocation = function() {
+          if (d3.select("#county-select-menu").select(".ui-state-active").node() == null) {
+            if (d3.select("#state-select-menu").select(".ui-state-active").node() == null){
+              selectedStatePh = "USA"
+            }else { console.log('county')
+              selectedCountyPh = d3.select(".county-menu").select(".ui-selectmenu-text").text()
+            }
+          }else { console.log('state')
+            selectedStatePh = d3.select(".state-menu").select(".ui-selectmenu-text").text()
+          }
+        }
+        selectedLocation()
+        console.log(selectedStatePh)
+        updateBars(selectedCategory, selectedStatePh)
 
       }
     })
@@ -756,16 +796,28 @@ function ready(error, us, county, state) {
  
   /*END TABLE*/
   /*BAR CHARTS*/
+
   var groups = ["National", "State", "County"]
   var groups_ph = ["County", "State", "National"]
   var categories = ["Overall", "White", "Nonwhite"]
-  var barData = [{data: filteredState}, {data: filteredState}, {data: filteredState} ]
+  var barData = [{data: us_data_ph}, {data: us_data_ph}, {data: us_data_ph} ]
     /*MOBILE*/
   var barWidth_ph = width 
   var x_ph = d3.scaleLinear().range([0, width-30]);
   var y_ph = d3.scaleBand().range([30, 0]);
-  x_ph.domain([0, d3.max(state_data, function(d) { return d[SELECTED_VARIABLE]; })]);
-  y_ph.domain(filteredState.map(function(d) { return d[SELECTED_VARIABLE]; }));
+  // x_ph.domain([0, d3.max(state_data, function(d) { return d[SELECTED_VARIABLE]; })]);
+  x_ph.domain([0, d3.max(state_data, function(d) {
+    if (isNaN(d[NONWHITE]) == true && isNaN(d[WHITE]) == true){
+      return d[SELECTED_VARIABLE]
+    }else if (isNaN(d[NONWHITE]) == true && isNaN(d[WHITE]) == false) {
+      return Math.max(d[WHITE], d[SELECTED_VARIABLE])
+    }else if (isNaN(d[WHITE]) == true && isNaN(d[NONWHITE]) == false) {
+      return Math.max(d[NONWHITE], d[SELECTED_VARIABLE])
+    }else {
+      return Math.max(d[WHITE], d[NONWHITE], d[SELECTED_VARIABLE])
+    }
+  })])
+  y_ph.domain(us_data_ph.map(function(d) { return d[SELECTED_VARIABLE]; }));
   var xAxis_ph = d3.axisBottom()
       .scale(x_ph)
       .ticks(0)
@@ -775,7 +827,6 @@ function ready(error, us, county, state) {
   for (i=0; i<=groups_ph.length - 1; i++){
     var group = groups_ph[i]
     var category = categories[i]
-    console.log(category)
     d3.select(".bar-" + group )
       .append("svg")
       .attr("width", width)
@@ -807,27 +858,11 @@ function ready(error, us, county, state) {
         return "category " + categories[i]
       })
       .attr("transform", function(d,i) {
-        return "translate(" + 0 + "," + 60*i + ")"
+        return "translate(" + 0 + "," + 50*i + ")"
       })
-    // subBarPh.selectAll("text")
-    //   .data(filteredState)
-    //   .enter()
-    //   .append("text")
-    //   .attr("class", "data-label")
-    //   .attr("transform", function(d,i) {
-    //     return "translate(" + (width-33) +"," + 0+ ")"
-    //   })
-    //   .attr("text-anchor", "start")
-    //   .text(function(d) { 
-    //     var parentClass = d3.select(this.parentNode).attr('class');
-    //     if (parentClass.search("Overall") > -1) {
-    //       return formatNumber(d[SELECTED_VARIABLE])
-    //     }else if (parentClass.search("Non") > -1) {
-    //       return formatNumber(d[NONWHITE])
-    //     }else{
-    //       return formatNumber(d[WHITE])
-    //     }
-    //   })
+
+    d3.selectAll(".bar-County, .bar-State")
+      .style("display", "none")
 
     var rectG_ph = subBarPh.append("g")
       .attr("class", function(d) { 
@@ -874,22 +909,29 @@ function ready(error, us, county, state) {
       .attr("class", "y axis")
       .call(yAxis_ph)
     rectG_ph.selectAll(".bar")
-        .data(filteredState)
+      .data(us_data_ph)
       .enter().append("rect")
-        .attr("class", "background-rect-ph")
-        .attr("x", 0)
-        .attr("height", y_ph.bandwidth())
-        .attr("width", barWidth_ph)
-        .style("fill", "#adabac")
+      .attr("class", "background-rect-ph")
+      .attr("x", 0)
+      .attr("height", y_ph.bandwidth())
+      .attr("width", barWidth_ph)
+      .style("fill", "#adabac")
     rectG_ph.selectAll("rect:not(.background-rect-ph)")
-      .data(filteredState)
+      .data(us_data_ph)
       .enter()
       .append("rect")
       .attr("x", 0)
       .attr("class", "bar")
       .attr("height", y_ph.bandwidth())
-      .attr("width", function(d) {
-        return x_ph(d[SELECTED_VARIABLE])
+      .attr("width", function(d) { 
+        var parentClass = d3.select(this.parentNode).attr('class');
+        if (parentClass.search("Overall") > -1) {
+          return x_ph(d[SELECTED_VARIABLE])
+        }else if (parentClass.search("Non") > -1) {
+          return x_ph(d[WHITE])
+        }else{
+          return x_ph(d[NONWHITE])
+        }
       })
       .attr("fill", function(d) { 
         var parentClass = d3.select(this.parentNode).attr('class');
@@ -1134,10 +1176,59 @@ function ready(error, us, county, state) {
     var selected = (d3.select("path.selected").node() != null) ? (d3.select("path.selected").datum()) : undefined
     updateBars(variable, selected)
   }
+
+
   function updateBars(variable, selected) { 
     var WHITE = variable + "_wh"
     var NONWHITE = variable + "_nw"
     var data = (zoomCounty == true) ? county_data : state_data;
+
+    if (IS_PHONE) {
+      console.log(variable)
+      y_ph.domain([0, d3.max(data, function(d) {
+        if (isNaN(d[NONWHITE]) == true && isNaN(d[WHITE]) == true){
+          return d[variable]
+        }else if (isNaN(d[NONWHITE]) == true && isNaN(d[WHITE]) == false) {
+          return Math.max(d[WHITE], d[variable])
+        }else if (isNaN(d[WHITE] == true && isNaN(d[NONWHITE])) == false) {
+          return Math.max(d[NONWHITE], d[variable])
+        }else {
+          return Math.max(d[WHITE], d[NONWHITE], d[variable])
+        }
+      })])
+      var National = d3.select(".bar-group-ph.National").selectAll(".category")
+      National
+        .each(function() {
+          d3.select(this).select(".bar")
+            .data(us_data_ph)
+            .transition()
+            .duration(300)
+            // .attr("height", y_ph.bandwidth())
+            .attr("width", function(d) { 
+              var parentClass = d3.select(this.parentNode).attr('class');
+              if (parentClass.search("Overall") > -1) {
+                return (isNaN(d[variable]) != true) ? barWidth_ph - x_ph(d[variable]) : 0
+              }else if (parentClass.search("Non") > -1) {
+                return (isNaN(d[NONWHITE]) != true) ? barWidth_ph - x_ph(d[NONWHITE]) : 0
+              }else{
+                return (isNaN(d[WHITE]) != true) ? barWidth_ph - x_ph(d[WHITE]) : 0
+              }
+            })
+
+          // d3.select(this).select(".data-label")
+          //   .data([us_data])
+          //   .text(function(d) {
+          //     var parentClass = d3.select(this.parentNode).attr('class');
+          //     if (parentClass.search("Overall") > -1) { 
+          //       return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : ""
+          //     }else if (parentClass.search("Non") > -1) {
+          //       return (isNaN(d[NONWHITE]) != true) ? formatNumber(d[NONWHITE]) : ""
+          //     }else{
+          //       return (isNaN(d[WHITE]) != true) ? formatNumber(d[WHITE]) : ""
+          //     }
+          //   })
+        })
+    }else {
     var x = d3.scaleBand()
       .rangeRound([0, 50])
     // var y = d3.scaleLinear()
@@ -1357,6 +1448,7 @@ function ready(error, us, county, state) {
             d3.selectAll("#National, #State").style("opacity", 1)
           }
         }
+    }
 
   }
   function addTag(state, county, abbr) { 
