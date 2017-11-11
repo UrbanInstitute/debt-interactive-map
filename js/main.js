@@ -10,10 +10,10 @@ var zoomNational;
 var zoomCounty;
 var CATEGORY = "medical";
 var tdMap;
-var margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 10, bottom: 10, left: 10}
+var margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55}
 
 var dropdown;
-function setWidth(width) {
+function setWidth(width) { console.log('set')
   if (width > 755) {
     tdMap = 755
   }else {
@@ -34,19 +34,19 @@ function setZoom(national, state, county) {
 function selectedStatePh() {
 
 }
-var initialWidth = (IS_PHONE) ? $('body').width() : $(".divider").width() 
+var initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() * .75
 setWidth(initialWidth)
 setZoom(true,false, false)
 setVariable("perc_debt_collect")
 var width = (tdMap) - margin.right-margin.left,
-    height = (IS_PHONE) ? (width) - margin.top-margin.bottom : (width*.64) - margin.top-margin.bottom,     
+    height = (IS_PHONE) ? (width) - margin.top-margin.bottom : (width*.72) - margin.top-margin.bottom,     
     centered,
     selectedState,
     selectedStatePh,
     selectedCountyPh
 // d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
 //   if (error) throw error;
-console.log(width)
+console.log(tdMap)
 d3.queue()
     .defer(d3.json, "https://d3js.org/us-10m.v1.json")
     .defer(d3.csv, "data/county_" + CATEGORY + ".csv")
@@ -197,7 +197,7 @@ function ready(error, us, county, state) {
           }
         },
         afterTagAdded: function(event, ui) { 
-          ($(".ui-widget").css("height", 37))
+          ($(".ui-widget").css("height", 47))
           // console.log($('input[name="tags"').tagit('assignedTags'))
           var tag = (ui.tag[0]["textContent"]);
           var county = (tag.search(",") > 0) ? tag.split(",")[0] : "";
@@ -260,13 +260,13 @@ function ready(error, us, county, state) {
     .range(["#cfe8f3", "#73bfe2", "#1696d2", "#0a4c6a", "#000000"])  
 
  /*ADD DROPDOWNS*/
-    var categoryData = [{label: "% has any debt in collections, 2016", variable: "perc_debt_collect"},
-    {label: "Median amount all collections among those with, 2016", variable: "med_debt_collect"},
-    {label: "% has medical debt in collections, 2016", variable: "perc_debt_med"},
-    {label: "Median amount medical collections among those with, 2016", variable: "med_debt_med"},
-    {label: "% population not white", variable: "perc_pop_nw"},
-    {label: "% population without health insurance, 2015 (ACS)", variable: "perc_pop_no_ins" },
-    {label: "Average household income, 2015 (ACS)", variable: "avg_income"}]
+    var categoryData = [{label: "Share with any debt in collections", variable: "perc_debt_collect"},
+    {label: "Median debt in collections, 2016", variable: "med_debt_collect"},
+    {label: "Share medical debt in collections, 2016", variable: "perc_debt_med"},
+    {label: "Median medical debt in collections, 2016", variable: "med_debt_med"},
+    {label: "Share non-white population, 2015", variable: "perc_pop_nw"},
+    {label: "Share without health insurance, 2015", variable: "perc_pop_no_ins" },
+    {label: "Average household income, 2015", variable: "avg_income"}]
     
     var table = d3.select("#table-div")
     var stateMenu = d3.select(".state-menu")
@@ -715,7 +715,7 @@ function ready(error, us, county, state) {
   /*ADD TABLE*/
     $("#table-div").empty()
     var columns = ["Overall", "White", "Non-White"]
-    var groups = ["% has any debt in collections, 2016", "Median amount all collections among those with, 2016", "% has medical debt in collections, 2016", "Median amount medical collections among those with, 2016","% population not white", "% population without health insurance, 2015 (ACS)","Average household income, 2015 (ACS)"]
+    var groups = ["Share with any debt in collections", "Median debt in collections, 2016", "Share medical debt in collections, 2016", "Median medical debt in collections, 2016","Share non-white population, 2015", "Share without health insurance coverage, 2015","Average household income, 2015"]
     var rowNumbers = [1,2,3]
     var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]
     var table = d3.select("#table-div")
@@ -1522,7 +1522,7 @@ function ready(error, us, county, state) {
 
   }
   function addTag(state, county, abbr) { 
-      ($(".ui-widget").css("height", 37))
+      ($(".ui-widget").css("height", 47))
       d3.selectAll('li.tagit-choice').remove()
       var newTag = $("ul.tagit").append('<li id="state" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable"></li>')
       $('li#state').insertBefore(".tagit-new").append('<span class="tagit-label">' + state + '</span>')
@@ -1659,12 +1659,12 @@ function ready(error, us, county, state) {
     var IS_PHONE = d3.select("#isPhone").style("display") == "block";
     var barWidth = (IS_MOBILE) ? 45 : 50;
     var initialWidth = (IS_PHONE) ? $('body').width() : $(".divider").width(),
-        margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 10, bottom: 10, left: 10};
+        margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55}
     setWidth(initialWidth)
+    console.log(initialWidth)
     var width = (tdMap) - margin.right-margin.left,
-        height = (IS_PHONE) ? (width*1.5) - margin.top-margin.bottom : (width*.64) - margin.top-margin.bottom,     
+        height = (IS_PHONE) ? (width*1.5) - margin.top-margin.bottom : ($("body").width()*.75) - margin.top-margin.bottom,     
         barSvgHeight = height/3.5
-    
     if (IS_PHONE) { 
       d3.selectAll("#bar-chart-mobile").selectAll("svg")
         .each(function() { 

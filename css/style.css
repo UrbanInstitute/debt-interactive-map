@@ -4,7 +4,7 @@ body {
 }
 
 hr {
-  height: 1px;
+  height: 0px;
   background-color: #d2d2d2;
   border: none;
 }
@@ -14,7 +14,10 @@ hr {
 path.domain {
   stroke: none;
 }
-
+.note-table {
+  font-size: 11px;
+  font-style: normal !important;
+}
 #ui-id-2 > .ui-menu-item{
   border: solid 1px #f1f1f1 !important;
   background-color: #fff !important;
@@ -41,6 +44,13 @@ path.domain {
   margin-right: auto;
   font-size: 11px;
   font-style: italic;
+  margin-bottom: 69px;
+
+}
+.intro-wrap {
+    height: auto;
+    padding: 15px 30px 20px 30px;
+    z-index: 20000;
 }
 
 #bar-chart-mobile {
@@ -60,6 +70,27 @@ path.domain {
 /*.tagit.ui-widget.ui-widget-content.ui-corner-all {
   width: 221px !important;
 }*/
+a {
+    text-decoration: none;
+    color: #1896d2;
+}
+.appendixButton {
+  margin-left: 15px !important;
+}
+.footerButton {
+    float: left;
+    height: 20px;
+    width: 115px;
+    border: 1px solid #333;
+    cursor: pointer;
+    font: 13px Lato;
+    font-weight: bold;
+    text-align: center;
+    padding: 10px;
+    text-decoration: none !important;
+    color: #333 !important;
+    margin: 14px 0;
+}
 .title {
   margin-top: 25px;
   height: 22px;
@@ -67,6 +98,35 @@ path.domain {
   font-size: 18px;
   text-align: left;
   color: #000000;
+}
+.credit-list {
+    font-size: 14px;
+}
+.credit-names{
+    margin-bottom: 20px;
+    margin-top: 5px;
+}
+.bottom-text {
+  clear: both;
+  font-size: 14px;
+  color: #231f20;
+  padding-right: 25px;
+}
+h1.bottom-header{
+  font-size: 34px;
+  color: #231f20;
+}
+.bottom-section {
+    float: left;
+    width: 50%;
+}
+.bottom-content {
+  float: left;
+  width: auto;
+  padding: 60px 80px;
+  background-color: #f3f3f3;
+  border-top: 1px solid #d2d2d2;
+
 }
 
 .description {
@@ -87,8 +147,8 @@ td.td-table {
 }
 td.td-map {
   background-color: #f3f3f3;
-  width: 70%;
-  vertical-align: top;
+/*  width: 70%;
+*/  vertical-align: top;
 }
 table {
   max-height: 480px !important;
@@ -111,11 +171,11 @@ table {
   width: 100%;
 }
 #intro-text {
-  width: 70%;
+  margin: 0 auto;
+  max-width: 960px;
   margin: 0 auto;
 }
 h1 {
-  padding-top: 50px;
   color: #fff;
 
 }
@@ -123,10 +183,9 @@ h2 {
   font-size: 18px;
   color: #ffffff;
   font-weight: 300;
-  padding-top: 20px;
 }
 .banner {
-  height: 250px;
+  height: auto;
   margin-top: 52px;
   background-color: #000;
 }
@@ -166,8 +225,8 @@ h2 {
 }
 .search-div-main {
   background-color: #f5f5f5;
-  height: 60px;
-  margin-top: 30px;
+/*  height: 60px;
+*/  margin-top: 30px;
   max-width: 292px;
   width: 88.5%;
   margin-left: auto;
@@ -197,7 +256,17 @@ h2 {
 .tagit.ui-widget.ui-widget-content.ui-corner-all {
   background-color: #f5f5f5 !important;
 }
-
+.tagit-label {
+  font-weight: normal !important;
+  font-size: 14px !important;
+}
+ul.tagit {
+  padding-left: 0px !important;
+  overflow: hidden !important;
+}
+ul.tagit li.tagit-choice-editable {
+  margin-right: 100px !important;
+}
 .ui-widget {
   padding-left: 20px;
 }
@@ -249,7 +318,7 @@ tr.cell-column {
 
 .search-div {
   position: relative;
-  padding-top: 14px;
+  padding: 14px 0px
 
 }
 .image-div {
@@ -306,7 +375,10 @@ path.selected {
 
 
 table {
-  margin-top: 50px;
+  margin-top: 0px;
+}
+.left-table {
+  max-width: 328px;
 }
 .left-table > table {
   margin-top: 20px;
@@ -315,17 +387,18 @@ table {
 .left-table table {
     border-collapse: collapse;
     text-align: left;
+    width: 100%;
 }
 
 .td-table {
   max-width: 328px !important;
-  width: 27.9%;
+  width: 27.5%;
 }
 .left-table table th {
-    padding: 5px 19px;
+    padding: 14px 19px 5px 19px;
 }
 .cell-data > td {
-    width: 24px;
+   /* width: 24px;*/
 }
 
 .cell-data > td:nth-child(2), .cell-column > td:nth-child(2){
@@ -341,7 +414,7 @@ table {
 th {
   height: 14px;
   font-family: Lato;
-  font-size: 12px;
+  font-size: 13px;
   text-align: left;
   font-weight: 400;
 }
@@ -367,6 +440,7 @@ th {
 }
 .left-table table tbody .cell-data > td {
    font-size: 16px;
+   width: 84px;
 }
 
 
@@ -393,6 +467,7 @@ th {
 
 .left-table table tbody tr:last-child td {
     border-bottom: none;
+    padding-bottom: 12px;
 }
 
 .left-table tbody:hover {

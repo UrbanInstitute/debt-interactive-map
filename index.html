@@ -46,8 +46,10 @@
   </div>
   <div class="banner">
     <div id="intro-text">
-      <h1>Delinquent Medical Debt</h1>
-      <h2>Credit can be a lifeline during emergencies and a bridge to education and homeownership. But not all debt starts out as credit, and many people struggle with debt burdens. Debt burdens can ripple through families and communities and exacerbate wealth inequality. This map shows the geography of debt in America. How do your county and state compare?</h2>
+      <div class="intro-wrap">
+        <h1>Delinquent Medical Debt</h1>
+        <h2>Credit can be a lifeline during emergencies and a bridge to education and homeownership. But not all debt starts out as credit, and many people struggle with debt burdens. Debt burdens can ripple through families and communities and exacerbate wealth inequality. This map shows the geography of debt in America. How do your county and state compare?</h2>
+      </div>
     </div>
   </div>
 </div>
@@ -74,6 +76,7 @@
           <div id="notes">
             <p>* Note one describing why there is no data</p>
             <p>** Note two describing why there is no data</p>
+            <p class="note-table"><b>Note:</b> White and nonwhite values are for consumers living in zip codes within the county or state with predominantly (60%+) white or nonwhite zipcodes.</p>
           </div>
         </div>
       </td>
@@ -85,24 +88,39 @@
           <div id="map">
           </div>
           <div id="bar-chart"></div>
-        <hr>
-        <div id="map-description">
+<!--         <div id="map-description">
           <div class="title">Description of dashboard goes here</div>
           <div class="description">
             <p>Credit can be a lifeline during emergencies and a bridge to education and homeownership. But not all debt starts out as credit, and many people struggle with debt burdens. Debt burdens can ripple through families and communities and exacerbate wealth inequality. This map shows the geography of debt in America. How do your county and state compare? </p>
           </div>
-        </div>
+        </div> -->
         </div>
       </td>
     </tr>
   </table>
+  <div class="bottom-content">
+    <div class="bottom-section about">
+      <h1 class="bottom-header">ABOUT THE DATA</h1>
+      <a href = "data/data-for-download.xlsx">
+        <div class = "footerButton">Download data</div>
+      </a>
+      <a href = "Appendix.pdf" target="_blank">
+        <div class = "footerButton appendixButton">Appendix</div>
+      </a>
+      <div class="about-text bottom-text">
+        <p><em>This dashboard contains information derived from a random sample of deidentified, consumer-level records from a major credit bureau, as well as estimates from summary tables of the US Census Bureau’s American Community Survey (ACS).</em></p>
+        <p>Please contact externalaffairs@urban.org for more information.</p>
+      </div>
+    </div>
+
+
   <!--MOBILE-->
-    <div id="intro-mobile">
+<!--     <div id="intro-mobile">
       <div class="title">Description of dashboard goes here</div>
       <div class="description">
         <p>Credit can be a lifeline during emergencies and a bridge to education and homeownership. But not all debt starts out as credit, and many people struggle with debt burdens. Debt burdens can ripple through families and communities and exacerbate wealth inequality. This map shows the geography of debt in America. How do your county and state compare? </p>
       </div>
-    </div>
+    </div> -->
     <div id="dropdown-div">
       <div class="state-menu dropdown">
         <div class= "dropdown-label">Region/State:</div>
@@ -119,6 +137,43 @@
       <div class="bar_ph bar-State"></div>
       <div class="bar_ph bar-National"></div>
     </div>
+  <!--BOTTOM SECTION -->
+    <div class="bottom-section credits">
+      <h1 class="bottom-header">PROJECT CREDITS</h1>
+      <div class="credits-text bottom-text">
+        <p>Lorem ipsum dolor sit amet, id dolor philosophia sit, ei pro mutat liber menandri. Mea quem cotidieque efficiantur ea. Vix sumo noster commodo te, ex cum cibo falli. Eos ei vitae dolore copiosae. Cu est nihil verear deserunt, sonet ponderum appellantur ea pro, pri no novum dolor quaestio. Purto prima decore vel et. Alterum meliore voluptaria eum an, unum soluta eruditi mei eu.</p>
+      </div>
+      <div class="credit-list">
+         <div class="credit-header">
+            RESEARCH
+          </div>
+          <div class="credit-names">
+            <a href="http://www.urban.org/author/matthew-chingos" target="_blank">NAME 1</a> and <a href="http://www.urban.org/author/kristin-blagg" target="_blank">NAME 2</a>
+          </div>
+          <div class="credit-header">
+            DESIGN
+          </div>
+          <div class="credit-names">
+            <a href="http://www.urban.org/author/christina-baird" target="_blank">NAME 1</a>
+          </div>
+
+          <div class="credit-header">
+            DEVELOPMENT
+          </div>
+          <div class="credit-names">
+            <a href="http://www.urban.org/author/vivian-hou" target="_blank">NAME 1</a> 
+          </div>
+          <div class="credit-header">
+            EDITORIAL
+          </div>
+          <div class="credit-names">
+            <a href="http://www.urban.org/author/alexandra-tilsley" target="_blank">NAME 1</a> 
+          </div>
+          <p>Copyright © <a href="http://www.urban.org/" target="_blank">Urban Institute</a> December 2017. View this project on <a href="https://github.com/UrbanInstitute/education-funding-trends" target="_blank">Github</a>.</p>
+      </div>
+    </div>
+
+  </div>
 </body>
 
 <script src="https://d3js.org/d3.v4.min.js"></script>
