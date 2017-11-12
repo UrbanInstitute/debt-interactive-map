@@ -13,9 +13,9 @@ var tdMap;
 var margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55}
 
 var dropdown;
-function setWidth(width) { console.log('set')
-  if (width > 755) {
-    tdMap = 755
+function setWidth(width) { 
+  if ($("body").width() > 1200) {
+    tdMap = 870
   }else {
     tdMap = width;
   }
@@ -34,12 +34,12 @@ function setZoom(national, state, county) {
 function selectedStatePh() {
 
 }
-var initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() * .75
+var initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width()
 setWidth(initialWidth)
 setZoom(true,false, false)
 setVariable("perc_debt_collect")
 var width = (tdMap) - margin.right-margin.left,
-    height = (IS_PHONE) ? (width) - margin.top-margin.bottom : (width*.72) - margin.top-margin.bottom,     
+    height = (IS_PHONE) ? (width) - margin.top-margin.bottom : (width*.57) - margin.top-margin.bottom,     
     centered,
     selectedState,
     selectedStatePh,
@@ -559,12 +559,14 @@ function ready(error, us, county, state) {
 
     /*ZOOM IN/OUT BUTTONS*/
     var data = [{label: "+", x: width - 35, y: height / 1.5, id: "zoom_in"},
-                {label: "-", x: width - 35, y: height / 1.25, id: "zoom_out" }];
+                {label: "–", x: width - 35, y: height / 1.25, id: "zoom_out" }];
     var buttons = svg.selectAll(".zoomBtn")
       .data(data)
       .enter()
       .append('g')
-      .attr('class', 'zoomBtn')
+      .attr('class', function(d) {
+        return (d.label == "+") ? 'zoomBtn in' : 'zoomBtn out';
+      })
       .attr('id', function(d) {
         return d.id
       })
@@ -591,9 +593,12 @@ function ready(error, us, county, state) {
       .text(function(d) {
         return d.label
       })
-      .attr('x', 12.5)
-      .attr('y', 25.5)
-      .style('font-size', "28px")
+      .attr('x', function(d) {
+        return (d.label == "+") ? 10 : 9.5;
+      })
+      .attr('y', function(d) {
+        return (d.label == "+") ? 28 : 26;
+      })
 
     d3.select(".map-g")
       .call(d3.zoom().on("zoom", function () {
@@ -623,13 +628,13 @@ function ready(error, us, county, state) {
     .attr("width", function() {
       return (IS_MOBILE) ? 45 : 50;
     })
-    .attr('transform', 'translate(' + (width- 55) + ',' + 0 + ')')
+    .attr('transform', 'translate(' + (width- 55) + ',' + 10 + ')')
   legend.append("rect")
     .attr("width", 65)
-    .attr("height", 160)
+    .attr("height", 170)
     .style("fill", "#f5f5f5")
     .style("opacity", 0.9)
-    .attr('transform', 'translate(' + (-5) + ',' + 0 + ')')
+    .attr('transform', 'translate(' + (-5) + ',' + -10 + ')')
 
   legend.append("text")
   var keyWidth =   15;
@@ -837,7 +842,7 @@ function ready(error, us, county, state) {
       .attr("class", function(d,i) {
         return "bar-group-ph " + group
       })
-      .attr("transform", "translate(" + 0 + "," + 20 + ")")
+      .attr("transform", "translate(" + 0 + "," + 10 + ")")
     barG_ph.append("text")
       .text(function(d,i) {
         return group;
@@ -1658,12 +1663,11 @@ function ready(error, us, county, state) {
     var IS_MOBILE = d3.select("#isMobile").style("display") == "block";
     var IS_PHONE = d3.select("#isPhone").style("display") == "block";
     var barWidth = (IS_MOBILE) ? 45 : 50;
-    var initialWidth = (IS_PHONE) ? $('body').width() : $(".divider").width(),
+    var initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width()
         margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55}
     setWidth(initialWidth)
-    console.log(initialWidth)
     var width = (tdMap) - margin.right-margin.left,
-        height = (IS_PHONE) ? (width*1.5) - margin.top-margin.bottom : ($("body").width()*.75) - margin.top-margin.bottom,     
+        height = (IS_PHONE) ? (width*1.5) - margin.top-margin.bottom : tdMap*.53 - margin.top-margin.bottom,     
         barSvgHeight = height/3.5
     if (IS_PHONE) { 
       d3.selectAll("#bar-chart-mobile").selectAll("svg")

@@ -215,7 +215,10 @@ h2 {
   height: 35px;
   pointer-events: all;
   cursor: pointer;
+  font-size: 28px
 }
+
+
 #map {
   float: left;
   margin-bottom: 15px;
@@ -308,7 +311,8 @@ tr.cell-column {
 #location {
   font-size: 18px;
   font-weight: 600;
-  margin: 20px 0;
+  height: 39px;
+  padding-top: 70px;
   text-transform: uppercase;
 }
 
@@ -395,7 +399,7 @@ table {
   width: 27.5%;
 }
 .left-table table th {
-    padding: 14px 19px 5px 19px;
+    padding: 10px 19px 5px 19px;
 }
 .cell-data > td {
    /* width: 24px;*/
