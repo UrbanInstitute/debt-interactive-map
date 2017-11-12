@@ -268,8 +268,8 @@ ul.tagit {
   overflow: hidden !important;
 }
 ul.tagit li.tagit-choice-editable {
-  margin-right: 100px !important;
-}
+/*  margin-right: 100px !important;
+*/}
 .ui-widget {
   padding-left: 20px;
 }
@@ -458,6 +458,11 @@ th {
   color: #fff;
 }
 
+/*tbody.group.selected:hover >  *{
+  background-color: #000 !important;
+}*/
+
+
 .group.selected > .cell-data > td  {
     color: #fdbf11;
 
@@ -475,16 +480,16 @@ th {
 }
 
 .left-table tbody:hover {
-    background-color: #000;
+    background-color: #696969 !important;
     color: white;
 }
 .left-table tbody:hover td {
-    background-color: #000;
+    background-color: #696969 !important;
     color: white;
 }
 
 .left-table tbody:hover .cell-data > td {
-    background-color: #000;
+    background-color: #696969 !important;
     color: #fdbf11;
 }
 
@@ -563,9 +568,10 @@ html .ui-button.ui-state-disabled:active {
     display: block;
   }
   .map-div {
-    margin: 30px 13px 30px 30px;
+    margin: 30px 0px 30px 0px;
   }
 }
+
 @media (max-width: 700px) {
   #isPhone {
     display: block;

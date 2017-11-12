@@ -10,14 +10,20 @@ var zoomNational;
 var zoomCounty;
 var CATEGORY = "medical";
 var tdMap;
-var margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55}
+// var margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55}
 
 var dropdown;
-function setWidth(width) { 
+function setWidth(width) { console.log(width)
+  var margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55};
+  console.log(margin.left)
   if ($("body").width() > 1200) {
-    tdMap = 870
-  }else {
-    tdMap = width;
+    tdMap = 870 - margin.right - margin.left
+  }else if ($("body").width() < 1200 && !IS_MOBILE){ console.log(width - margin.right -margin.left)
+    tdMap = width - margin.right -margin.left
+  }else if (IS_MOBILE && !IS_PHONE) { console.log('hi')
+    tdMap = width
+  }else if (IS_PHONE) {
+    tdMap = width - margin.right -margin.left
   }
 }
 function setVariable(variable) {
@@ -38,15 +44,15 @@ var initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-t
 setWidth(initialWidth)
 setZoom(true,false, false)
 setVariable("perc_debt_collect")
-var width = (tdMap) - margin.right-margin.left,
-    height = (IS_PHONE) ? (width) - margin.top-margin.bottom : (width*.57) - margin.top-margin.bottom,     
+console.log(tdMap)
+var width =  tdMap,  //(IS_MOBILE && !IS_PHONE) ? tdMap : (tdMap) - margin.right-margin.left,
+    height = (IS_PHONE) ? (width) - margin.top-margin.bottom :  425,//(width*.57) - margin.top-margin.bottom,     
     centered,
     selectedState,
     selectedStatePh,
     selectedCountyPh
 // d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
 //   if (error) throw error;
-console.log(tdMap)
 d3.queue()
     .defer(d3.json, "https://d3js.org/us-10m.v1.json")
     .defer(d3.csv, "data/county_" + CATEGORY + ".csv")
@@ -145,7 +151,7 @@ function ready(error, us, county, state) {
     }
   }
   /*END*/
-    function createSearchArray(filter) {
+    function createSearchArray(filter) { console.log(filter)
       var searchArray = [];
       if (zoomNational == true) {
         for (var i = 0; i<tmp_state.length; i++){
@@ -188,7 +194,12 @@ function ready(error, us, county, state) {
             $("#ui-id-2").css("top", "68px")
           },
         },
-        beforeTagAdded: function(event, ui) { 
+        beforeTagAdded: function(event, ui) { console.log('hi')
+          // if ($("ul.tagit li.tagit-choice-editable").width() < 70) { console.log('1')
+          //   $("ul.tagit li.tagit-choice-editable").css("margin-right", "100px")
+          // }else {
+          //   $("ul.tagit li.tagit-choice-editable").css("margin-right", "0px")
+          // }
           if(dropdown.indexOf(ui.tagLabel) == -1){ 
             return false;
           }
@@ -223,11 +234,11 @@ function ready(error, us, county, state) {
         },
         afterTagRemoved: function(event,ui) { 
            var tag = (ui.tag[0]["textContent"]);
-           if (tag.search(",") > 0) { console.log('1')
+           if (tag.search(",") > 0) { 
             d3.selectAll(".counties > path.selected")
               .classed("selected", false)
             setZoom(false, true, false)
-           }else { console.log('2')
+           }else { 
             d3.select("#location").html("National")
             d3.selectAll(".state-borders > path.selected")
               .classed("selected", false)
@@ -522,7 +533,7 @@ function ready(error, us, county, state) {
       .on('click', function(d) {
         var state = d.properties.state;
         // var county = d.properties.county;
-        var abbr = d.abbr;
+        var abbr = d.properties.abbr;
         var level = "state"
         setZoom(false, true, false)
         // $(".state-borders").css("pointer-events", "none")
@@ -628,9 +639,13 @@ function ready(error, us, county, state) {
     .attr("width", function() {
       return (IS_MOBILE) ? 45 : 50;
     })
-    .attr('transform', 'translate(' + (width- 55) + ',' + 10 + ')')
+    .attr('transform', function() {console.log((IS_MOBILE) ? 'hi' : 'hello')
+      return (IS_MOBILE) ? 'translate(' + (width- 68) + ',' + 10 + ')' : 'translate(' + (width- 55) + ',' + 10 + ')';
+    })
   legend.append("rect")
-    .attr("width", 65)
+    .attr("width", function() {
+      return (IS_MOBILE) ? 73: 65
+    })
     .attr("height", 170)
     .style("fill", "#f5f5f5")
     .style("opacity", 0.9)
@@ -1534,24 +1549,33 @@ function ready(error, us, county, state) {
       $('li#state').append('<a class="tagit-close"</a>')
       $("li#state > a.tagit-close").append('<span class="text-icon"</span>')
       $("li#state > a.tagit-close").append('<span class="ui-icon ui-icon-close"</span>')
+      if ($("li#state").width() < 70) {
+        $("li#state").css("margin-right", "100px")
+      }else {
+        $("li#state").css("margin-right", "0px")
+      }
       setZoom(false,true, false)
-      $("li#state").on('click', function() { console.log('click')
+      createSearchArray(abbr)
+      $("li#state").on('click', function() { 
         d3.selectAll('li.tagit-choice').remove()
-
+        $(".tagit-new").css("display", "block")
         d3.selectAll("path.selected")
           .classed("selected", false)
         d3.select("#location").html("National")
         setZoom(true,false, false)
         zoomMap(null, "national")
+        createSearchArray("")
       })
-    if (county != undefined) { 
+    if (county != undefined) { console.log(county)
       var newTag = $("ul.tagit").append('<li id="county" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable"></li>')
       $('li#county').insertBefore(".tagit-new").append('<span class="tagit-label">' + county + ', ' + abbr + '</span>')
       $('li#county').append('<a class="tagit-close"</a>')
       $("li#county > a.tagit-close").append('<span class="text-icon"</span>')
       $("li#county > a.tagit-close").append('<span class="ui-icon ui-icon-close"</span>')
       setZoom(false,true, true)
+      $(".tagit-new").css("display", "none")
       $("li#county").on('click', function() {
+        $(".tagit-new").css("display", "block")
         setZoom(false,true, false)
         var filteredData = tmp_state.filter(function(d) {
             return d.properties["state"] == state;
@@ -1664,10 +1688,11 @@ function ready(error, us, county, state) {
     var IS_PHONE = d3.select("#isPhone").style("display") == "block";
     var barWidth = (IS_MOBILE) ? 45 : 50;
     var initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width()
-        margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55}
+    //    margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55}
+    console.log(initialWidth)
     setWidth(initialWidth)
-    var width = (tdMap) - margin.right-margin.left,
-        height = (IS_PHONE) ? (width*1.5) - margin.top-margin.bottom : tdMap*.53 - margin.top-margin.bottom,     
+    var width = tdMap,  //- margin.right-margin.left,
+        height = (IS_PHONE) ? (width) - margin.top-margin.bottom :  425,//(width*.57) - margin.top-margin.bottom,       
         barSvgHeight = height/3.5
     if (IS_PHONE) { 
       d3.selectAll("#bar-chart-mobile").selectAll("svg")
@@ -1711,6 +1736,19 @@ function ready(error, us, county, state) {
             return 'translate(' + (width - 35) + ',' + (height - 80 + (i*40)) + ')'
             });
         })
+      d3.select(".g-legend")
+        .attr("height", height/2)
+        .attr("width", function() {
+          return (IS_MOBILE) ? 45 : 50;
+        })
+        .attr('transform', function() {console.log((IS_MOBILE) ? 'hi' : 'hello')
+          return (IS_MOBILE) ? 'translate(' + (width- 68) + ',' + 10 + ')' : 'translate(' + (width- 55) + ',' + 10 + ')';
+        })
+      legend.select("rect")
+        .attr("width", function() {
+          return (IS_MOBILE) ? 73: 65
+        })
+
       }
  
   })
