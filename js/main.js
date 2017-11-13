@@ -1627,10 +1627,10 @@ function ready(error, us, county, state) {
           })
       })
   }
-  function zoomMap(d,zoomLevel) { 
+  function zoomMap(d,zoomLevel) { console.log('zoom')
     var x, y, k;
     // if (d.properties.state && centered !== d.properties.state && zoomLevel != "national") { 
-    if (zoomLevel != "national") { 
+    if (zoomLevel != "national") { console.log('1')
       d3.selectAll("path.hoverNational").classed("hoverNational", false)
       $(".state-borders").css("pointer-events", "none")
       $(".counties").css("pointer-events", "all")
@@ -1667,13 +1667,13 @@ function ready(error, us, county, state) {
             .moveToFront()
           // updateTable(data)
       }
-    } else { 
+    } else { console.log('2')
       setZoom(true, false, false)
       $(".state-borders").css("pointer-events", "all")
       $(".counties").css("pointer-events", "none")
-      x = width / 1.15;
-      y = height / 1.2;
-      k = .6;
+      x = width / 1.4;
+      y = height / 1.3;
+      k = .7;
       centered = null;
       updateTable(us_data)
       g.selectAll("path")
