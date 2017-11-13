@@ -18,7 +18,7 @@ function setWidth(width) { console.log(width)
   console.log(margin.left)
   if ($("body").width() > 1200) {
     tdMap = 870 - margin.right - margin.left
-  }else if ($("body").width() < 1200 && !IS_MOBILE){ console.log(width - margin.right -margin.left)
+  }else if ($("body").width() <= 1200 && !IS_MOBILE){ console.log(width - margin.right -margin.left)
     tdMap = width - margin.right -margin.left
   }else if (IS_MOBILE && !IS_PHONE) { console.log('hi')
     tdMap = width
@@ -616,9 +616,9 @@ function ready(error, us, county, state) {
       })
 
     d3.select(".map-g")
-      .call(d3.zoom().on("zoom", function () {
-              d3.select(".map-g").attr("transform", d3.event.transform)
-      }))
+      // .call(d3.zoom().on("zoom", function () {
+      //         d3.select(".map-g").attr("transform", d3.event.transform)
+      // }))
 
 
   function zoomed(factor) { 
