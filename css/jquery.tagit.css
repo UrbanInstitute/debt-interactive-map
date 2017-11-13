@@ -21,7 +21,7 @@ ul.tagit li.tagit-choice-read-only {
 } 
 
 ul.tagit li.tagit-choice-editable { 
-    padding: .2em 18px .2em .5em; 
+    padding: .2em 28px .2em 10px; 
 } 
 
 ul.tagit li.tagit-new {
@@ -38,6 +38,7 @@ ul.tagit li.tagit-choice .tagit-close {
     right: .1em;
     top: 50%;
     margin-top: -8px;
+    margin-right: 5px;
     line-height: 17px;
 }
 

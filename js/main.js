@@ -969,7 +969,7 @@ function ready(error, us, county, state) {
         }else if (parentClass.search("Non") > -1) {
           return "#000000"
         }else{
-          return "#1696d2"
+          return "#696969"
         }
       })
   }
@@ -1132,7 +1132,7 @@ function ready(error, us, county, state) {
         }else if (parentClass.search("Non") > -1) {
           return "#000000"
         }else{
-          return "#1696d2"
+          return "#696969"
         }
       })
       .attr("width", x.bandwidth())
@@ -1556,11 +1556,11 @@ function ready(error, us, county, state) {
       $('li#state').append('<a class="tagit-close"</a>')
       $("li#state > a.tagit-close").append('<span class="text-icon"</span>')
       $("li#state > a.tagit-close").append('<span class="ui-icon ui-icon-close"</span>')
-      if ($("li#state").width() < 70) {
-        $("li#state").css("margin-right", "100px")
-      }else {
-        $("li#state").css("margin-right", "20px")
-      }
+      // if ($("li#state").width() < 70) {
+      //   $("li#state").css("margin-right", "100px")
+      // }else {
+      //   $("li#state").css("margin-right", "20px")
+      // }
       setZoom(false,true, false)
       createSearchArray(abbr)
       $("li#state").on('click', function() { 

@@ -28,6 +28,13 @@ path.domain {
 
 }
 
+.ui-state-default .ui-icon {
+    background-image: url(../img/close-sign.png) !important;
+    background-size: 10px;
+}
+.ui-icon-close {
+  background-position: 3px 6px !important;
+}
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-state-active.ui-button:hover{ 
   color: #000 !important;
   font-size: 14px !important;
@@ -49,8 +56,9 @@ path.domain {
 }
 .intro-wrap {
     height: auto;
-    padding: 15px 30px 20px 30px;
+    padding: 15px 30px 20px 67px;
     z-index: 20000;
+    width: 57.5%;
 }
 
 #bar-chart-mobile {
@@ -79,7 +87,6 @@ a {
 }
 .footerButton {
     float: left;
-    height: 20px;
     width: 115px;
     border: 1px solid #333;
     cursor: pointer;
@@ -172,8 +179,8 @@ table {
 }
 #intro-text {
   margin: 0 auto;
-  max-width: 960px;
   margin: 0 auto;
+  background-color: rgba(0, 0, 0, 0.5)
 }
 h1 {
   color: #fff;
@@ -185,6 +192,10 @@ h2 {
   font-weight: 300;
 }
 .banner {
+  background-image: url(../img/banner-image.jpeg);
+  background-size: cover;
+  background-repeat: no-repeat;
+  width: 100%;
   height: auto;
   margin-top: 52px;
   background-color: #000;
@@ -263,16 +274,16 @@ h2 {
   font-weight: normal !important;
   font-size: 14px !important;
 }
+ul.tagit li.tagit-new {
+  padding-left: 10px !important;
+}
 ul.tagit {
-  padding-left: 0px !important;
+  padding-left: 11px !important;
   overflow: hidden !important;
 }
 ul.tagit li.tagit-choice-editable {
 /*  margin-right: 100px !important;
 */}
-.ui-widget {
-  padding-left: 20px;
-}
 
 .ui-widget > label {
   font-family: "Lato";
@@ -282,6 +293,7 @@ ul.tagit li.tagit-choice-editable {
   font-size: 12px;
   text-align: left;
   color: #000000;
+  padding-left: 21px;
 }
 .ui-widget-content {
   background: #f5f5f5 !important;
@@ -406,7 +418,7 @@ table {
   width: 27.5%;
 }
 .left-table table th {
-    padding: 8px 19px 4px 19px;
+    padding: 14px 19px 6px 19px;
 }
 .left-table tbody.selected {
     border-right: 5px solid #fdbf11;
@@ -435,9 +447,8 @@ table {
 }
 
 th {
-  height: 14px;
   font-family: Lato;
-  font-size: 13px;
+  font-size: 12px;
   text-align: left;
   font-weight: 400;
 }
@@ -462,7 +473,7 @@ th {
     font-weight: 600;
 }
 .left-table table tbody .cell-data > td {
-   font-size: 14px;
+   font-size: 16px;
    width: 84px;
    vertical-align: unset;
 }
@@ -496,7 +507,7 @@ th {
 
 .left-table table tbody tr:last-child td {
     border-bottom: none;
-    padding-bottom: 8px;
+    padding-bottom: 14px;
 }
 
 .left-table tbody:hover {
