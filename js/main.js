@@ -517,7 +517,9 @@ function ready(error, us, county, state) {
           updateBars(SELECTED_VARIABLE, d3.select(".state-borders > path.selected").datum())
         }
         d3.selectAll("path.selected").moveToFront()
-        d3.selectAll(".hover").classed("hover", false)
+        d3.selectAll(".hover")
+          .classed("hover", false)
+          .classed("hoverNational", false)
       })
       .call(zoom)
 
@@ -562,7 +564,9 @@ function ready(error, us, county, state) {
             d3.select("#location").html(state)
             d3.selectAll("path.selected").moveToFront()
           }else {
-            d3.selectAll(".hover").classed("hover", false)
+            d3.selectAll(".hover")
+              .classed("hover", false)
+              .classed("hoverNational", false)
             updateBars(SELECTED_VARIABLE, undefined)
           }
         }
@@ -725,6 +729,9 @@ function ready(error, us, county, state) {
     var id = (geography == "county") ? filteredData[0]["id"] : ""
     d3.select("path#" + filteredData[0]["properties"]["abbr"] + id)
       .classed('hover', true)
+      .classed("hoverNational", function() {
+        return (zoomNational == true) ? true : false
+      })
       .moveToFront()
   }
 
@@ -1552,7 +1559,7 @@ function ready(error, us, county, state) {
       if ($("li#state").width() < 70) {
         $("li#state").css("margin-right", "100px")
       }else {
-        $("li#state").css("margin-right", "0px")
+        $("li#state").css("margin-right", "20px")
       }
       setZoom(false,true, false)
       createSearchArray(abbr)
@@ -1620,10 +1627,11 @@ function ready(error, us, county, state) {
           })
       })
   }
-  function zoomMap(d,zoomLevel) { console.log('zoom')
+  function zoomMap(d,zoomLevel) { 
     var x, y, k;
     // if (d.properties.state && centered !== d.properties.state && zoomLevel != "national") { 
     if (zoomLevel != "national") { 
+      d3.selectAll("path.hoverNational").classed("hoverNational", false)
       $(".state-borders").css("pointer-events", "none")
       $(".counties").css("pointer-events", "all")
       d3.selectAll("path").classed("selected", false)

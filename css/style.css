@@ -305,9 +305,11 @@ tr.cell-column {
   text-transform: uppercase;
   font-size: 11px;
   letter-spacing: 1.6px;
-  opacity: .8;
 }
 
+path.hoverNational {
+  stroke-width: 4px !important;
+}
 #location {
   font-size: 18px;
   font-weight: 600;
@@ -376,8 +378,13 @@ path.selected {
 .group-4 > .cell-column > td:nth-child(2), .group-4 .cell-column > td:nth-child(3) {
   opacity: 0;
 }
-
-
+.left-table2 {
+  float: left;
+  width: 5px;
+}
+.pseudo-td {
+  width: 1px;
+}
 table {
   margin-top: 0px;
 }
@@ -400,6 +407,18 @@ table {
 }
 .left-table table th {
     padding: 10px 19px 5px 19px;
+}
+.left-table tbody.selected {
+    border-right: 5px solid #fdbf11;
+    border-collapse: separate;
+    border-spacing: 4px; 
+
+}
+.left-table > tbody:hover {
+    border-right: 5px solid #fdbf11;
+}
+.left-table > tbody.selected > tr {
+    border-right: 5px solid #fdbf11;
 }
 .cell-data > td {
    /* width: 24px;*/
@@ -482,6 +501,8 @@ th {
 .left-table tbody:hover {
     background-color: #696969 !important;
     color: white;
+    border-right: 5px solid #fdbf11;
+
 }
 .left-table tbody:hover td {
     background-color: #696969 !important;
