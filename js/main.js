@@ -46,7 +46,7 @@ setZoom(true,false, false)
 setVariable("perc_debt_collect")
 console.log(tdMap)
 var width =  tdMap,  //(IS_MOBILE && !IS_PHONE) ? tdMap : (tdMap) - margin.right-margin.left,
-    height = (IS_PHONE) ? (width) - margin.top-margin.bottom :  425,//(width*.57) - margin.top-margin.bottom,     
+    height = (IS_PHONE) ? (width) - margin.top-margin.bottom :  630,//(width*.57) - margin.top-margin.bottom,     
     centered,
     selectedState,
     selectedStatePh,
@@ -74,14 +74,14 @@ function ready(error, us, county, state) {
   var stateData = us.objects.states.geometries
 
   var county_data = transformData(county)
-
+console.log(county_data)
     county_data.forEach(function(d,i){ 
       for (var property in d["values"][0]) {
         d[property] = d.values[0][property]
       }
       countyData.forEach(function(e, j) { 
         if (d.key == e.id) { 
-          for (var property in d["values"][0]) {
+          for (var property in d["values"][0]) { 
           //   if ((d.values[0][property]).search('<') > 0 && property != "state" && property != "abbr" && property != "county") {
           //     console.log(d.values[0][property])
           //     e[property] == "n<50"
@@ -123,7 +123,7 @@ function ready(error, us, county, state) {
   var filteredCounties = county_data.filter(function(d) {
     return d.state == "USA"
   })
-
+  console.log(countyData)
   var tmp_county = topojson.feature(us, us.objects.counties).features;
   for (var i =0; i<tmp_county.length; i++){
     var mergeID = +tmp_county[i]["id"]
@@ -137,6 +137,7 @@ function ready(error, us, county, state) {
       }
     }
   }
+  console.log(tmp_county)
   var tmp_state = topojson.feature(us, us.objects.states).features;
   for (var i =0; i<tmp_state.length; i++){
     var mergeIDState = tmp_state[i]["id"]
@@ -249,7 +250,7 @@ function ready(error, us, county, state) {
           createSearchArray("")
         }
     });
-
+    $('.ui-widget-content.ui-autocomplete-input').attr('placeholder', 'National')
     createSearchArray("")
 
   // });
@@ -442,7 +443,9 @@ function ready(error, us, county, state) {
     var path = d3.geoPath()
     var g = svg.append("g")
       .attr("class", "map-g")
-      .attr("transform", "scale(" + width/1060 + ")");
+      .attr("transform", "translate(" + 0 + "," + height / 10 + ")scale(" +width/1060 + ")")
+
+      // .attr("transform",  "scale(" + width/1060 + ")");
     g.append("g")
       .attr("class", "counties")
       .selectAll("path")
@@ -453,7 +456,7 @@ function ready(error, us, county, state) {
       .style("fill", function(d){ 
           return (isNaN(d.properties[SELECTED_VARIABLE]) == true) ? "#adabac" : quantize(d.properties[SELECTED_VARIABLE]);
       })
-      .on('click', function(d) { 
+      .on('click', function(d) { console.log(d)
         var state = d.properties.state;
         var stateData = tmp_state.filter(function(d){ 
           return d.properties.state == state
@@ -1672,7 +1675,7 @@ function ready(error, us, county, state) {
       $(".state-borders").css("pointer-events", "all")
       $(".counties").css("pointer-events", "none")
       x = width / 1.4;
-      y = height / 1.3;
+      y = height / 1.5;
       k = .7;
       centered = null;
       updateTable(us_data)
@@ -1681,7 +1684,7 @@ function ready(error, us, county, state) {
 
       g.transition()
           .duration(750)
-          .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
+          .attr("transform", "translate(" + 0 + "," + height / 10 + ")scale(" +width/1060 + ")")
           .style("stroke-width", 1.5 / k + "px");
     }
       updateBars(SELECTED_VARIABLE, d)
@@ -1700,7 +1703,7 @@ function ready(error, us, county, state) {
     console.log(initialWidth)
     setWidth(initialWidth)
     var width = tdMap,  //- margin.right-margin.left,
-        height = (IS_PHONE) ? (width) - margin.top-margin.bottom :  425,//(width*.57) - margin.top-margin.bottom,       
+        height = (IS_PHONE) ? (width) - margin.top-margin.bottom :  630,//(width*.57) - margin.top-margin.bottom,       
         barSvgHeight = height/3.5
     if (IS_PHONE) { 
       d3.selectAll("#bar-chart-mobile").selectAll("svg")
@@ -1713,7 +1716,9 @@ function ready(error, us, county, state) {
     }else {
       d3.select("#bar-chart").attr('width', width).attr("height", barSvgHeight)
       d3.select(".g-legend").attr('transform', 'translate(' + (width*.9) + ',' + 0 + ')')
-      d3.select("g").attr("transform", "scale(" + width/1060 + ")");
+      d3.select("g")          
+        .attr("transform", "translate(" + 0 + "," + height / 10 + ")scale(" +width/1060 + ")")
+ //.attr("transform", "scale(" + width/1060 + ")");
       $("table").height($("table").width()*0.8);
       d3.select("#map").select('svg')
         .attr('width', width)
@@ -1722,7 +1727,9 @@ function ready(error, us, county, state) {
         .attr('width', width)
         .attr('height', height)
       svg.select(".map-g")
-        .attr("transform", "scale(" + width/1060 + ")");
+          .attr("transform", "translate(" + 0 + "," + height / 10 + ")scale(" +width/1060 + ")")
+
+      //  .attr("transform", "scale(" + width/1060 + ")");
       d3.selectAll(".bar-group")
         .each(function(d,i) {
           d3.select(this)
