@@ -27,7 +27,9 @@ path.domain {
   text-align: left !important;
 
 }
-
+p.note1, p.note2 {
+  display: none;
+}
 .ui-state-default .ui-icon {
     background-image: url(../img/close-sign.png) !important;
     background-size: 10px;
@@ -485,6 +487,7 @@ th {
 .left-table tbody {
   border-bottom: 1.1px solid #ececec;
   cursor: pointer;
+  border-right: 5px solid #fff;
 /*  width: 288px;
 */}
 .group.selected, .group.selected td {
