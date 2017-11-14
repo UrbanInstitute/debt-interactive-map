@@ -218,10 +218,11 @@ h2 {
 }
 
 .zoomBtn {
-  background-image: url("../img/refresh.png");
-  width: 15px;
-  pointer-events: all;
+  opacity: .8;
   cursor: pointer;
+}
+.zoomBtn:hover {
+  opacity: 1;
 }
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
   font-family: "Lato", sans-serif !important;
@@ -375,12 +376,12 @@ path.hide {
 
 path.hover {
   stroke: #fdbf11;
-  stroke-width: 1.5px;
+  stroke-width: 1.3px;
 }
 
 path.selected {
   stroke: #fdbf11;
-  stroke-width: 1.5px;
+  stroke-width: 1.3px;
 }
 .background {
   fill: none;

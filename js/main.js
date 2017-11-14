@@ -608,25 +608,14 @@ function ready(error, us, county, state) {
       //   zoomed(factor)
       // })
 
-
-    var buttonRect = button.append('rect')
-      .attr("width", 35)
-      .attr('height', 35)
-      .attr('x', 0)
-      .attr('y', 0)
-      .style('fill', '#777')
-      .style('border-radius', "2px")
-      .style("opacity", .5)
     button
       .append("image")
-      .attr("xlink:href", "img/refresh.png")
-      .attr("x", 3.5)
-      .attr("y", 3.5)
-      .attr("width", 28)
-      .attr("height", 28)
-    button
-      .attr('x', 10)
-      .attr('y', 28)
+      .attr("xlink:href", "img/reload.png")
+      .attr("x", -15)
+      .attr("y", 10)
+      .attr("width", 50)
+      .attr("height", 50)
+      .attr(".zoomBtn")
 
     // d3.select(".map-g")
     //   .call(d3.zoom().on("zoom", function () {
@@ -1191,7 +1180,7 @@ function ready(error, us, county, state) {
     return (d<1) ? percent(d) : number(d);
   }
 
-  function updateMap(variable) {
+  function updateMap(variable) {console.log('map')
     var min = d3.min(tmp_county, function(d) {
       return d.properties[variable]
     })
@@ -1381,6 +1370,7 @@ function ready(error, us, county, state) {
         return Math.max(d.white, d.nonwhite, d.national)
       }
     })])
+    console.log(y.domain())
 
 
       var National = d3.select("#National").selectAll(".category")
