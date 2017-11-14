@@ -26,7 +26,7 @@
 <div class="banner-wrapper">
   <div id="header-pinned" class="no-touch">   
     <a target="_blank" href="http://www.urban.org" title="Home" rel="home" class="site-logo"></a>
-    <div class="title"><span class="feature-link"><a href="http://www.urban.org/features" target="_blank" class="title-linkback" alt="Urban Institute logo">Features</a> <span>: :</span> Casey Consumer Debt </span><a href="index.html" class="title-linkback linkback-title"></a>
+    <div class="title"><span class="feature-link"><a href="http://www.urban.org/features" target="_blank" class="title-linkback" alt="Urban Institute logo">Features</a> <a href="index.html" class="title-linkback linkback-title"></a>
     </div>
     <div class="share-icons english">
         <div class="shareThisP">
@@ -66,7 +66,7 @@
               <img src="img/search-icon-01.png" alt="search-box"/>
             </div>
             <div class="ui-widget">
-              <label for="searchBox">Search Location</label>
+              <label for="searchBox">Location</label>
               <input name ="tags" id="searchBox">
             </div>
           </div>
@@ -98,21 +98,6 @@
       </td>
     </tr>
   </table>
-  <div class="bottom-content">
-    <div class="bottom-section about">
-      <h1 class="bottom-header">ABOUT THE DATA</h1>
-      <a href = "data/data-for-download.xlsx">
-        <div class = "footerButton">Download data</div>
-      </a>
-      <a href = "Appendix.pdf" target="_blank">
-        <div class = "footerButton appendixButton">Appendix</div>
-      </a>
-      <div class="about-text bottom-text">
-        <p><em>This dashboard contains information derived from a random sample of deidentified, consumer-level records from a major credit bureau, as well as estimates from summary tables of the US Census Bureau’s American Community Survey.</em></p>
-        <p>Please contact <a href="mailto:externalaffairs@urban.org" target="_top">externalaffairs@urban.org</a> for more information.</p>
-      </div>
-    </div>
-
 
   <!--MOBILE-->
 <!--     <div id="intro-mobile">
@@ -138,10 +123,22 @@
       <div class="bar_ph bar-National"></div>
     </div>
   <!--BOTTOM SECTION -->
-    <div class="bottom-section credits">
+  <div class="bottom-container">
+    <div class="bottom-content">
+      <h1 class="bottom-header">ABOUT THE DATA</h1>
+      <a href = "data/data-for-download.xlsx">
+        <div class = "footerButton">Download data</div>
+      </a>
+      <a href = "Appendix.pdf" target="_blank">
+        <div class = "footerButton appendixButton">Appendix</div>
+      </a>
+      <div class="about-text bottom-text">
+        <p>This dashboard contains information derived from a random sample of deidentified, consumer-level records from a major credit bureau, as well as estimates from summary tables of the US Census Bureau’s American Community Survey.</p>
+        <p>Please contact <a href="mailto:externalaffairs@urban.org" target="_top">externalaffairs@urban.org</a> for more information.</p>
+      </div>
       <h1 class="bottom-header">PROJECT CREDITS</h1>
       <div class="credits-text bottom-text">
-        <p>This feature was funded by [FUNDER]. We are grateful to them and to all our funders, who make it possible for Urban to advance its mission. The views expressed are those of the authors and should not be attributed to the Urban Institute, its trustees, or its funders. Funders do not determine research findings or the insights and recommendations of our experts. More information on our funding principles is available <a>here</a>. Read our terms of service <a>here</a>.</p>
+        <p><em>This feature was funded by [FUNDER]. We are grateful to them and to all our funders, who make it possible for Urban to advance its mission. The views expressed are those of the authors and should not be attributed to the Urban Institute, its trustees, or its funders. Funders do not determine research findings or the insights and recommendations of our experts. More information on our funding principles is available <a>here</a>. Read our terms of service <a>here</a>.</em></p>
       </div>
       <div class="credit-list">
          <div class="credit-header">
@@ -175,10 +172,9 @@
           <div class="credit-names">
             <a href="http://www.urban.org/author/emily-peiffer" target="_blank">Emily Peiffer</a> 
           </div>
-          <p>Copyright © <a href="http://www.urban.org/" target="_blank">Urban Institute</a> December 2017. View this project on <a href="https://github.com/UrbanInstitute/education-funding-trends" target="_blank">Github</a>.</p>
+          <p id="copyright">Copyright © <a href="http://www.urban.org/" target="_blank">Urban Institute</a> December 2017. View this project on <a href="https://github.com/UrbanInstitute/education-funding-trends" target="_blank">Github</a>.</p>
+        </div>
       </div>
-    </div>
-
   </div>
 </body>
 

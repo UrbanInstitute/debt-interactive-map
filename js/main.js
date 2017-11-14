@@ -260,7 +260,15 @@ function ready(error, us, county, state) {
         }
     });
     $(".ui-widget").css("height", 55)
-    $('.ui-widget-content.ui-autocomplete-input').attr('placeholder', 'National')
+    $(".ui-widget-content.ui-autocomplete-input").css({"font-style" : "italic"})
+    $(".ui-widget-content.ui-autocomplete-input").css({"font-weight" : "400"})
+    $('.ui-widget-content.ui-autocomplete-input').attr('placeholder', 'Search for a state or county')
+    $('.ui-widget-content.ui-autocomplete-input').focusin(function(){
+        $(this).attr('placeholder','');
+    });
+    $('.ui-widget-content.ui-autocomplete-input').focusout(function(){
+        $(this).attr('placeholder','Search for a state or county');
+    });
     createSearchArray("")
 
   // });
@@ -982,9 +990,9 @@ function ready(error, us, county, state) {
         if (parentClass.search("Overall") > -1) {
           return "#fdbf11"
         }else if (parentClass.search("Non") > -1) {
-          return "#000000"
-        }else{
           return "#696969"
+        }else{
+          return "#000000"
         }
       })
   }
@@ -1145,9 +1153,9 @@ function ready(error, us, county, state) {
         if (parentClass.search("Overall") > -1) {
           return "#fdbf11"
         }else if (parentClass.search("Non") > -1) {
-          return "#000000"
-        }else{
           return "#696969"
+        }else{
+          return "#000000"
         }
       })
       .attr("width", x.bandwidth())
@@ -1341,7 +1349,8 @@ function ready(error, us, county, state) {
           })
       }
     }else {
-    var data = (zoomCounty == true) ? county_data : state_data;
+    var data = (selectedCountyPh != undefined || d3.selectAll(".counties").selectAll("path.hover").size() > 0) ? county_data : state_data;
+    // var data = (zoomCounty == true) ? county_data : state_data;
     var x = d3.scaleBand()
       .rangeRound([0, 50])
     // var y = d3.scaleLinear()
@@ -1732,7 +1741,7 @@ function ready(error, us, county, state) {
       }
     } else { 
       setZoom(true, false, false)
-      $('.tagit-new > input').attr('placeholder', 'National')
+      $('.tagit-new > input').attr('placeholder', 'Search for a state or county')
       $(".state-borders").css("pointer-events", "all")
       $(".counties").css("pointer-events", "none")
       x = width / 1.4;

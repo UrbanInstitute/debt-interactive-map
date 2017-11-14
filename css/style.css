@@ -61,7 +61,6 @@ p.note1, p.note2 {
     padding: 10px 30px 10px 30px;
     z-index: 20000;
     width: 57.5%;
-    background-color: rgba(0,0,0,0.5);
 }
 
 #bar-chart-mobile {
@@ -83,7 +82,11 @@ p.note1, p.note2 {
 }*/
 a {
     text-decoration: none;
-    color: #1896d2;
+    color: #12719e;
+    cursor: pointer;
+}
+a:hover {
+  color: #000;
 }
 .appendixButton {
   margin-left: 15px !important;
@@ -101,6 +104,11 @@ a {
     color: #333 !important;
     margin: 14px 0;
 }
+
+.footerButton:hover {
+  background-color: #000;
+  color: #fff !important;
+}
 .title {
   margin-top: 25px;
   height: 22px;
@@ -112,30 +120,50 @@ a {
 .credit-list {
     font-size: 14px;
 }
+.credit-header {
+  font-size: 16px;
+  font-weight: bold !important;
+}
 .credit-names{
     margin-bottom: 20px;
     margin-top: 5px;
+    font-size: 16px;
+}
+.credits-text {
+  font-size: 14px;
+  font-style: italic;
+  line-height: 22px !important;
 }
 .bottom-text {
   clear: both;
-  font-size: 14px;
+  font-size: 16px;
   color: #231f20;
-  padding-right: 25px;
+  line-height: 26px;
 }
 h1.bottom-header{
   font-size: 34px;
-  color: #231f20;
+  color: #000;
+  margin-top: 50px;
+  margin-bottom: 8px;
 }
+#copyright{
+    margin-bottom: 100px;
+    display: inline-block;
+}
+
+
 .bottom-section {
-    float: left;
-    width: 50%;
+
 }
-.bottom-content {
-  float: left;
-  width: auto;
-  padding: 60px 80px;
-  background-color: #f3f3f3;
+.bottom-container {
+  background-color: #d2d2d2;
   border-top: 1px solid #d2d2d2;
+}
+
+.bottom-content {
+    max-width: 700px;
+    margin: 0 auto;
+    padding-top: 44px;
 
 }
 
@@ -156,8 +184,8 @@ td.td-table {
 }
 td.td-map {
   background-color: #f3f3f3;
-/*  width: 70%;
-*/  vertical-align: top;
+  box-shadow: inset 3px 0px 9px -6px;
+ vertical-align: top;
 }
 table {
   max-height: 480px !important;
@@ -182,11 +210,12 @@ table {
 #intro-text {
   margin: 0 auto;
   margin: 0 auto;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(10, 76, 106, .8);
   padding: 50px 0px 50px 47px;
 }
 h1 {
   color: #fff;
+  letter-spacing: .5px;
 
 }
 h2 {
@@ -195,13 +224,12 @@ h2 {
   font-weight: 300;
 }
 .banner {
-  background-image: url(../img/banner-image.jpeg);
+  background-image: url(../img/banner-image2.png);
   background-size: cover;
   background-repeat: no-repeat;
   width: 100%;
   height: auto;
   margin-top: 52px;
-  background-color: #000;
 }
 .g-text {
   font-size: 11px;
@@ -275,6 +303,7 @@ h2 {
 }
 ul.tagit li.tagit-new {
   padding-left: 10px !important;
+  width: 170px !important;
 }
 ul.tagit {
   padding-left: 11px !important;
@@ -349,15 +378,14 @@ path.hide {
   height: 100%;
 }
 .image-div img {
-  margin-top: 19.5px;
+  margin-top: 25.5px;
   padding-right: 21.5px;
   width: 17.5px;
   height: 17.5px;
-  cursor: pointer;
   pointer-events: all;
 }
 .counties {
-  stroke: #fff;
+  stroke: #f2f2f2;
   stroke-width: 0.5px;
   stroke-linejoin: round;
   stroke-linecap: round;
@@ -366,7 +394,7 @@ path.hide {
 
 .state-borders > path {
   fill: none;
-  stroke: #fff;
+  stroke: #f2f2f2;
   stroke-width: 2px;
   stroke-linejoin: round;
   stroke-linecap: round;
@@ -379,7 +407,7 @@ path.hover {
   stroke-width: 1.3px;
 }
 
-path.selected {
+ path.selected {
   stroke: #fdbf11;
   stroke-width: 1.3px;
 }
