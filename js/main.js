@@ -284,9 +284,9 @@ function ready(error, us, county, state) {
  /*ADD DROPDOWNS*/
     var categoryData = [{label: "Share with any debt in collections", variable: "perc_debt_collect"},
     {label: "Median debt in collections, 2016", variable: "med_debt_collect"},
-    {label: "Share medical debt in collections, 2016", variable: "perc_debt_med"},
+    {label: "Share with medical debt in collections, 2016", variable: "perc_debt_med"},
     {label: "Median medical debt in collections, 2016", variable: "med_debt_med"},
-    {label: "Share non-white population, 2015", variable: "perc_pop_nw"},
+    {label: "Share of non-white population, 2015", variable: "perc_pop_nw"},
     {label: "Share without health insurance, 2015", variable: "perc_pop_no_ins" },
     {label: "Average household income, 2015", variable: "avg_income"}]
     
@@ -590,53 +590,48 @@ function ready(error, us, county, state) {
         }
       })
 
-    /*ZOOM IN/OUT BUTTONS*/
-    // var data = [{label: "+", x: width - 35, y: height / 1.5, id: "zoom_in"},
-    //             {label: "–", x: width - 35, y: height / 1.25, id: "zoom_out" }];
-    // var buttons = svg.selectAll(".zoomBtn")
-    //   .data(data)
-    //   .enter()
-    //   .append('g')
-    //   .attr('class', function(d) {
-    //     return (d.label == "+") ? 'zoomBtn in' : 'zoomBtn out';
-    //   })
-    //   .attr('id', function(d) {
-    //     return d.id
-    //   })
-    //   .on('click', function(d) {
-    //     var factor = (this.id === 'zoom_in') ? 2 : .9;
-    //     zoomed(factor)
-    //   })
-    // d3.selectAll('.zoomBtn')
-    //   .each(function(d,i) {
-    //     d3.select(this)
-    //      .attr('transform', function(d) {
-    //       return 'translate(' + d.x + ',' + (height - 80 + (i*40)) + ')'
-    //       });
-    //   })
+    /*ZOOM OUT BUTTON*/
+    var data = [{x: width - 35, y: height / 1.5, id: "zoom_out"}]
+    var button = svg.selectAll(".zoomBtn")
+      .data(data)
+      .enter()
+      .append('g')
+      .attr('class', 'zoomBtn')
+      .attr('id', function(d) {
+        return d.id
+      })
+      .attr('transform', function(d) {
+        return 'translate(' + d.x + ',' + (height - 80 ) + ')'
+      });
+      // .on('click', function(d) {
+      //   var factor = (this.id === 'zoom_in') ? 2 : .9;
+      //   zoomed(factor)
+      // })
 
-    // var buttonRect = buttons.append('rect')
-    //   .attr("width", 35)
-    //   .attr('height', 35)
-    //   .attr('x', 0)
-    //   .attr('y', 0)
-    //   .style('fill', '#fff')
-    //   .style('border-radius', "2px")
-    // buttons.append('text')
-    //   .text(function(d) {
-    //     return d.label
-    //   })
-    //   .attr('x', function(d) {
-    //     return (d.label == "+") ? 10 : 9.5;
-    //   })
-    //   .attr('y', function(d) {
-    //     return (d.label == "+") ? 28 : 26;
-    //   })
+
+    var buttonRect = button.append('rect')
+      .attr("width", 35)
+      .attr('height', 35)
+      .attr('x', 0)
+      .attr('y', 0)
+      .style('fill', '#777')
+      .style('border-radius', "2px")
+      .style("opacity", .5)
+    button
+      .append("image")
+      .attr("xlink:href", "img/refresh.png")
+      .attr("x", 3.5)
+      .attr("y", 3.5)
+      .attr("width", 28)
+      .attr("height", 28)
+    button
+      .attr('x', 10)
+      .attr('y', 28)
 
     // d3.select(".map-g")
-      // .call(d3.zoom().on("zoom", function () {
-      //         d3.select(".map-g").attr("transform", d3.event.transform)
-      // }))
+    //   .call(d3.zoom().on("zoom", function () {
+    //           d3.select(".map-g").attr("transform", d3.event.transform)
+    //   }))
 
 
   function zoomed(factor) { 
@@ -762,7 +757,7 @@ function ready(error, us, county, state) {
   /*ADD TABLE*/
     $("#table-div").empty()
     var columns = ["Overall", "White", "Non-White"]
-    var groups = ["Share with any debt in collections", "Median debt in collections, 2016", "Share medical debt in collections, 2016", "Median medical debt in collections, 2016","Share non-white population, 2015", "Share without health insurance coverage, 2015","Average household income, 2015"]
+    var groups = ["Share with any debt in collections", "Median debt in collections, 2016", "Share with medical debt in collections, 2016", "Median medical debt in collections, 2016","Share of non-white population, 2015", "Share without health insurance coverage, 2015","Average household income, 2015"]
     var rowNumbers = [1,2,3]
     var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]
     var table = d3.select("#table-div")
@@ -1530,7 +1525,7 @@ function ready(error, us, county, state) {
               })
           })
 
-            if (countyID !== "" || countyIDHov !== "") { 
+            if (countyID.slice(0,2) == state || countyIDHov.slice(0,2) == state) { 
               d3.selectAll("#National, #State, #County").style("opacity", 1)
               // var stateData = tmp_state.filter(function(d){
               //     return d.properties.abbr == state

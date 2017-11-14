@@ -216,20 +216,12 @@ h2 {
   float: right;
   width: 0px;
 }
-#zoomBtn {
-  position: relative;
-  bottom: -500px;
-  width: 35px;
-  float: left;
-}
+
 .zoomBtn {
-  width: 100%;
-  float: left;
-  display: inline-block;
-  height: 35px;
+  background-image: url("../img/refresh.png");
+  width: 15px;
   pointer-events: all;
   cursor: pointer;
-  font-size: 28px
 }
 .ui-widget input, .ui-widget select, .ui-widget textarea, .ui-widget button {
   font-family: "Lato", sans-serif !important;
