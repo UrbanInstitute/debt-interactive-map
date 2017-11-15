@@ -28,14 +28,20 @@ path.domain {
 
 }
 p.note1, p.note2 {
-  display: none;
+  opacity:0;
 }
 .ui-state-default .ui-icon {
-    background-image: url(../img/close-sign.png) !important;
+    background-image: url(../img/close-sign2.png) !important;
     background-size: 10px;
 }
 .ui-icon-close {
-  background-position: 3px 6px !important;
+  background-position: 0px 0px !important;
+}
+.ui-icon {
+  margin-top: 3px !important;
+  width: 10px !important;
+  height: 10px !important;
+  margin-right: 4px !important;
 }
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-state-active.ui-button:hover{ 
   color: #000 !important;
@@ -58,7 +64,6 @@ p.note1, p.note2 {
 }
 .intro-wrap {
     height: auto;
-    padding: 10px 30px 10px 30px;
     z-index: 20000;
     width: 57.5%;
 }
@@ -92,6 +97,7 @@ a:hover {
   margin-left: 15px !important;
 }
 .footerButton {
+    height: 20;
     float: left;
     width: 115px;
     border: 1px solid #333;
@@ -103,6 +109,7 @@ a:hover {
     text-decoration: none !important;
     color: #333 !important;
     margin: 14px 0;
+    line-height: 20px
 }
 
 .footerButton:hover {
@@ -157,7 +164,7 @@ h1.bottom-header{
 }
 .bottom-container {
   background-color: #d2d2d2;
-  border-top: 1px solid #d2d2d2;
+  border-top: 1px solid rgb(173, 171, 172);
 }
 
 .bottom-content {
@@ -184,7 +191,7 @@ td.td-table {
 }
 td.td-map {
   background-color: #f3f3f3;
-  box-shadow: inset 3px 0px 9px -6px;
+  box-shadow: inset 2px 0px 9px -6px;
  vertical-align: top;
 }
 table {
@@ -202,18 +209,16 @@ table {
   fill: #000;
   font-size: 14px;
   height: 17px;
-  font-weight: 600;
 }
 .banner-wrapper {
   width: 100%;
 }
 #intro-text {
-  margin: 0 auto;
-  margin: 0 auto;
-  background-color: rgba(10, 76, 106, .8);
-  padding: 50px 0px 50px 47px;
+  background-color: rgba(17, 46, 59, 0.8);
+  padding: 42px 36px 41px 67px;
 }
 h1 {
+  font-size: 24px;
   color: #fff;
   letter-spacing: .5px;
 
@@ -232,10 +237,10 @@ h2 {
   margin-top: 52px;
 }
 .g-text {
-  font-size: 11px;
+  font-size: 12px;
 }
 .data-label {
-  font-size: 12px;
+  font-size: 11px;
 }
 .legend-labels {
   font-size: 12px;
@@ -260,20 +265,20 @@ h2 {
 
 #map {
   float: left;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 .map-div {
-  margin: 30px 31px 30px 55px
+  margin: 20px 31px 30px 55px
 }
 .search-div-main {
   background-color: #f5f5f5;
 /*  height: 60px;
-*/  margin-top: 30px;
+*/  margin-top: 20px;
   max-width: 292px;
   width: 88.5%;
   margin-left: auto;
   margin-right: auto;
-  padding-bottom: 14px;
+  padding-bottom: 15px;
 
 }
 .td-map, .td-table {
@@ -322,7 +327,7 @@ ul.tagit li.tagit-choice-editable {
   font-size: 12px;
   text-align: left;
   color: #000000;
-  padding-left: 21px;
+  padding-left: 20px;
 }
 .ui-widget-content {
   background: #f5f5f5 !important;
@@ -370,7 +375,8 @@ path.hide {
 
 .search-div {
   position: relative;
-  padding: 14px 0px
+  height: 73px;
+  padding-top: 6px;
 
 }
 .image-div {
@@ -448,7 +454,7 @@ table {
 
 .td-table {
   max-width: 328px !important;
-  width: 27.5%;
+  width: 27.4%;
 }
 .left-table table th {
     padding: 14px 19px 6px 19px;
@@ -470,7 +476,6 @@ table {
 }
 
 .cell-data > td:nth-child(2), .cell-column > td:nth-child(2){
-  padding: 0 10px;
 }
 .cell-data > td:nth-child(1), .cell-column > td:nth-child(1){
   padding-left: 19px;
@@ -503,7 +508,7 @@ th {
     height: 24px;
 /*    border-left: 1px solid #E1EEF4;
 */   font-size: 16px;
-    font-weight: 600;
+    font-weight: bold;
 }
 .left-table table tbody .cell-data > td {
    font-size: 16px;

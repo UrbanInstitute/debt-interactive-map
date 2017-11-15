@@ -15,7 +15,6 @@ var tdMap;
 var dropdown;
 function setWidth(width) { 
   var margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55};
-  console.log(margin.left)
   if ($("body").width() > 1200) {
     tdMap = 870 - margin.right - margin.left
   }else if ($("body").width() <= 1200 && !IS_MOBILE){ 
@@ -80,18 +79,7 @@ function ready(error, us, county, state) {
       countyData.forEach(function(e, j) { 
         if (d.key == e.id) { 
           for (var property in d["values"][0]) { 
-            if (property == "county") {
-            }
-          //   if ((d.values[0][property]).search('<') > 0 && property != "state" && property != "abbr" && property != "county") {
-          //     console.log(d.values[0][property])
-          //     e[property] == "n<50"
-          // //  if (isNaN(+d.values[0][property]) == true && property != "state" && property != "abbr" && property != "county") {
-          //     // e[property] == null
-          //   }else if ((d.values[0][property]).search('/') > 0 && property != "state" && property != "abbr" && property != "county"){
-          //     e[property] == "N/A"
-          //   }else {
               e[property] = d.values[0][property]
-            // }
           }
         }
       })
@@ -208,13 +196,14 @@ function ready(error, us, county, state) {
           }
         },
         afterTagAdded: function(event, ui) { 
-          ($(".ui-widget").css("height", 55))
+          ($(".ui-widget").css("height", 60))
           var tag = (ui.tag[0]["textContent"]);
           var county = (tag.search(",") > 0) ? tag.split(",")[0] : "";
           var state = (tag.search(",") > 0) ? (tag.split(", ")[1]).slice(0,-1) : tag.slice(0,-1);
           var geoData = (tag.search(",") > 0) ? tmp_county : tmp_state;
           var geoType = (tag.search(",") > 0) ? "county" : "state";
           var geography = (geoType == "county") ? county : state;
+          selectedLocation()
           // var filteredCounty = tmp_county.filter(function(d) { 
             // if (geoType == "county"){
             //   return d.properties["county"] == county && d.properties["abbr"] == state
@@ -226,9 +215,8 @@ function ready(error, us, county, state) {
           //   return d.properties["state"] == tagContent
           // })
           var filteredData = geoData.filter(function(d) {
-            return d.properties[geoType] == geography
+            return d.properties["county"] == county && d.properties["abbr"] == state;
           })
-          console.log(filteredData)
           // var geoType = (filteredCounty.length != 0) ? "county" : "state";
           // var county = tagContent;
           // var filteredData = (filteredCounty.length != 0) ? filteredCounty : filteredState;
@@ -259,7 +247,7 @@ function ready(error, us, county, state) {
           createSearchArray("")
         }
     });
-    $(".ui-widget").css("height", 55)
+    $(".ui-widget").css("height", 60)
     $(".ui-widget-content.ui-autocomplete-input").css({"font-style" : "italic"})
     $(".ui-widget-content.ui-autocomplete-input").css({"font-weight" : "400"})
     $('.ui-widget-content.ui-autocomplete-input').attr('placeholder', 'Search for a state or county')
@@ -655,6 +643,15 @@ function ready(error, us, county, state) {
 
 
 /*LEGEND*/
+  svg.append("rect")
+    .attr("width", function() {
+      return (IS_MOBILE) ? 73: 65
+    })
+    .attr("class", "rect-div")
+    .attr("height", 155)
+    .style("fill", "#f5f5f5")
+    .style("opacity", 0.8)
+    .attr('transform', 'translate(' + (width- 64) + ',' + 0 + ')')
   var legend = svg
     .append("g")
     .attr("class", "g-legend")
@@ -663,21 +660,13 @@ function ready(error, us, county, state) {
       return (IS_MOBILE) ? 45 : 50;
     })
     .attr('transform', function() {
-      return (IS_MOBILE) ? 'translate(' + (width- 68) + ',' + 10 + ')' : 'translate(' + (width- 55) + ',' + 10 + ')';
+      return (IS_MOBILE) ? 'translate(' + (width- 68) + ',' + 10 + ')' : 'translate(' + (width- 55) + ',' + 20 + ')';
     })
-  legend.append("rect")
-    .attr("width", function() {
-      return (IS_MOBILE) ? 73: 65
-    })
-    .attr("class", "rect-div")
-    .attr("height", 170)
-    .style("fill", "#f5f5f5")
-    .style("opacity", 0.9)
-    .attr('transform', 'translate(' + (-5) + ',' + -10 + ')')
+
 
   legend.append("text")
-  var keyWidth =   15;
-  var keyHeight =  30;
+  var keyWidth =   10;
+  var keyHeight =  25;
   for (i=0; i<=5; i++){
     if(i !== 5){  
       legend.append("rect")
@@ -1389,8 +1378,6 @@ function ready(error, us, county, state) {
         return Math.max(d.white, d.nonwhite, d.national)
       }
     })])
-    console.log(y.domain())
-
 
       var National = d3.select("#National").selectAll(".category")
       National
@@ -1616,7 +1603,7 @@ function ready(error, us, county, state) {
 
   }
   function addTag(state, county, abbr) { 
-      ($(".ui-widget").css("height", 47))
+      ($(".ui-widget").css("height", 60))
       d3.selectAll('li.tagit-choice').remove()
       var newTag = $("ul.tagit").append('<li id="state" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable"></li>')
       $('li#state').insertBefore(".tagit-new").append('<span class="tagit-label">' + state + '</span>')
@@ -1665,17 +1652,17 @@ function ready(error, us, county, state) {
   }
   function updateTable(data) { 
     var data = (zoomNational == true) ? data : data["properties"];
-    d3.selectAll("p.note1, p.note2").style("display", "none")
+    d3.selectAll("p.note1, p.note2").style("opacity", 0)
     d3.selectAll(".cell-data")
       .each(function(d,i) { 
         var rowVariable = [rowData[i]],
             rowVariable_nw = rowVariable + "_nw";
             rowVariable_wh = rowVariable + "_wh";
         if ((data[rowVariable]) == "n<50" || (data[rowVariable_nw]) == "n<50" || (data[rowVariable_wh]) == "n<50") { 
-          d3.select("p.note1").style("display", "block")
+          d3.select("p.note1").style("opacity", 1)
         }
         if ((data[rowVariable]) == "N/A" || (data[rowVariable_nw]) == "N/A" || (data[rowVariable_wh]) == "N/A") {
-          d3.select("p.note2").style("display", "block")
+          d3.select("p.note2").style("opacity", 1)
         }
         d3.select(this).selectAll("td")
           .text(function(d,i) { 
