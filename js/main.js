@@ -15,15 +15,17 @@ var active = d3.select(null);
 // var margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55}
 
 var dropdown;
-function setWidth(width) { 
-  var margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55};
+var margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55};
+
+function setWidth(width, mobile, phone) { console.log(mobile)
+  var margin = phone ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55};
   if ($("body").width() > 1200) {
     tdMap = 870 - margin.right - margin.left
-  }else if ($("body").width() <= 1200 && !IS_MOBILE){ 
+  }else if ($("body").width() <= 1200 && !mobile){ console.log('hi')
     tdMap = width - margin.right -margin.left
-  }else if (IS_MOBILE && !IS_PHONE) { 
+  }else if (mobile && !phone) { console.log('hi')
     tdMap = width
-  }else if (IS_PHONE) {
+  }else if (phone) {
     tdMap = width - margin.right -margin.left
   }
 }
@@ -43,7 +45,7 @@ function selectedStatePh() {
 
 }
 var initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width()
-setWidth(initialWidth)
+setWidth(initialWidth, IS_MOBILE, IS_PHONE)
 setZoom(true,false, false)
 setVariable("perc_debt_collect")
 var width =  tdMap,  //(IS_MOBILE && !IS_PHONE) ? tdMap : (tdMap) - margin.right-margin.left,
@@ -394,6 +396,7 @@ function ready(error, us, county, state) {
   $("#state-select")
     .selectmenu({
       open: function(event,ui) {
+        $(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").css("top", "381px")
 
       },
       close: function(event, ui) {
@@ -677,7 +680,7 @@ function ready(error, us, county, state) {
 
 /*LEGEND*/
   svg.append("rect")
-    .attr("width", function() {
+    .attr("width", function() { 
       return (IS_MOBILE) ? 73: 65
     })
     .attr("class", "rect-div")
@@ -1795,9 +1798,8 @@ function ready(error, us, county, state) {
           .duration(750)
           .attr("transform", "translate(" + 0 + "," + height / 7 + ")scale(" +width/1000 + ")")
           // .style("stroke-width", 1.5 / k + "px");
-          .on('end',function() {
-            d3.selectAll(".selected").classed("selectedNational", true)
-          })
+     
+      d3.selectAll(".selected").transition().classed("selectedNational", true)
     }
       updateBars(SELECTED_VARIABLE, d)
 
@@ -1806,10 +1808,12 @@ function ready(error, us, county, state) {
   $(window).resize(function() { 
     var IS_MOBILE = d3.select("#isMobile").style("display") == "block";
     var IS_PHONE = d3.select("#isPhone").style("display") == "block";
+    console.log(IS_MOBILE)
     var barWidth = (IS_MOBILE) ? 45 : 50;
-    var initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width()
+    var initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width() 
+
     //    margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55}
-    setWidth(initialWidth)
+    setWidth(initialWidth, IS_MOBILE, IS_PHONE)
     var width = tdMap,  //- margin.right-margin.left,
         height = (IS_PHONE) ? (width) - margin.top-margin.bottom :  630,//(width*.57) - margin.top-margin.bottom,       
         barSvgHeight = height/3.5
@@ -1822,11 +1826,11 @@ function ready(error, us, county, state) {
         })
 
     }else {
-      d3.select("#bar-chart").attr('width', width).attr("height", barSvgHeight)
-      d3.select(".g-legend").attr('transform', 'translate(' + (width*.9) + ',' + 0 + ')')
-      d3.select("g")          
-        .attr("transform", "translate(" + 0 + "," + height / 7 + ")scale(" +width/1000 + ")")
- //.attr("transform", "scale(" + width/1060 + ")");
+
+      var mobilePadding = (IS_MOBILE) ? 15 : 0;
+      d3.select("#bar-chart").select("svg")
+        .attr('width', width - mobilePadding)
+        .attr("height", barSvgHeight)
       $("table").height($("table").width()*0.8);
       d3.select("#map").select('svg')
         .attr('width', width)
@@ -1867,10 +1871,12 @@ function ready(error, us, county, state) {
         .attr('transform', function() {
           return (IS_MOBILE) ? 'translate(' + (width- 68) + ',' + 10 + ')' : 'translate(' + (width- 55) + ',' + 10 + ')';
         })
-      legend.select("rect")
+      d3.select(".rect-div")
         .attr("width", function() {
           return (IS_MOBILE) ? 73: 65
         })
+        .attr('transform', function() {
+          return (IS_MOBILE) ? 'translate(' + (width- 64) + ',' + 0 + ')' :'translate(' + (width- 64) + ',' + 0 + ')'})
 
       }
  
