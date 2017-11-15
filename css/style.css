@@ -356,6 +356,9 @@ tr.cell-column {
 path.hoverNational {
   stroke-width: 4px !important;
 }
+path.selectedNational {
+  stroke-width: 4px !important;
+}
 
 path.hide {
   fill: #000 !important;
