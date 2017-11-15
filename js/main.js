@@ -1439,53 +1439,34 @@ function ready(error, us, county, state) {
                 return (isNaN(d[WHITE]) != true) ? barHeight - y(d[WHITE]) : 0;
               }
             })
+          d3.select(this).select(".background-rect")
+            .data([us_data])
+            .style("opacity", function(d) {
+              var parentClass = d3.select(this.parentNode).attr('class');
+              if (parentClass.search("Overall") > -1) {
+                return (isNaN(d[variable]) != true) ? 1 : 0.4;
+              }else if (parentClass.search("Non") > -1){
+                return (isNaN(d[NONWHITE]) != true) ? 1 : 0.4;
+              }else {
+                return (isNaN(d[WHITE]) != true) ? 1 : 0.4;
+              }
+            })
           d3.select(this).select(".data-label")
             .data([us_data])
             .text(function(d) {
+              var noData = (d[variable] == "n<50") ? "n/a*" : "n/a**"
+              var noData_wh = (d[WHITE] == "n<50") ? "n/a*" : "n/a**"
+              var noData_nw = (d[NONWHITE] == "n<50") ? "n/a*" : "n/a**"
               var parentClass = d3.select(this.parentNode).attr('class');
               if (parentClass.search("Overall") > -1) { 
-                return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : ""
+                return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
               }else if (parentClass.search("Non") > -1) {
-                return (isNaN(d[NONWHITE]) != true) ? formatNumber(d[NONWHITE]) : ""
+                return (isNaN(d[NONWHITE]) != true) ? formatNumber(d[NONWHITE]) : noData_nw
               }else{
-                return (isNaN(d[WHITE]) != true) ? formatNumber(d[WHITE]) : ""
+                return (isNaN(d[WHITE]) != true) ? formatNumber(d[WHITE]) : noData_wh
               }
             })
         })
-      // if (mouseout == true) { //NATIONAL VIEW AND MOUSE OUT STATES
-
-
-
-      // }else { console.log(d3.select(this))
-        // var State = d3.select("#State").selectAll(".category")
-        // State
-        //   .each(function() {
-        //     d3.select(this).select(".bar")
-        //       .data([state_data])
-        //       .transition()
-        //       .duration(300)
-        //       .attr("y", function(d) {  console.log(d)
-        //         var parentClass = d3.select(this.parentNode).attr('class');
-        //         if (parentClass.search("Overall") > -1) { 
-        //           return (isNaN(d[variable]) == false) ? y(d[variable]) : barHeight;
-        //         }else if (parentClass.search("Non") > -1) {
-        //           return (isNaN(d[NONWHITE]) == false) ? y(d[NONWHITE]) : barHeight;
-        //         }else {
-        //           return (isNaN(d[WHITE]) == false) ? y(d[WHITE]) : barHeight;
-        //         }
-        //       })
-        //       .attr("height", function(d) {
-        //         var parentClass = d3.select(this.parentNode).attr('class');
-        //         if (parentClass.search("Overall") > -1) {
-        //           return (isNaN(d[variable]) == false) ? barHeight - y(d[variable]) : 0;
-        //         }else if (parentClass.search("Non") > -1){
-        //           return (isNaN(d[NONWHITE]) == false) ? barHeight - y(d[NONWHITE]) : 0;
-        //         }else {
-        //           return (isNaN(d[WHITE]) == false) ? barHeight - y(d[WHITE]) : 0;
-        //         }
-        //       })
-        //   })
-      // }
       if (zoomNational == true && selected == undefined) {  
         d3.selectAll("#State, #County").style("opacity", 0)
       } else if (zoomNational == false || selected != undefined) { //IF MOUSE IS OVER A STATE OR COUNTY IN WHICHEVER VIEW
