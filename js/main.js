@@ -488,7 +488,7 @@ function ready(error, us, county, state) {
       .style("fill", function(d){ 
           return (isNaN(d.properties[SELECTED_VARIABLE]) == true) ? "#adabac" : quantize(d.properties[SELECTED_VARIABLE]);
       })
-      .on('click', function(d) { 
+      .on('click', function(d) { console.log('click')
         var state = d.properties.state;
         var stateData = tmp_state.filter(function(d){ 
           return d.properties.state == state
@@ -500,6 +500,7 @@ function ready(error, us, county, state) {
         var county = d.properties["county"]
         var abbr = d.properties["abbr"]
         if (d3.select(this).classed('selected') == true) { 
+          $(".tagit-new").css("display", "block")
           d3.select(this).classed('selected', false)
           if (level == "county") { 
             $('ul.tagit > li:nth-child(2)').remove()
@@ -1656,6 +1657,7 @@ function ready(error, us, county, state) {
       $("li#county").on('click', function() {
         d3.selectAll("path.selectedNational").classed("selectedNational", false)
         $(".tagit-new").css("display", "block")
+        $(".tagit-new").css("autocomplete", "on")
         $('.ui-widget-content.ui-autocomplete-input').focusout(function(){
             $(this).attr('placeholder','');
         });
