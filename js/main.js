@@ -684,7 +684,7 @@ function ready(error, us, county, state) {
     .attr("height", 155)
     .style("fill", "#f5f5f5")
     .style("opacity", 0.8)
-    .attr('transform', 'translate(' + (width- 64) + ',' + 0 + ')')
+    .attr('transform', 'translate(' + (width- 64) + ',' + (-1) + ')')
   var legend = svg
     .append("g")
     .attr("class", "g-legend")
@@ -804,13 +804,13 @@ function ready(error, us, county, state) {
             if (d == "avg_income") {
               d3.select(".rect-div")
                 .attr("width", 76)
-                .attr('transform', 'translate(' + (-20) + ',' + -10 + ')')
+                .attr('transform', 'translate(' + (width- 74) + ',' + (-1) + ')')
             }else {
               d3.select(".rect-div")
               .attr("width", function() {
                 return (IS_MOBILE) ? 73: 65
               })
-              .attr('transform', 'translate(' + (-5) + ',' + -10 + ')')
+              .attr('transform', 'translate(' + (width- 64) + ',' + (-1) + ')')
             }
             setVariable(d)
             updateMap(d)
