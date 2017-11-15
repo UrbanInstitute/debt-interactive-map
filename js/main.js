@@ -216,9 +216,15 @@ function ready(error, us, county, state) {
           // var filteredState = tmp_state.filter(function(d) {
           //   return d.properties["state"] == tagContent
           // })
+          console.log(state)
           var filteredData = geoData.filter(function(d) {
-            return d.properties["county"] == county && d.properties["abbr"] == state;
+            if (geoType == "county") {
+              return d.properties["county"] == county && d.properties["abbr"] == state;
+            }else { console.log('hi')
+              return d.properties["state"] == state;
+            }
           })
+          console.log(filteredData)
           // var geoType = (filteredCounty.length != 0) ? "county" : "state";
           // var county = tagContent;
           // var filteredData = (filteredCounty.length != 0) ? filteredCounty : filteredState;
@@ -232,7 +238,7 @@ function ready(error, us, county, state) {
             createSearchArray(filter)
           }
         },
-        afterTagRemoved: function(event,ui) { 
+        afterTagRemoved: function(event,ui) { console.log('after')
            var tag = (ui.tag[0]["textContent"]);
            if (tag.search(",") > 0) { 
             d3.selectAll(".counties > path.selected")
@@ -249,6 +255,9 @@ function ready(error, us, county, state) {
            }
           updateBars(SELECTED_VARIABLE)
           createSearchArray("")
+
+          $('.ui-widget-content.ui-autocomplete-input').attr('placeholder', 'Search for a state or county')
+
         }
     });
     $(".ui-widget").css("height", 60)
@@ -1644,6 +1653,9 @@ function ready(error, us, county, state) {
       $("li#state").on('click', function() { 
         d3.selectAll('li.tagit-choice').remove()
         $(".tagit-new").css("display", "block")
+        $('.ui-widget-content.ui-autocomplete-input').focusout(function(){
+            $(this).attr('placeholder','Search for a state or county');
+        });
         d3.selectAll("path.selected")
           .classed("selected", false)
         d3.select("#location").html("National")
@@ -1661,6 +1673,9 @@ function ready(error, us, county, state) {
       $(".tagit-new").css("display", "none")
       $("li#county").on('click', function() {
         $(".tagit-new").css("display", "block")
+        $('.ui-widget-content.ui-autocomplete-input').focusout(function(){
+            $(this).attr('placeholder','');
+        });
         setZoom(false,true, false)
         var filteredData = tmp_state.filter(function(d) {
             return d.properties["state"] == state;
@@ -1712,7 +1727,7 @@ function ready(error, us, county, state) {
           })
       })
   }
-  function zoomMap(d,zoomLevel) { console.log(zoomLevel)
+  function zoomMap(d,zoomLevel) { console.log(d)
     var x, y, k;
     d3.select(".state-borders").selectAll("path")
       .classed("hide", false)
@@ -1783,7 +1798,7 @@ function ready(error, us, county, state) {
         updateTable(us_data)
       }
       $('.zoomBtn').css("display", "none")
-      $('.tagit-new > input').attr('placeholder', 'Search for a state or county')
+      $('.tagit-new > input').attr('placeholder', '')
       $(".state-borders").css("pointer-events", "all")
       $(".counties").css("pointer-events", "none")
       x = width / 1.4;

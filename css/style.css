@@ -229,7 +229,7 @@ h2 {
   font-weight: 300;
 }
 .banner {
-  background-image: url(../img/banner-image2.png);
+  background-image: url(../img/banner-image3.png);
   background-size: cover;
   background-repeat: no-repeat;
   width: 100%;
@@ -417,7 +417,11 @@ path.hover {
   stroke-width: 1.3px;
 }
 
- path.selected {
+ .counties > path.selected {
+  stroke: #fdbf11;
+  stroke-width: 1.2px;
+}
+ .state-borders > path.selected {
   stroke: #fdbf11;
   stroke-width: 1.3px;
 }
