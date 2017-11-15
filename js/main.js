@@ -55,7 +55,7 @@ var width =  tdMap,  //(IS_MOBILE && !IS_PHONE) ? tdMap : (tdMap) - margin.right
 // d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
 //   if (error) throw error;
 d3.queue()
-    .defer(d3.json, "data/us.json")
+    .defer(d3.json, "https://d3js.org/us-10m.v1.json")
     .defer(d3.csv, "data/county_" + CATEGORY + "2.csv")
     .defer(d3.csv, "data/state_"+ CATEGORY + ".csv")
     .await(ready);
@@ -162,7 +162,6 @@ function ready(error, us, county, state) {
         availableTags: dropdown,
       })
     }
-
     $( "#searchBox" ).autocomplete({
       appendTo: ".search-div",
     });
@@ -263,6 +262,7 @@ function ready(error, us, county, state) {
         $(this).attr('placeholder','Search for a state or county');
     });
     createSearchArray("")
+
 
   // });
   var zoom = d3.zoom()
@@ -461,14 +461,14 @@ function ready(error, us, county, state) {
         .attr("height", height)
         .attr("class", "background")
     
-    var projection = d3.geoAlbersUsa()
-    var path = d3.geoPath().projection(projection)
-    var states = topojson.feature(us, us.objects.states);
+    // var projection = d3.geoAlbersUsa()
+    var path = d3.geoPath()//.projection(projection)
+    // var states = topojson.feature(us, us.objects.states);
 
-    projection.fitSize([width, height], states);
+    // projection.fitSize([width, height], states);
     var g = svg.append("g")
       .attr("class", "map-g")
-      .attr("transform", "translate(" + -width*.06 + "," + height / 10 + ")scale(" +width/750 + ")")
+      .attr("transform", "translate(" + 0 + "," + height / 7 + ")scale(" +width/1000 + ")")
 
       // .attr("transform",  "scale(" + width/1060 + ")");
     g.append("g")
@@ -595,7 +595,6 @@ function ready(error, us, county, state) {
       })
       .on('mouseout', function(d) { 
         if (zoomNational==true || zoomNational_St == true) {
-          d3.select('#location').html('National')
           if (d3.select(".state-borders > path.selected").node() != undefined && zoomNational_St != true) {
             var state = d3.select(".state-borders > path.selected").datum().properties.state
             d3.select("#location").html(state)
@@ -608,6 +607,7 @@ function ready(error, us, county, state) {
             var selected = (d3.select(".counties > path.selected").size() > 0) ? d3.select(".counties > path.selected").datum() : d3.select(".state-borders > path.selected").datum()
             updateBars(SELECTED_VARIABLE, selected)
           }else { 
+            d3.select('#location').html('National')
             d3.selectAll(".hover")
               .classed("hover", false)
               .classed("hoverNational", false)
@@ -1795,7 +1795,7 @@ function ready(error, us, county, state) {
 
       g.transition()
           .duration(750)
-          .attr("transform", "translate(" + -width*.06 + "," + height / 10 + ")scale(" +width/750 + ")")
+          .attr("transform", "translate(" + 0 + "," + height / 7 + ")scale(" +width/1000 + ")")
           // .style("stroke-width", 1.5 / k + "px");
           .on('end',function() {
             d3.selectAll(".selected").classed("selectedNational", true)
@@ -1827,7 +1827,7 @@ function ready(error, us, county, state) {
       d3.select("#bar-chart").attr('width', width).attr("height", barSvgHeight)
       d3.select(".g-legend").attr('transform', 'translate(' + (width*.9) + ',' + 0 + ')')
       d3.select("g")          
-        .attr("transform", "translate(" + 0 + "," + height / 10 + ")scale(" +width/1060 + ")")
+        .attr("transform", "translate(" + 0 + "," + height / 7 + ")scale(" +width/1000 + ")")
  //.attr("transform", "scale(" + width/1060 + ")");
       $("table").height($("table").width()*0.8);
       d3.select("#map").select('svg')
