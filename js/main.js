@@ -531,6 +531,10 @@ function ready(error, us, county, state) {
           d3.selectAll(".state-borders > path").classed("hide", true)
           d3.select(".state-borders > path#" + abbr).classed("hide", false)
           d3.select("#location").html(county + ", " + abbr)
+          d3.selectAll("path.selected").moveToFront()
+          d3.selectAll(".hover")
+            .classed("hover", false)
+            .classed("hoverNational", false)
           setZoom(false, true, true)
           updateBars(SELECTED_VARIABLE, d3.select(".counties > path.selected").datum())
         }else if (d3.select(".state-borders > path.selected").node() != undefined) { //IF A STATE IS SELECTED
@@ -539,15 +543,18 @@ function ready(error, us, county, state) {
           d3.selectAll(".state-borders > path").classed("hide", true)
           d3.select(".state-borders > path#" + abbr).classed("hide", false)
           d3.select("#location").html(state)
+          d3.selectAll("path.selected").moveToFront()
+          d3.selectAll(".hover")
+          .classed("hover", false)
+          .classed("hoverNational", false)
           setZoom(false, true, false)
           updateBars(SELECTED_VARIABLE, d3.select(".state-borders > path.selected").datum())
         }
-        d3.selectAll("path.selected").moveToFront()
-        d3.selectAll(".hover")
-          .classed("hover", false)
-          .classed("hoverNational", false)
       })
-      .call(zoom)
+
+    var states = topojson.feature(us, us.objects.states);
+    var projection = d3.geoAlbersUsa()
+    projection.fitSize([width, height], states);
 
     g.append("g")
       .attr("class", "state-borders")
@@ -623,7 +630,9 @@ function ready(error, us, county, state) {
       .attr("y", 10)
       .attr("width", 50)
       .attr("height", 50)
-      .attr(".zoomBtn")
+      .on('click', function() {
+        zoomMap(null, "national")
+      })
 
     // d3.select(".map-g")
     //   .call(d3.zoom().on("zoom", function () {
@@ -1188,7 +1197,7 @@ function ready(error, us, county, state) {
     return (d<1) ? percent(d) : number(d);
   }
 
-  function updateMap(variable) {console.log('map')
+  function updateMap(variable) {
     var min = d3.min(tmp_county, function(d) {
       return d.properties[variable]
     })
@@ -1349,6 +1358,7 @@ function ready(error, us, county, state) {
           })
       }
     }else {
+      /*DESKTOP*/
     var data = (selectedCountyPh != undefined || d3.selectAll(".counties").selectAll("path.hover").size() > 0) ? county_data : state_data;
     // var data = (zoomCounty == true) ? county_data : state_data;
     var x = d3.scaleBand()
@@ -1697,6 +1707,7 @@ function ready(error, us, county, state) {
       .classed("hide", false)
     // if (d.properties.state && centered !== d.properties.state && zoomLevel != "national") { 
     if (zoomLevel != "national") { 
+      $('.zoomBtn').css("display", "block")
       $('.tagit-new > input').attr('placeholder', '')
       d3.select(".state-borders").selectAll("path:not(#" + d.properties.abbr+ ")")
         .classed("hide", true)
@@ -1726,10 +1737,31 @@ function ready(error, us, county, state) {
       g.transition()
           .duration(750)
           .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
-      // d3.select(".state-borders").selectAll("path:not(.selected)")
-      //   .transition()
+
+      // centered = centered !== d && d;
+      // console.log(centered)
+      // var paths = svg.selectAll(".state-borders > path")
+      //   .classed("active", d => d===centered);
+      // var t0 = projection.translate(),
+      //     s0 = projection.scale();
+      // projection.fitSize([width, height], centered || states);
+
+      // var interpolateTranslate = d3.interpolate(t0, projection.translate()),
+      //     interpolateScale = d3.interpolate(s0, projection.scale());
+
+      // var interpolator = function(t) {console.log(t)
+      //   projection.scale(interpolateScale(t))
+      //     .translate(interpolateTranslate(t));
+      //   paths.attr("d", path);
+      // };
+
+      // d3.transition()
       //   .duration(750)
-      //   .style("stroke-width", "1px")
+      //   .tween("projection", function() {
+      //     return interpolator;
+      //   });
+      
+
       if (zoomLevel == "county") { 
           setZoom(false, true, true)
           d3.select("#location").html(d["properties"]["county"] + ", " + d["properties"]["abbr"])
@@ -1741,6 +1773,7 @@ function ready(error, us, county, state) {
       }
     } else { 
       setZoom(true, false, false)
+      $('.zoomBtn').css("display", "none")
       $('.tagit-new > input').attr('placeholder', 'Search for a state or county')
       $(".state-borders").css("pointer-events", "all")
       $(".counties").css("pointer-events", "none")

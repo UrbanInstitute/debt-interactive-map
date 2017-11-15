@@ -248,6 +248,7 @@ h2 {
 .zoomBtn {
   opacity: .8;
   cursor: pointer;
+  display: none;
 }
 .zoomBtn:hover {
   opacity: 1;
