@@ -144,7 +144,6 @@ function ready(error, us, county, state) {
     }
   }
   /*END*/
-console.log('hi')
   $("#location").html("Exploring " + CATEGORY + " debt: " + "<span class=\"blue\">Nationwide</span>")
     function createSearchArray(filter) { 
       var searchArray = [];
@@ -162,7 +161,6 @@ console.log('hi')
           }
         }
       }
-      console.log(searchArray)
      dropdown = searchArray
      $('input[name="tags"').tagit("option", {
         availableTags: dropdown,
@@ -483,13 +481,12 @@ console.log('hi')
     // var projection = d3.geoAlbersUsa()
     var path = d3.geoPath()//.projection(projection)
     // var states = topojson.feature(us, us.objects.states);
-
+console.log(width)
     // projection.fitSize([width, height], states);
     var g = svg.append("g")
       .attr("class", "map-g")
       .attr("transform", "translate(" + 0 + "," + height / 7 + ")scale(" +width/1000 + ")")
 
-      // .attr("transform",  "scale(" + width/1060 + ")");
     g.append("g")
       .attr("class", "counties")
       .selectAll("path")
@@ -704,7 +701,7 @@ console.log('hi')
     .text("All:")
     .attr("class", "legend-title")
     .attr("x", 12)
-    .attr("y", 20)
+    .attr("y", 17)
   // legendPh.append("text")
   var keyWidthPh =   width/8;
   var keyHeightPh =  15;
@@ -714,13 +711,13 @@ console.log('hi')
         .attr("width",keyWidthPh)
         .attr("height",keyHeightPh)
         .attr("class","rect"+i)
-        .attr("x",keyWidthPh*i + width/8)
+        .attr("x",keyWidthPh*i + 50)
         .attr("y", 5)
         .style("fill", COLORRANGE[i])
       legendPh.append("text")
-        .attr("y", 32)
+        .attr("y", 34)
         .attr("class","legend-labels")
-        .attr("x",keyWidthPh*i + width/8 + 15)
+        .attr("x",keyWidthPh*i + 55)
         .attr("text-anchor", "middle")
         .text(function(){
           var min = d3.min(tmp_county, function(d) { 
@@ -732,10 +729,10 @@ console.log('hi')
      }
      if (i == 5) { 
       legendPh.append("text")
-        .attr("y", 32)
+        .attr("y", 34)
         .attr("class","legend-labels")
         .attr("text-anchor", "end")
-        .attr("x",keyWidthPh*i + width/8 )
+        .attr("x",keyWidthPh*i + 55 )
         .attr("text-anchor", "middle")
         .text(function(){
           var max = d3.max(tmp_county, function(d) { 
@@ -752,20 +749,14 @@ console.log('hi')
       return (IS_MOBILE) ? 73: 65
     })
     .attr("class", "rect-div")
-    .attr("height", 170)
+    .attr("height", 175)
     .style("fill", "#f5f5f5")
     .style("opacity", 0.8)
     .attr('transform', 'translate(' + (width- 64) + ',' + (-1) + ')')
   var legend = svg
     .append("g")
     .attr("class", "g-legend")
-    .attr("height", height/2)
-    .attr("width", function() {
-      return (IS_MOBILE) ? 45 : 50;
-    })
-    .attr('transform', function() {
-      return (IS_MOBILE) ? 'translate(' + (width- 68) + ',' + 10 + ')' : 'translate(' + (width- 55) + ',' + 20 + ')';
-    })
+    .attr('transform', 'translate(' + (width- 55) + ',' + 20 + ')')
   legend.append("text")
     .text("All")
     .attr("class", "legend-title")
@@ -781,7 +772,7 @@ console.log('hi')
         .attr("width",keyWidth)
         .attr("height",keyHeight)
         .attr("class","rect"+i)
-        .attr("y",keyHeight*i + 18)
+        .attr("y",keyHeight*i + 23)
         .attr("x", 38)
         .style("fill", COLORRANGE[i])
         // .on("mouseover",function(){ mouseEvent({type: "Legend", "class": (d3.select(this).attr("class"))}, "hover") })
@@ -792,7 +783,7 @@ console.log('hi')
       legend.append("text")
         .attr("x", 33)
         .attr("class","legend-labels")
-        .attr("y",keyHeight*i + 18)
+        .attr("y",keyHeight*i + 23)
         .attr("text-anchor", "end")
         .text(function(){
           var min = d3.min(tmp_county, function(d) { 
@@ -807,7 +798,7 @@ console.log('hi')
         .attr("x", 33)
         .attr("class","legend-labels")
         .attr("text-anchor", "end")
-        .attr("y",keyHeight*i + 18)
+        .attr("y",keyHeight*i + 23)
         .text(function(){
           var max = d3.max(tmp_county, function(d) { 
             return d.properties[SELECTED_VARIABLE]
@@ -1281,11 +1272,11 @@ console.log('hi')
         .attr("y", function(d) {
           var parentClass = d3.select(this.parentNode).attr('class');
           if (parentClass.search("All") > -1) {
-            return y(d[SELECTED_VARIABLE]) - 10
+            return y(d[SELECTED_VARIABLE]) - 13
           }else if (parentClass.search("Non") > -1) {
-            return y(d[NONWHITE]) - 10
+            return y(d[NONWHITE]) - 13
           }else{
-            return y(d[WHITE]) - 10
+            return y(d[WHITE]) - 13
           }
         })
         .attr("dy", ".71em")
@@ -1597,11 +1588,11 @@ console.log('hi')
               .attr("y", function(d) {
                 var parentClass = d3.select(this.parentNode).attr('class');
                 if (parentClass.search("All") > -1) {
-                  return (isNaN(d[variable]) != true) ? y(d[variable]) - 10 : barHeight - 8;
+                  return (isNaN(d[variable]) != true) ? y(d[variable]) - 13 : barHeight - 8;
                 }else if (parentClass.search("Non") > -1) {
-                  return (isNaN(d[NONWHITE]) != true) ? y(d[NONWHITE]) - 10 : barHeight - 8;
+                  return (isNaN(d[NONWHITE]) != true) ? y(d[NONWHITE]) - 13 : barHeight - 8;
                 }else{
-                  return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) - 10 : barHeight - 8;
+                  return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) - 13 : barHeight - 8;
                 }
               })
             .text(function(d) { 
@@ -1663,11 +1654,11 @@ console.log('hi')
               .attr("y", function(d) {
                 var parentClass = d3.select(this.parentNode).attr('class');
                 if (parentClass.search("All") > -1) {
-                  return (isNaN(d[variable]) != true) ? y(d[variable]) - 10 : barHeight - 8;
+                  return (isNaN(d[variable]) != true) ? y(d[variable]) - 13 : barHeight - 8;
                 }else if (parentClass.search("Non") > -1) {
-                  return (isNaN(d[NONWHITE]) != true) ? y(d[NONWHITE]) - 10 : barHeight - 8;
+                  return (isNaN(d[NONWHITE]) != true) ? y(d[NONWHITE]) - 13 : barHeight - 8;
                 }else{
-                  return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) - 10 : barHeight - 8;
+                  return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) - 13 : barHeight - 8;
                 }
               })
               .text(function(d) { 
@@ -1734,11 +1725,11 @@ console.log('hi')
                 .attr("y", function(d) {
                   var parentClass = d3.select(this.parentNode).attr('class');
                   if (parentClass.search("All") > -1) {
-                    return (isNaN(d[variable]) != true) ? y(d[variable]) - 10 : barHeight -8;
+                    return (isNaN(d[variable]) != true) ? y(d[variable]) - 13 : barHeight -8;
                   }else if (parentClass.search("Non") > -1) {
-                    return (isNaN(d[NONWHITE]) != true) ? y(d[NONWHITE]) - 10 : barHeight - 8;
+                    return (isNaN(d[NONWHITE]) != true) ? y(d[NONWHITE]) - 13 : barHeight - 8;
                   }else{
-                    return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) - 10 : barHeight - 8;
+                    return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) - 13 : barHeight - 8;
                   }
                 })
                 .text(function(d) { 
@@ -1960,7 +1951,8 @@ console.log('hi')
 
     //    margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55}
     setWidth(initialWidth, IS_MOBILE, IS_PHONE)
-    var width = tdMap,  //- margin.right-margin.left,
+    var mobilePadding = (IS_MOBILE) ? 0 : 15;
+    var width = tdMap - mobilePadding,  //- margin.right-margin.left,
         height = (IS_PHONE) ? (width) - margin.top-margin.bottom :  630,//(width*.57) - margin.top-margin.bottom,       
         barSvgHeight = height/3.5
     if (IS_PHONE) { 
@@ -1974,12 +1966,11 @@ console.log('hi')
         })
 
     }else {
-
-      var mobilePadding = (IS_MOBILE) ? 15 : 0;
       d3.select("#bar-chart").select("svg")
-        .attr('width', width - mobilePadding)
+        .attr('width', width)
         .attr("height", barSvgHeight)
       $("table").height($("table").width()*0.8);
+      console.log(width)
       d3.select("#map").select('svg')
         .attr('width', width)
         .attr('height', height)
@@ -1987,7 +1978,7 @@ console.log('hi')
         .attr('width', width)
         .attr('height', height)
       svg.select(".map-g")
-          .attr("transform", "translate(" + 0 + "," + height / 10 + ")scale(" +width/1060 + ")")
+          .attr("transform", "translate(" + 0 + "," + height / 10 + ")scale(" +width/1000 + ")")
 
       //  .attr("transform", "scale(" + width/1060 + ")");
       d3.selectAll(".bar-group")
@@ -2011,20 +2002,20 @@ console.log('hi')
             return 'translate(' + (width - 35) + ',' + (height - 80 + (i*40)) + ')'
             });
         })
+
       d3.select(".g-legend")
         .attr("height", height/2)
         .attr("width", function() {
           return (IS_MOBILE) ? 45 : 50;
         })
-        .attr('transform', function() {
-          return (IS_MOBILE) ? 'translate(' + (width- 68) + ',' + 10 + ')' : 'translate(' + (width- 55) + ',' + 10 + ')';
-        })
+        .attr('transform', 'translate(' + (width- 55) + ',' + 20 + ')')
+
       d3.select(".rect-div")
         .attr("width", function() {
           return (IS_MOBILE) ? 73: 65
         })
-        .attr('transform', function() {
-          return (IS_MOBILE) ? 'translate(' + (width- 64) + ',' + 0 + ')' :'translate(' + (width- 64) + ',' + 0 + ')'})
+        .attr('transform', 'translate(' + (width- 64) + ',' + (-1) + ')')
+
 
       }
  

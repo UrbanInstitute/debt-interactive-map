@@ -11,7 +11,7 @@ hr {
 
 .legend-title {
   font-weight: bold;
-  font-size: 12px;
+  font-size: 15px;
 }
 
 path.domain {
@@ -256,7 +256,7 @@ h2 {
   display: none;
 }
 .legend-labels {
-  font-size: 12px;
+  font-size: 14px;
 }
 #legend {
   float: right;
@@ -656,7 +656,7 @@ html .ui-button.ui-state-disabled:active {
   display: none;
   height: 65px;
 }
-.g-legend {
+.g-legend, .rect-div {
   display: block;
 }
 @media (min-width : 1201px) {
@@ -674,12 +674,15 @@ html .ui-button.ui-state-disabled:active {
 }
 
 @media (max-width: 900px) {
+  .intro-wrap {
+    width: 100%;
+  }
   .legend-title {
     font-size: 16px;
     font-weight: 400;
     font-style: italic;
   }
-  .g-legend {
+  .g-legend, .rect-div {
     display: none;
   }
   #legend-div {
@@ -759,9 +762,6 @@ html .ui-button.ui-state-disabled:active {
   }
   .data-label-ph {
     display: block;
-  }
-  .intro-wrap {
-    width: 90%;
   }
   #bar-mobile-labels{
     float: left;
