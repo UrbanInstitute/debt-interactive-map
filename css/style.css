@@ -244,7 +244,7 @@ h2 {
   font-size: 12px;
 }
 .data-label, .data-label-ph {
-  font-size: 11px;
+  font-size: 12px;
 }
 .data-label{
   display: block;
@@ -592,7 +592,10 @@ th {
     color: #fdbf11;
 
 }
-
+.group-label-ph {
+  font-size: 14px;
+  font-weight: bold;
+}
 #intro-mobile {
   display: none;
   margin: 70px 30px 30px 30px;
@@ -686,7 +689,14 @@ html .ui-button.ui-state-disabled:active {
   padding-left: 10px;
 }
 
+
 @media (max-width: 700px) {
+  .label > .group-label-ph {
+    opacity: 1;
+  }
+  .bar-group-ph > .group-label-ph {
+    opacity: 0;
+  }
   .g-text {
     display: none;
   }
@@ -703,10 +713,11 @@ html .ui-button.ui-state-disabled:active {
     float: left;
     width: 15%;
     display: block;
+    margin-top: 26px;
   }
   #bar-chart-mobile {
     float: left;
-    margin: 20px 30px 20px 5px;
+    margin: 26px 30px 20px 5px;
   }
   .ui-selectmenu-text {
     font-weight: bold !important;
@@ -763,6 +774,12 @@ html .ui-button.ui-state-disabled:active {
 }
 
 @media (max-width: 550px) {
+  .label > .group-label-ph {
+    opacity: 0;
+  }
+  .bar-group-ph > .group-label-ph {
+    opacity: 1;
+  }
   .g-text {
     display: block;
   }

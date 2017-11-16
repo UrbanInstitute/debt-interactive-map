@@ -439,6 +439,7 @@ function ready(error, us, county, state) {
       change: function(event, ui) {
         selectedLocation()
         $(".bar-County").css("display", "block")
+        $(".label-County").css("display", "block")
         var selectedPlace = ui.item.value
         var selectedCategory = $("#category-select").val()
         updateBars(selectedCategory, selectedPlace)
@@ -927,6 +928,13 @@ function ready(error, us, county, state) {
       .append("svg")
       .attr("width", width*.15)
       .attr("height", height/3)
+    barLabel.append("text")
+      .text(function(d,i) {
+        return group;
+      })
+      .attr("transform", "translate(" + width*.14 + "," + 20 + ")")
+      .attr("text-anchor", "end")
+      .attr("class", "group-label-ph")
     barLabel.selectAll("g")
       .data(categories)
       .enter()
@@ -936,7 +944,7 @@ function ready(error, us, county, state) {
         return categories[i]
       })
       .attr("transform", function(d,i) {
-        return "translate(" + width*.14 + "," + (50*i + 60) + ")"
+        return "translate(" + width*.14 + "," + (50*i + 57) + ")"
       })
       .attr("text-anchor", "end")
 
@@ -981,7 +989,7 @@ function ready(error, us, county, state) {
       .attr("class", function(d) { 
         return "rect-g " + d})
       .attr("transform", function(d,i) {
-        return "translate(" + 0 +"," + 10+ ")"
+        return "translate(" + 0 +"," + 28+ ")"
       })
     rectG_ph.append("g")
       .data(barData)
