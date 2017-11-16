@@ -9,7 +9,10 @@ hr {
   border: none;
 }
 
-
+.legend-title {
+  font-weight: bold;
+  font-size: 12px;
+}
 
 path.domain {
   stroke: none;
@@ -239,7 +242,7 @@ h2 {
 .g-text {
   font-size: 12px;
 }
-.data-label {
+.data-label, .data-label-ph {
   font-size: 11px;
 }
 .legend-labels {
