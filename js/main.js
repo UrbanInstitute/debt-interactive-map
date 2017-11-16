@@ -144,6 +144,8 @@ function ready(error, us, county, state) {
     }
   }
   /*END*/
+console.log('hi')
+  $("#location").html("Exploring " + CATEGORY + " debt: " + "<span class=\"blue\">Nationwide</span>")
     function createSearchArray(filter) { 
       var searchArray = [];
       if (zoomNational == true) {
@@ -160,6 +162,7 @@ function ready(error, us, county, state) {
           }
         }
       }
+      console.log(searchArray)
      dropdown = searchArray
      $('input[name="tags"').tagit("option", {
         availableTags: dropdown,
@@ -246,7 +249,7 @@ function ready(error, us, county, state) {
               .classed("selected", false)
             setZoom(false, true, false)
            }else { 
-            d3.select("#location").html("National")
+            $("#location").html("Exploring " + CATEGORY + " debt: " + "<span class=\"blue\">Nationwide</span>")
             d3.selectAll(".state-borders > path.selected")
               .classed("selected", false)
             setZoom(true, false, false)
@@ -555,7 +558,7 @@ function ready(error, us, county, state) {
           var abbr = d3.select(".counties > path.selected").datum().properties.abbr
           d3.selectAll(".state-borders > path").classed("hide", true)
           d3.select(".state-borders > path#" + abbr).classed("hide", false)
-          d3.select("#location").html(county + ", " + abbr)
+          d3.select("#location").html("Exploring " + CATEGORY + " debt in: " + "<span class=\"blue\">" + county + ", " + abbr + " </span>")
           d3.selectAll("path.selected").moveToFront()
           d3.selectAll(".hover")
             .classed("hover", false)
@@ -567,7 +570,7 @@ function ready(error, us, county, state) {
           var abbr = d3.select(".state-borders > path.selected").datum().properties.abbr
           d3.selectAll(".state-borders > path").classed("hide", true)
           d3.select(".state-borders > path#" + abbr).classed("hide", false)
-          d3.select("#location").html(state)
+          d3.select("#location").html("Exploring " + CATEGORY + " debt in: " + state)
           d3.selectAll("path.selected").moveToFront()
           d3.selectAll(".hover")
           .classed("hover", false)
@@ -614,19 +617,19 @@ function ready(error, us, county, state) {
         if (zoomNational==true || zoomNational_St == true) {
           if (d3.select(".state-borders > path.selected").node() != undefined && zoomNational_St != true) {
             var state = d3.select(".state-borders > path.selected").datum().properties.state
-            d3.select("#location").html(state)
+            d3.select("#location").html("Exploring " + CATEGORY + " debt in: " + "<span class=\"blue\">" + state + "</span>")
             d3.selectAll("path.selected").moveToFront()
-          }else if (zoomNational_St == true){ 
+          }else if (zoomNational_St == true){ console.log('1')
             d3.selectAll(".hover")
               .classed("hover", false)
               .classed("hoverNational", false)
             d3.selectAll("path.selected").moveToFront()
             var selected = (d3.select(".counties > path.selected").size() > 0) ? d3.select(".counties > path.selected").datum() : d3.select(".state-borders > path.selected").datum()
             var geography = (d3.select(".counties > path.selected").size() > 0) ? selected.properties["county"] + ", " + selected.properties["abbr"] : selected.properties["state"];
-            d3.select('#location').html(geography)
+            d3.select('#location').html("Exploring " + CATEGORY + " debt in: " + "<span class=\"blue\">" + geography + "</span>")
             updateBars(SELECTED_VARIABLE, selected)
-          }else { 
-            d3.select('#location').html('National')
+          }else { console.log('2')
+            d3.select('#location').html("Exploring " + CATEGORY + " debt: <span class=\"blue\">Nationwide</span>" )
             d3.selectAll(".hover")
               .classed("hover", false)
               .classed("hoverNational", false)
@@ -686,12 +689,70 @@ function ready(error, us, county, state) {
 
 
 /*LEGEND*/
+  /*MOBILE*/
+  var svgPh = d3.select("#legend-div")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", 60)
+  var legendPh = svgPh
+    .append("g")
+    .attr("class", "g-legend-ph")
+    // .attr('transform', function() {
+    //   return (IS_MOBILE) ? 'translate(' + (width- 68) + ',' + 10 + ')' : 'translate(' + (width- 55) + ',' + 20 + ')';
+    // })
+  legendPh.append("text")
+    .text("All:")
+    .attr("class", "legend-title")
+    .attr("x", 12)
+    .attr("y", 20)
+  // legendPh.append("text")
+  var keyWidthPh =   width/8;
+  var keyHeightPh =  15;
+  for (i=0; i<=5; i++){
+    if(i !== 5){  
+      legendPh.append("rect")
+        .attr("width",keyWidthPh)
+        .attr("height",keyHeightPh)
+        .attr("class","rect"+i)
+        .attr("x",keyWidthPh*i + width/8)
+        .attr("y", 5)
+        .style("fill", COLORRANGE[i])
+      legendPh.append("text")
+        .attr("y", 32)
+        .attr("class","legend-labels")
+        .attr("x",keyWidthPh*i + width/8 + 15)
+        .attr("text-anchor", "middle")
+        .text(function(){
+          var min = d3.min(tmp_county, function(d) { 
+            return d.properties[SELECTED_VARIABLE]
+          })
+          var array = BREAKS[SELECTED_VARIABLE]
+          return (i==0) ? formatNumber(min) : formatNumber((array[i-1]))
+        })
+     }
+     if (i == 5) { 
+      legendPh.append("text")
+        .attr("y", 32)
+        .attr("class","legend-labels")
+        .attr("text-anchor", "end")
+        .attr("x",keyWidthPh*i + width/8 )
+        .attr("text-anchor", "middle")
+        .text(function(){
+          var max = d3.max(tmp_county, function(d) { 
+            return d.properties[SELECTED_VARIABLE]
+          })
+          return formatNumber(max)
+        })
+      }
+    }
+ 
+  /*DESKTOP*/
   svg.append("rect")
     .attr("width", function() { 
       return (IS_MOBILE) ? 73: 65
     })
     .attr("class", "rect-div")
-    .attr("height", 155)
+    .attr("height", 170)
     .style("fill", "#f5f5f5")
     .style("opacity", 0.8)
     .attr('transform', 'translate(' + (width- 64) + ',' + (-1) + ')')
@@ -780,7 +841,7 @@ function ready(error, us, county, state) {
       }
     })
     d3.select("#location").html(function() { 
-      return (geography=="county") ? filteredData[0]["properties"]["county"] + ", " + filteredData[0]["properties"]["abbr"] : filteredData[0]["properties"]["state"]
+      return (geography=="county") ? "Exploring " + CATEGORY + " debt in: " + "<span class=\"blue\">" + filteredData[0]["properties"]["county"] + ", " + filteredData[0]["properties"]["abbr"] + "</span>" : "Exploring " + CATEGORY + " debt in: " + "<span class=\"blue\">" +filteredData[0]["properties"]["state"] + "</span>"
     })
     var id = (geography == "county") ? filteredData[0]["id"] : ""
     d3.select("path#" + filteredData[0]["properties"]["abbr"] + id)
@@ -1255,7 +1316,7 @@ function ready(error, us, county, state) {
     d3.selectAll("#State, #County").style("opacity", 0)
 
   function formatNumber(d) { 
-    var percent = d3.format(",.1%"),
+    var percent = d3.format(",.0%"),
         number = d3.format("$,.0f");
     return (d<1) ? percent(d) : number(d);
   }
@@ -1346,7 +1407,6 @@ function ready(error, us, county, state) {
             .data(us_data_ph)
             .attr("x", function(d) { 
               var parentClass = $(this).closest(".rect-g").attr("class")
-              console.log(parentClass)
               if (parentClass.search("All") > -1) {
                 return (isNaN(d[variable]) != true) ? x_ph(d[variable]) + 5 : 5
               }else if (parentClass.search("Non") > -1) {
@@ -1403,7 +1463,6 @@ function ready(error, us, county, state) {
             .data(state_data_ph)
             .attr("x", function(d) { 
               var parentClass = $(this).closest(".rect-g").attr("class")
-              console.log(parentClass)
               if (parentClass.search("All") > -1) {
                 return (isNaN(d[variable]) != true) ? x_ph(d[variable]) + 5 : 5
               }else if (parentClass.search("Non") > -1) { console.log((isNaN(d[WHITE]) != true) ? x_ph(d[NONWHITE]) + 5 : 5)
@@ -1449,7 +1508,6 @@ function ready(error, us, county, state) {
               .data(county_data_ph)
               .attr("x", function(d) { 
                 var parentClass = $(this).closest(".rect-g").attr("class")
-                console.log(parentClass)
                 if (parentClass.search("All") > -1) {
                   return (isNaN(d[variable]) != true) ? x_ph(d[variable]) + 5 : 5
                 }else if (parentClass.search("Non") > -1) {
@@ -1546,7 +1604,7 @@ function ready(error, us, county, state) {
                   return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) - 10 : barHeight - 8;
                 }
               })
-            .text(function(d) { console.log(d)
+            .text(function(d) { 
               var noData = (d[variable] == "n<50") ? "n/a*" : "n/a**"
               var noData_wh = (d[WHITE] == "n<50") ? "n/a*" : "n/a**"
               var noData_nw = (d[NONWHITE] == "n<50") ? "n/a*" : "n/a**"
@@ -1706,7 +1764,8 @@ function ready(error, us, county, state) {
 
   }
   function addTag(state, county, abbr) { 
-      ($(".ui-widget").css("height", 60))
+      var widgetHeight = (IS_MOBILE) ? 80 : 60;
+      ($(".ui-widget").css("height", widgetHeight))
       d3.selectAll('li.tagit-choice').remove()
       var newTag = $("ul.tagit").append('<li id="state" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable"></li>')
       $('li#state').insertBefore(".tagit-new").append('<span class="tagit-label">' + state + '</span>')
@@ -1729,7 +1788,7 @@ function ready(error, us, county, state) {
         });
         d3.selectAll("path.selected")
           .classed("selected", false)
-        d3.select("#location").html("National")
+        d3.select("#location").html("Exploring " + CATEGORY + " debt: " + "<span class=\"blue\">Nationwide</span>")
         setZoom(true,false, false)
         zoomMap(null, "national")
         createSearchArray("")
@@ -1754,7 +1813,7 @@ function ready(error, us, county, state) {
             return d.properties["state"] == state;
         })
         d3.select(this).remove()
-        d3.select("#location").html(state)
+        d3.select("#location").html("Exploring " + CATEGORY + " debt in: " + "<span class=\"blue\">" + state + "</span>")
         d3.selectAll(".counties > path.selected")
           .classed("selected", false)
         updateBars(SELECTED_VARIABLE, filteredData[0])
@@ -1818,7 +1877,7 @@ function ready(error, us, county, state) {
       d3.select("path#" + d["properties"]["abbr"])
         .classed("selected", true)
         .moveToFront()
-      d3.select("#location").html(d["properties"]["state"])
+      d3.select("#location").html("Exploring " + CATEGORY + " debt in: " + "<span class=\"blue\">" + d["properties"]["state"] + "</span>")
       setZoom(false, true, false)
       for (var i = 0; i < tmp_state.length; i++) {
         if (tmp_state[i]["properties"]["state"] == d.properties.state){
@@ -1855,7 +1914,7 @@ function ready(error, us, county, state) {
 
       if (zoomLevel == "county") { 
           setZoom(false, true, true)
-          d3.select("#location").html(d["properties"]["county"] + ", " + d["properties"]["abbr"])
+          d3.select("#location").html("Exploring " + CATEGORY + " debt in: " + "<span class=\"blue\">" +d["properties"]["county"] + ", " + d["properties"]["abbr"] + "</span>")
           d3.selectAll("g.counties > path").classed("selected", false)
           d3.select("path#" + d["properties"]["abbr"] + d.id)
             .classed("selected", true)
@@ -1886,7 +1945,7 @@ function ready(error, us, county, state) {
           .attr("transform", "translate(" + 0 + "," + height / 7 + ")scale(" +width/1000 + ")")
           // .style("stroke-width", 1.5 / k + "px");
      
-      d3.selectAll(".selected").transition().classed("selectedNational", true)
+      d3.selectAll(".selected").classed("selectedNational", true)
     }
       updateBars(SELECTED_VARIABLE, d)
 
@@ -1896,7 +1955,6 @@ function ready(error, us, county, state) {
     var IS_MOBILE = d3.select("#isMobile").style("display") == "block";
     var IS_PHONE = d3.select("#isPhone").style("display") == "block";
     var IS_PHONESM = d3.select("#isPhoneSm").style("display") == "block";
-    console.log(IS_MOBILE)
     var barWidth = (IS_MOBILE) ? 45 : 50;
     var initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width() 
 
