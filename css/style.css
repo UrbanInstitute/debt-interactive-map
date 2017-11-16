@@ -73,8 +73,6 @@ p.note1, p.note2 {
 
 #bar-chart-mobile {
   display: none;
-  float: left;
-  margin: 20px 30px;
 }
 
 #topic {
@@ -208,6 +206,9 @@ table {
 #isPhone{
   display: none;
 }
+#isPhoneSm {
+  display: none;
+}
 .group-label-2 {
   fill: #000;
   font-size: 14px;
@@ -244,6 +245,12 @@ h2 {
 }
 .data-label, .data-label-ph {
   font-size: 11px;
+}
+.data-label{
+  display: block;
+}
+.data-label-ph{
+  display: none;
 }
 .legend-labels {
   font-size: 12px;
@@ -390,6 +397,9 @@ path.hide {
   height: 73px;
   padding-top: 6px;
 
+}
+#bar-mobile-labels{
+  display: none;
 }
 .image-div {
   display: inline-block;
@@ -649,6 +659,7 @@ html .ui-button.ui-state-disabled:active {
 }
 
 @media (max-width: 900px) {
+
 #location {
   padding-left: 10px;
 }
@@ -676,8 +687,26 @@ html .ui-button.ui-state-disabled:active {
 }
 
 @media (max-width: 700px) {
+  .g-text {
+    display: none;
+  }
+  .data-label {
+    display: none;
+  }
+  .data-label-ph {
+    display: block;
+  }
   .intro-wrap {
     width: 90%;
+  }
+  #bar-mobile-labels{
+    float: left;
+    width: 15%;
+    display: block;
+  }
+  #bar-chart-mobile {
+    float: left;
+    margin: 20px 30px 20px 5px;
   }
   .ui-selectmenu-text {
     font-weight: bold !important;
@@ -734,6 +763,19 @@ html .ui-button.ui-state-disabled:active {
 }
 
 @media (max-width: 550px) {
+  .g-text {
+    display: block;
+  }
+  #isPhoneSm {
+    display: block;
+  }
+  #bar-chart-mobile {
+    float: left;
+    margin: 20px 30px;
+  }
+  #bar-mobile-labels{
+    display: none;
+  }
   .intro-wrap {
     width: 100%;
   }

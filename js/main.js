@@ -1,5 +1,6 @@
 var IS_MOBILE = d3.select("#isMobile").style("display") == "block";
 var IS_PHONE = d3.select("#isPhone").style("display") == "block";
+var IS_PHONESM = d3.select("#isPhoneSm").style("display") == "block";
 var BREAKS ={"perc_debt_collect":[0.22, .31, .39, .49], "med_debt_collect":[1200, 1500, 1800, 2300], "perc_debt_med":[.11,.18,.26,.34], "med_debt_med":[500,700,950,1250], "perc_pop_nw":[.13,.28,.46,.67], "perc_pop_no_ins":[.08,.13,.18,.26], "avg_income":[52650,63850,77900,101050]}
 var SELECTED_VARIABLE;
 var WHITE;
@@ -407,13 +408,17 @@ function ready(error, us, county, state) {
         var selectedState = ui.item.value
         if (selectedState != "USA") {
           $(".bar-State").css("display", "block")
+          $(".label-State").css("display", "block")
           $(".bar-County").css("display", "none")
+          $(".label-County").css("display", "none")
           var selectedPlace = ui.item.value
           var selectedCategory = $("#category-select").val()
           updateBars(selectedCategory, selectedPlace)
         }else {
           $(".bar-County").css("display", "none")
           $(".bar-State").css("display", "none")
+          $(".label-County").css("display", "none")
+          $(".label-State").css("display", "none")
 
         }
 
@@ -893,8 +898,8 @@ function ready(error, us, county, state) {
   var categories = ["All", "White", "Nonwhite"]
   var barData = [{data: us_data_ph}, {data: us_data_ph}, {data: us_data_ph} ]
     /*MOBILE*/
-  var barWidth_ph = width
-  var x_ph = d3.scaleLinear().range([0, width-30]);
+  var barWidth_ph = (IS_PHONESM) ? width : width*.85;
+  var x_ph = d3.scaleLinear().range([0, barWidth_ph]);
   var y_ph = d3.scaleBand().range([30, 0]);
   // x_ph.domain([0, d3.max(state_data, function(d) { return d[SELECTED_VARIABLE]; })]);
   x_ph.domain([0, d3.max(state_data, function(d) {
@@ -918,6 +923,23 @@ function ready(error, us, county, state) {
   for (i=0; i<=groups_ph.length - 1; i++){
     var group = groups_ph[i]
     var category = categories[i]
+    var barLabel = d3.select(".label-" + group )
+      .append("svg")
+      .attr("width", width*.15)
+      .attr("height", height/3)
+    barLabel.selectAll("g")
+      .data(categories)
+      .enter()
+      .append("g")
+      .append("text")
+      .text(function(d,i) {
+        return categories[i]
+      })
+      .attr("transform", function(d,i) {
+        return "translate(" + width*.14 + "," + (50*i + 60) + ")"
+      })
+      .attr("text-anchor", "end")
+
     d3.select(".bar-" + group )
       .append("svg")
       .attr("width", barWidth_ph)
@@ -952,7 +974,7 @@ function ready(error, us, county, state) {
         return "translate(" + 0 + "," + 50*i + ")"
       })
 
-    d3.selectAll(".bar-County, .bar-State")
+    d3.selectAll(".bar-County, .bar-State, .label-County, .label-State")
       .style("display", "none")
 
     var rectG_ph = subBarPh.append("g")
@@ -965,12 +987,22 @@ function ready(error, us, county, state) {
       .data(barData)
       .append("text")
       .attr("class", "data-label-ph")
-      .attr("y", -10)
+      .attr("y", 12)
       .attr("dy", ".71em")
-      .attr("transform", function(d,i) {
-        return "translate(" + (barWidth_ph-33) +"," + 0+ ")"
+      // .attr("transform", function(d,i) {
+      //   return "translate(" + (barWidth_ph-33) +"," + 0+ ")"
+      // })
+      .attr("x", function(d) { 
+        var parentClass = $(this).closest(".rect-g").attr("class")
+        console.log(parentClass)
+        if (parentClass.search("All") > -1) {
+          return x_ph(d.data[0][SELECTED_VARIABLE]) + 5
+        }else if (parentClass.search("Non") > -1) {
+          return x_ph(d.data[0][WHITE]) + 5
+        }else{
+          return x_ph(d.data[0][NONWHITE]) + 5
+        }
       })
-      .attr("text-anchor", "start")
       .text(function(d) { 
         var parentClass = $(this).closest(".rect-g").attr("class")
         if (parentClass.search("All") > -1) { 
@@ -999,15 +1031,7 @@ function ready(error, us, county, state) {
     rectG_ph.append("g")
       .attr("class", "y axis")
       .call(yAxis_ph)
-    rectG_ph.selectAll(".bar")
-      .data(us_data_ph)
-      .enter().append("rect")
-      .attr("class", "background-rect-ph")
-      .attr("x", 0)
-      .attr("height", y_ph.bandwidth())
-      .attr("width", barWidth_ph)
-      .style("fill", "#adabac")
-    rectG_ph.selectAll("rect:not(.background-rect-ph)")
+    rectG_ph.selectAll("rect")
       .data(us_data_ph)
       .enter()
       .append("rect")
@@ -1137,26 +1161,7 @@ function ready(error, us, county, state) {
         return "translate(" + 0 +"," + barHeight+ ")"
       })
       .call(xAxis)
-    // rectG.selectAll("rect")
-    //   .data([us_data])
-    //   .enter()
-    //   .append("rect")
-    //   .attr("x", function(d) { 
-    //     return d.abbr
-    //   })
-    //   .attr("class", "background-rect")
-    //   .attr("width", x.bandwidth())
-    //   .attr("height", function(d) {
-    //     var parentClass = d3.select(this.parentNode).attr('class');
-    //     if (parentClass.search("All") > -1) {
-    //       return barHeight //- y(d[SELECTED_VARIABLE])
-    //     }else if (parentClass.search("Non") > -1){
-    //       return barHeight //- y(d[NONWHITE])
-    //     }else{
-    //       return barHeight //- y(d[WHITE])
-    //     }
-    //   })
-    //   .style("fill", "#adabac")
+
     //add bars
     rectG.selectAll("rect")
       .data([us_data])
@@ -1237,7 +1242,6 @@ function ready(error, us, county, state) {
 
     // barText
     //   .append("text")
-
 
 
     d3.selectAll("#State, #County").style("opacity", 0)
@@ -1332,16 +1336,41 @@ function ready(error, us, county, state) {
             })
           d3.select(this).select(".data-label-ph")
             .data(us_data_ph)
+            .attr("x", function(d) { 
+              var parentClass = $(this).closest(".rect-g").attr("class")
+              console.log(parentClass)
+              if (parentClass.search("All") > -1) {
+                return (isNaN(d[variable]) != true) ? x_ph(d[variable]) + 5 : 5
+              }else if (parentClass.search("Non") > -1) {
+                return (isNaN(d[NONWHITE]) != true) ? x_ph(d[NONWHITE]) + 5 : 5
+              }else{
+                return (isNaN(d[WHITE]) != true) ? x_ph(d[WHITE]) + 5 : 5
+              }
+            })
+            .attr("y", 12)
             .text(function(d) { 
               var parentClass = $(this).closest(".rect-g").attr("class")
               if (parentClass.search("All") > -1) { 
-                return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : ""
+                var noData = (d[variable] == "n<50") ? "n/a*" : "n/a**"
+                var noData_wh = (d[WHITE] == "n<50") ? "n/a*" : "n/a**"
+                var noData_nw = (d[NONWHITE] == "n<50") ? "n/a*" : "n/a**"
+                return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
               }else if (parentClass.search("Non") > -1) {
-                return (isNaN(d[NONWHITE]) != true) ? formatNumber(d[NONWHITE]) : ""
+                return (isNaN(d[NONWHITE]) != true) ? formatNumber(d[NONWHITE]) : noData_nw
               }else{
-                return (isNaN(d[WHITE]) != true) ? formatNumber(d[WHITE]) : ""
+                return (isNaN(d[WHITE]) != true) ? formatNumber(d[WHITE]) : noData_wh
               }
             })
+            // .text(function(d) { 
+            //   var parentClass = $(this).closest(".rect-g").attr("class")
+            //   if (parentClass.search("All") > -1) { 
+            //     return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : ""
+            //   }else if (parentClass.search("Non") > -1) {
+            //     return (isNaN(d[NONWHITE]) != true) ? formatNumber(d[NONWHITE]) : ""
+            //   }else{
+            //     return (isNaN(d[WHITE]) != true) ? formatNumber(d[WHITE]) : ""
+            //   }
+            // })
         })
 
       var State = d3.select(".bar-group-ph.State").selectAll(".category")
@@ -1364,14 +1393,28 @@ function ready(error, us, county, state) {
             })
           d3.select(this).select(".data-label-ph")
             .data(state_data_ph)
+            .attr("x", function(d) { 
+              var parentClass = $(this).closest(".rect-g").attr("class")
+              console.log(parentClass)
+              if (parentClass.search("All") > -1) {
+                return (isNaN(d[variable]) != true) ? x_ph(d[variable]) + 5 : 5
+              }else if (parentClass.search("Non") > -1) { console.log((isNaN(d[WHITE]) != true) ? x_ph(d[NONWHITE]) + 5 : 5)
+                return (isNaN(d[NONWHITE]) != true) ? x_ph(d[NONWHITE]) + 5 : 5
+              }else{
+                return (isNaN(d[WHITE]) != true) ? x_ph(d[WHITE]) + 5 : 5
+              }
+            })
             .text(function(d) { 
+              var noData = (d[variable] == "n<50") ? "n/a*" : "n/a**"
+              var noData_wh = (d[WHITE] == "n<50") ? "n/a*" : "n/a**"
+              var noData_nw = (d[NONWHITE] == "n<50") ? "n/a*" : "n/a**"
               var parentClass = $(this).closest(".rect-g").attr("class")
               if (parentClass.search("All") > -1) { 
-                return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : ""
+                return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
               }else if (parentClass.search("Non") > -1) {
-                return (isNaN(d[NONWHITE]) != true) ? formatNumber(d[NONWHITE]) : ""
+                return (isNaN(d[NONWHITE]) != true) ? formatNumber(d[NONWHITE]) : noData_nw
               }else{
-                return (isNaN(d[WHITE]) != true) ? formatNumber(d[WHITE]) : ""
+                return (isNaN(d[WHITE]) != true) ? formatNumber(d[WHITE]) : noData_wh
               }
             })
         })
@@ -1396,14 +1439,28 @@ function ready(error, us, county, state) {
               })
             d3.select(this).select(".data-label-ph")
               .data(county_data_ph)
+              .attr("x", function(d) { 
+                var parentClass = $(this).closest(".rect-g").attr("class")
+                console.log(parentClass)
+                if (parentClass.search("All") > -1) {
+                  return (isNaN(d[variable]) != true) ? x_ph(d[variable]) + 5 : 5
+                }else if (parentClass.search("Non") > -1) {
+                  return (isNaN(d[NONWHITE]) != true) ? x_ph(d[NONWHITE]) + 5 : 5
+                }else{
+                  return (isNaN(d[WHITE]) != true) ? x_ph(d[WHITE]) + 5 : 5
+                }
+              })
               .text(function(d) { 
+                var noData = (d[variable] == "n<50") ? "n/a*" : "n/a**"
+                var noData_wh = (d[WHITE] == "n<50") ? "n/a*" : "n/a**"
+                var noData_nw = (d[NONWHITE] == "n<50") ? "n/a*" : "n/a**"
                 var parentClass = $(this).closest(".rect-g").attr("class")
                 if (parentClass.search("All") > -1) { 
-                  return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : ""
+                  return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
                 }else if (parentClass.search("Non") > -1) {
-                  return (isNaN(d[NONWHITE]) != true) ? formatNumber(d[NONWHITE]) : ""
+                  return (isNaN(d[NONWHITE]) != true) ? formatNumber(d[NONWHITE]) : noData_nw
                 }else{
-                  return (isNaN(d[WHITE]) != true) ? formatNumber(d[WHITE]) : ""
+                  return (isNaN(d[WHITE]) != true) ? formatNumber(d[WHITE]) : noData_wh
                 }
               })
           })
@@ -1830,6 +1887,7 @@ function ready(error, us, county, state) {
   $(window).resize(function() { 
     var IS_MOBILE = d3.select("#isMobile").style("display") == "block";
     var IS_PHONE = d3.select("#isPhone").style("display") == "block";
+    var IS_PHONESM = d3.select("#isPhoneSm").style("display") == "block";
     console.log(IS_MOBILE)
     var barWidth = (IS_MOBILE) ? 45 : 50;
     var initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width() 
@@ -1843,7 +1901,9 @@ function ready(error, us, county, state) {
       d3.selectAll("#bar-chart-mobile").selectAll("svg")
         .each(function() { 
           d3.select(this)
-            .attr("width", width)
+            .attr("width", function() {
+              return (IS_PHONESM) ? width : width*.8;
+            })
             .attr("height", height/3)
         })
 
