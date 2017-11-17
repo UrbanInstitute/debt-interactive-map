@@ -46,6 +46,7 @@ p.note1, p.note2 {
   height: 10px !important;
   margin-right: 4px !important;
 }
+
 .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-state-active.ui-button:hover{ 
   color: #000 !important;
   font-size: 14px !important;
@@ -72,6 +73,10 @@ input:-moz-placeholder { text-overflow: ellipsis; }
     height: auto;
     z-index: 20000;
     width: 57.5%;
+}
+.select-table {
+  padding-left: 19px;
+  font-style: italic;
 }
 
 #bar-chart-mobile {
@@ -255,7 +260,7 @@ h2 {
 .data-label-ph{
   display: none;
 }
-.legend-labels {
+.legend-labels, .legend-labels-ph {
   font-size: 14px;
 }
 #legend {
@@ -437,7 +442,10 @@ path.hide {
   cursor: pointer;
 
 }
-
+#notes-section {
+  display: none;
+  padding: 20px 30px;
+}
 path.hover {
   stroke: #fdbf11;
   stroke-width: 1.3px;
@@ -650,7 +658,7 @@ html .ui-button.ui-state-disabled:active {
 }
 
 .dropdown-label.disabled {
-  color: grey;
+  color: #d2d2d2;
 }
 #legend-div{
   display: none;
@@ -745,6 +753,16 @@ html .ui-button.ui-state-disabled:active {
 
 
 @media (max-width: 700px) {
+  .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-state-active.ui-button:hover{ 
+    color: #fff !important;
+    font-size: 14px !important;
+    background: #000 !important;
+    border: solid 1px #d2d2d2 !important;
+    font-weight: normal !important;
+  }
+  #notes-section{
+    display: block;
+  }
   #legend-div {
     display: none;
   }
@@ -789,6 +807,14 @@ html .ui-button.ui-state-disabled:active {
     background-image: url("../img/arrow.png") !important;
     background-size: 13px !important;
   }
+  .ui-button .ui-icon.greyed {
+    background-image: url("../img/arrow-grey.png") !important;
+    background-size: 13px !important;
+  }
+  .ui-button .ui-icon.arrow-up {
+    background-image: url("../img/arrow-up.png") !important;
+    background-size: 13px !important;
+  }
   #bar-chart-mobile {
     display: block;
   }
@@ -796,7 +822,8 @@ html .ui-button.ui-state-disabled:active {
     display: none;
   }
   .dropdown {
-    width: 95%;
+    width: 100%;
+    box-sizing: border-box;
     float: left;
     padding: 20px 22.7px 20px 15px;
     border-top: 1px solid grey;

@@ -1,6 +1,6 @@
-var IS_MOBILE = d3.select("#isMobile").style("display") == "block";
-var IS_PHONE = d3.select("#isPhone").style("display") == "block";
-var IS_PHONESM = d3.select("#isPhoneSm").style("display") == "block";
+var IS_MOBILE;
+var IS_PHONE;
+var IS_PHONESM;
 var BREAKS ={"perc_debt_collect":[0.22, .31, .39, .49], "med_debt_collect":[1200, 1500, 1800, 2300], "perc_debt_med":[.11,.18,.26,.34], "med_debt_med":[500,700,950,1250], "perc_pop_nw":[.13,.28,.46,.67], "perc_pop_no_ins":[.08,.13,.18,.26], "avg_income":[52650,63850,77900,101050]}
 var SELECTED_VARIABLE;
 var WHITE;
@@ -18,18 +18,26 @@ var active = d3.select(null);
 var dropdown;
 var margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55};
 
-function setWidth(width, mobile, phone) { console.log(mobile)
+function setWidth(width, mobile, phone) { 
   var margin = phone ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55};
   if ($("body").width() > 1200) {
     tdMap = 870 - margin.right - margin.left
-  }else if ($("body").width() <= 1200 && !mobile){ console.log('hi')
+  }else if ($("body").width() <= 1200 && !mobile){ 
     tdMap = width - margin.right -margin.left
-  }else if (mobile && !phone) { console.log('hi')
+  }else if (mobile && !phone) { 
     tdMap = width
   }else if (phone) {
     tdMap = width - margin.right -margin.left
   }
 }
+
+function setScreenState(mobile, phone, phonesm){
+  IS_MOBILE = mobile
+  IS_PHONE = phone
+  IS_PHONESM = phonesm
+}
+setScreenState (d3.select("#isMobile").style("display") == "block", d3.select("#isPhone").style("display") == "block", d3.select("#isPhoneSm").style("display") == "block" )
+
 function setVariable(variable) {
   SELECTED_VARIABLE = variable;
   WHITE = variable + "_wh"
@@ -49,8 +57,9 @@ var initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-t
 setWidth(initialWidth, IS_MOBILE, IS_PHONE)
 setZoom(true,false, false)
 setVariable("perc_debt_collect")
+var setHeight = (IS_MOBILE) ? 600 : 630;
 var width =  tdMap,  //(IS_MOBILE && !IS_PHONE) ? tdMap : (tdMap) - margin.right-margin.left,
-    height = (IS_PHONE) ? (width) - margin.top-margin.bottom :  630,//(width*.57) - margin.top-margin.bottom,     
+    height = (IS_PHONE) ? (width) - margin.top-margin.bottom :  setHeight,//(width*.57) - margin.top-margin.bottom,     
     centered,
     selectedState,
     selectedStatePh,
@@ -206,7 +215,7 @@ function ready(error, us, county, state) {
           var tag = (ui.tag[0]["textContent"]);
           var county = (tag.search(",") > 0) ? tag.split(",")[0] : "";
           var state = (tag.search(",") > 0) ? (tag.split(", ")[1]).slice(0,-1) : tag.slice(0,-1);
-          var geoData = (tag.search(",") > 0) ? tmp_county : tmp_state;
+          var geoData = tmp_county 
           var geoType = (tag.search(",") > 0) ? "county" : "state";
           var geography = (geoType == "county") ? county : state;
           selectedLocation()
@@ -398,11 +407,18 @@ function ready(error, us, county, state) {
   $("#state-select")
     .selectmenu({
       open: function(event,ui) {
-        $(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").css("top", "381px")
+        var dropdownWidth = $("#dropdown-div").width()
+        var dropdownTop = $(".banner").height() + 112
+        $(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").css("top", dropdownTop + "px")
+        $("ul#state-select-menu").css("width", dropdownWidth + "px")
+        $("ul#state-select-menu").css("margin-left", "-137px")
+        d3.select(".state-menu").select(".ui-icon")
+          .classed("arrow-up", true)
 
       },
       close: function(event, ui) {
-
+        d3.select(".state-menu").select(".ui-icon")
+          .classed("arrow-up", false)
       },
       change: function(event, ui) {
         selectedLocation()
@@ -412,6 +428,8 @@ function ready(error, us, county, state) {
           $(".label-State").css("display", "block")
           $(".bar-County").css("display", "none")
           $(".label-County").css("display", "none")
+          d3.select(".county-menu").select(".ui-icon")
+            .classed("greyed", false)
           var selectedPlace = ui.item.value
           var selectedCategory = $("#category-select").val()
           updateBars(selectedCategory, selectedPlace)
@@ -420,6 +438,8 @@ function ready(error, us, county, state) {
           $(".bar-State").css("display", "none")
           $(".label-County").css("display", "none")
           $(".label-State").css("display", "none")
+          d3.select(".county-menu").select(".ui-icon")
+            .classed("greyed", true)
 
         }
 
@@ -432,10 +452,18 @@ function ready(error, us, county, state) {
   $("#county-select")
     .selectmenu({
       open: function(event,ui) {
-
+        var dropdownWidth = $("#dropdown-div").width()
+        var dropdownTop = $(".banner").height() + 175
+        console.log(dropdownTop)
+        $(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").css("top", dropdownTop + "px")
+        $("ul#county-select-menu").css("width", dropdownWidth + "px")
+        $("ul#county-select-menu").css("margin-left", "-137px")
+        d3.select(".county-menu").select(".ui-icon")
+          .classed("arrow-up", true)
       },
       close: function(event, ui) {
-
+        d3.select(".county-menu").select(".ui-icon")
+          .classed("arrow-up", false)
       },
       change: function(event, ui) {
         selectedLocation()
@@ -453,10 +481,17 @@ function ready(error, us, county, state) {
   $("#category-select")
     .selectmenu({
       open: function(event,ui) {
-
+        var dropdownWidth = $("#dropdown-div").width()
+        var dropdownTop = $(".banner").height() + 232
+        $(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").css("top", dropdownTop + "px")
+        $("ul#category-select-menu").css("width", dropdownWidth + "px")
+        $("ul#category-select-menu").css("margin-left", "-137px")
+        d3.select(".category-menu").select(".ui-icon")
+          .classed("arrow-up", true)
       },
       close: function(event, ui) {
-
+        d3.select(".category-menu").select(".ui-icon")
+          .classed("arrow-up", false)
       },
       change: function(event, ui) {
         var selectedCategory = ui.item.value
@@ -467,6 +502,8 @@ function ready(error, us, county, state) {
     })
     .selectmenu("menuWidget")
     .addClass("ui-menu-icons customicons")
+  d3.select(".county-menu").select(".ui-icon")
+    .classed("greyed", true)
   /*ADD MAP*/
     var svg = d3.select("#map")
       .append("svg")
@@ -481,7 +518,6 @@ function ready(error, us, county, state) {
     // var projection = d3.geoAlbersUsa()
     var path = d3.geoPath()//.projection(projection)
     // var states = topojson.feature(us, us.objects.states);
-console.log(width)
     // projection.fitSize([width, height], states);
     var g = svg.append("g")
       .attr("class", "map-g")
@@ -497,7 +533,7 @@ console.log(width)
       .style("fill", function(d){ 
           return (isNaN(d.properties[SELECTED_VARIABLE]) == true) ? "#adabac" : quantize(d.properties[SELECTED_VARIABLE]);
       })
-      .on('click', function(d) { console.log('click')
+      .on('click', function(d) { 
         var state = d.properties.state;
         var stateData = tmp_state.filter(function(d){ 
           return d.properties.state == state
@@ -616,7 +652,7 @@ console.log(width)
             var state = d3.select(".state-borders > path.selected").datum().properties.state
             d3.select("#location").html("Exploring " + CATEGORY + " debt in: " + "<span class=\"blue\">" + state + "</span>")
             d3.selectAll("path.selected").moveToFront()
-          }else if (zoomNational_St == true){ console.log('1')
+          }else if (zoomNational_St == true){ 
             d3.selectAll(".hover")
               .classed("hover", false)
               .classed("hoverNational", false)
@@ -625,7 +661,7 @@ console.log(width)
             var geography = (d3.select(".counties > path.selected").size() > 0) ? selected.properties["county"] + ", " + selected.properties["abbr"] : selected.properties["state"];
             d3.select('#location').html("Exploring " + CATEGORY + " debt in: " + "<span class=\"blue\">" + geography + "</span>")
             updateBars(SELECTED_VARIABLE, selected)
-          }else { console.log('2')
+          }else { 
             d3.select('#location').html("Exploring " + CATEGORY + " debt: <span class=\"blue\">Nationwide</span>" )
             d3.selectAll(".hover")
               .classed("hover", false)
@@ -689,7 +725,7 @@ console.log(width)
   /*MOBILE*/
   var svgPh = d3.select("#legend-div")
     .append("svg")
-    .attr("width", width)
+    .attr("width", width*.9)
     .attr("height", 60)
   var legendPh = svgPh
     .append("g")
@@ -716,7 +752,7 @@ console.log(width)
         .style("fill", COLORRANGE[i])
       legendPh.append("text")
         .attr("y", 34)
-        .attr("class","legend-labels")
+        .attr("class","legend-labels-ph")
         .attr("x",keyWidthPh*i + 55)
         .attr("text-anchor", "middle")
         .text(function(){
@@ -724,13 +760,13 @@ console.log(width)
             return d.properties[SELECTED_VARIABLE]
           })
           var array = BREAKS[SELECTED_VARIABLE]
-          return (i==0) ? formatNumber(min) : formatNumber((array[i-1]))
+          return (i==0) ? formatNumber(min, "min") : formatNumber((array[i-1]))
         })
      }
      if (i == 5) { 
       legendPh.append("text")
         .attr("y", 34)
-        .attr("class","legend-labels")
+        .attr("class","legend-labels-ph")
         .attr("text-anchor", "end")
         .attr("x",keyWidthPh*i + 55 )
         .attr("text-anchor", "middle")
@@ -738,7 +774,7 @@ console.log(width)
           var max = d3.max(tmp_county, function(d) { 
             return d.properties[SELECTED_VARIABLE]
           })
-          return formatNumber(max)
+          return formatNumber(max, "max")
         })
       }
     }
@@ -759,7 +795,7 @@ console.log(width)
     .attr('transform', 'translate(' + (width- 55) + ',' + 20 + ')')
   legend.append("text")
     .text("All")
-    .attr("class", "legend-title")
+    .attr("class", " ftitle")
     .attr("x", 33)
     .attr("text-anchor", "end")
 
@@ -790,7 +826,7 @@ console.log(width)
             return d.properties[SELECTED_VARIABLE]
           })
           var array = BREAKS[SELECTED_VARIABLE]
-          return (i==0) ? formatNumber(min) : formatNumber((array[i-1]))
+          return (i==0) ? formatNumber(min, "min") : formatNumber((array[i-1]))
         })
      }
      if (i == 5) { 
@@ -803,7 +839,7 @@ console.log(width)
           var max = d3.max(tmp_county, function(d) { 
             return d.properties[SELECTED_VARIABLE]
           })
-          return formatNumber(max)
+          return formatNumber(max, "max")
         })
       }
     }
@@ -823,7 +859,7 @@ console.log(width)
       });
   };
   function hoverLocation(county, state, geography) {
-    var data = (geography == "county") ? tmp_county : tmp_state
+    var data =  tmp_county;
     var filteredData = data.filter(function(d){ 
       if (geography == "county") {
         return d.properties.county == county && d.properties.abbr == state
@@ -949,13 +985,15 @@ console.log(width)
   var groups = ["National", "State", "County"]
   var groups_ph = ["County", "State", "National"]
   var categories = ["All", "White", "Nonwhite"]
-  var barData = [{data: us_data_ph}, {data: us_data_ph}, {data: us_data_ph} ]
+  var barData = [{data: us_data_ph[0]}, {data: us_data_ph[0]}, {data: us_data_ph[0]} ]
+  console.log(us_data_ph)
     /*MOBILE*/
+  var barSvgHeight_ph = (IS_PHONESM) ? 200 : 180;
   var barWidth_ph = (IS_PHONESM) ? width : width*.85;
   var x_ph = d3.scaleLinear().range([0, barWidth_ph]);
   var y_ph = d3.scaleBand().range([30, 0]);
   // x_ph.domain([0, d3.max(state_data, function(d) { return d[SELECTED_VARIABLE]; })]);
-  x_ph.domain([0, d3.max(state_data, function(d) {
+  x_ph.domain([0, d3.max(county_data, function(d) {
     if (isNaN(d[NONWHITE]) == true && isNaN(d[WHITE]) == true){
       return d[SELECTED_VARIABLE]
     }else if (isNaN(d[NONWHITE]) == true && isNaN(d[WHITE]) == false) {
@@ -1003,12 +1041,12 @@ console.log(width)
     d3.select(".bar-" + group )
       .append("svg")
       .attr("width", barWidth_ph)
-      .attr("height", height/3)
+      .attr("height", barSvgHeight_ph)
     var barG_ph = d3.select(".bar-" + group).select("svg").append("g")
       .attr("class", function(d,i) {
         return "bar-group-ph " + group
       })
-      .attr("transform", "translate(" + 0 + "," + 10 + ")")
+      .attr("transform", "translate(" + 0 + "," + 12 + ")")
     barG_ph.append("text")
       .text(function(d,i) {
         return group;
@@ -1052,25 +1090,26 @@ console.log(width)
       // .attr("transform", function(d,i) {
       //   return "translate(" + (barWidth_ph-33) +"," + 0+ ")"
       // })
+    rectG_ph.selectAll(".data-label-ph")
+      .data([us_data])
       .attr("x", function(d) { 
         var parentClass = $(this).closest(".rect-g").attr("class")
-        console.log(parentClass)
-        if (parentClass.search("All") > -1) {
-          return x_ph(d.data[0][SELECTED_VARIABLE]) + 5
+        if (parentClass.search("All") > -1) { console.log(x_ph(d[SELECTED_VARIABLE]) + 5)
+          return x_ph(d[SELECTED_VARIABLE]) + 5
         }else if (parentClass.search("Non") > -1) {
-          return x_ph(d.data[0][WHITE]) + 5
+          return x_ph(d[WHITE]) + 5
         }else{
-          return x_ph(d.data[0][NONWHITE]) + 5
+          return x_ph(d[NONWHITE]) + 5
         }
       })
       .text(function(d) { 
         var parentClass = $(this).closest(".rect-g").attr("class")
-        if (parentClass.search("All") > -1) { 
-          return formatNumber(d.data[0][SELECTED_VARIABLE])
+        if (parentClass.search("All") > -1) { console.log(formatNumber(d[SELECTED_VARIABLE]))
+          return formatNumber(d[SELECTED_VARIABLE])
         }else if (parentClass.search("Non") > -1) {
-          return formatNumber(d.data[0][NONWHITE])
+          return formatNumber(d[NONWHITE])
         }else{
-          return formatNumber(d.data[0][WHITE])
+          return formatNumber(d[WHITE])
         }
       })
     rectG_ph
@@ -1121,27 +1160,29 @@ console.log(width)
   }
 
     /*DESKTOP*/
-    var barSvgHeight = 120
-    var barHeight = 51
+
+
+    var barSvgHeight = (IS_MOBILE) ? 160 : 130;
+    var barHeight = (IS_MOBILE) ? 90 : 65;
     var barWidth = (IS_MOBILE) ? 45 : 50;
     var x = d3.scaleBand()
       .rangeRound([0, barWidth])
 
     var y = d3.scaleLinear()
         .rangeRound([barHeight, 0]);
-    state_data.forEach(function(d) { 
+    county_data.forEach(function(d) { 
       d.national = +d.values[0][SELECTED_VARIABLE]
     })
-    state_data.forEach(function(d) { 
+    county_data.forEach(function(d) { 
       d.white = +d.values[0][WHITE];
     })
-    state_data.forEach(function(d) { 
+    county_data.forEach(function(d) { 
       d.nonwhite = +d.values[0][NONWHITE]
     })
     x.domain([[us_data].map(function(d){ 
       return d.abbr
     })]);
-    y.domain([0, d3.max(state_data, function(d) {
+    y.domain([0, d3.max(county_data, function(d) {
       if (isNaN(d.nonwhite) == true && isNaN(d.white) == true){
         return d.national
       }else if (isNaN(d.nonwhite) == true && isNaN(d.white) == false) {
@@ -1306,10 +1347,16 @@ console.log(width)
 
     d3.selectAll("#State, #County").style("opacity", 0)
 
-  function formatNumber(d) { 
+  function formatNumber(d, type) { 
     var percent = d3.format(",.0%"),
         number = d3.format("$,.0f");
-    return (d<1) ? percent(d) : number(d);
+    if (type == "max") {
+      return (d<1) ? percent(Math.ceil(d * 10) / 10 ) : number( Math.ceil((d+1)/10)*10)
+    }else if (type == "min") {
+      return (d<1) ? percent(Math.floor(d * 100) / 100 ) : number( Math.floor((d+1)/10)*10)
+    }else {
+      return (d<1) ? percent(d) : number(d);
+    }
   }
 
   function updateMap(variable) {
@@ -1333,12 +1380,13 @@ console.log(width)
             var max = d3.max(tmp_county, function(d) {
               return d.properties[variable]
             })
-            var array = BREAKS[SELECTED_VARIABLE]
+            var array = BREAKS[variable]
+            console.log(formatNumber(array[2]))
             if (i==0) {
-              return formatNumber(min)
+              return formatNumber(min, "min")
             }else if (i==5) {
-              return formatNumber(max)
-            }else {
+              return formatNumber(max, "max")
+            }else { 
               return formatNumber(array[i-1])
             }
         })
@@ -1355,9 +1403,11 @@ console.log(width)
 
 
   function updateBars(variable, selected) { 
+    d3.select("#notes-section").selectAll("p.note2, p.note1").style("opacity", 0)
+
     var WHITE = variable + "_wh"
     var NONWHITE = variable + "_nw"
-    var data = (selectedCountyPh != "") ? county_data : state_data;
+    var data = county_data;
     /**MOBILE**/
     if (IS_PHONE) {
       var state_data_ph = state_data.filter(function(d) {
@@ -1386,6 +1436,7 @@ console.log(width)
             .duration(300)
             .attr("width", function(d) { 
               var parentClass = d3.select(this.parentNode).attr('class');
+              console.log(parentClass)
               if (parentClass.search("All") > -1) {
                 return (isNaN(d[variable]) != true) ? x_ph(d[variable]) : 0
               }else if (parentClass.search("Non") > -1) {
@@ -1413,6 +1464,12 @@ console.log(width)
                 var noData = (d[variable] == "n<50") ? "n/a*" : "n/a**"
                 var noData_wh = (d[WHITE] == "n<50") ? "n/a*" : "n/a**"
                 var noData_nw = (d[NONWHITE] == "n<50") ? "n/a*" : "n/a**"
+                if (d[NONWHITE] == "n<50" || (d[WHITE]) == "n<50" || (d[variable]) == "n<50") { 
+                  d3.select("#notes-section > p.note1").style("opacity", 1)
+                }
+                if ((d[variable]) == "N/A" || (d[NONWHITE]) == "N/A" || (d[WHITE]) == "N/A") {
+                  d3.select("#notes-section > p.note2").style("opacity", 1)
+                }
                 return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
               }else if (parentClass.search("Non") > -1) {
                 return (isNaN(d[NONWHITE]) != true) ? formatNumber(d[NONWHITE]) : noData_nw
@@ -1420,16 +1477,6 @@ console.log(width)
                 return (isNaN(d[WHITE]) != true) ? formatNumber(d[WHITE]) : noData_wh
               }
             })
-            // .text(function(d) { 
-            //   var parentClass = $(this).closest(".rect-g").attr("class")
-            //   if (parentClass.search("All") > -1) { 
-            //     return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : ""
-            //   }else if (parentClass.search("Non") > -1) {
-            //     return (isNaN(d[NONWHITE]) != true) ? formatNumber(d[NONWHITE]) : ""
-            //   }else{
-            //     return (isNaN(d[WHITE]) != true) ? formatNumber(d[WHITE]) : ""
-            //   }
-            // })
         })
 
       var State = d3.select(".bar-group-ph.State").selectAll(".category")
@@ -1456,7 +1503,7 @@ console.log(width)
               var parentClass = $(this).closest(".rect-g").attr("class")
               if (parentClass.search("All") > -1) {
                 return (isNaN(d[variable]) != true) ? x_ph(d[variable]) + 5 : 5
-              }else if (parentClass.search("Non") > -1) { console.log((isNaN(d[WHITE]) != true) ? x_ph(d[NONWHITE]) + 5 : 5)
+              }else if (parentClass.search("Non") > -1) { 
                 return (isNaN(d[NONWHITE]) != true) ? x_ph(d[NONWHITE]) + 5 : 5
               }else{
                 return (isNaN(d[WHITE]) != true) ? x_ph(d[WHITE]) + 5 : 5
@@ -1467,6 +1514,12 @@ console.log(width)
               var noData_wh = (d[WHITE] == "n<50") ? "n/a*" : "n/a**"
               var noData_nw = (d[NONWHITE] == "n<50") ? "n/a*" : "n/a**"
               var parentClass = $(this).closest(".rect-g").attr("class")
+              if (d[NONWHITE] == "n<50" || (d[WHITE]) == "n<50" || (d[variable]) == "n<50") { 
+                d3.select("#notes-section > p.note1").style("opacity", 1)
+              }
+              if ((d[variable]) == "N/A" || (d[NONWHITE]) == "N/A" || (d[WHITE]) == "N/A") {
+                d3.select("#notes-section > p.note2").style("opacity", 1)
+              }
               if (parentClass.search("All") > -1) { 
                 return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
               }else if (parentClass.search("Non") > -1) {
@@ -1511,6 +1564,12 @@ console.log(width)
                 var noData = (d[variable] == "n<50") ? "n/a*" : "n/a**"
                 var noData_wh = (d[WHITE] == "n<50") ? "n/a*" : "n/a**"
                 var noData_nw = (d[NONWHITE] == "n<50") ? "n/a*" : "n/a**"
+                if (d[NONWHITE] == "n<50" || (d[WHITE]) == "n<50" || (d[variable]) == "n<50") { 
+                  d3.select("#notes-section > p.note1").style("opacity", 1)
+                }
+                if ((d[variable]) == "N/A" || (d[NONWHITE]) == "N/A" || (d[WHITE]) == "N/A") {
+                  d3.select("#notes-section > p.note2").style("opacity", 1)
+                }
                 var parentClass = $(this).closest(".rect-g").attr("class")
                 if (parentClass.search("All") > -1) { 
                   return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
@@ -1524,7 +1583,7 @@ console.log(width)
       }
     }else {
       /*DESKTOP*/
-    var data = (selectedCountyPh != undefined || d3.selectAll(".counties").selectAll("path.hover").size() > 0) ? county_data : state_data;
+    var data =  county_data;
     // var data = (zoomCounty == true) ? county_data : state_data;
     var x = d3.scaleBand()
       .rangeRound([0, 50])
@@ -1616,7 +1675,7 @@ console.log(width)
         var countyIDHov = (d3.select(".counties > path.hover").node() == null) ? "" : d3.select(".counties > path.hover").attr("id");
         var county = countyID.slice(2,)
         var state = selected["properties"]["abbr"]
-        var data = (county == "") ? tmp_state : tmp_county
+        var data =  tmp_county
         var State = d3.select("#State").selectAll(".category")
         var selectedState = d3.select("path#" + selected["properties"]["abbr"]).datum()
         var stateData = selectedState["properties"]
@@ -1943,34 +2002,130 @@ console.log(width)
   }
 
   $(window).resize(function() { 
-    var IS_MOBILE = d3.select("#isMobile").style("display") == "block";
-    var IS_PHONE = d3.select("#isPhone").style("display") == "block";
-    var IS_PHONESM = d3.select("#isPhoneSm").style("display") == "block";
-    var barWidth = (IS_MOBILE) ? 45 : 50;
-    var initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width() 
+    setScreenState (d3.select("#isMobile").style("display") == "block", d3.select("#isPhone").style("display") == "block", d3.select("#isPhoneSm").style("display") == "block" )
+    initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width() 
+    barSvgHeight = (IS_MOBILE) ? 160 : 130;
+    barHeight = (IS_MOBILE) ? 90 : 65;
+    barWidth = (IS_MOBILE) ? 45 : 50;
+    setHeight = (IS_MOBILE) ? 600 : 630;
 
     //    margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55}
     setWidth(initialWidth, IS_MOBILE, IS_PHONE)
     var mobilePadding = (IS_MOBILE) ? 0 : 15;
     var width = tdMap - mobilePadding,  //- margin.right-margin.left,
-        height = (IS_PHONE) ? (width) - margin.top-margin.bottom :  630,//(width*.57) - margin.top-margin.bottom,       
+        height = (IS_PHONE) ? (width) - margin.top-margin.bottom :  setHeight,//(width*.57) - margin.top-margin.bottom,       
         barSvgHeight = height/3.5
-    if (IS_PHONE) { 
-      d3.selectAll("#bar-chart-mobile").selectAll("svg")
-        .each(function() { 
-          d3.select(this)
-            .attr("width", function() {
-              return (IS_PHONESM) ? width : width*.8;
-            })
-            .attr("height", height/3)
+    if (IS_PHONE) {
+      console.log(IS_PHONESM)
+      var barSvgHeight_ph = (IS_PHONESM) ? 200 : 180;
+      var barWidth_ph = (IS_PHONESM) ? width : width*.85;
+      var x_ph = d3.scaleLinear().range([0, barWidth_ph]);
+      d3.selectAll(".label")
+        .attr("width", width*.15)
+        .attr("height", height/3)
+      d3.selectAll(".bar_ph" ).select("svg")
+        .attr("width", barWidth_ph)
+        .attr("height", barSvgHeight_ph)
+        console.log(barSvgHeight_ph)
+      d3.selectAll(".bar")
+        .attr("width", function(d) {  
+          var parentClass = d3.select(this.parentNode).attr('class');
+          if (parentClass.search("All") > -1) {
+            return (isNaN(d[SELECTED_VARIABLE]) != true) ? x_ph(d[SELECTED_VARIABLE]) : 0
+          }else if (parentClass.search("Non") > -1) {
+            return (isNaN(d[NONWHITE]) != true) ?  x_ph(d[NONWHITE]) : 0
+          }else{
+            return (isNaN(d[WHITE]) != true) ?  x_ph(d[WHITE]) : 0
+          }
         })
+      d3.selectAll(".data-label-ph")
+        .attr("x", function(d) { 
+          var parentClass = $(this).closest(".rect-g").attr("class")
+          if (parentClass.search("All") > -1) {// console.log((isNaN(d[SELECTED_VARIABLE]) != true) ? x_ph(d[SELECTED_VARIABLE]) + 5 : 5)
+            return (isNaN(d[SELECTED_VARIABLE]) != true) ? x_ph(d[SELECTED_VARIABLE]) + 5 : 5
+          }else if (parentClass.search("Non") > -1) {
+            return (isNaN(d[NONWHITE]) != true) ? x_ph(d[NONWHITE]) + 5 : 5
+          }else{
+            return (isNaN(d[WHITE]) != true) ? x_ph(d[WHITE]) + 5 : 5
+          }
+        })
+    // }
+    // else if (IS_PHONE) { 
+      // d3.selectAll("#bar-chart-mobile").selectAll("svg")
+      //   .each(function() { 
+      //     d3.select(this)
+      //       .attr("width", function() {
+      //         return (IS_PHONESM) ? width : width*.8;
+      //       })
+      //       .attr("height", height/3)
+      //   })
 
     }else {
+      //UPDATE MOBILE LEGEND
+      d3.select("#legend-div")
+        .attr("width", width*.9)
+      //UPDATE BAR CHARTS
+      var chartPadding = (IS_MOBILE) ? 10 : 0;
       d3.select("#bar-chart").select("svg")
-        .attr('width', width)
+        .attr('width', width - chartPadding)
         .attr("height", barSvgHeight)
+      d3.selectAll(".bar-group")
+        .each(function(d,i) {
+          d3.select(this)
+          .attr("transform", function(d,i) {
+            return "translate(" + ( (width/3 + 5) * i) + "," + (20) + ")";
+          })
+        })
+      d3.selectAll(".category")
+        .each(function(d,i) {
+          d3.select(this)
+          .attr("transform", function(d,i) {
+            return (IS_MOBILE) ? "translate(" + (50 * i ) + "," + 10 + ")" : "translate(" + (60 * i ) + "," + 10 + ")"
+          })
+        })
+      d3.selectAll(".g-text > text")
+      .attr("y", barHeight + 10)
+      d3.selectAll(".x.axis")
+      .attr("transform", function(d,i) {
+        return "translate(" + 0 +"," + barHeight+ ")"
+      })
+      rectG.selectAll(".bar")
+        .attr("width", x.bandwidth())
+        .attr("y", function(d) {  
+          var parentClass = d3.select(this.parentNode).attr('class');
+          if (parentClass.search("All") > -1) { 
+            return (isNaN(d[SELECTED_VARIABLE]) != true) ? y(d[SELECTED_VARIABLE]) : barHeight;
+          }else if (parentClass.search("Non") > -1) { 
+            return (isNaN(d[NONWHITE]) != true) ? y(d[NONWHITE]) : barHeight;
+          }else {
+            return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) : barHeight;
+          }
+        })
+        .attr("height", function(d) { 
+          var parentClass = d3.select(this.parentNode).attr('class');
+          if (parentClass.search("All") > -1) { 
+            return (isNaN(d[SELECTED_VARIABLE]) != true) ? barHeight - y(d[SELECTED_VARIABLE]) : 0;
+          }else if (parentClass.search("Non") > -1){ 
+            return (isNaN(d[NONWHITE]) != true) ? barHeight - y(d[NONWHITE]) : 0;
+          }else {
+            return (isNaN(d[WHITE]) != true) ? barHeight - y(d[WHITE]) : 0;
+          }
+        })
+      d3.selectAll(".bar-text")
+        .attr("y", function(d) {
+          var parentClass = d3.select(this.parentNode).attr('class');
+          if (parentClass.search("All") > -1) {
+            return (isNaN(d[SELECTED_VARIABLE]) != true) ? y(d[SELECTED_VARIABLE]) - 13 : barHeight -8;
+          }else if (parentClass.search("Non") > -1) {
+            return (isNaN(d[NONWHITE]) != true) ? y(d[NONWHITE]) - 13 : barHeight - 8;
+          }else{
+            return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) - 13 : barHeight - 8;
+          }
+        })
+
+
+      //UPDATE TABLE
       $("table").height($("table").width()*0.8);
-      console.log(width)
       d3.select("#map").select('svg')
         .attr('width', width)
         .attr('height', height)
