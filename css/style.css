@@ -248,7 +248,7 @@ h2 {
   height: auto;
   margin-top: 52px;
 }
-.g-text {
+.g-text, .g-text-ph {
   font-size: 12px;
 }
 .data-label, .data-label-ph {
@@ -607,7 +607,7 @@ th {
     color: #fdbf11;
 
 }
-.group-label-ph {
+.group-label-ph, .group-label-ph2 {
   font-size: 14px;
   font-weight: bold;
 }
@@ -680,6 +680,11 @@ html .ui-button.ui-state-disabled:active {
   }
 
 }
+@media (max-width: 930px) {
+  ul.tagit li.tagit-new {
+    width: 120px !important;
+  }
+}
 
 @media (max-width: 900px) {
   .intro-wrap {
@@ -718,9 +723,7 @@ html .ui-button.ui-state-disabled:active {
   .image-div img {
     padding-right: 10px;
   }
-  ul.tagit li.tagit-new {
-    width: 120px !important;
-  }
+
 .tagit-label {
   font-size: 12px !important;
 }
@@ -769,10 +772,10 @@ html .ui-button.ui-state-disabled:active {
   .label > .group-label-ph {
     opacity: 1;
   }
-  .bar-group-ph > .group-label-ph {
+  .bar-group-ph > .group-label-ph2 {
     opacity: 0;
   }
-  .g-text {
+  .g-text-ph {
     display: none;
   }
   .data-label {
@@ -858,10 +861,10 @@ html .ui-button.ui-state-disabled:active {
   .label > .group-label-ph {
     opacity: 0;
   }
-  .bar-group-ph > .group-label-ph {
+  .bar-group-ph > .group-label-ph2 {
     opacity: 1;
   }
-  .g-text {
+  .g-text-ph {
     display: block;
   }
   #isPhoneSm {
