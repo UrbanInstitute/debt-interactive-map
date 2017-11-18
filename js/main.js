@@ -433,6 +433,8 @@ function ready(error, us, county, state) {
           var selectedPlace = ui.item.value
           var selectedCategory = $("#category-select").val()
           updateBars(selectedCategory, selectedPlace)
+          d3.select(".group-label-ph2.State").text(selectedPlace)
+
         }else {
           $(".bar-County").css("display", "none")
           $(".bar-State").css("display", "none")
@@ -472,6 +474,7 @@ function ready(error, us, county, state) {
         var selectedPlace = ui.item.value
         var selectedCategory = $("#category-select").val()
         updateBars(selectedCategory, selectedPlace)
+        d3.select(".group-label-ph2.County").text(selectedPlace)
 
 
       }
@@ -1429,7 +1432,7 @@ function ready(error, us, county, state) {
           return Math.max(d[WHITE], d[NONWHITE], d[variable])
         }
       })])
-      var National = d3.select(".bar-group-ph.National").selectAll(".category")
+      var National = d3.select(".bar-group-ph.National").selectAll(".category-ph")
       National
         .each(function() {
           d3.select(this).select(".bar-ph")
@@ -1481,7 +1484,7 @@ function ready(error, us, county, state) {
             })
         })
 
-      var State = d3.select(".bar-group-ph.State").selectAll(".category")
+      var State = d3.select(".bar-group-ph.State").selectAll(".category-ph")
       State
         .each(function() {
           d3.select(this).select(".bar-ph")
@@ -1532,7 +1535,7 @@ function ready(error, us, county, state) {
             })
         })
       if (selectedCountyPh != "") {
-        var County = d3.select(".bar-group-ph.County").selectAll(".category")
+        var County = d3.select(".bar-group-ph.County").selectAll(".category-ph")
         County
           .each(function() {
             d3.select(this).select(".bar-ph")
