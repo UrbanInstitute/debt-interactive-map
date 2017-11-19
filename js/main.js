@@ -1423,6 +1423,26 @@ function ready(error, us, county, state) {
             }
         })
       })
+      d3.selectAll(".legend-labels-ph")
+      .each(function(d,i) {
+        d3.select(this)
+          .text(function(){
+            var min = d3.min(tmp_county, function(d) {
+              return d.properties[variable]
+            })
+            var max = d3.max(tmp_county, function(d) {
+              return d.properties[variable]
+            })
+            var array = BREAKS[variable]
+            if (i==0) {
+              return formatNumber(min, "min")
+            }else if (i==5) {
+              return formatNumber(max, "max")
+            }else { 
+              return formatNumber(array[i-1])
+            }
+        })
+      })
     d3.select(".counties").selectAll("path")
     .transition()
     .duration(800)
