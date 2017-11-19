@@ -44,6 +44,7 @@ function setVariable(variable) {
   NONWHITE= variable + "_nw"
 }
 function setZoom(national, state, county, national_st) {
+  console.log(national)
   zoomNational = national;
   zoomState = state;
   zoomCounty = county;
@@ -1386,7 +1387,6 @@ function ready(error, us, county, state) {
               return d.properties[variable]
             })
             var array = BREAKS[variable]
-            console.log(formatNumber(array[2]))
             if (i==0) {
               return formatNumber(min, "min")
             }else if (i==5) {
@@ -1441,7 +1441,6 @@ function ready(error, us, county, state) {
             .duration(300)
             .attr("width", function(d) { 
               var parentClass = d3.select(this.parentNode).attr('class');
-              console.log(parentClass)
               if (parentClass.search("All") > -1) {
                 return (isNaN(d[variable]) != true) ? x_ph(d[variable]) : 0
               }else if (parentClass.search("Non") > -1) {
@@ -1673,9 +1672,9 @@ function ready(error, us, county, state) {
               }
             })
         })
-      if (zoomNational == true && selected == undefined) {  
+      if (zoomNational == true && selected == null) {  
         d3.selectAll("#State, #County").style("opacity", 0)
-      } else if (zoomNational == false || selected != undefined) { //IF MOUSE IS OVER A STATE OR COUNTY IN WHICHEVER VIEW
+      } else if (zoomNational == false && selected != null) { //IF MOUSE IS OVER A STATE OR COUNTY IN WHICHEVER VIEW
         var countyID = (d3.select(".counties > path.selected").node() == null) ? "" : d3.select(".counties > path.selected").attr("id");
         var countyIDHov = (d3.select(".counties > path.hover").node() == null) ? "" : d3.select(".counties > path.hover").attr("id");
         var county = countyID.slice(2,)
@@ -1857,7 +1856,7 @@ function ready(error, us, county, state) {
       setZoom(false,true, true)
       $(".tagit-new").css("display", "none")
       $("li#county").on('click', function() {
-        d3.selectAll("path.selectedNational").classed("selectedNational", false)
+        d3.selectAll(".counties").selectAll("path.selectedNational").classed("selectedNational", false)
         $(".tagit-new").css("display", "block")
         $(".tagit-new").css("autocomplete", "on")
         $('.ui-widget-content.ui-autocomplete-input').focusout(function(){
@@ -2000,7 +1999,7 @@ function ready(error, us, county, state) {
           .attr("transform", "translate(" + 0 + "," + height / 7 + ")scale(" +width/1000 + ")")
           // .style("stroke-width", 1.5 / k + "px");
      
-      d3.selectAll(".selected").classed("selectedNational", true)
+      d3.selectAll("path.selected").classed("selectedNational", true)
     }
       updateBars(SELECTED_VARIABLE, d)
 
@@ -2044,7 +2043,6 @@ function ready(error, us, county, state) {
       d3.selectAll(".bar_ph" ).select("svg")
         .attr("width", barWidth_ph)
         .attr("height", barSvgHeight_ph)
-        console.log(barSvgHeight_ph)
       d3.selectAll(".bar-ph")
         .attr("width", function(d) {  
           var parentClass = d3.select(this.parentNode).attr('class');
@@ -2069,6 +2067,17 @@ function ready(error, us, county, state) {
         })
 
     }else {
+      if (d3.selectAll("path.selected").size() > 0){
+        setZoom(false, false, false, true)
+        zoomMap(null, "national")
+      }else {
+        setZoom(true, false, false)
+        zoomMap(null, "national")
+      }
+      d3.select(".state-borders").selectAll("path")
+        .classed("hide", false)
+      d3.selectAll("path.selected")
+        .classed("selectedNational", true)
       //UPDATE MOBILE LEGEND
       d3.select("#legend-div")
         .attr("width", width*.9)
@@ -2130,7 +2139,17 @@ function ready(error, us, county, state) {
             return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) - 13 : barHeight - 8;
           }
         })
-
+      d3.selectAll(".data-label")
+        .attr("y", function(d) {
+          var parentClass = d3.select(this.parentNode).attr('class');
+          if (parentClass.search("All") > -1) {
+            return (isNaN(d[SELECTED_VARIABLE]) != true) ? y(d[SELECTED_VARIABLE]) - 13 : barHeight -8;
+          }else if (parentClass.search("Non") > -1) {
+            return (isNaN(d[NONWHITE]) != true) ? y(d[NONWHITE]) - 13 : barHeight - 8;
+          }else{
+            return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) - 13 : barHeight - 8;
+          }
+        })
 
       //UPDATE TABLE
       $("table").height($("table").width()*0.8);

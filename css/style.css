@@ -684,6 +684,9 @@ html .ui-button.ui-state-disabled:active {
   ul.tagit li.tagit-new {
     width: 120px !important;
   }
+  .tagit-label {
+    font-size: 13px !important;
+  }
 }
 
 @media (max-width: 900px) {
