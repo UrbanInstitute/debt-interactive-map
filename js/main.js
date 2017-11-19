@@ -220,7 +220,7 @@ function ready(error, us, county, state) {
           }
         },
         afterTagAdded: function(event, ui) { 
-          ($(".ui-widget").css("height", 60))
+          ($(".search-div > .ui-widget").css("height", 60))
           var tag = (ui.tag[0]["textContent"]);
           var county = (tag.search(",") > 0) ? tag.split(",")[0] : "";
           var state = (tag.search(",") > 0) ? (tag.split(", ")[1]).slice(0,-1) : tag.slice(0,-1);
@@ -280,7 +280,7 @@ function ready(error, us, county, state) {
 
         }
     });
-    $(".ui-widget").css("height", 60)
+    $(".search-div > .ui-widget").css("height", 60)
     $(".ui-widget-content.ui-autocomplete-input").css({"font-style" : "italic"})
     $(".ui-widget-content.ui-autocomplete-input").css({"font-weight" : "400"})
     $('.ui-widget-content.ui-autocomplete-input').attr('placeholder', 'Search for a state or county')
@@ -406,6 +406,7 @@ function ready(error, us, county, state) {
 
         }
     $("#county-select").selectmenu("refresh");
+    console.log(filteredCounties)
   }
 
   var selectedLocation = function() { 
@@ -1828,7 +1829,7 @@ function ready(error, us, county, state) {
   }
   function addTag(state, county, abbr) { 
       var widgetHeight = (IS_MOBILE) ? 80 : 60;
-      ($(".ui-widget").css("height", widgetHeight))
+      ($(".search-div > .ui-widget").css("height", widgetHeight))
       d3.selectAll('li.tagit-choice').remove()
       var newTag = $("ul.tagit").append('<li id="state" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable"></li>')
       $('li#state').insertBefore(".tagit-new").append('<span class="tagit-label">' + state + '</span>')
@@ -2027,9 +2028,7 @@ function ready(error, us, county, state) {
     var mobilePadding = (IS_MOBILE) ? 0 : 15;
     var width = tdMap - mobilePadding,  //- margin.right-margin.left,
         height = (IS_PHONE) ? (width) - margin.top-margin.bottom :  setHeight,//(width*.57) - margin.top-margin.bottom,       
-        barSvgHeight = height/3.5,
-        widgetHeight = (IS_MOBILE) ? 80 : 60;
-    ($(".ui-widget").css("height", widgetHeight))
+        barSvgHeight = height/3.5
     if (IS_PHONE) {
       var barSvgHeight_ph = (IS_PHONESM) ? 200 : 180;
       var barWidth_ph = (IS_PHONESM) ? width : width*.85;
@@ -2089,6 +2088,8 @@ function ready(error, us, county, state) {
         })
 
     }else {
+      var widgetHeight = (IS_MOBILE) ? 80 : 60;
+      ($(".search-div > .ui-widget").css("height", widgetHeight))
       if (d3.selectAll("path.selected").size() > 0){
         setZoom(false, false, false, true)
         zoomMap(null, "national")
