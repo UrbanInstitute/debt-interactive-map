@@ -24,7 +24,7 @@ function setWidth(width, mobile, phone) {
     tdMap = 870 - margin.right - margin.left
   }else if ($("body").width() <= 1200 && !mobile){ 
     tdMap = width - margin.right -margin.left
-  }else if (mobile && !phone) { 
+  }else if (mobile && !phone) { console.log(width)
     tdMap = width
   }else if (phone) {
     tdMap = width - margin.right -margin.left
@@ -61,7 +61,7 @@ function setZoom(national, state, county, national_st) {
 function selectedStatePh() {
 
 }
-var initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width()
+var initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width() - 15
 setWidth(initialWidth, IS_MOBILE, IS_PHONE)
 setZoom(true,false, false)
 setVariable("perc_debt_collect")
@@ -444,6 +444,7 @@ function ready(error, us, county, state) {
           var selectedCategory = $("#category-select").val()
           updateBars(selectedCategory, selectedPlace)
           d3.select(".group-label-ph2.State").text(selectedPlace)
+          d3.select(".group-label-ph.State").text(selectedPlace)
 
         }else {
           $(".bar-County").css("display", "none")
@@ -485,7 +486,7 @@ function ready(error, us, county, state) {
         var selectedCategory = $("#category-select").val()
         updateBars(selectedCategory, selectedPlace)
         d3.select(".group-label-ph2.County").text(selectedPlace)
-
+        d3.select(".group-label-ph.County").text(selectedPlace)
 
       }
     })
@@ -1002,7 +1003,7 @@ function ready(error, us, county, state) {
   var barData = [{data: us_data_ph[0]}, {data: us_data_ph[0]}, {data: us_data_ph[0]} ]
   console.log(us_data_ph)
     /*MOBILE*/
-  var barSvgHeight_ph = (IS_PHONESM) ? 200 : 180;
+  var barSvgHeight_ph = (IS_PHONESM) ? 200 : 173;
   var barWidth_ph = (IS_PHONESM) ? width : width*.85;
   var x_ph = d3.scaleLinear().range([0, barWidth_ph]);
   var y_ph = d3.scaleBand().range([30, 0]);
@@ -1028,17 +1029,31 @@ function ready(error, us, county, state) {
   for (i=0; i<=groups_ph.length - 1; i++){
     var group = groups_ph[i]
     var category = categories[i]
+    d3.select(".label-" + group )
+      .append("svg")
+      .attr("width", 200)
+      .attr("height", 20)
+      .append("text")
+      .text(group)
+      .attr("class", function() {
+        return "group-label-ph " + group
+      })
+      .attr("transform", "translate(" + 15 + "," + 15 + ")")
+      .attr("text-anchor", "start")
     var barLabel = d3.select(".label-" + group )
       .append("svg")
       .attr("width", 82)
-      .attr("height", 163)
-    barLabel.append("text")
-      .text(function(d,i) {
-        return group;
-      })
-      .attr("transform", "translate(" + 74 + "," + 20 + ")")
-      .attr("text-anchor", "end")
-      .attr("class", "group-label-ph")
+      .attr("height", 130)
+
+    // barLabel.append("text")
+    //   .text(function(d,i) {
+    //     return group;
+    //   })
+    //   .attr("transform", "translate(" + 74 + "," + 20 + ")")
+    //   .attr("text-anchor", "end")
+    //   .attr("class", function() {
+    //     return "group-label-ph " + group
+    //   })
     barLabel.selectAll("g")
       .data(categories)
       .enter()
@@ -1049,7 +1064,7 @@ function ready(error, us, county, state) {
       })
       .attr("class", "category-labels-ph")
       .attr("transform", function(d,i) {
-        return (IS_PHONESM) ? "translate(" + 74 + "," + (52*i + 57) + ")" : "translate(" + 74 + "," + (40*i + 57) + ")";
+        return (IS_PHONESM) ? "translate(" + 0 + "," + (52*i + 57) + ")" : "translate(" + 74 + "," + (40*i + 25) + ")";
       })
       .attr("text-anchor", "end")
 
@@ -1061,7 +1076,9 @@ function ready(error, us, county, state) {
       .attr("class", function(d,i) {
         return "bar-group-ph " + group
       })
-      .attr("transform", "translate(" + 0 + "," + 12 + ")")
+      .attr("transform", function(d,i) {
+        return (IS_PHONESM) ? "translate(" + 0 + "," + (20) + ")" : "translate(" + 0 + "," + 0 + ")";
+      })
     barG_ph.append("text")
       .text(function(d,i) {
         return group;
@@ -1178,7 +1195,7 @@ function ready(error, us, county, state) {
     /*DESKTOP*/
 
 
-    var barSvgHeight = (IS_MOBILE) ? 160 : 130;
+    var barSvgHeight = (IS_MOBILE) ? 165 : 130;
     var barHeight = (IS_MOBILE) ? 90 : 65;
     var barWidth = (IS_MOBILE) ? 45 : 50;
     var x = d3.scaleBand()
@@ -1216,10 +1233,10 @@ function ready(error, us, county, state) {
     var yAxis = d3.axisLeft()
         .scale(y)
         .tickFormat(formatPercent);
-
+    var chartPadding = (IS_MOBILE) ? 20 : 0;
     var barSvg = d3.select("#bar-chart")
       .append("svg")
-      .attr('width', width)
+      .attr('width', width - chartPadding)
       .attr('height', barSvgHeight)
     var barG = barSvg.selectAll("g")
       .data(groups)
@@ -2026,11 +2043,13 @@ function ready(error, us, county, state) {
     //    margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55}
     setWidth(initialWidth, IS_MOBILE, IS_PHONE)
     var mobilePadding = (IS_MOBILE) ? 0 : 15;
+    console.log(tdMap)
     var width = tdMap - mobilePadding,  //- margin.right-margin.left,
         height = (IS_PHONE) ? (width) - margin.top-margin.bottom :  setHeight,//(width*.57) - margin.top-margin.bottom,       
         barSvgHeight = height/3.5
+        console.log(width)
     if (IS_PHONE) {
-      var barSvgHeight_ph = (IS_PHONESM) ? 200 : 180;
+      var barSvgHeight_ph = (IS_PHONESM) ? 200 : 173;
       var barWidth_ph = (IS_PHONESM) ? width : width*.85;
       var x_ph = d3.scaleLinear().range([0, barWidth_ph]);
       x_ph.domain([0, d3.max(county_data, function(d) {
@@ -2051,11 +2070,20 @@ function ready(error, us, county, state) {
               return (IS_PHONESM) ? "translate(" + 0 + "," + (52*i) + ")" : "translate(" + 0 + "," + (40*i) + ")";
             })
         })
-      barLabel.selectAll(".category-labels-ph")
+      d3.selectAll("g.bar-group-ph")
         .each(function(d,i) {
           d3.select(this)
-          .attr("transform", function() {
-            return (IS_PHONESM) ? "translate(" + 74 + "," + (52*i + 57) + ")" : "translate(" + 74 + "," + (40*i + 57) + ")";
+            .attr("transform", function() {
+              return (IS_PHONESM) ? "translate(" + 0 + "," + (20) + ")" : "translate(" + 0 + "," + 0 + ")";
+            })
+        })
+
+      d3.selectAll(".label").selectAll(".category-labels-ph")
+        .each(function(d,i) {
+          d3.select(this)
+          .attr("transform", function() {console.log(i)
+            return (IS_PHONESM) ? "translate(" + 0 + "," + (52*i + 57) + ")" : "translate(" + 74 + "," + (40*i + 25) + ")";
+
           })
         })
       d3.selectAll(".label")
@@ -2102,10 +2130,10 @@ function ready(error, us, county, state) {
       d3.selectAll("path.selected")
         .classed("selectedNational", true)
       //UPDATE MOBILE LEGEND
-      d3.select("#legend-div")
+      d3.select("#legend-div").select("svg")
         .attr("width", width*.9)
       //UPDATE BAR CHARTS
-      var chartPadding = (IS_MOBILE) ? 10 : 0;
+      var chartPadding = (IS_MOBILE) ? 20 : 0;
       d3.select("#bar-chart").select("svg")
         .attr('width', width - chartPadding)
         .attr("height", barSvgHeight)
@@ -2173,9 +2201,8 @@ function ready(error, us, county, state) {
             return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) - 13 : barHeight - 8;
           }
         })
-
-      //UPDATE TABLE
       $("table").height($("table").width()*0.8);
+      // var chartPadding = (IS_MOBILE) ? 15 : 0;
       d3.select("#map").select('svg')
         .attr('width', width)
         .attr('height', height)
