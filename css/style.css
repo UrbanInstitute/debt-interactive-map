@@ -295,7 +295,7 @@ h2 {
   margin-bottom: 20px;
 }
 .map-div {
-  margin: 20px 31px 30px 55px
+  margin: 20px 0px 30px 55px
 }
 .search-div-main {
   background-color: #f5f5f5;
@@ -708,7 +708,9 @@ html .ui-button.ui-state-disabled:active {
   .intro-wrap {
     width: 100%;
   }
-
+  #bar-chart{
+    width: unset;
+  }
   .legend-title {
     font-size: 16px;
     font-weight: 400;
