@@ -535,6 +535,7 @@ function ready(error, us, county, state) {
       .append("svg")
       .attr("width", width)
       .attr("height", height)
+      .attr("overflow", "hidden")
 
     svg.append("rect")
         .attr("width", width)
@@ -547,7 +548,6 @@ function ready(error, us, county, state) {
     // projection.fitSize([width, height], states);
     var g = svg.append("g")
       .attr("class", "map-g")
-      .attr("overflow", "hidden")
       .attr("transform", "translate(" + 0 + "," + height / 7 + ")scale(" +width/1000 + ")")
 
     g.append("g")
