@@ -150,8 +150,8 @@ a:hover {
 }
 .credits-text {
   font-size: 14px;
-  font-style: italic;
-  line-height: 22px !important;
+/*  font-style: italic;
+*/  line-height: 22px !important;
 }
 .bottom-text {
   clear: both;

@@ -313,12 +313,12 @@ function ready(error, us, county, state) {
 
  /*ADD DROPDOWNS*/
     var categoryData = [{label: "Share with any debt in collections", variable: "perc_debt_collect"},
-    {label: "Median debt in collections, 2016", variable: "med_debt_collect"},
-    {label: "Share with medical debt in collections, 2016", variable: "perc_debt_med"},
-    {label: "Median medical debt in collections, 2016", variable: "med_debt_med"},
-    {label: "Share of non-white population, 2015", variable: "perc_pop_nw"},
-    {label: "Share without health insurance, 2015", variable: "perc_pop_no_ins" },
-    {label: "Average household income, 2015", variable: "avg_income"}]
+    {label: "Median debt in collections", variable: "med_debt_collect"},
+    {label: "Share with medical debt in collections", variable: "perc_debt_med"},
+    {label: "Median medical debt in collections", variable: "med_debt_med"},
+    {label: "Nonwhite population share", variable: "perc_pop_nw"},
+    {label: "Share without health insurance", variable: "perc_pop_no_ins" },
+    {label: "Average household income", variable: "avg_income"}]
     
     var table = d3.select("#table-div")
     var stateMenu = d3.select(".state-menu")
@@ -944,7 +944,7 @@ function ready(error, us, county, state) {
   /*ADD TABLE*/
     $("#table-div").empty()
     var columns = ["All", "White", "Non-White"]
-    var groups = ["Share with any debt in collections", "Median debt in collections, 2016", "Share with medical debt in collections, 2016", "Median medical debt in collections, 2016","Share of non-white population, 2015", "Share without health insurance coverage, 2015","Average household income, 2015"]
+    var groups = ["Share with any debt in collections", "Median debt in collections", "Share with medical debt in collections", "Median medical debt in collections","Nonwhite population share", "Share without health insurance coverage","Average household income"]
     var rowNumbers = [1,2,3]
     var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]
     var table = d3.select("#table-div")
