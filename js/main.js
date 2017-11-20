@@ -665,12 +665,40 @@ function ready(error, us, county, state) {
         if (zoomNational == true || zoomNational_St == true) { 
           // $(".state-borders").css("pointer-events", "all")
           // $(".counties").css("pointer-events", "none")
-          hoverLocation("", d.properties.abbr, "state");
+          if (d3.select(this).attr("class").search("hover") > 0){
+            console.log('do nothing')
+          }else {
+            hoverLocation("", d.properties.abbr, "state");
+          }
           updateBars(SELECTED_VARIABLE, d) 
         }else {
           // $(".state-borders").css("pointer-events", "none")
           // $(".counties").css("pointer-events", "all")
 
+        }
+      })
+      .on('mouseleave', function(d) { console.log('mouseleave-st')
+        if (zoomNational==true || zoomNational_St == true) {
+          if (d3.select(".state-borders > path.selected").node() != undefined && zoomNational_St != true) {
+            var state = d3.select(".state-borders > path.selected").datum().properties.state
+            d3.select("#location").html(state)
+            d3.selectAll("path.selected").moveToFront()
+          }else if (zoomNational_St == true){ 
+            d3.selectAll(".hover")
+              .classed("hover", false)
+              .classed("hoverNational", false)
+            d3.selectAll("path.selected").moveToFront()
+            var selected = (d3.select(".counties > path.selected").size() > 0) ? d3.select(".counties > path.selected").datum() : d3.select(".state-borders > path.selected").datum()
+            var geography = (d3.select(".counties > path.selected").size() > 0) ? selected.properties["county"] + ", " + selected.properties["abbr"] : selected.properties["state"];
+            d3.select('#location').html(geography)
+            updateBars(SELECTED_VARIABLE, selected)
+          }else { 
+            d3.select('#location').html("National")
+            d3.selectAll(".hover")
+              .classed("hover", false)
+              .classed("hoverNational", false)
+            updateBars(SELECTED_VARIABLE, undefined)
+          }
         }
       })
       .on('mouseout', function(d) { console.log('mouseout-st')
@@ -886,7 +914,7 @@ function ready(error, us, county, state) {
           } 
       });
   };
-  function hoverLocation(county, state, geography) {
+  function hoverLocation(county, state, geography) {console.log('hover location')
     var data =  tmp_county;
     var filteredData = data.filter(function(d){ 
       if (geography == "county") {
