@@ -665,11 +665,7 @@ function ready(error, us, county, state) {
         if (zoomNational == true || zoomNational_St == true) { 
           // $(".state-borders").css("pointer-events", "all")
           // $(".counties").css("pointer-events", "none")
-          if (d3.select(this).attr("class").search("hover") > 0){
-            console.log('do nothing')
-          }else {
             hoverLocation("", d.properties.abbr, "state");
-          }
           updateBars(SELECTED_VARIABLE, d) 
         }else {
           // $(".state-borders").css("pointer-events", "none")
@@ -914,7 +910,7 @@ function ready(error, us, county, state) {
           } 
       });
   };
-  function hoverLocation(county, state, geography) {console.log('hover location')
+  function hoverLocation(county, state, geography) {
     var data =  tmp_county;
     var filteredData = data.filter(function(d){ 
       if (geography == "county") {
@@ -927,13 +923,17 @@ function ready(error, us, county, state) {
       return (geography=="county") ?  filteredData[0]["properties"]["county"] + ", " + filteredData[0]["properties"]["abbr"] : filteredData[0]["properties"]["state"] 
     })
     var id = (geography == "county") ? filteredData[0]["id"] : ""
-    d3.select("path#" + filteredData[0]["properties"]["abbr"] + id)
-      .classed('hover', true)
-      .classed('hide', false)
-      .classed("hoverNational", function() {
-        return (zoomNational == true || zoomNational_St) ? true : false
-      })
-      .moveToFront()
+    if ( d3.select("path#" + filteredData[0]["properties"]["abbr"] + id).classed("hover") == true) {
+      console.log('do nothing')
+    }else {
+      d3.select("path#" + filteredData[0]["properties"]["abbr"] + id)
+        .classed('hover', true)
+        .classed('hide', false)
+        .classed("hoverNational", function() {
+          return (zoomNational == true || zoomNational_St) ? true : false
+        })
+        .moveToFront()
+    }
   }
 
       // .datum(topojson.mesh(us, us.objects.states, function(a, b) { return a !== b; }))
