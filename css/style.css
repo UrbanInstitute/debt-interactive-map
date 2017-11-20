@@ -487,6 +487,7 @@ table {
 }
 .left-table {
   max-width: 328px;
+  margin-top: -7px;
 }
 .left-table > table {
   margin-top: 20px;
@@ -569,6 +570,9 @@ th {
   border-right: 5px solid #fff;
 /*  width: 288px;
 */}
+.group-0 {
+  border-top: 1.1px solid #ececec;
+}
 .group.selected, .group.selected td {
   background-color: #000;
   color: #fff;
