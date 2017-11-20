@@ -180,7 +180,7 @@ function ready(error, us, county, state) {
         }
       }
      dropdown = searchArray
-     $('input[name="tags"').tagit("option", {
+     $('input[name="tags"]').tagit("option", {
         availableTags: dropdown,
       })
     }
