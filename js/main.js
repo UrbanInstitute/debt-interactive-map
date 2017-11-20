@@ -416,7 +416,7 @@ function ready(error, us, county, state) {
     .selectmenu({
       open: function(event,ui) {
         var dropdownWidth = $("#dropdown-div").width()
-        var dropdownTop = $(".banner").height() + 112
+        var dropdownTop = $(".banner").height() + 113
         $(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").css("top", dropdownTop + "px")
         $("ul#state-select-menu").css("width", dropdownWidth + "px")
         $("ul#state-select-menu").css("margin-left", "-137px")
@@ -1758,8 +1758,9 @@ function ready(error, us, county, state) {
               }
             })
         })
-      if ( (zoomNational == true || zoomNational_St) && selected == null) { 
+      if ( (zoomNational == true) && selected == null) { 
         d3.selectAll("#State, #County").style("opacity", 0)
+      }else if (zoomNational_St && selected == null) {
       } else if (zoomNational == false || selected != null) { //IF MOUSE IS OVER A STATE OR COUNTY IN WHICHEVER VIEW
         var countyID = (d3.select(".counties > path.selected").node() == null) ? "" : d3.select(".counties > path.selected").attr("id");
         var countyIDHov = (d3.select(".counties > path.hover").node() == null) ? "" : d3.select(".counties > path.hover").attr("id");
