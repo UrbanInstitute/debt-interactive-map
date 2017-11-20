@@ -320,9 +320,14 @@ function ready(error, us, county, state) {
     {label: "Average household income", variable: "avg_income"}]
     
     var table = d3.select("#table-div")
+
     var stateMenu = d3.select(".state-menu")
+      .on('click', function() {
+        $("#state-select").trigger('open')
+      })
       .append("select")
       .attr("id", "state-select")
+
     var optionsState = stateMenu
       .selectAll('option')
       .data(state_data)
@@ -1504,7 +1509,7 @@ function ready(error, us, county, state) {
 
   function updateBars(variable, selected) { 
     d3.select("#notes-section").selectAll("p.note2, p.note1").style("opacity", 0)
-    d3.selectAll(".note-header").html("<b>Note:</b>")
+    // d3.selectAll(".note-header").html("<b>Note:</b>")
 
     var WHITE_ph = variable + "_wh"
     var NONWHITE_ph = variable + "_nw"
@@ -1991,11 +1996,11 @@ function ready(error, us, county, state) {
             rowVariable_wh = rowVariable + "_wh";
         if ((data[rowVariable]) == "n<50" || (data[rowVariable_nw]) == "n<50" || (data[rowVariable_wh]) == "n<50") { 
           d3.select("p.note1").style("opacity", 1)
-          d3.selectAll(".note-header").text("Notes:")
+          d3.selectAll(".note-header").html("<b>Notes:</b>")
         }
         if ((data[rowVariable]) == "N/A" || (data[rowVariable_nw]) == "N/A" || (data[rowVariable_wh]) == "N/A") {
           d3.select("p.note2").style("opacity", 1)
-          d3.selectAll(".note-header").text("Notes:")
+          d3.selectAll(".note-header").html("<b>Notes:</b>")
         }
         d3.select(this).selectAll("td")
           .text(function(d,i) { 
