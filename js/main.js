@@ -188,7 +188,7 @@ function ready(error, us, county, state) {
       appendTo: ".search-div",
     });
 
-    $('input[name="tags"').tagit({
+    $('input[name="tags"]').tagit({
         availableTags: dropdown,
         allowSpaces: true,
         autocomplete:{
