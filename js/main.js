@@ -1724,7 +1724,8 @@ function ready(error, us, county, state) {
       } else if (zoomNational == false && selected != null) { //IF MOUSE IS OVER A STATE OR COUNTY IN WHICHEVER VIEW
         var countyID = (d3.select(".counties > path.selected").node() == null) ? "" : d3.select(".counties > path.selected").attr("id");
         var countyIDHov = (d3.select(".counties > path.hover").node() == null) ? "" : d3.select(".counties > path.hover").attr("id");
-        var county = (countyID == "") ? "" : countyID.slice(2,);
+        var county = (countyID == "") ? "" : countyID.slice(2);
+        console.log(countyID.slice(2))
         var state = selected["properties"]["abbr"]
         var data =  tmp_county
         var State = d3.select("#State").selectAll(".category")
