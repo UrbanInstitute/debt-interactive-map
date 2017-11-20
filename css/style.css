@@ -84,8 +84,11 @@ input:-moz-placeholder { text-overflow: ellipsis; }
 
 #bar-chart-mobile {
   display: none;
-}
 
+}
+#bar-chart {
+  width: 100%;
+}
 #topic {
   height: 22px;
   font-family: Lato;
