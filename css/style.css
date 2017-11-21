@@ -82,6 +82,7 @@ input:-moz-placeholder { text-overflow: ellipsis; }
 .intro-wrap {
     height: auto;
     z-index: 20000;
+    max-width: 1200px;
 }
 .select-table {
   font-style: italic;
