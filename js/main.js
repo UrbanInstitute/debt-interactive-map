@@ -3,7 +3,7 @@ var IS_PHONE;
 var IS_PHONESM;
 var BREAKS ={"perc_debt_collect":[0.22, .31, .39, .49], "med_debt_collect":[1200, 1500, 1800, 2300], "perc_debt_med":[.11,.18,.26,.34], "med_debt_med":[500,700,950,1250], "perc_pop_nw":[.13,.28,.46,.67], "perc_pop_no_ins":[.08,.13,.18,.26], "avg_income":[52650,63850,77900,101050]}
 var legendWidth = {"perc_debt_collect": 60, "perc_debt_med": 58, "med_debt_collect": 73, "med_debt_med": 70, "perc_pop_nw": 63, "perc_pop_no_ins": 60, "avg_income": 89}
-var legendTranslate = {"perc_debt_collect": 642, "perc_debt_med": 644, "med_debt_collect": 628, "med_debt_med":631, "perc_pop_nw":638, "perc_pop_no_ins": 642, "avg_income":615}
+// var legendTranslate = {"perc_debt_collect": width-60, "perc_debt_med": 644, "med_debt_collect": 628, "med_debt_med":631, "perc_pop_nw":638, "perc_pop_no_ins": 642, "avg_income":615}
 
 var SELECTED_VARIABLE;
 var WHITE;
@@ -871,7 +871,7 @@ function ready(error, us, county, state) {
       return (IS_MOBILE) ? 73: 57
     })
     .attr("class", "rect-div")
-    .attr("height", 175)
+    .attr("height", 177)
     .style("fill", "#f5f5f5")
     .style("opacity", 0.8)
     .attr('transform', 'translate(' + (width- 54) + ',' + (-1) + ')')
@@ -1009,7 +1009,7 @@ function ready(error, us, county, state) {
               .attr("width", function() {console.log(legendWidth[d])
                 return (IS_MOBILE) ? 73: legendWidth[d]
               })
-              .attr('transform', 'translate(' + (legendTranslate[d]) + ',' + (-1) + ')')
+              .attr('transform', 'translate(' + (width - legendWidth[d]) + ',' + (-1) + ')')
             // }
             setVariable(d)
             updateMap(d)
