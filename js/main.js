@@ -1315,7 +1315,7 @@ function ready(error, us, county, state) {
     var yAxis = d3.axisLeft()
         .scale(y)
         .tickFormat(formatPercent);
-    var chartPadding = (IS_MOBILE) ? 20 : 0;
+    var chartPadding = (IS_MOBILE) ? 15 : 0;
     var barSvg = d3.select("#bar-chart")
       .append("svg")
       .attr('width', width - chartPadding)
@@ -1325,7 +1325,7 @@ function ready(error, us, county, state) {
       .enter()
       .append('g')
       .attr("transform", function(d,i) {
-        return "translate(" + ( (width/3 + 5) * i) + "," + (20) + ")";
+        return "translate(" + ( (width/3.1 + 5) * i) + "," + (20) + ")";
       })
       .attr("id", function(d) { 
         return d
@@ -2099,11 +2099,12 @@ function ready(error, us, county, state) {
         y = (bounds[0][1] + bounds[1][1]) / 2,
         scale = .9 / Math.max(dx / width, dy / height),
         translate = [width / 2 - scale * x, height / 2 - scale * y];
+        console.log(width / 2 - scale * x)
       g.transition()
         .duration(750)
         .attr("transform", "translate(" + translate + ")scale(" + scale + ")");
 
-      if (zoomLevel == "county") { 
+      if (zoomLevel == "county") { console.log('county')
           setZoom(false, true, true)
           d3.select("#location").html(d["properties"]["county"] + ", " + d["properties"]["abbr"] )
           d3.selectAll("g.counties > path").classed("selected", false)
@@ -2251,7 +2252,7 @@ function ready(error, us, county, state) {
       d3.select("#legend-div").select("svg")
         .attr("width", width*.9)
       //UPDATE BAR CHARTS
-      var chartPadding = (IS_MOBILE) ? 20 : 0;
+      var chartPadding = (IS_MOBILE) ? 15 : 0;
       d3.select("#bar-chart").select("svg")
         .attr('width', width - chartPadding)
         .attr("height", barSvgHeight)
@@ -2259,7 +2260,7 @@ function ready(error, us, county, state) {
         .each(function(d,i) {
           d3.select(this)
           .attr("transform", function(d,i) {
-            return "translate(" + ( (width/3 + 5) * i) + "," + (20) + ")";
+            return "translate(" + ( (width/3.1 + 5) * i) + "," + (20) + ")";
           })
         })
       d3.selectAll(".category")
@@ -2339,7 +2340,7 @@ function ready(error, us, county, state) {
         .each(function(d,i) {
           d3.select(this)
             .attr("transform", function() { 
-              return "translate(" + ( (width/3 + 5) * i) + "," + (20) + ")";
+              return "translate(" + ( (width/3.1 + 5) * i) + "," + (20) + ")";
             })
         })
       barG.selectAll('.category')

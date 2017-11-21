@@ -702,7 +702,15 @@ html .ui-button.ui-state-disabled:active {
   }
 
 }
+@media (max-width: 1100px) {
+  .td-table{
+    min-width: 281px !important;
+  }
+}
 @media (max-width: 930px) {
+  .td-table{
+    min-width: 251px !important;
+  }
   ul.tagit li.tagit-new {
     width: 120px !important;
   }
@@ -712,6 +720,9 @@ html .ui-button.ui-state-disabled:active {
 }
 
 @media (max-width: 900px) {
+  .td-table{
+    min-width: 231px !important;
+  }
   .intro-wrap {
     width: 100%;
   }
@@ -782,7 +793,10 @@ html .ui-button.ui-state-disabled:active {
   padding-left: 10px;
   float: left;
 }
+@media (max-width: 800px){
 
+  
+}
 
 @media (max-width: 700px) {
   .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-state-active.ui-button:hover{ 
