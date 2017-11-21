@@ -2,6 +2,9 @@ var IS_MOBILE;
 var IS_PHONE;
 var IS_PHONESM;
 var BREAKS ={"perc_debt_collect":[0.22, .31, .39, .49], "med_debt_collect":[1200, 1500, 1800, 2300], "perc_debt_med":[.11,.18,.26,.34], "med_debt_med":[500,700,950,1250], "perc_pop_nw":[.13,.28,.46,.67], "perc_pop_no_ins":[.08,.13,.18,.26], "avg_income":[52650,63850,77900,101050]}
+var legendWidth = {"perc_debt_collect": 60, "perc_debt_med": 58, "med_debt_collect": 73, "med_debt_med": 70, "perc_pop_nw": 63, "perc_pop_no_ins": 60, "avg_income": 89}
+var legendTranslate = {"perc_debt_collect": 642, "perc_debt_med": 644, "med_debt_collect": 628, "med_debt_med":631, "perc_pop_nw":638, "perc_pop_no_ins": 642, "avg_income":615}
+
 var SELECTED_VARIABLE;
 var WHITE;
 var NONWHITE;
@@ -575,9 +578,10 @@ function ready(error, us, county, state) {
     // var states = topojson.feature(us, us.objects.states);
     // projection.fitSize([width, height], states);
     var translateHeight = (IS_MOBILE) ? height*.05 : height*.05
+    var mapScale = (IS_MOBILE) ? width/930 : width/1010
     var g = svg.append("g")
       .attr("class", "map-g")
-      .attr("transform", "translate(" + (-10) + "," + (translateHeight) + ")scale(" +width/930 + ")")
+      .attr("transform", "translate(" + (-10) + "," + (translateHeight) + ")scale(" +mapScale + ")")
 
     g.append("g")
       .attr("class", "counties")
@@ -983,30 +987,30 @@ function ready(error, us, county, state) {
           .attr("class", function(d, i) {
             return "group group-" + i
           })
-          .on('click', function(d) { 
+          .on('click', function(d) { console.log(d)
             d3.selectAll('tbody')
               .classed('selected', false)
             d3.select(this)
               .classed('selected', true)
-            if (d == "med_debt_collect"|| d=="med_debt_med") {
+            // if (d == "med_debt_collect"|| d=="med_debt_med") {
+            //   d3.select(".rect-div")
+            //     .attr("width", 73)
+            //     .attr('transform', 'translate(' + (width- 72) + ',' + (-1) + ')')
+            // }else if (d == "med_debt_collect"|| d=="med_debt_med") {
+            //   d3.select(".rect-div")
+            //     .attr("width", 85)
+            //     .attr('transform', 'translate(' + (width- 83) + ',' + (-1) + ')')
+            // }else if (d == "avg_income") {
+            //   d3.select(".rect-div")
+            //     .attr("width", 89)
+            //     .attr('transform', 'translate(' + (width- 85) + ',' + (-1) + ')')
+            // }else {
               d3.select(".rect-div")
-                .attr("width", 73)
-                .attr('transform', 'translate(' + (width- 72) + ',' + (-1) + ')')
-            }else if (d == "med_debt_collect"|| d=="med_debt_med") {
-              d3.select(".rect-div")
-                .attr("width", 85)
-                .attr('transform', 'translate(' + (width- 83) + ',' + (-1) + ')')
-            }else if (d == "avg_income") {
-              d3.select(".rect-div")
-                .attr("width", 89)
-                .attr('transform', 'translate(' + (width- 85) + ',' + (-1) + ')')
-            }else {
-              d3.select(".rect-div")
-              .attr("width", function() {
-                return (IS_MOBILE) ? 73: 63
+              .attr("width", function() {console.log(legendWidth[d])
+                return (IS_MOBILE) ? 73: legendWidth[d]
               })
-              .attr('transform', 'translate(' + (width- 61) + ',' + (-1) + ')')
-            }
+              .attr('transform', 'translate(' + (legendTranslate[d]) + ',' + (-1) + ')')
+            // }
             setVariable(d)
             updateMap(d)
           })
@@ -2131,10 +2135,12 @@ function ready(error, us, county, state) {
       centered = null;
       g.selectAll("path")
           .classed("active", centered && function(d) {return d === centered; });
-      var translateHeight = height*.05
+      var translateHeight = height*.05,
+          mapScale = (IS_MOBILE) ? width/930 : width/1010;
+
       g.transition()
           .duration(750)
-          .attr("transform", "translate(" + (-10) + "," + (translateHeight) + ")scale(" +width/930 + ")")
+          .attr("transform", "translate(" + (-10) + "," + (translateHeight) + ")scale(" + mapScale + ")")
           // .style("stroke-width", 1.5 / k + "px");
       d3.selectAll("path.selected").classed("selectedNational", true)
     }
@@ -2319,12 +2325,14 @@ function ready(error, us, county, state) {
       d3.select("#map").select('svg')
         .attr('width', width)
         .attr('height', height)
+        console.log(height)
       svg.select("rect")
         .attr('width', width)
         .attr('height', height)
-      translateHeight = (IS_MOBILE) ? height*.05 : height*.1;
+      var translateHeight = (IS_MOBILE) ? height*.05 : height*.1,
+          mapScale = (IS_MOBILE) ? width/930 : width/1010;
       svg.select(".map-g")
-        .attr("transform", "translate(" + (-10) + "," + (translateHeight) + ")scale(" +width/930 + ")")
+        .attr("transform", "translate(" + (-10) + "," + (translateHeight) + ")scale(" + mapScale + ")")
 
       //  .attr("transform", "scale(" + width/1060 + ")");
       d3.selectAll(".bar-group")
