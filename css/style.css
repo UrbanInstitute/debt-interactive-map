@@ -76,7 +76,6 @@ input:-moz-placeholder { text-overflow: ellipsis; }
 .intro-wrap {
     height: auto;
     z-index: 20000;
-    width: 57.5%;
 }
 .select-table {
   font-style: italic;
@@ -236,7 +235,7 @@ table {
 }
 #intro-text {
   background-color: rgba(17, 46, 59, 0.8);
-  padding: 42px 36px 41px 67px;
+  padding: 42px;
 }
 h1 {
   font-size: 24px;

@@ -65,7 +65,7 @@ setWidth(initialWidth, IS_MOBILE, IS_PHONE)
 setZoom(true,false, false)
 setVariable("perc_debt_collect")
 setVariable("perc_debt_collect", true)
-var setHeight = (IS_MOBILE) ? 470 : 560;
+var setHeight = tdMap*.7;
 var width =  tdMap,  //(IS_MOBILE && !IS_PHONE) ? tdMap : (tdMap) - margin.right-margin.left,
     height = (IS_PHONE) ? (width) - margin.top-margin.bottom :  setHeight,//(width*.57) - margin.top-margin.bottom,     
     centered,
@@ -249,7 +249,7 @@ function ready(error, us, county, state) {
           // var filteredData = (filteredCounty.length != 0) ? filteredCounty : filteredState;
           var data = filteredData[0]
           // var state = data["properties"]["abbr"]
-          zoomMap(data, geoType)
+          zoomMap(width, data, geoType)
           if (geoType == "county") { 
             addTag(data["properties"]["state"], county, state)
           }else {
@@ -269,7 +269,7 @@ function ready(error, us, county, state) {
               .classed("selected", false)
             setZoom(true, false, false)
             if (d3.select("li#state").size() == 0) {
-              zoomMap(null, "national")
+              zoomMap(width, null, "national")
             }
            }
           updateBars(SELECTED_VARIABLE)
@@ -323,7 +323,13 @@ function ready(error, us, county, state) {
 
     var stateMenu = d3.select(".state-menu")
       .on('click', function() {
-        $("#state-select").trigger('open')
+        if ( d3.select(".state-menu.dropdown").classed("open") == true) {
+          $("#state-select").selectmenu('close')
+          d3.select(".state-menu.dropdown").classed("open", false)
+        }else {
+          d3.select(".state-menu.dropdown").classed("open", true)
+          $("#state-select").selectmenu('open')
+        }
       })
       .append("select")
       .attr("id", "state-select")
@@ -340,6 +346,15 @@ function ready(error, us, county, state) {
         return d.state
       })
     var countyMenu = d3.select(".county-menu")
+      .on('click', function() {
+        if ( d3.select(".county-menu.dropdown").classed("open") == true) {
+          $("#county-select").selectmenu('close')
+          d3.select(".county-menu.dropdown").classed("open", false)
+        }else {
+          d3.select(".county-menu.dropdown").classed("open", true)
+          $("#county-select").selectmenu('open')
+        }
+      })
       .append("select")
       .attr("id", "county-select")
     var optionsCounty = countyMenu
@@ -351,6 +366,15 @@ function ready(error, us, county, state) {
         return d.county
       })
    var categoryMenu = d3.select(".category-menu")
+        .on('click', function() {
+          if ( d3.select(".category-menu.dropdown").classed("open") == true) {
+            $("#category-select").selectmenu('close')
+            d3.select(".category-menu.dropdown").classed("open", false)
+          }else {
+            d3.select(".category-menu.dropdown").classed("open", true)
+            $("#category-select").selectmenu('open')
+          }
+        })
         .append("select")
         .attr("id", "category-select")
       var optionsCategory = categoryMenu
@@ -549,9 +573,10 @@ function ready(error, us, county, state) {
     var path = d3.geoPath()//.projection(projection)
     // var states = topojson.feature(us, us.objects.states);
     // projection.fitSize([width, height], states);
+    var translateHeight = (IS_MOBILE) ? height*.05 : height*.05
     var g = svg.append("g")
       .attr("class", "map-g")
-      .attr("transform", "translate(" + (-10) + "," + height / 7 + ")scale(" +width/950 + ")")
+      .attr("transform", "translate(" + (-10) + "," + (translateHeight) + ")scale(" +width/930 + ")")
 
     g.append("g")
       .attr("class", "counties")
@@ -587,7 +612,7 @@ function ready(error, us, county, state) {
           reset()
           var county = (level == "state") ? null : county;
           addTag(state, county, abbr)
-          zoomMap(d, level)
+          zoomMap(width, d, level)
           updateBars(SELECTED_VARIABLE, d)
         }
       })
@@ -662,7 +687,7 @@ function ready(error, us, county, state) {
         // $(".state-borders").css("pointer-events", "none")
         // $(".counties").css("pointer-events", "all")
         addTag(state, null, abbr)
-        zoomMap(d, level)
+        zoomMap(width, d, level)
         updateBars(SELECTED_VARIABLE, d)
       })
       .on('mouseover', function(d) { 
@@ -754,7 +779,7 @@ function ready(error, us, county, state) {
       .attr("height", 50)
       .on('click', function() {
         setZoom(false, false, false, true)
-        zoomMap(null, "national")
+        zoomMap(width, null, "national")
       })
 
     // d3.select(".map-g")
@@ -957,7 +982,7 @@ function ready(error, us, county, state) {
           .attr("class", function(d, i) {
             return "group group-" + i
           })
-          .on('click', function(d) { console.log(d)
+          .on('click', function(d) { 
             d3.selectAll('tbody')
               .classed('selected', false)
             d3.select(this)
@@ -1247,7 +1272,7 @@ function ready(error, us, county, state) {
     /*DESKTOP*/
 
 
-    var barSvgHeight = (IS_MOBILE) ? 165 : 130;
+    var barSvgHeight = (IS_MOBILE) ? 185 : 130;
     var barHeight = (IS_MOBILE) ? 90 : 65;
     var barWidth = (IS_MOBILE) ? 42 : 50;
     var x = d3.scaleBand()
@@ -1954,7 +1979,7 @@ function ready(error, us, county, state) {
           .classed("selected", false)
         d3.select("#location").html("National")
         setZoom(true,false, false)
-        zoomMap(null, "national")
+        zoomMap(width, null, "national")
         createSearchArray("")
       })
     if (county != undefined) { 
@@ -2026,7 +2051,7 @@ function ready(error, us, county, state) {
           })
       })
   }
-  function zoomMap(d,zoomLevel) { 
+  function zoomMap(width, d,zoomLevel) { 
     var x, y, k;
     d3.select(".state-borders").selectAll("path")
       .classed("hide", false)
@@ -2058,12 +2083,6 @@ function ready(error, us, county, state) {
       // centered = selectedState.properties.state;
       var data = (zoomLevel == "state") ? d3.select("path#" + selectedState.properties.abbr).datum() : d;
       updateTable(data)
-      // g.selectAll("path")
-      //     .classed("active", centered && function(d) { return d === centered; });
-      // g.transition()
-      //     .duration(750)
-      //     .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
-
 
       if (active.node() === this) return reset();
       active.classed("active", false);
@@ -2089,6 +2108,9 @@ function ready(error, us, county, state) {
           // updateTable(data)
       }
     }else { 
+      if (IS_MOBILE == true) {
+        d3.selectAll(".hover").classed("hover", false)
+      }
       //ZOOM OUT TO NATIONAL VIEW
       if (zoomNational_St == true) {
         updateBars(SELECTED_VARIABLE, null)
@@ -2108,12 +2130,11 @@ function ready(error, us, county, state) {
       centered = null;
       g.selectAll("path")
           .classed("active", centered && function(d) {return d === centered; });
-
+      var translateHeight = height*.05
       g.transition()
           .duration(750)
-          .attr("transform", "translate(" + (-10) + "," + height / 7 + ")scale(" +width/950 + ")")
+          .attr("transform", "translate(" + (-10) + "," + (translateHeight) + ")scale(" +width/930 + ")")
           // .style("stroke-width", 1.5 / k + "px");
-     
       d3.selectAll("path.selected").classed("selectedNational", true)
     }
       // var selectedPlace = (d3.selectAll(".counties").selectAll("path.selected").size() > 0) ? d3.selectAll(".counties").select("path.selected").datum() : d3.selectAll(".state-borders").select("path.selected").datum() ;
@@ -2124,10 +2145,11 @@ function ready(error, us, county, state) {
   $(window).resize(function() { 
     setScreenState (d3.select("#isMobile").style("display") == "block", d3.select("#isPhone").style("display") == "block", d3.select("#isPhoneSm").style("display") == "block" )
     initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width() 
-    barSvgHeight = (IS_MOBILE) ? 160 : 130;
+    barSvgHeight = (IS_MOBILE) ? 185 : 130
+    barSvgHeight_ph = (IS_PHONESM) ? 200 : 173
     barHeight = (IS_MOBILE) ? 90 : 65;
     barWidth = (IS_MOBILE) ? 42 : 50;
-    setHeight = (IS_MOBILE) ? 470 : 560;
+    setHeight = tdMap*.7;
     var x = d3.scaleBand()
       .rangeRound([0, barWidth])
     var xAxis = d3.axisBottom()
@@ -2135,9 +2157,8 @@ function ready(error, us, county, state) {
     //    margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55}
     setWidth(initialWidth, IS_MOBILE, IS_PHONE)
     var mobilePadding = (IS_MOBILE) ? 0 : 15;
-    var width = tdMap - mobilePadding,  //- margin.right-margin.left,
-        height = (IS_PHONE) ? (width) - margin.top-margin.bottom :  setHeight,//(width*.57) - margin.top-margin.bottom,       
-        barSvgHeight = height/3.5
+    width = tdMap - mobilePadding  //- margin.right-margin.left,
+    height = (IS_PHONE) ? (width) - margin.top-margin.bottom :  setHeight//(width*.57) - margin.top-margin.bottom,       
     if (IS_PHONE) {
       var barSvgHeight_ph = (IS_PHONESM) ? 200 : 173;
       var barWidth_ph = (IS_PHONESM) ? width : width*.85;
@@ -2205,12 +2226,12 @@ function ready(error, us, county, state) {
           }
         })
 
-    }else {
+    }else { 
       var widgetHeight = (IS_MOBILE) ? 80 : 60;
       ($(".search-div > .ui-widget").css("height", widgetHeight))
       if (d3.selectAll("path.selected").size() > 0){
         setZoom(false, false, false, true)
-        zoomMap(null, "national")
+        zoomMap(width, null, "national")
       }else {
         setZoom(true, false, false)
         // zoomMap(null, "national")
@@ -2300,8 +2321,9 @@ function ready(error, us, county, state) {
       svg.select("rect")
         .attr('width', width)
         .attr('height', height)
+      translateHeight = (IS_MOBILE) ? height*.05 : height*.1;
       svg.select(".map-g")
-          .attr("transform", "translate(" + (-10) + "," + height / 10 + ")scale(" +width/950 + ")")
+        .attr("transform", "translate(" + (-10) + "," + (translateHeight) + ")scale(" +width/930 + ")")
 
       //  .attr("transform", "scale(" + width/1060 + ")");
       d3.selectAll(".bar-group")
