@@ -439,6 +439,7 @@ function ready(error, us, county, state) {
   var selectedLocation = function() { 
     selectedCountyPh = d3.select("#county-select-button").select(".ui-selectmenu-text").text()
     selectedStatePh = d3.select("#state-select-button").select(".ui-selectmenu-text").text()
+    $(".ui-widget-content.ui-autocomplete-input").blur()
   }
 
   $("#state-select")
