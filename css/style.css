@@ -187,7 +187,7 @@ h1.bottom-header{
 
 }
 .bottom-container {
-  background-color: #d2d2d2;
+  background-color: #ececec;
   border-top: 1px solid rgb(173, 171, 172);
 }
 
@@ -799,6 +799,10 @@ html .ui-button.ui-state-disabled:active {
 }
 
 @media (max-width: 700px) {
+  .ui-selectmenu-menu .ui-menu {
+    max-height: 340px !important;
+    overflow: auto !important;
+  }
   .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-state-active.ui-button:hover{ 
     color: #fff !important;
     font-size: 14px !important;
