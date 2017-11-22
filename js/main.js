@@ -78,8 +78,8 @@ var width =  tdMap,  //(IS_MOBILE && !IS_PHONE) ? tdMap : (tdMap) - margin.right
 // d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
 //   if (error) throw error;
 d3.queue()
-    .defer(d3.json, "https://d3js.org/us-10m.v1.json")
-    .defer(d3.csv, "data/county_" + CATEGORY + "2.csv")
+    .defer(d3.json, "data/us-10m.v1.json")
+    .defer(d3.csv, "data/county_" + CATEGORY + ".csv")
     .defer(d3.csv, "data/state_"+ CATEGORY + ".csv")
     .await(ready);
 
@@ -96,7 +96,6 @@ function ready(error, us, county, state) {
   /*SETTING UP THE DATA*/
   var countyData = us.objects.counties.geometries
   var stateData = us.objects.states.geometries
-
   var county_data = transformData(county)
     county_data.forEach(function(d,i){ 
       for (var property in d["values"][0]) {
@@ -137,6 +136,7 @@ function ready(error, us, county, state) {
   var filteredCounties = county_data.filter(function(d) {
     return d.state == "USA"
   })
+
   var tmp_county = topojson.feature(us, us.objects.counties).features;
   for (var i =0; i<tmp_county.length; i++){
     var mergeID = +tmp_county[i]["id"]
@@ -247,11 +247,8 @@ function ready(error, us, county, state) {
               return d.properties["state"] == state;
             }
           })
-          // var geoType = (filteredCounty.length != 0) ? "county" : "state";
-          // var county = tagContent;
-          // var filteredData = (filteredCounty.length != 0) ? filteredCounty : filteredState;
           var data = filteredData[0]
-          // var state = data["properties"]["abbr"]
+          updateBars(SELECTED_VARIABLE, data)
           zoomMap(width, data, geoType)
           if (geoType == "county") { 
             addTag(data["properties"]["state"], county, state)
@@ -987,7 +984,7 @@ function ready(error, us, county, state) {
           .attr("class", function(d, i) {
             return "group group-" + i
           })
-          .on('click', function(d) { console.log(d)
+          .on('click', function(d) { 
             d3.selectAll('tbody')
               .classed('selected', false)
             d3.select(this)
@@ -1006,7 +1003,7 @@ function ready(error, us, county, state) {
             //     .attr('transform', 'translate(' + (width- 85) + ',' + (-1) + ')')
             // }else {
               d3.select(".rect-div")
-              .attr("width", function() {console.log(legendWidth[d])
+              .attr("width", function() {
                 return (IS_MOBILE) ? 73: legendWidth[d]
               })
               .attr('transform', 'translate(' + (width - legendWidth[d]) + ',' + (-1) + ')')
@@ -1536,7 +1533,7 @@ function ready(error, us, county, state) {
     updateBars(variable, selected)
   }
 
-
+console.log('hi')
   function updateBars(variable, selected) { 
     d3.select("#notes-section").selectAll("p.note2, p.note1").style("opacity", 0)
     // d3.selectAll(".note-header").html("<b>Note:</b>")
@@ -1815,7 +1812,7 @@ function ready(error, us, county, state) {
         d3.selectAll("#State, #County").style("opacity", 0)
       }else if (zoomNational_St && selected == null) {
       } else if (zoomNational == false || selected != null) { //IF MOUSE IS OVER A STATE OR COUNTY IN WHICHEVER VIEW
-        var countyID = (d3.select(".counties > path.selected").node() == null) ? "" : d3.select(".counties > path.selected").attr("id");
+        var countyID = (d3.select(".counties > path.selected").node() == null ) ? "" : d3.select(".counties > path.selected").attr("id");
         var countyIDHov = (d3.select(".counties > path.hover").node() == null) ? "" : d3.select(".counties > path.hover").attr("id");
         var county = (countyID == "") ? "" : countyID.slice(2);
         var state = selected["properties"]["abbr"]
@@ -1823,7 +1820,6 @@ function ready(error, us, county, state) {
         var State = d3.select("#State").selectAll(".category")
         var selectedState = d3.select("path#" + selected["properties"]["abbr"]).datum()
         var stateData = selectedState["properties"]
-        
         d3.select("#State").select(".group-label-2").text(stateData["state"])
         State
           .each(function() {
@@ -1878,7 +1874,6 @@ function ready(error, us, county, state) {
                 }
               })
           })
-
             if (countyID.slice(0,2) == state || countyIDHov.slice(0,2) == state) { 
               d3.selectAll("#National, #State, #County").style("opacity", 1)
               // var stateData = tmp_state.filter(function(d){
@@ -1995,6 +1990,9 @@ function ready(error, us, county, state) {
       $("li#county > a.tagit-close").append('<span class="ui-icon ui-icon-close"</span>')
       setZoom(false,true, true)
       $(".tagit-new").css("display", "none")
+        var filteredData = tmp_county.filter(function(d) {
+          return d.properties["county"] == county;
+        })
       $("li#county").on('click', function() {
         d3.selectAll(".counties").selectAll("path.selectedNational").classed("selectedNational", false)
         $(".tagit-new").css("display", "block")
@@ -2003,9 +2001,6 @@ function ready(error, us, county, state) {
             $(this).attr('placeholder','');
         });
         setZoom(false,true, false)
-        var filteredData = tmp_state.filter(function(d) {
-            return d.properties["state"] == state;
-        })
         d3.select(this).remove()
         d3.select("#location").html( state )
         d3.selectAll(".counties > path.selected")
@@ -2013,6 +2008,7 @@ function ready(error, us, county, state) {
         updateBars(SELECTED_VARIABLE, filteredData[0])
         updateTable(filteredData[0])
       })
+        updateBars(SELECTED_VARIABLE, filteredData[0])
     }
   }
   function updateTable(data) { 
@@ -2099,12 +2095,11 @@ function ready(error, us, county, state) {
         y = (bounds[0][1] + bounds[1][1]) / 2,
         scale = .9 / Math.max(dx / width, dy / height),
         translate = [width / 2 - scale * x, height / 2 - scale * y];
-        console.log(width / 2 - scale * x)
       g.transition()
         .duration(750)
         .attr("transform", "translate(" + translate + ")scale(" + scale + ")");
 
-      if (zoomLevel == "county") { console.log('county')
+      if (zoomLevel == "county") {
           setZoom(false, true, true)
           d3.select("#location").html(d["properties"]["county"] + ", " + d["properties"]["abbr"] )
           d3.selectAll("g.counties > path").classed("selected", false)
@@ -2326,7 +2321,6 @@ function ready(error, us, county, state) {
       d3.select("#map").select('svg')
         .attr('width', width)
         .attr('height', height)
-        console.log(height)
       svg.select("rect")
         .attr('width', width)
         .attr('height', height)
