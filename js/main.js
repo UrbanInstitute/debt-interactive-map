@@ -1531,9 +1531,18 @@ function ready(error, us, county, state) {
     })
     var selected = (d3.select("path.selected").node() != null) ? (d3.select("path.selected").datum()) : undefined
     updateBars(variable, selected)
+    //REMOVE WHITE AND NONWHITE BARS IF NONWHITE POP VARIABLE IS SELECTED
+    if (variable == "perc_pop_nw") {
+      d3.select("#County").selectAll(".White, .Nonwhite").style("opacity", 0)
+      d3.select("#State").selectAll(".White, .Nonwhite").style("opacity", 0)
+      d3.select("#National").selectAll(".White, .Nonwhite").style("opacity", 0)
+    }else {
+      d3.select("#County").selectAll(".White, .Nonwhite").style("opacity", 1)
+      d3.select("#State").selectAll(".White, .Nonwhite").style("opacity", 1)
+      d3.select("#National").selectAll(".White, .Nonwhite").style("opacity", 1)
+    }
   }
 
-console.log('hi')
   function updateBars(variable, selected) { 
     d3.select("#notes-section").selectAll("p.note2, p.note1").style("opacity", 0)
     // d3.selectAll(".note-header").html("<b>Note:</b>")
@@ -1599,7 +1608,6 @@ console.log('hi')
                 if (d[NONWHITE_ph] == "n<50" || (d[WHITE_ph]) == "n<50" || (d[variable]) == "n<50") { 
                   d3.select("#notes-section > p.note1").style("opacity", 1)
                   d3.selectAll(".note-header").html("<b>Notes:</b>")
-
                 }
                 if ((d[variable]) == "N/A" || (d[NONWHITE_ph]) == "N/A" || (d[WHITE_ph]) == "N/A") {
                   d3.select("#notes-section > p.note2").style("opacity", 1)
