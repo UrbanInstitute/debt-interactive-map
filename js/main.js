@@ -1607,11 +1607,9 @@ function ready(error, us, county, state) {
                 var noData_nw = (d[NONWHITE_ph] == "n<50") ? "n/a*" : "n/a**"
                 if (d[NONWHITE_ph] == "n<50" || (d[WHITE_ph]) == "n<50" || (d[variable]) == "n<50") { 
                   d3.select("#notes-section > p.note1").style("opacity", 1)
-                  d3.selectAll(".note-header").html("<b>Notes:</b>")
                 }
                 if ((d[variable]) == "N/A" || (d[NONWHITE_ph]) == "N/A" || (d[WHITE_ph]) == "N/A") {
                   d3.select("#notes-section > p.note2").style("opacity", 1)
-                  d3.selectAll(".note-header").html("<b>Notes:</b>")
                 }
                 return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
               }else if (parentClass.search("Non") > -1) {
@@ -1659,12 +1657,10 @@ function ready(error, us, county, state) {
               var parentClass = $(this).closest(".rect-g").attr("class")
               if (d[NONWHITE_ph] == "n<50" || (d[WHITE_ph]) == "n<50" || (d[variable]) == "n<50") { 
                 d3.select("#notes-section > p.note1").style("opacity", 1)
-                d3.selectAll(".note-header").html("<b>Notes:</b>")
 
               }
               if ((d[variable]) == "N/A" || (d[NONWHITE_ph]) == "N/A" || (d[WHITE_ph]) == "N/A") {
                 d3.select("#notes-section > p.note2").style("opacity", 1)
-                d3.selectAll(".note-header").html("<b>Notes:</b>")
               }
               if (parentClass.search("All") > -1) { 
                 return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
@@ -1712,11 +1708,9 @@ function ready(error, us, county, state) {
                 var noData_nw = (d[NONWHITE_ph] == "n<50") ? "n/a*" : "n/a**"
                 if (d[NONWHITE_ph] == "n<50" || (d[WHITE_ph]) == "n<50" || (d[variable]) == "n<50") { 
                   d3.select("#notes-section > p.note1").style("opacity", 1)
-                  d3.selectAll(".note-header").html("<b>Notes:</b>")
                 }
                 if ((d[variable]) == "N/A" || (d[NONWHITE_ph]) == "N/A" || (d[WHITE_ph]) == "N/A") {
                   d3.select("#notes-section > p.note2").style("opacity", 1)
-                  d3.selectAll(".note-header").html("<b>Notes:</b>")
                 }
                 var parentClass = $(this).closest(".rect-g").attr("class")
                 if (parentClass.search("All") > -1) { 
@@ -2022,7 +2016,6 @@ function ready(error, us, county, state) {
   function updateTable(data) { 
     var data = (zoomNational == true) ? data : data["properties"];
     d3.selectAll("p.note1, p.note2").style("opacity", 0)
-    d3.selectAll(".note-header").html("<b>Note:</b>")
     d3.selectAll(".cell-data")
       .each(function(d,i) { 
         var rowVariable = [rowData[i]],
@@ -2030,11 +2023,9 @@ function ready(error, us, county, state) {
             rowVariable_wh = rowVariable + "_wh";
         if ((data[rowVariable]) == "n<50" || (data[rowVariable_nw]) == "n<50" || (data[rowVariable_wh]) == "n<50") { 
           d3.select("p.note1").style("opacity", 1)
-          d3.selectAll(".note-header").html("<b>Notes:</b>")
         }
         if ((data[rowVariable]) == "N/A" || (data[rowVariable_nw]) == "N/A" || (data[rowVariable_wh]) == "N/A") {
           d3.select("p.note2").style("opacity", 1)
-          d3.selectAll(".note-header").html("<b>Notes:</b>")
         }
         d3.select(this).selectAll("td")
           .text(function(d,i) { 
