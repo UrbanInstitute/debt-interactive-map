@@ -311,10 +311,10 @@ function ready(error, us, county, state) {
     .range(["#cfe8f3", "#73bfe2", "#1696d2", "#0a4c6a", "#000000"])  
 
  /*ADD DROPDOWNS*/
-    var categoryData = [{label: "Share with any debt in collections", variable: "perc_debt_collect"},
-    {label: "Median debt in collections", variable: "med_debt_collect"},
-    {label: "Share with medical debt in collections", variable: "perc_debt_med"},
-    {label: "Median medical debt in collections", variable: "med_debt_med"},
+    var categoryData = [{label: "Share with any debt in collections&#x207A;", variable: "perc_debt_collect"},
+    {label: "Median debt in collections&#x207A;", variable: "med_debt_collect"},
+    {label: "Share with medical debt in collections&#x207A;", variable: "perc_debt_med"},
+    {label: "Median medical debt in collections&#x207A;", variable: "med_debt_med"},
     {label: "Nonwhite population share", variable: "perc_pop_nw"},
     {label: "Share without health insurance", variable: "perc_pop_no_ins" },
     {label: "Average household income", variable: "avg_income"}]
@@ -382,7 +382,7 @@ function ready(error, us, county, state) {
         .data(categoryData)
       optionsCategory.enter()
         .append('option')
-        .text(function(d) {
+        .html(function(d) {
           return d.label
         })
         .attr('value', function(d) {
@@ -973,7 +973,7 @@ function ready(error, us, county, state) {
   /*ADD TABLE*/
     $("#table-div").empty()
     var columns = ["All", "White", "Non-White"]
-    var groups = ["Share with any debt in collections", "Median debt in collections", "Share with medical debt in collections", "Median medical debt in collections","Nonwhite population share", "Share without health insurance coverage","Average household income"]
+    var groups = ["Share with any debt in collections&#x207A;", "Median debt in collections&#x207A;", "Share with medical debt in collections&#x207A;", "Median medical debt in collections&#x207A;","Nonwhite population share", "Share without health insurance coverage","Average household income"]
     var rowNumbers = [1,2,3]
     var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]
     var table = d3.select("#table-div")
@@ -1041,7 +1041,7 @@ function ready(error, us, county, state) {
       .attr("colspan", 3)
       .each(function(d,i) {
         d3.select(this)
-          .text(function() { 
+          .html(function() { 
             return groups[i]
           })
       })
