@@ -948,6 +948,11 @@ html .ui-button.ui-state-disabled:active {
 }
 
 @media print{
+  @page {
+    size: 297mm 210mm; 
+    margin: 5mm; 
+  }
+
   .banner-wrapper {
     display: none;
   }
@@ -957,15 +962,18 @@ html .ui-button.ui-state-disabled:active {
   .left-table table tbody tr:last-child td {
     padding-bottom: 3px;
   }
-.left-table table th {
-  padding: 2px 1px 0px 10px;
-}
+  .left-table table th {
+    padding: 2px 1px 0px 10px;
+  }
   .bottom-content {
     padding-top: 0px;
   }
-.group.selected, .group.selected td {
-  color: #000;
-}
+  .group.selected, .group.selected td {
+    color: #000;
+  }
+  #legend-div {
+    height: 25px;
+  }
   h1.bottom-header {
     margin-top: 0px;
     font-size: 20px;
