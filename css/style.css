@@ -985,6 +985,9 @@ html .ui-button.ui-state-disabled:active {
   #legend-div {
     height: 20px;
   }
+  .map-div {
+    margin-left: 10px;
+  }
   h1.bottom-header {
     margin-top: 20px;
     font-size: 20px;
