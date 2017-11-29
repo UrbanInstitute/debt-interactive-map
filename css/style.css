@@ -13,7 +13,9 @@ hr {
   font-weight: bold;
   font-size: 15px;
 }
-
+.large {
+  font-size: 16px;
+}
 #date {
   text-align: left;
   font-style: italic;
@@ -418,10 +420,15 @@ path.hide {
 #location {
   font-size: 18px;
   font-weight: 600;
-  height: 39px;
+  height: 29px;
   text-transform: uppercase;
 }
-
+#variable-name {
+  font-size: 13px;
+  font-weight: 600;
+  height: 20px;
+  text-transform: uppercase;
+}
 .tick > line {
   stroke: none;
 }
@@ -938,4 +945,57 @@ html .ui-button.ui-state-disabled:active {
     padding: 30px 15px;
   }
 
+}
+
+@media print{
+  .banner-wrapper {
+    display: none;
+  }
+  .search-div-main {
+    display: none;
+  }
+  .left-table table tbody tr:last-child td {
+    padding-bottom: 3px;
+  }
+.left-table table th {
+  padding: 2px 1px 0px 10px;
+}
+  .bottom-content {
+    padding-top: 0px;
+  }
+.group.selected, .group.selected td {
+  color: #000;
+}
+  h1.bottom-header {
+    margin-top: 0px;
+    font-size: 20px;
+  }
+  .bottom-text {
+    font-size: 13px;
+  }
+  .credit-header, .credit-names {
+    font-size: 13px;
+  }
+  .bottom-text, .credits-text {
+    line-height: 18px;
+  }
+  .credit-names {
+    margin-bottom: 10px;
+    margin-top: 5px;
+  }
+ .bottom-content {
+  max-width: 850px;
+ }
+ .counties {
+  stroke-width: 0px;
+ }
+ #map {
+  margin-bottom: 5px;
+ }
+ .bottom-container {
+  border: none;
+ }
+ #copyright {
+  margin-bottom: 0px;
+ }
 }
