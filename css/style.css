@@ -168,10 +168,11 @@ a:hover {
     margin-top: 5px;
     font-size: 16px;
 }
-.credits-text {
+.credits-text.bottom-text{
   font-size: 14px;
-/*  font-style: italic;
-*/  line-height: 22px !important;
+    margin-bottom: 45px;
+
+   line-height: 22px !important;
 }
 .bottom-text {
   clear: both;
