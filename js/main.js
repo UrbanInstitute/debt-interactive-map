@@ -822,10 +822,10 @@ function ready(error, us, county, state) {
     .attr("x", 12)
     .attr("y", 17)
   // legendPh.append("text")
-  var keyWidthPh =   width/8;
+  var keyWidthPh =   width/9.8;
   var keyHeightPh =  15;
-  for (i=0; i<=5; i++){
-    if(i !== 5){  
+  for (i=0; i<=6; i++){
+    if(i  < 5){  
       legendPh.append("rect")
         .attr("width",keyWidthPh)
         .attr("height",keyHeightPh)
@@ -845,6 +845,22 @@ function ready(error, us, county, state) {
           var array = BREAKS[SELECTED_VARIABLE]
           return (i==0) ? formatNumber(min, "min") : formatNumber((array[i-1]))
         })
+     }
+    if(i==6){  
+      legendPh.append("rect")
+        .attr("width",keyWidthPh)
+        .attr("height",keyHeightPh)
+        .attr("class","rect"+i)
+        .attr("x",keyWidthPh*i + 17)
+        .attr("y", 5)
+        .style("fill","#ADABAC")
+      legendPh.append("text")
+        .attr("y", 34)
+        .attr("class","legend-labels-ph")
+        .attr("x",keyWidthPh*i + 45)
+        .attr("text-anchor", "middle")
+        .text("n/a")
+
      }
      if (i == 5) { 
       legendPh.append("text")
@@ -881,12 +897,11 @@ function ready(error, us, county, state) {
     .attr("class", " ftitle")
     .attr("x", 33)
     .attr("text-anchor", "end")
-
   legend.append("text")
   var keyWidth =   10;
   var keyHeight =  25;
-  for (i=0; i<=5; i++){
-    if(i !== 5){  
+  for (i=0; i<=6; i++){
+    if(i <5){  
       legend.append("rect")
         .attr("width",keyWidth)
         .attr("height",keyHeight)
@@ -911,6 +926,26 @@ function ready(error, us, county, state) {
           var array = BREAKS[SELECTED_VARIABLE]
           return (i==0) ? formatNumber(min, "min") : formatNumber((array[i-1]))
         })
+     }
+    if(i==6){  
+      legend.append("rect")
+        .attr("width",keyWidth)
+        .attr("height",keyHeight)
+        .attr("class","rect"+i)
+        .attr("y",keyHeight*i + 10)
+        .attr("x", 38)
+        .style("fill", "#ADABAC")
+        // .on("mouseover",function(){ mouseEvent({type: "Legend", "class": (d3.select(this).attr("class"))}, "hover") })
+        // .on("mouseleave", function(){
+        //   d3.selectAll(".demphasized").classed("demphasized",false)
+        // })
+    //     .on("click",function(){ mouseEvent(dataID, {type: "Legend", "class": "q" + (this.getAttribute("x")/keyWidth) + "-4"}, "click") })
+      legend.append("text")
+        .attr("x", 33)
+        .attr("class","legend-labels " + i)
+        .attr("y",keyHeight*i + 28)
+        .attr("text-anchor", "end")
+        .text("n/a")
      }
      if (i == 5) { 
       legend.append("text")
