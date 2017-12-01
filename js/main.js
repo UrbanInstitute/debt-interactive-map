@@ -972,7 +972,7 @@ function ready(error, us, county, state) {
 
   /*ADD TABLE*/
     $("#table-div").empty()
-    var columns = ["All", "White", "Non-White"]
+    var columns = ["All", "White", "NonWhite"]
     var groups = ["Share with any debt in collections<span class=\"large\">&#x207A;</span>", "Median debt in collections<span class=\"large\">&#x207A;</span>", "Share with medical debt in collections<span class=\"large\">&#x207A;</span>", "Median medical debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
     var rowNumbers = [1,2,3]
     var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]
