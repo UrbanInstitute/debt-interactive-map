@@ -2285,6 +2285,31 @@ function ready(error, us, county, state) {
       //UPDATE MOBILE LEGEND
       d3.select("#legend-div").select("svg")
         .attr("width", width*.9)
+      var legendPh = svgPh
+        .append("g")
+        .attr("class", "g-legend-ph")
+      var keyWidthPh =   width/9.8;
+      for (i=0; i<=6; i++){
+        if(i  < 5){  
+          legendPh.select("rect")
+            .attr("width",keyWidthPh)
+            .attr("x",keyWidthPh*i + 50)
+          legendPh.select("text")
+            .attr("x",keyWidthPh*i + 55)
+         }
+        if(i==6){  
+          legendPh.select("rect")
+            .attr("width",keyWidthPh)
+            .attr("x",keyWidthPh*i + 17)
+          legendPh.select("text")
+            .attr("x",keyWidthPh*i + 45)
+
+         }
+         if (i == 5) { 
+          legendPh.select("text")
+            .attr("x",keyWidthPh*i + 55 )
+          }
+        }
       //UPDATE BAR CHARTS
       var chartPadding = (IS_MOBILE) ? 15 : 0;
       d3.select("#bar-chart").select("svg")
