@@ -1519,6 +1519,7 @@ function ready(error, us, county, state) {
       .range(["#cfe8f3", "#73bfe2", "#1696d2", "#0a4c6a", "#000000"])        
     d3.selectAll(".legend-labels")
       .each(function(d,i) {
+        if (i != 6) {
         d3.select(this)
           .text(function(){
             var min = d3.min(tmp_county, function(d) {
@@ -1535,11 +1536,14 @@ function ready(error, us, county, state) {
             }else { 
               return formatNumber(array[i-1])
             }
-        })
+          })
+        }
+
       })
 
       d3.selectAll(".legend-labels-ph")
       .each(function(d,i) {
+        if (i != 6) {
         d3.select(this)
           .text(function(){
             var min = d3.min(tmp_county, function(d) {
@@ -1556,7 +1560,8 @@ function ready(error, us, county, state) {
             }else { 
               return formatNumber(array[i-1])
             }
-        })
+          })
+        }
       })
     d3.select(".counties").selectAll("path")
     .transition()
