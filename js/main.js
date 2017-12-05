@@ -808,7 +808,7 @@ function ready(error, us, county, state) {
   /*MOBILE*/
   var svgPh = d3.select("#legend-div")
     .append("svg")
-    .attr("width", width*.9)
+    .attr("width", width*.95)
     .attr("height", 60)
   var legendPh = svgPh
     .append("g")
@@ -822,7 +822,7 @@ function ready(error, us, county, state) {
     .attr("x", 12)
     .attr("y", 17)
   // legendPh.append("text")
-  var keyWidthPh =   width/9.8;
+  var keyWidthPh =   width/8;
   var keyHeightPh =  15;
   for (i=0; i<=6; i++){
     if(i  < 5){  
@@ -835,7 +835,7 @@ function ready(error, us, county, state) {
         .style("fill", COLORRANGE[i])
       legendPh.append("text")
         .attr("y", 34)
-        .attr("class","legend-labels-ph")
+        .attr("class","legend-labels-ph legend-labels-ph" + i)
         .attr("x",keyWidthPh*i + 55)
         .attr("text-anchor", "middle")
         .text(function(){
@@ -856,7 +856,7 @@ function ready(error, us, county, state) {
         .style("fill","#ADABAC")
       legendPh.append("text")
         .attr("y", 34)
-        .attr("class","legend-labels-ph")
+        .attr("class","legend-labels-ph legend-labels-ph" + i)
         .attr("x",keyWidthPh*i + 45)
         .attr("text-anchor", "middle")
         .text("n/a")
@@ -865,7 +865,7 @@ function ready(error, us, county, state) {
      if (i == 5) { 
       legendPh.append("text")
         .attr("y", 34)
-        .attr("class","legend-labels-ph")
+        .attr("class","legend-labels-ph legend-labels-ph" + i)
         .attr("text-anchor", "end")
         .attr("x",keyWidthPh*i + 55 )
         .attr("text-anchor", "middle")
@@ -2283,30 +2283,27 @@ function ready(error, us, county, state) {
       d3.selectAll("path.selected")
         .classed("selectedNational", true)
       //UPDATE MOBILE LEGEND
-      d3.select("#legend-div").select("svg")
-        .attr("width", width*.9)
-      var legendPh = svgPh
-        .append("g")
-        .attr("class", "g-legend-ph")
-      var keyWidthPh =   width/9.8;
+      var legendPh = d3.select("#legend-div").select("svg")
+        .attr("width", width*.95)
+      var keyWidthPh =   width/8;
       for (i=0; i<=6; i++){
         if(i  < 5){  
-          legendPh.select("rect")
+          legendPh.select(".rect" + i)
             .attr("width",keyWidthPh)
             .attr("x",keyWidthPh*i + 50)
-          legendPh.select("text")
+          d3.select(".legend-labels-ph" + i)
             .attr("x",keyWidthPh*i + 55)
          }
         if(i==6){  
-          legendPh.select("rect")
+          legendPh.select(".rect" + i)
             .attr("width",keyWidthPh)
             .attr("x",keyWidthPh*i + 17)
-          legendPh.select("text")
+          d3.select(".legend-labels-ph" + i)
             .attr("x",keyWidthPh*i + 45)
 
          }
          if (i == 5) { 
-          legendPh.select("text")
+          d3.select(".legend-labels-ph" + i)
             .attr("x",keyWidthPh*i + 55 )
           }
         }
