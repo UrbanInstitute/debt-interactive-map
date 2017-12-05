@@ -884,7 +884,7 @@ function ready(error, us, county, state) {
       return (IS_MOBILE) ? 73: 57
     })
     .attr("class", "rect-div")
-    .attr("height", 177)
+    .attr("height", 215)
     .style("fill", "#f5f5f5")
     .style("opacity", 0.8)
     .attr('transform', 'translate(' + (width- 54) + ',' + (-1) + ')')
