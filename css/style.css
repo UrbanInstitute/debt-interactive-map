@@ -285,8 +285,11 @@ h2 {
 .data-label-ph{
   display: none;
 }
-.legend-labels, .legend-labels-ph {
+.legend-labels{
   font-size: 14px;
+}
+.legend-labels-ph  {
+  font-size: 12px;
 }
 #legend {
   float: right;

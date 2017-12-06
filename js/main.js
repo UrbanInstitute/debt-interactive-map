@@ -808,7 +808,7 @@ function ready(error, us, county, state) {
   /*MOBILE*/
   var svgPh = d3.select("#legend-div")
     .append("svg")
-    .attr("width", width*.9)
+    .attr("width", width*.95)
     .attr("height", 60)
   var legendPh = svgPh
     .append("g")
@@ -822,7 +822,7 @@ function ready(error, us, county, state) {
     .attr("x", 12)
     .attr("y", 17)
   // legendPh.append("text")
-  var keyWidthPh =   width/9.8;
+  var keyWidthPh =   width/8;
   var keyHeightPh =  15;
   for (i=0; i<=6; i++){
     if(i  < 5){  
@@ -835,7 +835,7 @@ function ready(error, us, county, state) {
         .style("fill", COLORRANGE[i])
       legendPh.append("text")
         .attr("y", 34)
-        .attr("class","legend-labels-ph")
+        .attr("class","legend-labels-ph legend-labels-ph" + i)
         .attr("x",keyWidthPh*i + 55)
         .attr("text-anchor", "middle")
         .text(function(){
@@ -856,7 +856,7 @@ function ready(error, us, county, state) {
         .style("fill","#ADABAC")
       legendPh.append("text")
         .attr("y", 34)
-        .attr("class","legend-labels-ph")
+        .attr("class","legend-labels-ph legend-labels-ph" + i)
         .attr("x",keyWidthPh*i + 45)
         .attr("text-anchor", "middle")
         .text("n/a")
@@ -865,7 +865,7 @@ function ready(error, us, county, state) {
      if (i == 5) { 
       legendPh.append("text")
         .attr("y", 34)
-        .attr("class","legend-labels-ph")
+        .attr("class","legend-labels-ph legend-labels-ph" + i)
         .attr("text-anchor", "end")
         .attr("x",keyWidthPh*i + 55 )
         .attr("text-anchor", "middle")
@@ -884,7 +884,7 @@ function ready(error, us, county, state) {
       return (IS_MOBILE) ? 73: 57
     })
     .attr("class", "rect-div")
-    .attr("height", 177)
+    .attr("height", 215)
     .style("fill", "#f5f5f5")
     .style("opacity", 0.8)
     .attr('transform', 'translate(' + (width- 54) + ',' + (-1) + ')')
@@ -1519,6 +1519,7 @@ function ready(error, us, county, state) {
       .range(["#cfe8f3", "#73bfe2", "#1696d2", "#0a4c6a", "#000000"])        
     d3.selectAll(".legend-labels")
       .each(function(d,i) {
+        if (i != 6) {
         d3.select(this)
           .text(function(){
             var min = d3.min(tmp_county, function(d) {
@@ -1535,11 +1536,14 @@ function ready(error, us, county, state) {
             }else { 
               return formatNumber(array[i-1])
             }
-        })
+          })
+        }
+
       })
 
       d3.selectAll(".legend-labels-ph")
       .each(function(d,i) {
+        if (i != 6) {
         d3.select(this)
           .text(function(){
             var min = d3.min(tmp_county, function(d) {
@@ -1556,7 +1560,8 @@ function ready(error, us, county, state) {
             }else { 
               return formatNumber(array[i-1])
             }
-        })
+          })
+        }
       })
     d3.select(".counties").selectAll("path")
     .transition()
@@ -2281,8 +2286,30 @@ function ready(error, us, county, state) {
       d3.selectAll("path.selected")
         .classed("selectedNational", true)
       //UPDATE MOBILE LEGEND
-      d3.select("#legend-div").select("svg")
-        .attr("width", width*.9)
+      var legendPh = d3.select("#legend-div").select("svg")
+        .attr("width", width*.95)
+      var keyWidthPh =   width/8;
+      for (i=0; i<=6; i++){
+        if(i  < 5){  
+          legendPh.select(".rect" + i)
+            .attr("width",keyWidthPh)
+            .attr("x",keyWidthPh*i + 50)
+          d3.select(".legend-labels-ph" + i)
+            .attr("x",keyWidthPh*i + 55)
+         }
+        if(i==6){  
+          legendPh.select(".rect" + i)
+            .attr("width",keyWidthPh)
+            .attr("x",keyWidthPh*i + 17)
+          d3.select(".legend-labels-ph" + i)
+            .attr("x",keyWidthPh*i + 45)
+
+         }
+         if (i == 5) { 
+          d3.select(".legend-labels-ph" + i)
+            .attr("x",keyWidthPh*i + 55 )
+          }
+        }
       //UPDATE BAR CHARTS
       var chartPadding = (IS_MOBILE) ? 15 : 0;
       d3.select("#bar-chart").select("svg")
