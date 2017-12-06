@@ -2031,6 +2031,9 @@ function ready(error, us, county, state) {
           return d.properties["county"] == county;
         })
       $("li#county").on('click', function() {
+        var stateData = tmp_state.filter(function(d) {
+          return d.properties["state"] == state
+        })
         d3.selectAll(".counties").selectAll("path.selectedNational").classed("selectedNational", false)
         $(".tagit-new").css("display", "block")
         $(".tagit-new").css("autocomplete", "on")
@@ -2043,7 +2046,7 @@ function ready(error, us, county, state) {
         d3.selectAll(".counties > path.selected")
           .classed("selected", false)
         updateBars(SELECTED_VARIABLE, filteredData[0])
-        updateTable(filteredData[0])
+        updateTable(stateData[0])
       })
         updateBars(SELECTED_VARIABLE, filteredData[0])
     }
