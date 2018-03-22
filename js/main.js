@@ -81,6 +81,8 @@ d3.queue()
     .defer(d3.json, "data/us-10m.v1.json")
     .defer(d3.csv, "data/county_" + CATEGORY + ".csv")
     .defer(d3.csv, "data/state_"+ CATEGORY + ".csv")
+    .defer(d3.csv, "data/county_fake.csv")
+    .defer(d3.csv, "data/state_fake.csv")
     .await(ready);
 
 function transformData(geography){
@@ -91,24 +93,42 @@ function transformData(geography){
 }
 
 
-function ready(error, us, county, state) {
-  if (error) throw error;
-  /*SETTING UP THE DATA*/
-  var countyData = us.objects.counties.geometries
-  var stateData = us.objects.states.geometries
+function OverallTransformData(us, county, state, countyData, stateData) { 
+
+  var bigbig = {}
+
+  //transforms the county and state non geographical data
   var county_data = transformData(county)
-    county_data.forEach(function(d,i){ 
-      for (var property in d["values"][0]) {
-        d[property] = d.values[0][property]
-      }
-      countyData.forEach(function(e, j) { 
-        if (d.key == e.id) { 
-          for (var property in d["values"][0]) { 
-              e[property] = d.values[0][property]
-          }
-        }
-      })
-    })
+
+  // var t1 = performance.now();  
+
+  var countyGeoMapped = d3.map(countyData, function(d) { return d.id; });
+
+  county_data.forEach(function(d,i){ 
+    for (var property in d["values"][0]) {
+      d[property] = d.values[0][property];
+      countyGeoMapped.get(d.key)[property] = d.values[0][property];
+    }
+
+    // console.log(d.key)
+    // for (var property in d["values"][0]) { 
+      
+    // }
+
+    // This nested for loop of counties takes FOREVER
+    // countyData.forEach(function(e, j) { 
+    //   if (d.key == e.id) { 
+    //     // console.log(e)
+    //     for (var property in d["values"][0]) { 
+    //         e[property] = d.values[0][property]
+    //     }
+    //   }
+    // })
+
+  })
+
+  // var t2 = performance.now();
+  // console.log("Call to t2 took " + (t2 - t1) + " milliseconds.")    
 
   var state_data = transformData(state)
 
@@ -128,7 +148,6 @@ function ready(error, us, county, state) {
         }
       })
     })
-
   
   var us_data_ph = state_data.filter(function(d) {
     return d.state == "USA"
@@ -137,19 +156,34 @@ function ready(error, us, county, state) {
     return d.state == "USA"
   })
 
+  // var t3 = performance.now();
+
   var tmp_county = topojson.feature(us, us.objects.counties).features;
   for (var i =0; i<tmp_county.length; i++){
-    var mergeID = +tmp_county[i]["id"]
-    for (var j = 0; j<countyData.length;j++){
-      if(+countyData[j]["id"] == mergeID){ 
-          for (var property in countyData[j]) { 
-            var data = (isNaN(countyData[j][property]) == true) ? countyData[j][property] : +countyData[j][property];
-            tmp_county[i]["properties"][property] = data;
-          }
-        break;
-      }
+    // var mergeID = +tmp_county[i]["id"]
+    var mergeID2 = tmp_county[i]["id"]
+
+    for (var property in countyGeoMapped.get(mergeID2)) { 
+      var data = (isNaN(countyGeoMapped.get(mergeID2)[property]) == true) ? countyGeoMapped.get(mergeID2)[property] : +countyGeoMapped.get(mergeID2)[property];
+      tmp_county[i]["properties"][property] = data;
     }
+    
+    // This takes a fairly long time
+    // for (var j = 0; j<countyData.length;j++){      
+    //   if(+countyData[j]["id"] == mergeID){ 
+    //       for (var property in countyData[j]) { 
+
+    //         var data = (isNaN(countyData[j][property]) == true) ? countyData[j][property] : +countyData[j][property];
+    //         tmp_county[i]["properties"][property] = data;
+    //       }
+    //     break;
+    //   }
+    // }
   }
+
+  // var t4 = performance.now();
+  // console.log("Call to t4 took " + (t4 - t3) + " milliseconds.")   
+
   var tmp_state = topojson.feature(us, us.objects.states).features;
   for (var i =0; i<tmp_state.length; i++){
     var mergeIDState = tmp_state[i]["id"]
@@ -162,134 +196,208 @@ function ready(error, us, county, state) {
         break;
       }
     }
+  }       
+
+  bigbig.tmp_state = tmp_state;
+  bigbig.tmp_county = tmp_county;
+  bigbig.filteredCounties = filteredCounties;
+  bigbig.us_data_ph = us_data_ph;
+  bigbig.state_data = state_data;
+  bigbig.county_data = county_data;
+
+  return bigbig;
+}
+
+
+function ready(error, us, county, state, county2, state2) {
+  if (error) throw error;
+  /*SETTING UP THE DATA*/
+
+  // geographical data
+  var countyData = us.objects.counties.geometries;
+  var stateData = us.objects.states.geometries;
+
+  console.log(countyData)
+
+
+  // dropdown-header
+
+  $( "#dropdown-header" ).click(function() {
+    var CATEGORY = "medical";  
+    console.log('clickz')
+    changeData(CATEGORY);
+  });
+
+  function changeData(CATEGORY) {  
+
+    // console.log(countyData)
+    // console.log(stateData)
+    // console.log(CATEGORY)
+    var cat2 = (CATEGORY === "medical") ? "" : "2";
+    
+    var BigData = OverallTransformData(us,county2,state2,countyData,stateData);
+    var tmp_state = BigData.tmp_state,
+      tmp_county = BigData.tmp_county,
+      filteredCounties = BigData.filteredCounties,
+      us_data_ph = BigData.us_data_ph,
+      state_data = BigData.state_data,
+      county_data = BigData.county_data;
+
+    // move to first variable (perc_debt_collect for this proof ofconcept)
+    // update map -> data
+    // update legend ->
+    // update data at left
+    // update titles at left
+    // update bars at bottom
+    // if i can rebind the data, then call all the updates
   }
+
+  // End dropdown header topic change logic
+
+
+  var BigData = OverallTransformData(us,county,state,countyData,stateData);
+  var tmp_state = BigData.tmp_state,
+    tmp_county = BigData.tmp_county,
+    filteredCounties = BigData.filteredCounties,
+    us_data_ph = BigData.us_data_ph,
+    state_data = BigData.state_data,
+    county_data = BigData.county_data;
+
+  // console.log(BigData)      
+
   /*END*/
+
+  // NOT SURE WHAT THIS IS DOING....maybe creating the search pool for the filtering county/state search??
+
   $("#location").html("National")
-    function createSearchArray(filter) { 
-      var searchArray = [];
-      if (zoomNational == true) {
-        for (var i = 0; i<tmp_state.length; i++){
-         searchArray.push(tmp_state[i]["properties"]["state"])
-        }
-        for (var i = 0; i<tmp_county.length; i++){
-         searchArray.push(tmp_county[i]["properties"]["county"] + ", " + tmp_county[i]["properties"]["abbr"])
-        }
-      }else if (zoomState == true) { 
-        for (var i = 0; i<tmp_county.length; i++){ 
-          if (tmp_county[i]["properties"]["abbr"] == filter) {
-            searchArray.push(tmp_county[i]["properties"]["county"] + ", " + tmp_county[i]["properties"]["abbr"])
-          }
+
+  function createSearchArray(filter) { 
+    var searchArray = [];
+    if (zoomNational == true) {
+      for (var i = 0; i<tmp_state.length; i++){
+       searchArray.push(tmp_state[i]["properties"]["state"])
+      }
+      for (var i = 0; i<tmp_county.length; i++){
+       searchArray.push(tmp_county[i]["properties"]["county"] + ", " + tmp_county[i]["properties"]["abbr"])
+      }
+    }else if (zoomState == true) { 
+      for (var i = 0; i<tmp_county.length; i++){ 
+        if (tmp_county[i]["properties"]["abbr"] == filter) {
+          searchArray.push(tmp_county[i]["properties"]["county"] + ", " + tmp_county[i]["properties"]["abbr"])
         }
       }
-     dropdown = searchArray
-     $('input[name="tags"]').tagit("option", {
-        availableTags: dropdown,
-      })
     }
-    $( "#searchBox" ).autocomplete({
-      appendTo: ".search-div",
-    });
+   dropdown = searchArray
+   $('input[name="tags"]').tagit("option", {
+      availableTags: dropdown,
+    })
+  }
 
-    $('input[name="tags"]').tagit({
-        availableTags: dropdown,
-        allowSpaces: true,
-        autocomplete:{
-          // availableTags: searchArray, // this param is of course optional. it's for autocomplete.
-          // configure the name of the input field (will be submitted with form), default: item[tags]
-          itemName: 'item',
-          fieldName: 'tags',
-          onlyAvailableTags: true,
-          tagLimit: 2,
-          appendTo: ".search-div",
-          open: function(event, ui) {
-            $("#ui-id-2").width($(".search-div").width())
-            $("#ui-id-2").css("left", "0px")
-            $("#ui-id-2").css("top", "87px")
-          },
-        },
-        beforeTagAdded: function(event, ui) { 
-        // ($("li#county >span").text("hello"))
-          // if ($("ul.tagit li.tagit-choice-editable").width() < 70) { console.log('1')
-          //   $("ul.tagit li.tagit-choice-editable").css("margin-right", "100px")
-          // }else {
-          //   $("ul.tagit li.tagit-choice-editable").css("margin-right", "0px")
-          // }
-          if(dropdown.indexOf(ui.tagLabel) == -1){ 
-            return false;
-          }
-          if(ui.tagLabel == "not found"){
-              return false;
-          }
-        },
-        afterTagAdded: function(event, ui) { 
-          ($(".search-div > .ui-widget").css("height", 60))
-          var tag = (ui.tag[0]["textContent"]);
-          var county = (tag.search(",") > 0) ? tag.split(",")[0] : "";
-          var state = (tag.search(",") > 0) ? (tag.split(", ")[1]).slice(0,-1) : tag.slice(0,-1);
-          var geoData = tmp_county 
-          var geoType = (tag.search(",") > 0) ? "county" : "state";
-          var geography = (geoType == "county") ? county : state;
-          selectedLocation()
-          // var filteredCounty = tmp_county.filter(function(d) { 
-            // if (geoType == "county"){
-            //   return d.properties["county"] == county && d.properties["abbr"] == state
-            // }else {
-          //     return d.properties["county"] == tagContent;
-          //   // }
-          // })
-          // var filteredState = tmp_state.filter(function(d) {
-          //   return d.properties["state"] == tagContent
-          // })
-          var filteredData = geoData.filter(function(d) {
-            if (geoType == "county") {
-              return d.properties["county"] == county && d.properties["abbr"] == state;
-            }else { 
-              return d.properties["state"] == state;
-            }
-          })
-          var data = filteredData[0]
-          updateBars(SELECTED_VARIABLE, data)
-          zoomMap(width, data, geoType)
-          if (geoType == "county") { 
-            addTag(data["properties"]["state"], county, state)
-          }else {
-            var filter = data["properties"]["abbr"]
-            createSearchArray(filter)
-          }
-        },
-        afterTagRemoved: function(event,ui) { 
-           var tag = (ui.tag[0]["textContent"]);
-           if (tag.search(",") > 0) { 
-            d3.selectAll(".counties > path.selected")
-              .classed("selected", false)
-            setZoom(false, true, false)
-           }else { 
-            $("#location").html("National")
-            d3.selectAll(".state-borders > path.selected")
-              .classed("selected", false)
-            setZoom(true, false, false)
-            if (d3.select("li#state").size() == 0) {
-              zoomMap(width, null, "national")
-            }
-           }
-          updateBars(SELECTED_VARIABLE)
-          createSearchArray("")
+  $( "#searchBox" ).autocomplete({
+    appendTo: ".search-div",
+  });
 
-          $('.ui-widget-content.ui-autocomplete-input').attr('placeholder', 'Search for a state or county')
-
+  $('input[name="tags"]').tagit({
+      availableTags: dropdown,
+      allowSpaces: true,
+      autocomplete:{
+        // availableTags: searchArray, // this param is of course optional. it's for autocomplete.
+        // configure the name of the input field (will be submitted with form), default: item[tags]
+        itemName: 'item',
+        fieldName: 'tags',
+        onlyAvailableTags: true,
+        tagLimit: 2,
+        appendTo: ".search-div",
+        open: function(event, ui) {
+          $("#ui-id-2").width($(".search-div").width())
+          $("#ui-id-2").css("left", "0px")
+          $("#ui-id-2").css("top", "87px")
+        },
+      },
+      beforeTagAdded: function(event, ui) { 
+      // ($("li#county >span").text("hello"))
+        // if ($("ul.tagit li.tagit-choice-editable").width() < 70) { console.log('1')
+        //   $("ul.tagit li.tagit-choice-editable").css("margin-right", "100px")
+        // }else {
+        //   $("ul.tagit li.tagit-choice-editable").css("margin-right", "0px")
+        // }
+        if(dropdown.indexOf(ui.tagLabel) == -1){ 
+          return false;
         }
-    });
-    $(".search-div > .ui-widget").css("height", 60)
-    $(".ui-widget-content.ui-autocomplete-input").css({"font-style" : "italic"})
-    $(".ui-widget-content.ui-autocomplete-input").css({"font-weight" : "400"})
-    $('.ui-widget-content.ui-autocomplete-input').attr('placeholder', 'Search for a state or county')
-    $('.ui-widget-content.ui-autocomplete-input').focusin(function(){
-        $(this).attr('placeholder','');
-    });
-    $('.ui-widget-content.ui-autocomplete-input').focusout(function(){
-        $(this).attr('placeholder','Search for a state or county');
-    });
-    createSearchArray("")
+        if(ui.tagLabel == "not found"){
+            return false;
+        }
+      },
+      afterTagAdded: function(event, ui) { 
+        ($(".search-div > .ui-widget").css("height", 60))
+        var tag = (ui.tag[0]["textContent"]);
+        var county = (tag.search(",") > 0) ? tag.split(",")[0] : "";
+        var state = (tag.search(",") > 0) ? (tag.split(", ")[1]).slice(0,-1) : tag.slice(0,-1);
+        var geoData = tmp_county 
+        var geoType = (tag.search(",") > 0) ? "county" : "state";
+        var geography = (geoType == "county") ? county : state;
+        selectedLocation()
+        // var filteredCounty = tmp_county.filter(function(d) { 
+          // if (geoType == "county"){
+          //   return d.properties["county"] == county && d.properties["abbr"] == state
+          // }else {
+        //     return d.properties["county"] == tagContent;
+        //   // }
+        // })
+        // var filteredState = tmp_state.filter(function(d) {
+        //   return d.properties["state"] == tagContent
+        // })
+        var filteredData = geoData.filter(function(d) {
+          if (geoType == "county") {
+            return d.properties["county"] == county && d.properties["abbr"] == state;
+          }else { 
+            return d.properties["state"] == state;
+          }
+        })
+        var data = filteredData[0]
+        updateBars(SELECTED_VARIABLE, data)
+        zoomMap(width, data, geoType)
+        if (geoType == "county") { 
+          addTag(data["properties"]["state"], county, state)
+        }else {
+          var filter = data["properties"]["abbr"]
+          createSearchArray(filter)
+        }
+      },
+      afterTagRemoved: function(event,ui) { 
+         var tag = (ui.tag[0]["textContent"]);
+         if (tag.search(",") > 0) { 
+          d3.selectAll(".counties > path.selected")
+            .classed("selected", false)
+          setZoom(false, true, false)
+         }else { 
+          $("#location").html("National")
+          d3.selectAll(".state-borders > path.selected")
+            .classed("selected", false)
+          setZoom(true, false, false)
+          if (d3.select("li#state").size() == 0) {
+            zoomMap(width, null, "national")
+          }
+         }
+        updateBars(SELECTED_VARIABLE)
+        createSearchArray("")
+
+        $('.ui-widget-content.ui-autocomplete-input').attr('placeholder', 'Search for a state or county')
+
+      }
+  });
+
+  $(".search-div > .ui-widget").css("height", 60)
+  $(".ui-widget-content.ui-autocomplete-input").css({"font-style" : "italic"})
+  $(".ui-widget-content.ui-autocomplete-input").css({"font-weight" : "400"})
+  $('.ui-widget-content.ui-autocomplete-input').attr('placeholder', 'Search for a state or county')
+  $('.ui-widget-content.ui-autocomplete-input').focusin(function(){
+      $(this).attr('placeholder','');
+  });
+  $('.ui-widget-content.ui-autocomplete-input').focusout(function(){
+      $(this).attr('placeholder','Search for a state or county');
+  });
+  createSearchArray("")
 
 
   // });
@@ -804,7 +912,7 @@ function ready(error, us, county, state) {
   }
 
 
-/*LEGEND*/
+  /*LEGEND*/
   /*MOBILE*/
   var svgPh = d3.select("#legend-div")
     .append("svg")
@@ -1507,6 +1615,8 @@ function ready(error, us, county, state) {
   }
 
   function updateMap(variable) {
+    // console.log(variable)    
+
     var min = d3.min(tmp_county, function(d) {
       return d.properties[variable]
     })
@@ -2057,6 +2167,7 @@ function ready(error, us, county, state) {
     }
   }
   function updateTable(data) { 
+    console.log(data)
     var data = (zoomNational == true) ? data : data["properties"];
     d3.selectAll("p.note1, p.note2").style("opacity", 0)
     d3.selectAll(".cell-data")
