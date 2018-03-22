@@ -13,7 +13,7 @@ var zoomState;
 var zoomNational;
 var zoomCounty;
 var zoomNational_St;
-var CATEGORY = "medical";
+// var CATEGORY = "fake";
 var tdMap;
 var active = d3.select(null);
 // var margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55}
@@ -79,8 +79,8 @@ var width =  tdMap,  //(IS_MOBILE && !IS_PHONE) ? tdMap : (tdMap) - margin.right
 //   if (error) throw error;
 d3.queue()
     .defer(d3.json, "data/us-10m.v1.json")
-    .defer(d3.csv, "data/county_" + CATEGORY + ".csv")
-    .defer(d3.csv, "data/state_"+ CATEGORY + ".csv")
+    .defer(d3.csv, "data/county_medical.csv")
+    .defer(d3.csv, "data/state_medical.csv")
     .defer(d3.csv, "data/county_fake.csv")
     .defer(d3.csv, "data/state_fake.csv")
     .await(ready);
@@ -100,8 +100,6 @@ function OverallTransformData(us, county, state, countyData, stateData) {
   //transforms the county and state non geographical data
   var county_data = transformData(county)
 
-  // var t1 = performance.now();  
-
   var countyGeoMapped = d3.map(countyData, function(d) { return d.id; });
 
   county_data.forEach(function(d,i){ 
@@ -110,25 +108,7 @@ function OverallTransformData(us, county, state, countyData, stateData) {
       countyGeoMapped.get(d.key)[property] = d.values[0][property];
     }
 
-    // console.log(d.key)
-    // for (var property in d["values"][0]) { 
-      
-    // }
-
-    // This nested for loop of counties takes FOREVER
-    // countyData.forEach(function(e, j) { 
-    //   if (d.key == e.id) { 
-    //     // console.log(e)
-    //     for (var property in d["values"][0]) { 
-    //         e[property] = d.values[0][property]
-    //     }
-    //   }
-    // })
-
   })
-
-  // var t2 = performance.now();
-  // console.log("Call to t2 took " + (t2 - t1) + " milliseconds.")    
 
   var state_data = transformData(state)
 
@@ -156,8 +136,6 @@ function OverallTransformData(us, county, state, countyData, stateData) {
     return d.state == "USA"
   })
 
-  // var t3 = performance.now();
-
   var tmp_county = topojson.feature(us, us.objects.counties).features;
   for (var i =0; i<tmp_county.length; i++){
     // var mergeID = +tmp_county[i]["id"]
@@ -167,22 +145,7 @@ function OverallTransformData(us, county, state, countyData, stateData) {
       var data = (isNaN(countyGeoMapped.get(mergeID2)[property]) == true) ? countyGeoMapped.get(mergeID2)[property] : +countyGeoMapped.get(mergeID2)[property];
       tmp_county[i]["properties"][property] = data;
     }
-    
-    // This takes a fairly long time
-    // for (var j = 0; j<countyData.length;j++){      
-    //   if(+countyData[j]["id"] == mergeID){ 
-    //       for (var property in countyData[j]) { 
-
-    //         var data = (isNaN(countyData[j][property]) == true) ? countyData[j][property] : +countyData[j][property];
-    //         tmp_county[i]["properties"][property] = data;
-    //       }
-    //     break;
-    //   }
-    // }
   }
-
-  // var t4 = performance.now();
-  // console.log("Call to t4 took " + (t4 - t3) + " milliseconds.")   
 
   var tmp_state = topojson.feature(us, us.objects.states).features;
   for (var i =0; i<tmp_state.length; i++){
@@ -223,25 +186,35 @@ function ready(error, us, county, state, county2, state2) {
   // dropdown-header
 
   $( "#dropdown-header" ).click(function() {
-    var CATEGORY = "medical";  
+    var CATEGORY = "fake";  
     console.log('clickz')
     changeData(CATEGORY);
   });
 
   function changeData(CATEGORY) {  
 
-    // console.log(countyData)
-    // console.log(stateData)
-    // console.log(CATEGORY)
-    var cat2 = (CATEGORY === "medical") ? "" : "2";
+    var cat2 = (CATEGORY === "medical") ? "TRUE" : "FALSE";
+    console.log(cat2)
     
-    var BigData = OverallTransformData(us,county2,state2,countyData,stateData);
+    var BigData = (CATEGORY === "medical") ? OverallTransformData(us,county,state,countyData,stateData) : OverallTransformData(us,county2,state2,countyData,stateData)
     var tmp_state = BigData.tmp_state,
       tmp_county = BigData.tmp_county,
       filteredCounties = BigData.filteredCounties,
       us_data_ph = BigData.us_data_ph,
       state_data = BigData.state_data,
       county_data = BigData.county_data;
+        
+    var countiesD3 = d3.selectAll(".counties").selectAll("path")
+      .data(tmp_county)
+
+    // countiesD3.enter()
+    //   .style("fill", function(d){ 
+    //       return (isNaN(d.properties[SELECTED_VARIABLE]) == true) ? "#adabac" : quantize(d.properties[SELECTED_VARIABLE]);
+    //   })
+
+    updateMap("perc_debt_collect")
+
+
 
     // move to first variable (perc_debt_collect for this proof ofconcept)
     // update map -> data
@@ -252,9 +225,9 @@ function ready(error, us, county, state, county2, state2) {
     // if i can rebind the data, then call all the updates
   }
 
-  // End dropdown header topic change logic
+  // ENDDDDDD dropdown header topic change logic
 
-
+  // first time through use "county" and "state" which are medical info. CHANGE if you want diff
   var BigData = OverallTransformData(us,county,state,countyData,stateData);
   var tmp_state = BigData.tmp_state,
     tmp_county = BigData.tmp_county,
@@ -263,7 +236,6 @@ function ready(error, us, county, state, county2, state2) {
     state_data = BigData.state_data,
     county_data = BigData.county_data;
 
-  // console.log(BigData)      
 
   /*END*/
 
