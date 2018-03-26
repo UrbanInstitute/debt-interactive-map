@@ -211,8 +211,12 @@ function ready(error, us, county, state, county2, state2) {
 
     console.log(tmp_state[40])
 
-    var statesD3 = d3.selectAll(".state-borders").selectAll("path")
-      .data(tmp_state)    
+    var statesD3 = d3.selectAll(".state-borders")
+      .selectAll("path")
+      .each(function(d){
+        d3.select(this)
+          .datum(tmp_state.filter(function(o){ return o.properties.abbr == d.properties.abbr})[0])
+      })  
 
     // update map colors
     updateMap("perc_debt_collect")
