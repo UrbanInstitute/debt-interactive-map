@@ -193,8 +193,8 @@ function ready(error, us, county, state, county2, state2) {
 
   function changeData(CATEGORY) {  
 
-    var cat2 = (CATEGORY === "medical") ? "TRUE" : "FALSE";
-    console.log(cat2)
+    // var cat2 = (CATEGORY === "medical") ? "TRUE" : "FALSE";
+    // console.log(cat2)
     
     var BigData = (CATEGORY === "medical") ? OverallTransformData(us,county,state,countyData,stateData) : OverallTransformData(us,county2,state2,countyData,stateData)
     var tmp_state = BigData.tmp_state,
@@ -203,21 +203,23 @@ function ready(error, us, county, state, county2, state2) {
       us_data_ph = BigData.us_data_ph,
       state_data = BigData.state_data,
       county_data = BigData.county_data;
-        
+
+    // update data bound to counties  
+    // //// DATA IS Bound in the wrong order....not sure why .
     var countiesD3 = d3.selectAll(".counties").selectAll("path")
       .data(tmp_county)
 
-    // countiesD3.enter()
-    //   .style("fill", function(d){ 
-    //       return (isNaN(d.properties[SELECTED_VARIABLE]) == true) ? "#adabac" : quantize(d.properties[SELECTED_VARIABLE]);
-    //   })
+    console.log(tmp_state[40])
 
+    var statesD3 = d3.selectAll(".state-borders").selectAll("path")
+      .data(tmp_state)    
+
+    // update map colors
     updateMap("perc_debt_collect")
 
 
 
     // move to first variable (perc_debt_collect for this proof ofconcept)
-    // update map -> data
     // update legend ->
     // update data at left
     // update titles at left
@@ -750,6 +752,8 @@ function ready(error, us, county, state, county2, state2) {
         }
       })
 
+    console.log(tmp_state[40])  
+
     g.append("g")
       .attr("class", "state-borders")
       .selectAll("path")
@@ -773,10 +777,13 @@ function ready(error, us, county, state, county2, state2) {
         updateBars(SELECTED_VARIABLE, d)
       })
       .on('mouseover', function(d) { 
-        if (zoomNational == true || zoomNational_St == true) { 
-          // $(".state-borders").css("pointer-events", "all")
-          // $(".counties").css("pointer-events", "none")
-            hoverLocation("", d.properties.abbr, "state");
+
+
+          console.log(d)
+
+
+        if (zoomNational == true || zoomNational_St == true) {                 
+          hoverLocation("", d.properties.abbr, "state");
           updateBars(SELECTED_VARIABLE, d) 
         }else {
           // $(".state-borders").css("pointer-events", "none")
