@@ -206,10 +206,20 @@ function ready(error, us, county, state, county2, state2) {
 
     // update data bound to counties  
     // //// DATA IS Bound in the wrong order....not sure why .
-    var countiesD3 = d3.selectAll(".counties").selectAll("path")
-      .data(tmp_county)
 
-    console.log(tmp_state[40])
+    console.log(tmp_county)
+
+    var countiesD3 = d3.selectAll(".counties")
+    .selectAll("path")
+    // .data(tmp_county)  
+    .each(function(d){
+      d3.select(this)
+        .datum(tmp_county.filter(function(o){ return o.id == d.id})[0])
+    })  
+
+      
+
+    
 
     var statesD3 = d3.selectAll(".state-borders")
       .selectAll("path")
