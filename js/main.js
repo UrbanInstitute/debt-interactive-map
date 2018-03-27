@@ -81,9 +81,12 @@ d3.queue()
     .defer(d3.json, "data/us-10m.v1.json")
     .defer(d3.csv, "data/county_medical.csv")
     .defer(d3.csv, "data/state_medical.csv")
-    .defer(d3.csv, "data/county_fake.csv")
-    .defer(d3.csv, "data/state_fake.csv")
+    .defer(d3.csv, "data/county_student2.csv")
+    .defer(d3.csv, "data/state_student2.csv")    
     .await(ready);
+
+    // .defer(d3.csv, "data/county_fake.csv")
+    // .defer(d3.csv, "data/state_fake.csv")    
 
 function transformData(geography){
   var geography_nested = d3.nest()
@@ -180,16 +183,48 @@ function ready(error, us, county, state, county2, state2) {
   var countyData = us.objects.counties.geometries;
   var stateData = us.objects.states.geometries;
 
-  console.log(countyData)
-
-
   // dropdown-header
 
-  $( "#dropdown-header" ).click(function() {
-    var CATEGORY = "fake";  
-    console.log('clickz')
-    changeData(CATEGORY);
-  });
+  // $( "#dropdown-header" ).click(function() {
+    // var CATEGORY = "fake";  
+    // console.log('clickz')
+    // changeData(CATEGORY);
+  // });
+
+  $( "#dropdown-header" ).selectmenu({
+      open: function( event, ui ) {
+
+      },
+      close: function(event, ui){
+
+      },
+      change: function(event, d){
+        // console.log(event)
+        // console.log(d)
+        // console.log(d.item.value)
+        // console.log('switchz')
+        changeData(d.item.value);
+        updateMap("perc_debt_collect")
+        // console.log(selectedState)
+        
+        if (selectedState == undefined) {
+          updateTable(stateData[0])
+        }
+        else {
+          updateTable(selectedState)
+        }
+
+
+        // move to first variable (perc_debt_collect for this proof ofconcept)
+        // update legend ->
+        // update data at left
+        // update titles at left
+        // update bars at bottom
+        // if i can rebind the data, then call all the updates
+      }
+    });
+
+
 
   function changeData(CATEGORY) {  
 
@@ -229,16 +264,7 @@ function ready(error, us, county, state, county2, state2) {
       })  
 
     // update map colors
-    updateMap("perc_debt_collect")
 
-
-
-    // move to first variable (perc_debt_collect for this proof ofconcept)
-    // update legend ->
-    // update data at left
-    // update titles at left
-    // update bars at bottom
-    // if i can rebind the data, then call all the updates
   }
 
   // ENDDDDDD dropdown header topic change logic
@@ -764,9 +790,7 @@ function ready(error, us, county, state, county2, state2) {
           setZoom(false, true, false)
           updateBars(SELECTED_VARIABLE, d3.select(".state-borders > path.selected").datum())
         }
-      })
-
-    console.log(tmp_state[40])  
+      })  
 
     g.append("g")
       .attr("class", "state-borders")
@@ -791,9 +815,6 @@ function ready(error, us, county, state, county2, state2) {
         updateBars(SELECTED_VARIABLE, d)
       })
       .on('mouseover', function(d) { 
-
-
-          console.log(d)
 
 
         if (zoomNational == true || zoomNational_St == true) {                 
