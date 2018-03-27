@@ -2542,6 +2542,22 @@ function ready(error, us, county, state, county2, state2) {
 };
 
 
+$( "#dropdown-header" ).selectmenu({
+    open: function( event, ui ) {
+      // oldHeight = d3.select("body").style("height")
+      // d3.select("body").style("height", (d3.select(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").node().getBoundingClientRect().height+ d3.select("#controlsTop").node().getBoundingClientRect().height + 75) + "px")
+      // pymChild.sendHeight();
+    },
+    close: function(event, ui){
+      // d3.select("body").style("height", oldHeight)
+      // pymChild.sendHeight();
+    },
+    change: function(event, d){
+      // state = d.item.value;
+      // buildChart(opioids_map.get(d.item.value))
+    }
+  });
+
 
 
 

@@ -278,8 +278,10 @@ h2 {
   margin-top: 52px;
 }
 
-#dropdown-header { 
-    width: 100%;
+#dropdown-header-button {
+/*#dropdown-header { */
+    width: 100% !important;
+    display: block;
     max-width: 1160px !important;
     height: 40px;
     background-color: #fff;
@@ -287,7 +289,38 @@ h2 {
     margin: 0 auto;
     margin-top: -20px;
     box-shadow: 1px 2px 9px -3px;
+    float: unset !important; 
+    border-radius: 0px;
   }
+
+#dropdown-header-button .ui-selectmenu-text {
+  padding-top: 10px;
+}
+
+
+.ui-icon {
+  padding-right: 20px;
+  
+}
+
+#dropdown-header-button > span.ui-selectmenu-icon.ui-icon.ui-icon-triangle-1-s {
+  margin-top: 15.5px !important;
+  height: 12px !important;
+}
+
+.ui-button .ui-icon {
+  background-image: url("../img/arrow.png") !important;
+  background-size: 16px !important;
+  
+}
+.ui-button .ui-icon.greyed {
+  background-image: url("../img/arrow-grey.png") !important;
+  background-size: 16px !important;
+}
+.ui-button .ui-icon.arrow-up {
+  background-image: url("../img/arrow-up.png") !important;
+  background-size: 16px !important;
+}
 
 .g-text, .g-text-ph {
   font-size: 12px;
@@ -901,6 +934,11 @@ html .ui-button.ui-state-disabled:active {
     background-image: url("../img/arrow-up.png") !important;
     background-size: 13px !important;
   }
+
+  #dropdown-header-button {
+    padding-left: 0px;
+  }
+
   #bar-chart-mobile {
     display: block;
   }
@@ -915,6 +953,7 @@ html .ui-button.ui-state-disabled:active {
     border-top: 1px solid grey;
     cursor: pointer;
     pointer-events: all;
+    background-color: #fff;
   }
 
   .category-menu {

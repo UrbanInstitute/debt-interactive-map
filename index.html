@@ -6,8 +6,9 @@
    <meta name="description" content="">
    <link rel="shortcut icon" href="img/favicon.ico" type="img/x-icon">
    <title>Debt in America: An Interactive Map</title>
-   <link rel="stylesheet" type="text/css" href="css/style.css"/>
    <link rel="stylesheet" type="text/css" href="css/jquery-ui.css"/>
+   <link rel="stylesheet" type="text/css" href="css/style.css"/>
+   
 
    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
   <link rel="stylesheet" type="text/css" href="css/urban-header.css">
@@ -93,10 +94,13 @@
       </div>
     </div>
   </div>
-      <div id="dropdown-header">
-      <span>Currently viewing: </span>
-      <span>Student Loan Debt</span>
-    </div>
+      <!-- <div id="dropdown-header"> -->
+      <select id = "dropdown-header"">
+      <!-- <span>Currently viewing: </span>
+      <span>Student Loan Debt</span> -->
+        <option name = "medical" value = "medical">Medical Debt</option>
+        <option name = "student" value = "student">Student Loan Debt</option>
+      </select>
 </div>
   <!--END HEADER-->
 <div id="isMobile"></div>
