@@ -199,20 +199,40 @@ function ready(error, us, county, state, county2, state2) {
 
       },
       change: function(event, d){
-        // console.log(event)
-        // console.log(d)
-        // console.log(d.item.value)
-        // console.log('switchz')
-        changeData(d.item.value);
+        console.log('switchz')
+        var BigData = changeData(d.item.value);
         updateMap("perc_debt_collect")
-        // console.log(selectedState)
         
-        if (selectedState == undefined) {
-          updateTable(stateData[0])
+
+        // on click of a state or county, the "updateTable" works great. 
+
+        // Okay so the data should be updated and stored in BigData
+        // Now find what the municipality is....
+
+        if (zoomNational == true) {
+          console.log('national')          
+          
+          var us_data = BigData.state_data[0]["values"][0]
+          for (var key in us_data) {
+              if (us_data.hasOwnProperty(key)) { 
+                  if (+us_data[key] == NaN || +us_data[key] == 0){
+                    us_data[key = us_data[key]]
+                  }else {
+                    us_data[key] = +us_data[key]
+                  }
+              }
+          }          
+          updateTable(us_data)
+
+        } else if (zoomCounty == true) {
+          console.log('county')
+          // console.log(d3.select("g.counties").selectAll("path.selected").datum())
+          updateTable(d3.select("g.counties").selectAll("path.selected").datum())
+        } else if (zoomState == true) {
+          console.log('state')          
+          updateTable(d3.select("path#" + selectedState.properties.abbr).datum())
         }
-        else {
-          updateTable(selectedState)
-        }
+
 
 
         // move to first variable (perc_debt_collect for this proof ofconcept)
@@ -242,7 +262,7 @@ function ready(error, us, county, state, county2, state2) {
     // update data bound to counties  
     // //// DATA IS Bound in the wrong order....not sure why .
 
-    console.log(tmp_county)
+    // console.log(tmp_county)
 
     var countiesD3 = d3.selectAll(".counties")
     .selectAll("path")
@@ -252,10 +272,6 @@ function ready(error, us, county, state, county2, state2) {
         .datum(tmp_county.filter(function(o){ return o.id == d.id})[0])
     })  
 
-      
-
-    
-
     var statesD3 = d3.selectAll(".state-borders")
       .selectAll("path")
       .each(function(d){
@@ -264,6 +280,8 @@ function ready(error, us, county, state, county2, state2) {
       })  
 
     // update map colors
+
+    return BigData
 
   }
 
@@ -718,6 +736,7 @@ function ready(error, us, county, state, county2, state2) {
           return d.properties.state == state
         })
         var selectedState = stateData[0]
+        console.log(selectedState)
         var previousState = (d3.select(".state-borders > path.selected").node() != null) ? d3.select(".state-borders > path.selected").attr("id") : ""
         var selectedCounty = (d["properties"])
         var level = (zoomState == true && previousState == d["properties"]["abbr"]) ? "county": "state";
@@ -2181,7 +2200,7 @@ function ready(error, us, county, state, county2, state2) {
     }
   }
   function updateTable(data) { 
-    console.log(data)
+    // console.log(data)
     var data = (zoomNational == true) ? data : data["properties"];
     d3.selectAll("p.note1, p.note2").style("opacity", 0)
     d3.selectAll(".cell-data")
@@ -2250,6 +2269,7 @@ function ready(error, us, county, state, county2, state2) {
       // k = 4;
       // centered = selectedState.properties.state;
       var data = (zoomLevel == "state") ? d3.select("path#" + selectedState.properties.abbr).datum() : d;
+      // console.log(data)
       updateTable(data)
 
       if (active.node() === this) return reset();
@@ -2561,24 +2581,5 @@ function ready(error, us, county, state, county2, state2) {
 
 
 };
-
-
-$( "#dropdown-header" ).selectmenu({
-    open: function( event, ui ) {
-      // oldHeight = d3.select("body").style("height")
-      // d3.select("body").style("height", (d3.select(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").node().getBoundingClientRect().height+ d3.select("#controlsTop").node().getBoundingClientRect().height + 75) + "px")
-      // pymChild.sendHeight();
-    },
-    close: function(event, ui){
-      // d3.select("body").style("height", oldHeight)
-      // pymChild.sendHeight();
-    },
-    change: function(event, d){
-      // state = d.item.value;
-      // buildChart(opioids_map.get(d.item.value))
-    }
-  });
-
-
 
 
