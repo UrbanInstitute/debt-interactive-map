@@ -1,8 +1,8 @@
 var IS_MOBILE;
 var IS_PHONE;
 var IS_PHONESM;
-var BREAKS ={"perc_debt_collect":[0.22, .31, .39, .49], "med_debt_collect":[1200, 1500, 1800, 2300], "perc_debt_med":[.11,.18,.26,.34], "med_debt_med":[500,700,950,1250], "perc_pop_nw":[.13,.28,.46,.67], "perc_pop_no_ins":[.08,.13,.18,.26], "avg_income":[52650,63850,77900,101050]}
-var legendWidth = {"perc_debt_collect": 60, "perc_debt_med": 58, "med_debt_collect": 73, "med_debt_med": 70, "perc_pop_nw": 63, "perc_pop_no_ins": 60, "avg_income": 89}
+var BREAKS ={"perc_debt_collect":[0.22, .31, .39, .49], "med_debt_collect":[1200, 1500, 1800, 2300], "perc_debt_med":[.11,.18,.26,.34], "med_debt_med":[500,700,950,1250], "perc_pop_nw":[.13,.28,.46,.67], "perc_pop_no_ins":[.08,.13,.18,.26], "avg_income":[52650,63850,77900,101050],"avg_income2":[52650,63850,77900,101050]}
+var legendWidth = {"perc_debt_collect": 60, "perc_debt_med": 58, "med_debt_collect": 73, "med_debt_med": 70, "perc_pop_nw": 63, "perc_pop_no_ins": 60, "avg_income": 89, "avg_income2": 89}
 // var legendTranslate = {"perc_debt_collect": width-60, "perc_debt_med": 644, "med_debt_collect": 628, "med_debt_med":631, "perc_pop_nw":638, "perc_pop_no_ins": 642, "avg_income":615}
 
 var SELECTED_VARIABLE;
@@ -204,7 +204,7 @@ function ready(error, us, county, state, county2, state2) {
       },
       change: function(event, d){
         
-        var BigData = changeData(d.item.value);
+        BigData = changeData(d.item.value);
         updateMap("perc_debt_collect")            
 
         type = d.item.value;
@@ -309,6 +309,8 @@ function ready(error, us, county, state, county2, state2) {
       availableTags: dropdown,
     })
   }
+  
+  // End Search Array
 
   $( "#searchBox" ).autocomplete({
     appendTo: ".search-div",
@@ -442,7 +444,8 @@ function ready(error, us, county, state, county2, state2) {
     {label: "Median medical debt in collections&#x207A;", variable: "med_debt_med"},
     {label: "Nonwhite population share", variable: "perc_pop_nw"},
     {label: "Share without health insurance", variable: "perc_pop_no_ins" },
-    {label: "Average household income", variable: "avg_income"}]
+    {label: "Average household income", variable: "avg_income"},
+    {label: "Average household income", variable: "avg_income2"}]
     
     var table = d3.select("#table-div")
 
@@ -1701,18 +1704,32 @@ function ready(error, us, county, state, county2, state2) {
   }
 
   function updateBars(variable, selected) { 
+    // console.log(selected)
+    // console.log(BigData)
+
+    var us_data = BigData.state_data[0]["values"][0]
+    for (var key in us_data) {
+        if (us_data.hasOwnProperty(key)) { 
+            if (+us_data[key] == NaN || +us_data[key] == 0){
+              us_data[key = us_data[key]]
+            }else {
+              us_data[key] = +us_data[key]
+            }
+        }
+    }      
+    
     d3.select("#notes-section").selectAll("p.note2, p.note1").style("opacity", 0)
     // d3.selectAll(".note-header").html("<b>Note:</b>")
 
     var WHITE_ph = variable + "_wh"
     var NONWHITE_ph = variable + "_nw"
-    var data = county_data;
+    var data = BigData.county_data;
     /**MOBILE**/
     if (IS_PHONE) { 
-      var state_data_ph = state_data.filter(function(d) {
+      var state_data_ph = BigData.state_data.filter(function(d) {
         return d.state == selectedStatePh
       })
-      var county_data_ph = county_data.filter(function(d) {
+      var county_data_ph = BigData.county_data.filter(function(d) {
         return d.county == selectedCountyPh && d.state == selectedStatePh
       })
       x_ph.domain([0, d3.max(data, function(d) {
@@ -1730,7 +1747,7 @@ function ready(error, us, county, state, county2, state2) {
       National
         .each(function() {
           d3.select(this).select(".bar-ph")
-            .data(us_data_ph)
+            .data(BigData.us_data_ph)
             .transition()
             .duration(300)
             .attr("width", function(d) { 
@@ -1744,7 +1761,7 @@ function ready(error, us, county, state, county2, state2) {
               }
             })
           d3.select(this).select(".data-label-ph")
-            .data(us_data_ph)
+            .data(BigData.us_data_ph)
             .attr("x", function(d) { 
               var parentClass = $(this).closest(".rect-g").attr("class")
               if (parentClass.search("All") > -1) {
@@ -1781,7 +1798,7 @@ function ready(error, us, county, state, county2, state2) {
       State
         .each(function() {
           d3.select(this).select(".bar-ph")
-            .data(state_data_ph)
+            .data(BigData.state_data_ph)
             .transition()
             .duration(300)
             // .attr("height", y_ph.bandwidth())
@@ -1796,7 +1813,7 @@ function ready(error, us, county, state, county2, state2) {
               }
             })
           d3.select(this).select(".data-label-ph")
-            .data(state_data_ph)
+            .data(BigData.state_data_ph)
             .attr("x", function(d) { 
               var parentClass = $(this).closest(".rect-g").attr("class")
               if (parentClass.search("All") > -1) {
@@ -1880,9 +1897,10 @@ function ready(error, us, county, state, county2, state2) {
               })
           })
       }
-    }else {
+    }else {    
       /*DESKTOP*/
-    var data =  county_data;
+    var data =  BigData.county_data;
+    // console.log(data)
     // var data = (zoomCounty == true) ? county_data : state_data;
     var x = d3.scaleBand()
       .rangeRound([0, barWidth])
@@ -1975,7 +1993,7 @@ function ready(error, us, county, state, county2, state2) {
         var countyIDHov = (d3.select(".counties > path.hover").node() == null) ? "" : d3.select(".counties > path.hover").attr("id");
         var county = (countyID == "") ? "" : countyID.slice(2);
         var state = selected["properties"]["abbr"]
-        var data =  tmp_county
+        var data =  BigData.tmp_county
         var State = d3.select("#State").selectAll(".category")
         var selectedState = d3.select("path#" + selected["properties"]["abbr"]).datum()
         var stateData = selectedState["properties"]
@@ -2387,7 +2405,6 @@ function ready(error, us, county, state, county2, state2) {
 
       }else {
         setZoom(true, false, false)
-        console.log(type)
         updateTable(us_data,type)
         updateBars(SELECTED_VARIABLE, d)
       }
