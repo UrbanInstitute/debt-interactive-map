@@ -13,6 +13,7 @@ var zoomState;
 var zoomNational;
 var zoomCounty;
 var zoomNational_St;
+var type;
 // var CATEGORY = "fake";
 var tdMap;
 var active = d3.select(null);
@@ -198,11 +199,16 @@ function ready(error, us, county, state, county2, state2) {
       close: function(event, ui){
 
       },
+      create: function(event, ui){
+        type = "medical"
+      },
       change: function(event, d){
         
         var BigData = changeData(d.item.value);
-        updateMap("perc_debt_collect")
-        
+        updateMap("perc_debt_collect")            
+
+        type = d.item.value;
+
         if (zoomNational == true) {          
           var us_data = BigData.state_data[0]["values"][0]
           for (var key in us_data) {
@@ -213,12 +219,12 @@ function ready(error, us, county, state, county2, state2) {
                     us_data[key] = +us_data[key]
                   }
               }
-          }          
-          updateTable(us_data)
+          }                    
+          updateTable(us_data,type)
         } else if (zoomCounty == true) {
-          updateTable(d3.select("g.counties").selectAll("path.selected").datum())
+          updateTable(d3.select("g.counties").selectAll("path.selected").datum(),type)
         } else if (zoomState == true) {
-          updateTable(d3.select("path#" + selectedState.properties.abbr).datum())
+          updateTable(d3.select("path#" + selectedState.properties.abbr).datum(),type)
         }
       }
     });
@@ -726,8 +732,9 @@ function ready(error, us, county, state, county2, state2) {
           d3.select(this).classed('selected', false)
           if (level == "county") { 
             $('ul.tagit > li:nth-child(2)').remove()
-            setZoom(false, true, false)
-            updateTable(selectedState)
+            setZoom(false, true, false)    
+            console.log(type)        
+            updateTable(selectedState,type)
             updateBars(SELECTED_VARIABLE, d)
           }
         }else { 
@@ -2161,27 +2168,36 @@ function ready(error, us, county, state, county2, state2) {
         d3.selectAll(".counties > path.selected")
           .classed("selected", false)
         updateBars(SELECTED_VARIABLE, filteredData[0])
-        updateTable(stateData[0])
+        console.log(type)
+        updateTable(stateData[0],type)
       })
         updateBars(SELECTED_VARIABLE, filteredData[0])
     }
   }
-  function updateTable(data) { 
+  function updateTable(data,type) { 
 
     var columns = ["All", "White", "NonWhite"]    
-    var rowNumbers = [1,2,3]
-    var groups = ["Share with any debt in collections<span class=\"large\">&#x207A;</span>", "Median debt in collections<span class=\"large\">&#x207A;</span>", "Share with medical debt in collections<span class=\"large\">&#x207A;</span>", "Median medical debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share", "Share without health insurance coverage","Average household income","TEST"]
-    var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income","avg_income2"]
-    
-    
-    var tbody = table.selectAll('tbody')
+    var rowNumbers = [1,2,3]    
+
+    if (type) {
+      console.log('here')
+      if (type == "medical") {
+        var groups = ["Percent with any debt in collections<span class=\"large\">&#x207A;</span>", "Median debt in collections<span class=\"large\">&#x207A;</span>", "Share with medical debt in collections<span class=\"large\">&#x207A;</span>", "Median medical debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
+        var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]    
+      } else if (type == "student") {
+        var groups = ["Butts with any debt in collections<span class=\"large\">&#x207A;</span>", "Median debt in collections<span class=\"large\">&#x207A;</span>", "Share with medical debt in collections<span class=\"large\">&#x207A;</span>", "Median medical debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share", "Share without health insurance coverage","Average household income","TEST"]
+        var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income","avg_income2"]    
+      }
+
+      // based on type, define the groups and rowdata
+      var tbody = table.selectAll('tbody')
           .data(rowData)
 
         tbody.enter().append("tbody")
           .attr("class", function(d, i) {
             return "new group group-" + i
           })
-          .merge(tbody)
+          // .merge(tbody)
           .on('click', function(d) { 
             d3.selectAll('tbody')
               .classed('selected', false)
@@ -2197,74 +2213,71 @@ function ready(error, us, county, state, county2, state2) {
             updateMap(d)
           })
     
-    // tbody.exit().remove();  
+      tbody.exit().remove();  
 
-    table.select('tbody').classed('selected', true)
-
-
-// Seems to only be working on the SECOND click....
-// Is it only seeing three?? cuz rowNumbers is only three long? but why on second click it works?
-
+      table.select('tbody').classed('selected', true)
     
+      var tr = table.selectAll('tbody.new').selectAll('tr')
+          .data(rowNumbers)
+      
 
-    var tr = table.selectAll('tbody.new').selectAll('tr')
-        .data(rowNumbers)
-    
-
-    tr.enter().append('tr')
-        .attr("class", function(d,i) {
-          console.log(i)
-
-          if (i%3 == 0 ) {
-            return "cell-header new"
-          }else if (i%3==2) {
-            return "cell-column"
-          }else {
-            return "cell-data"
-          }
-        })
-
-    d3.selectAll(".cell-header.new").selectAll("th")
-      .data([1]).enter().append("th")
-      .attr("colspan", 3)
-      .each(function(d,i) {
-        d3.select(this)
-          .html(function() { 
-            return groups[i]
-          })
-      })
-
-    d3.selectAll(".cell-column")
-      .each(function() {
-        d3.select(this).selectAll("td")
-          .data(columns)
-          .enter().append("td")
-          .text(function(d) {
-            return d
-          })
-      })
-    d3.selectAll(".cell-data")
-      .each(function(d,i) {
-        var rowVariable = [rowData[i]],
-            rowVariable_nw = rowVariable + "_nw";
-            rowVariable_wh = rowVariable + "_wh";
-        d3.select(this).selectAll("td")
-          .data(columns)
-          .enter().append("td")
-          .text(function(d,i) {
-            if (i==0) {
-              return ((us_data[rowVariable]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable]);
-            }else if (i==1){
-              return ((us_data[rowVariable_wh]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_wh]);
-            }else if (i==2) {
-              return ((us_data[rowVariable_nw]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_nw]);
+      tr.enter().append('tr')
+          .attr("class", function(d,i) {
+            if (i%3 == 0 ) {
+              return "cell-header new"
+            }else if (i%3==2) {
+              return "cell-column"
+            }else {
+              return "cell-data"
             }
           })
-      })
- 
-// Remove things (EXIT) and remove the "new" headlines
 
-// create a means. (ABOVE) for passing through new data to the tables. 
+      d3.selectAll(".cell-header.new").selectAll("th")
+        .data([1]).enter().append("th")
+        .attr("colspan", 3)
+
+      d3.selectAll(".cell-header").select("th")      
+        .each(function(d,i) {
+          d3.select(this)
+            .html(function() { 
+              return groups[i]
+            })
+        })      
+
+      d3.selectAll(".cell-column")
+        .each(function() {
+          d3.select(this).selectAll("td")
+            .data(columns)
+            .enter().append("td")
+            .text(function(d) {
+              return d
+            })
+        })
+      d3.selectAll(".cell-data")
+        .each(function(d,i) {
+          var rowVariable = [rowData[i]],
+              rowVariable_nw = rowVariable + "_nw";
+              rowVariable_wh = rowVariable + "_wh";
+          d3.select(this).selectAll("td")
+            .data(columns)
+            .enter().append("td")
+            .text(function(d,i) {
+              if (i==0) {
+                return ((us_data[rowVariable]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable]);
+              }else if (i==1){
+                return ((us_data[rowVariable_wh]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_wh]);
+              }else if (i==2) {
+                return ((us_data[rowVariable_nw]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_nw]);
+              }
+            })
+        })
+ 
+      // Remove things (EXIT) and remove the "new" headlines
+
+      // create a means. (ABOVE) for passing through new data to the tables. 
+    }
+    
+    
 
     
     var data = (zoomNational == true) ? data : data["properties"];
@@ -2338,8 +2351,8 @@ function ready(error, us, county, state, county2, state2) {
       // k = 4;
       // centered = selectedState.properties.state;
       var data = (zoomLevel == "state") ? d3.select("path#" + selectedState.properties.abbr).datum() : d;
-      // console.log(data)
-      updateTable(data)
+      console.log(type)
+      updateTable(data,type)
 
       if (active.node() === this) return reset();
       active.classed("active", false);
@@ -2374,7 +2387,8 @@ function ready(error, us, county, state, county2, state2) {
 
       }else {
         setZoom(true, false, false)
-        updateTable(us_data)
+        console.log(type)
+        updateTable(us_data,type)
         updateBars(SELECTED_VARIABLE, d)
       }
       $('.zoomBtn').css("display", "none")
