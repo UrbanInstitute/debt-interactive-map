@@ -199,19 +199,11 @@ function ready(error, us, county, state, county2, state2) {
 
       },
       change: function(event, d){
-        console.log('switchz')
+        
         var BigData = changeData(d.item.value);
         updateMap("perc_debt_collect")
         
-
-        // on click of a state or county, the "updateTable" works great. 
-
-        // Okay so the data should be updated and stored in BigData
-        // Now find what the municipality is....
-
-        if (zoomNational == true) {
-          console.log('national')          
-          
+        if (zoomNational == true) {          
           var us_data = BigData.state_data[0]["values"][0]
           for (var key in us_data) {
               if (us_data.hasOwnProperty(key)) { 
@@ -223,24 +215,11 @@ function ready(error, us, county, state, county2, state2) {
               }
           }          
           updateTable(us_data)
-
         } else if (zoomCounty == true) {
-          console.log('county')
-          // console.log(d3.select("g.counties").selectAll("path.selected").datum())
           updateTable(d3.select("g.counties").selectAll("path.selected").datum())
         } else if (zoomState == true) {
-          console.log('state')          
           updateTable(d3.select("path#" + selectedState.properties.abbr).datum())
         }
-
-
-
-        // move to first variable (perc_debt_collect for this proof ofconcept)
-        // update legend ->
-        // update data at left
-        // update titles at left
-        // update bars at bottom
-        // if i can rebind the data, then call all the updates
       }
     });
 
@@ -1147,6 +1126,7 @@ function ready(error, us, county, state, county2, state2) {
       // .attr("d", path)
 
   /*ADD TABLE*/
+
     $("#table-div").empty()
     var columns = ["All", "White", "NonWhite"]
     var groups = ["Share with any debt in collections<span class=\"large\">&#x207A;</span>", "Median debt in collections<span class=\"large\">&#x207A;</span>", "Share with medical debt in collections<span class=\"large\">&#x207A;</span>", "Median medical debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
@@ -1164,21 +1144,8 @@ function ready(error, us, county, state, county2, state2) {
             d3.selectAll('tbody')
               .classed('selected', false)
             d3.select(this)
-              .classed('selected', true)
-            // if (d == "med_debt_collect"|| d=="med_debt_med") {
-            //   d3.select(".rect-div")
-            //     .attr("width", 73)
-            //     .attr('transform', 'translate(' + (width- 72) + ',' + (-1) + ')')
-            // }else if (d == "med_debt_collect"|| d=="med_debt_med") {
-            //   d3.select(".rect-div")
-            //     .attr("width", 85)
-            //     .attr('transform', 'translate(' + (width- 83) + ',' + (-1) + ')')
-            // }else if (d == "avg_income") {
-            //   d3.select(".rect-div")
-            //     .attr("width", 89)
-            //     .attr('transform', 'translate(' + (width- 85) + ',' + (-1) + ')')
-            // }else {
-              d3.select(".rect-div")
+              .classed('selected', true)           
+            d3.select(".rect-div")
               .attr("width", function() {
                 return (IS_MOBILE) ? 73: legendWidth[d]
               })
@@ -2200,7 +2167,106 @@ function ready(error, us, county, state, county2, state2) {
     }
   }
   function updateTable(data) { 
-    // console.log(data)
+
+    var columns = ["All", "White", "NonWhite"]    
+    var rowNumbers = [1,2,3]
+    var groups = ["Share with any debt in collections<span class=\"large\">&#x207A;</span>", "Median debt in collections<span class=\"large\">&#x207A;</span>", "Share with medical debt in collections<span class=\"large\">&#x207A;</span>", "Median medical debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share", "Share without health insurance coverage","Average household income","TEST"]
+    var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income","avg_income2"]
+    
+    
+    var tbody = table.selectAll('tbody')
+          .data(rowData)
+
+        tbody.enter().append("tbody")
+          .attr("class", function(d, i) {
+            return "new group group-" + i
+          })
+          .merge(tbody)
+          .on('click', function(d) { 
+            d3.selectAll('tbody')
+              .classed('selected', false)
+            d3.select(this)
+              .classed('selected', true)           
+            d3.select(".rect-div")
+              .attr("width", function() {
+                return (IS_MOBILE) ? 73: legendWidth[d]
+              })
+              .attr('transform', 'translate(' + (width - legendWidth[d]) + ',' + (-1) + ')')
+            // }
+            setVariable(d)
+            updateMap(d)
+          })
+    
+    // tbody.exit().remove();  
+
+    table.select('tbody').classed('selected', true)
+
+
+// Seems to only be working on the SECOND click....
+// Is it only seeing three?? cuz rowNumbers is only three long? but why on second click it works?
+
+    
+
+    var tr = table.selectAll('tbody.new').selectAll('tr')
+        .data(rowNumbers)
+    
+
+    tr.enter().append('tr')
+        .attr("class", function(d,i) {
+          console.log(i)
+
+          if (i%3 == 0 ) {
+            return "cell-header new"
+          }else if (i%3==2) {
+            return "cell-column"
+          }else {
+            return "cell-data"
+          }
+        })
+
+    d3.selectAll(".cell-header.new").selectAll("th")
+      .data([1]).enter().append("th")
+      .attr("colspan", 3)
+      .each(function(d,i) {
+        d3.select(this)
+          .html(function() { 
+            return groups[i]
+          })
+      })
+
+    d3.selectAll(".cell-column")
+      .each(function() {
+        d3.select(this).selectAll("td")
+          .data(columns)
+          .enter().append("td")
+          .text(function(d) {
+            return d
+          })
+      })
+    d3.selectAll(".cell-data")
+      .each(function(d,i) {
+        var rowVariable = [rowData[i]],
+            rowVariable_nw = rowVariable + "_nw";
+            rowVariable_wh = rowVariable + "_wh";
+        d3.select(this).selectAll("td")
+          .data(columns)
+          .enter().append("td")
+          .text(function(d,i) {
+            if (i==0) {
+              return ((us_data[rowVariable]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable]);
+            }else if (i==1){
+              return ((us_data[rowVariable_wh]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_wh]);
+            }else if (i==2) {
+              return ((us_data[rowVariable_nw]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_nw]);
+            }
+          })
+      })
+ 
+// Remove things (EXIT) and remove the "new" headlines
+
+// create a means. (ABOVE) for passing through new data to the tables. 
+
+    
     var data = (zoomNational == true) ? data : data["properties"];
     d3.selectAll("p.note1, p.note2").style("opacity", 0)
     d3.selectAll(".cell-data")
@@ -2238,6 +2304,9 @@ function ready(error, us, county, state, county2, state2) {
           })
       })
   }
+
+
+
   function zoomMap(width, d,zoomLevel) { 
     var x, y, k;
     d3.select(".state-borders").selectAll("path")
