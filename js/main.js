@@ -1,8 +1,8 @@
 var IS_MOBILE;
 var IS_PHONE;
 var IS_PHONESM;
-var BREAKS ={"perc_debt_collect":[0.22, .31, .39, .49], "med_debt_collect":[1200, 1500, 1800, 2300], "perc_debt_med":[.11,.18,.26,.34], "med_debt_med":[500,700,950,1250], "perc_pop_nw":[.13,.28,.46,.67], "perc_pop_no_ins":[.08,.13,.18,.26], "avg_income":[52650,63850,77900,101050],"avg_income2":[52650,63850,77900,101050]}
-var legendWidth = {"perc_debt_collect": 60, "perc_debt_med": 58, "med_debt_collect": 73, "med_debt_med": 70, "perc_pop_nw": 63, "perc_pop_no_ins": 60, "avg_income": 89, "avg_income2": 89}
+var BREAKS ={"perc_debt_collect":[0.22, .31, .39, .49], "med_debt_collect":[1200, 1500, 1800, 2300], "perc_debt_med":[.11,.18,.26,.34], "med_debt_med":[500,700,950,1250], "perc_pop_nw":[.13,.28,.46,.67], "perc_pop_no_ins":[.08,.13,.18,.26], "avg_income":[52650,63850,77900,101050],"perc_stud_debt":[0.10,0.13,0.16,0.20],"med_stud_debt": [12550,15050,17450,20350],"perc_stud_debt_collect": [0.1,0.2,0.3,0.6],"med_stud_debt_collect": [6150,7550,9000,10700],"med_mon_pmt": [135,155,175,195],"perc_no_bach": [0.59,0.71,0.79,0.85]};
+var legendWidth = {"perc_debt_collect": 60,"perc_debt_med": 58,"med_debt_collect": 73,"med_debt_med": 70,"perc_pop_nw": 63,"perc_pop_no_ins": 60,"avg_income": 89,"perc_stud_debt":89,"med_stud_debt":89,"perc_stud_debt_collect":89,"med_stud_debt_collect":89,"med_mon_pmt":89,"perc_no_bach":89}
 // var legendTranslate = {"perc_debt_collect": width-60, "perc_debt_med": 644, "med_debt_collect": 628, "med_debt_med":631, "perc_pop_nw":638, "perc_pop_no_ins": 642, "avg_income":615}
 
 var SELECTED_VARIABLE;
@@ -82,8 +82,8 @@ d3.queue()
     .defer(d3.json, "data/us-10m.v1.json")
     .defer(d3.csv, "data/county_medical.csv")
     .defer(d3.csv, "data/state_medical.csv")
-    .defer(d3.csv, "data/county_student2.csv")
-    .defer(d3.csv, "data/state_student2.csv")    
+    .defer(d3.tsv, "data/county_student3.tsv")
+    .defer(d3.csv, "data/state_student3.csv")    
     .await(ready);
 
     // .defer(d3.csv, "data/county_fake.csv")
@@ -192,6 +192,8 @@ function ready(error, us, county, state, county2, state2) {
     // changeData(CATEGORY);
   // });
 
+// CHANGE DATA SET
+
   $( "#dropdown-header" ).selectmenu({
       open: function( event, ui ) {
 
@@ -205,9 +207,13 @@ function ready(error, us, county, state, county2, state2) {
       change: function(event, d){
         
         BigData = changeData(d.item.value);
-        updateMap("perc_debt_collect")            
-
         type = d.item.value;
+
+        // to be used when ready
+        var type_variable = (type == "medical") ? "perc_debt_collect" : "perc_stud_debt";
+        updateMap(type_variable)            
+
+        
 
         if (zoomNational == true) {          
           var us_data = BigData.state_data[0]["values"][0]
@@ -232,9 +238,6 @@ function ready(error, us, county, state, county2, state2) {
 
 
   function changeData(CATEGORY) {  
-
-    // var cat2 = (CATEGORY === "medical") ? "TRUE" : "FALSE";
-    // console.log(cat2)
     
     var BigData = (CATEGORY === "medical") ? OverallTransformData(us,county,state,countyData,stateData) : OverallTransformData(us,county2,state2,countyData,stateData)
     var tmp_state = BigData.tmp_state,
@@ -244,8 +247,10 @@ function ready(error, us, county, state, county2, state2) {
       state_data = BigData.state_data,
       county_data = BigData.county_data;
 
-    // update data bound to counties  
-    // //// DATA IS Bound in the wrong order....not sure why .
+console.log(BigData)
+
+
+    // update data bound to counties 
 
     // console.log(tmp_county)
 
@@ -444,8 +449,7 @@ function ready(error, us, county, state, county2, state2) {
     {label: "Median medical debt in collections&#x207A;", variable: "med_debt_med"},
     {label: "Nonwhite population share", variable: "perc_pop_nw"},
     {label: "Share without health insurance", variable: "perc_pop_no_ins" },
-    {label: "Average household income", variable: "avg_income"},
-    {label: "Average household income", variable: "avg_income2"}]
+    {label: "Average household income", variable: "avg_income"}]
     
     var table = d3.select("#table-div")
 
@@ -724,7 +728,6 @@ function ready(error, us, county, state, county2, state2) {
           return d.properties.state == state
         })
         var selectedState = stateData[0]
-        console.log(selectedState)
         var previousState = (d3.select(".state-borders > path.selected").node() != null) ? d3.select(".state-borders > path.selected").attr("id") : ""
         var selectedCounty = (d["properties"])
         var level = (zoomState == true && previousState == d["properties"]["abbr"]) ? "county": "state";
@@ -735,8 +738,7 @@ function ready(error, us, county, state, county2, state2) {
           d3.select(this).classed('selected', false)
           if (level == "county") { 
             $('ul.tagit > li:nth-child(2)').remove()
-            setZoom(false, true, false)    
-            console.log(type)        
+            setZoom(false, true, false)                
             updateTable(selectedState,type)
             updateBars(SELECTED_VARIABLE, d)
           }
@@ -1625,7 +1627,7 @@ function ready(error, us, county, state, county2, state2) {
   }
 
   function updateMap(variable) {
-    // console.log(variable)    
+    
 
     var min = d3.min(tmp_county, function(d) {
       return d.properties[variable]
@@ -1633,7 +1635,7 @@ function ready(error, us, county, state, county2, state2) {
     var max = d3.max(tmp_county, function(d) { 
       return d.properties[variable]
     })
-  
+
     var quantize = d3.scaleThreshold()
       .domain(BREAKS[variable])
       .range(["#cfe8f3", "#73bfe2", "#1696d2", "#0a4c6a", "#000000"])        
@@ -1704,8 +1706,6 @@ function ready(error, us, county, state, county2, state2) {
   }
 
   function updateBars(variable, selected) { 
-    // console.log(selected)
-    // console.log(BigData)
 
     var us_data = BigData.state_data[0]["values"][0]
     for (var key in us_data) {
@@ -1717,7 +1717,7 @@ function ready(error, us, county, state, county2, state2) {
             }
         }
     }      
-    
+
     d3.select("#notes-section").selectAll("p.note2, p.note1").style("opacity", 0)
     // d3.selectAll(".note-header").html("<b>Note:</b>")
 
@@ -1900,7 +1900,7 @@ function ready(error, us, county, state, county2, state2) {
     }else {    
       /*DESKTOP*/
     var data =  BigData.county_data;
-    // console.log(data)
+
     // var data = (zoomCounty == true) ? county_data : state_data;
     var x = d3.scaleBand()
       .rangeRound([0, barWidth])
@@ -2129,6 +2129,7 @@ function ready(error, us, county, state, county2, state2) {
     }
 
   }
+
   function addTag(state, county, abbr) { 
       var widgetHeight = (IS_MOBILE) ? 80 : 60;
       ($(".search-div > .ui-widget").css("height", widgetHeight))
@@ -2185,8 +2186,7 @@ function ready(error, us, county, state, county2, state2) {
         d3.select("#location").html( state )
         d3.selectAll(".counties > path.selected")
           .classed("selected", false)
-        updateBars(SELECTED_VARIABLE, filteredData[0])
-        console.log(type)
+        updateBars(SELECTED_VARIABLE, filteredData[0])      
         updateTable(stateData[0],type)
       })
         updateBars(SELECTED_VARIABLE, filteredData[0])
@@ -2198,13 +2198,12 @@ function ready(error, us, county, state, county2, state2) {
     var rowNumbers = [1,2,3]    
 
     if (type) {
-      console.log('here')
       if (type == "medical") {
         var groups = ["Percent with any debt in collections<span class=\"large\">&#x207A;</span>", "Median debt in collections<span class=\"large\">&#x207A;</span>", "Share with medical debt in collections<span class=\"large\">&#x207A;</span>", "Median medical debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
         var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]    
       } else if (type == "student") {
-        var groups = ["Butts with any debt in collections<span class=\"large\">&#x207A;</span>", "Median debt in collections<span class=\"large\">&#x207A;</span>", "Share with medical debt in collections<span class=\"large\">&#x207A;</span>", "Median medical debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share", "Share without health insurance coverage","Average household income","TEST"]
-        var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income","avg_income2"]    
+        var groups = ["Share with student loan debt<span class=\"large\">&#x207A;</span>","Median student loan debt<span class=\"large\">&#x207A;</span>","Share with student loan debt in collections<span class=\"large\">&#x207A;</span>","Median student loan debt in collections<span class=\"large\">&#x207A;</span>","Median monthly student loan payment<span class=\"large\">&#x207A;</span>","Nonwhite population share","Share without a Bachelor’s degree","Average household income"];
+        var rowData = ["perc_stud_debt","med_stud_debt","perc_stud_debt_collect","med_stud_debt_collect","med_mon_pmt","perc_pop_nw","perc_no_bach","avg_income"]    
       }
 
       // based on type, define the groups and rowdata
@@ -2233,6 +2232,10 @@ function ready(error, us, county, state, county2, state2) {
     
       tbody.exit().remove();  
 
+      // ERROR HERE FIX
+
+      // changes. the highlighted tbody on change of data
+      table.selectAll('tbody').classed('selected', false);
       table.select('tbody').classed('selected', true)
     
       var tr = table.selectAll('tbody.new').selectAll('tr')
