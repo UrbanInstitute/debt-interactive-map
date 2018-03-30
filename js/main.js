@@ -1,7 +1,7 @@
 var IS_MOBILE;
 var IS_PHONE;
 var IS_PHONESM;
-var BREAKS ={"perc_debt_collect":[0.22, .31, .39, .49], "med_debt_collect":[1200, 1500, 1800, 2300], "perc_debt_med":[.11,.18,.26,.34], "med_debt_med":[500,700,950,1250], "perc_pop_nw":[.13,.28,.46,.67], "perc_pop_no_ins":[.08,.13,.18,.26], "avg_income":[52650,63850,77900,101050],"perc_stud_debt":[0.10,0.13,0.16,0.20],"med_stud_debt": [12550,15050,17450,20350],"perc_stud_debt_collect": [0.1,0.2,0.3,0.6],"med_stud_debt_collect": [6150,7550,9000,10700],"med_mon_pmt": [135,155,175,195],"perc_no_bach": [0.59,0.71,0.79,0.85]};
+var BREAKS ={"perc_debt_collect":[0.22, .31, .39, .49], "med_debt_collect":[1200, 1500, 1800, 2300], "perc_debt_med":[.11,.18,.26,.34], "med_debt_med":[500,700,950,1250], "perc_pop_nw":[.13,.28,.46,.67], "perc_pop_no_ins":[.08,.13,.18,.26], "avg_income":[52650,63850,77900,101050],"perc_stud_debt":[0.10,0.13,0.16,0.20],"med_stud_debt": [12550,15050,17450,20350],"perc_stud_debt_collect": [0.01,0.02,0.03,0.06],"med_stud_debt_collect": [6150,7550,9000,10700],"med_mon_pmt": [135,155,175,195],"perc_no_bach": [0.59,0.71,0.79,0.85]};
 var legendWidth = {"perc_debt_collect": 60,"perc_debt_med": 58,"med_debt_collect": 73,"med_debt_med": 70,"perc_pop_nw": 63,"perc_pop_no_ins": 60,"avg_income": 89,"perc_stud_debt":89,"med_stud_debt":89,"perc_stud_debt_collect":89,"med_stud_debt_collect":89,"med_mon_pmt":89,"perc_no_bach":89}
 // var legendTranslate = {"perc_debt_collect": width-60, "perc_debt_med": 644, "med_debt_collect": 628, "med_debt_med":631, "perc_pop_nw":638, "perc_pop_no_ins": 642, "avg_income":615}
 
@@ -214,6 +214,8 @@ function ready(error, us, county, state, county2, state2) {
 
         // to be used when ready
         var type_variable = (type == "medical") ? "perc_debt_collect" : "perc_stud_debt";
+        setVariable(type_variable)
+        setVariable(type_variable,true)
         updateMap(type_variable)            
 
         
@@ -250,7 +252,7 @@ function ready(error, us, county, state, county2, state2) {
       state_data = BigData.state_data,
       county_data = BigData.county_data;
 
-console.log(BigData)
+// console.log(BigData)
 
 
     // update data bound to counties 
@@ -435,10 +437,10 @@ console.log(BigData)
   //     .on("zoom", zoomed);
 
 
-  var min = d3.min(tmp_county, function(d) {
+  var min = d3.min(BigData.tmp_county, function(d) {
     return d.properties[SELECTED_VARIABLE]
   })
-  var max = d3.max(tmp_county, function(d) { 
+  var max = d3.max(BigData.tmp_county, function(d) { 
     return d.properties[SELECTED_VARIABLE]
   })
   var quantize = d3.scaleThreshold()
@@ -727,7 +729,7 @@ console.log(BigData)
       })
       .on('click', function(d) { 
         var state = d.properties.state;
-        var stateData = tmp_state.filter(function(d){ 
+        var stateData = BigData.tmp_state.filter(function(d){ 
           return d.properties.state == state
         })
         var selectedState = stateData[0]
@@ -823,10 +825,8 @@ console.log(BigData)
         setZoom(false, true, false)
         // $(".state-borders").css("pointer-events", "none")
         // $(".counties").css("pointer-events", "all")
-        addTag(state, null, abbr)
-        console.log(d3.select("tbody.group-0").classed("selected"))
-        zoomMap(width, d, level)
-        console.log(d3.select("tbody.group-0").classed("selected"))
+        addTag(state, null, abbr)        
+        zoomMap(width, d, level)        
         updateBars(SELECTED_VARIABLE, d)
       })
       .on('mouseover', function(d) { 
@@ -976,7 +976,7 @@ console.log(BigData)
         .attr("x",keyWidthPh*i + 55)
         .attr("text-anchor", "middle")
         .text(function(){
-          var min = d3.min(tmp_county, function(d) { 
+          var min = d3.min(BigData.tmp_county, function(d) { 
             return d.properties[SELECTED_VARIABLE]
           })
           var array = BREAKS[SELECTED_VARIABLE]
@@ -1007,7 +1007,7 @@ console.log(BigData)
         .attr("x",keyWidthPh*i + 55 )
         .attr("text-anchor", "middle")
         .text(function(){
-          var max = d3.max(tmp_county, function(d) { 
+          var max = d3.max(BigData.tmp_county, function(d) { 
             return d.properties[SELECTED_VARIABLE]
           })
           return formatNumber(max, "max")
@@ -1057,7 +1057,7 @@ console.log(BigData)
         .attr("y",keyHeight*i + 23)
         .attr("text-anchor", "end")
         .text(function(){
-          var min = d3.min(tmp_county, function(d) { 
+          var min = d3.min(BigData.tmp_county, function(d) { 
             return d.properties[SELECTED_VARIABLE]
           })
           var array = BREAKS[SELECTED_VARIABLE]
@@ -1091,7 +1091,7 @@ console.log(BigData)
         .attr("text-anchor", "end")
         .attr("y",keyHeight*i + 23)
         .text(function(){
-          var max = d3.max(tmp_county, function(d) { 
+          var max = d3.max(BigData.tmp_county, function(d) { 
             return d.properties[SELECTED_VARIABLE]
           })
           return formatNumber(max, "max")
@@ -1246,7 +1246,7 @@ console.log(BigData)
   var x_ph = d3.scaleLinear().range([0, barWidth_ph]);
   var y_ph = d3.scaleBand().range([30, 0]);
   // x_ph.domain([0, d3.max(state_data, function(d) { return d[SELECTED_VARIABLE]; })]);
-  x_ph.domain([0, d3.max(county_data, function(d) {
+  x_ph.domain([0, d3.max(BigData.county_data, function(d) {
     if (isNaN(d[NONWHITE_ph]) == true && isNaN(d[WHITE_ph]) == true){
       return d[SELECTED_VARIABLE_ph]
     }else if (isNaN(d[NONWHITE_ph]) == true && isNaN(d[WHITE_ph]) == false) {
@@ -1454,7 +1454,7 @@ console.log(BigData)
     x.domain([[us_data].map(function(d){ 
       return d.abbr
     })]);
-    y.domain([0, d3.max(county_data, function(d) {
+    y.domain([0, d3.max(BigData.county_data, function(d) {
       if (isNaN(d.nonwhite) == true && isNaN(d.white) == true){
         return d.national
       }else if (isNaN(d.nonwhite) == true && isNaN(d.white) == false) {
@@ -1634,12 +1634,19 @@ console.log(BigData)
   function updateMap(variable) {
     
 
-    var min = d3.min(tmp_county, function(d) {
+    var min = d3.min(BigData.tmp_county, function(d) {
       return d.properties[variable]
     })
-    var max = d3.max(tmp_county, function(d) { 
+    var max = d3.max(BigData.tmp_county, function(d) { 
       return d.properties[variable]
     })
+
+    // console.log(BigData.tmp_county.properties[variable])
+    // console.log(BigData)
+    // for (var i = 0; i < BigData.tmp_county.length; i++) {
+    //   console.log(BigData.tmp_county[i].properties[variable])
+    // }
+    // console.log(max)
 
     var quantize = d3.scaleThreshold()
       .domain(BREAKS[variable])
@@ -1649,11 +1656,20 @@ console.log(BigData)
         if (i != 6) {
         d3.select(this)
           .text(function(){
-            var min = d3.min(tmp_county, function(d) {
+            var min = d3.min(BigData.tmp_county, function(d) {
+              if (d.properties[variable] == "n<50") {
+                return 10000000
+              } else {
+                return d.properties[variable]  
+              }
               return d.properties[variable]
             })
-            var max = d3.max(tmp_county, function(d) {
-              return d.properties[variable]
+            var max = d3.max(BigData.tmp_county, function(d) {
+              if (d.properties[variable] == "n<50") {
+                return 0
+              } else {
+                return d.properties[variable]  
+              }              
             })
             var array = BREAKS[variable]
             if (i==0) {
@@ -1673,10 +1689,10 @@ console.log(BigData)
         if (i != 6) {
         d3.select(this)
           .text(function(){
-            var min = d3.min(tmp_county, function(d) {
+            var min = d3.min(BigData.tmp_county, function(d) {
               return d.properties[variable]
             })
-            var max = d3.max(tmp_county, function(d) {
+            var max = d3.max(BigData.tmp_county, function(d) {
               return d.properties[variable]
             })
             var array = BREAKS[variable]
@@ -1711,7 +1727,7 @@ console.log(BigData)
   }
 
   function updateBars(variable, selected) { 
-
+    // console.log(BigData.state_data["0"]["values"][0])
     var us_data = BigData.state_data[0]["values"][0]
     for (var key in us_data) {
         if (us_data.hasOwnProperty(key)) { 
@@ -2033,6 +2049,7 @@ console.log(BigData)
             d3.select(this).select(".data-label")
               .data([stateData])
               .attr("y", function(d) {
+                // console.log(d)
                 var parentClass = d3.select(this.parentNode).attr('class');
                 if (parentClass.search("All") > -1) {
                   return (isNaN(d[variable]) != true) ? y(d[variable]) - 16 : barHeight - 8;
@@ -2173,11 +2190,11 @@ console.log(BigData)
       $("li#county > a.tagit-close").append('<span class="ui-icon ui-icon-close"</span>')
       setZoom(false,true, true)
       $(".tagit-new").css("display", "none")
-        var filteredData = tmp_county.filter(function(d) {
+        var filteredData = BigData.tmp_county.filter(function(d) {
           return d.properties["county"] == county;
         })
       $("li#county").on('click', function() {
-        var stateData = tmp_state.filter(function(d) {
+        var stateData = BigData.tmp_state.filter(function(d) {
           return d.properties["state"] == state
         })
         d3.selectAll(".counties").selectAll("path.selectedNational").classed("selectedNational", false)
@@ -2191,20 +2208,23 @@ console.log(BigData)
         d3.select("#location").html( state )
         d3.selectAll(".counties > path.selected")
           .classed("selected", false)
-        updateBars(SELECTED_VARIABLE, filteredData[0])      
+        updateBars(SELECTED_VARIABLE, filteredData[0])    
+        // console.log('special')
+        // console.log(stateData[0].properties)                  
         updateTable(stateData[0],type)
       })
         updateBars(SELECTED_VARIABLE, filteredData[0])
     }
   }
   function updateTable(data,type) { 
-      
-    console.log(d3.select("tbody.group-0").classed("selected"))
+
+    // console.log(data.properties)
+
 
     var columns = ["All", "White", "NonWhite"]    
     var rowNumbers = [1,2,3]    
 
-    console.log(d3.select("tbody.group-0").classed("selected"))
+    
 
     if (type) {
       if (type == "medical") {
@@ -2219,10 +2239,9 @@ console.log(BigData)
       var tbody = table.selectAll('tbody')
           .data(rowData)
 
+      tbody.classed("medical",false)
+      tbody.classed("student",false)  
       tbody.classed(type,true)
-
-      console.log(d3.select("tbody.group-0").classed("selected"))
-
 
         // tbody.attr("class", function(d, i) {
         //     return type + " group group-" + i
@@ -2294,22 +2313,22 @@ console.log(BigData)
           d3.select(this).selectAll("td")
             .data(columns)
             .enter().append("td")
-            .text(function(d,i) {
-              if (i==0) {
-                return ((us_data[rowVariable]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable]);
-              }else if (i==1){
-                return ((us_data[rowVariable_wh]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_wh]);
-              }else if (i==2) {
-                return ((us_data[rowVariable_nw]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_nw]);
-              }
-            })
+            // .text(function(d,i) {
+            //   if (i==0) {
+            //     return ((us_data[rowVariable]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable]);
+            //   }else if (i==1){
+            //     return ((us_data[rowVariable_wh]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_wh]);
+            //   }else if (i==2) {
+            //     return ((us_data[rowVariable_nw]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_nw]);
+            //   }
+            // })
         })
  
       // Remove things (EXIT) and remove the "new" headlines
 
       // create a means. (ABOVE) for passing through new data to the tables. 
     }
-    
+    // console.log(data)
     var data = (zoomNational == true) ? data : data["properties"];
     d3.selectAll("p.note1, p.note2").style("opacity", 0)
     d3.selectAll(".cell-data")
@@ -2383,6 +2402,7 @@ console.log(BigData)
       // centered = selectedState.properties.state;
       var data = (zoomLevel == "state") ? d3.select("path#" + selectedState.properties.abbr).datum() : d;
 
+
       updateTable(data,type)
 
       if (active.node() === this) return reset();
@@ -2418,6 +2438,18 @@ console.log(BigData)
 
       }else {
         setZoom(true, false, false)
+        // reset zoom to US
+        var us_data = BigData.state_data[0]["values"][0]
+        for (var key in us_data) {
+            if (us_data.hasOwnProperty(key)) { 
+                if (+us_data[key] == NaN || +us_data[key] == 0){
+                  us_data[key = us_data[key]]
+                }else {
+                  us_data[key] = +us_data[key]
+                }
+            }
+        }      
+
         updateTable(us_data,type)
         updateBars(SELECTED_VARIABLE, d)
       }
@@ -2466,7 +2498,7 @@ console.log(BigData)
       var barSvgHeight_ph = (IS_PHONESM) ? 200 : 173;
       var barWidth_ph = (IS_PHONESM) ? width : width*.85;
       var x_ph = d3.scaleLinear().range([0, barWidth_ph]);
-      x_ph.domain([0, d3.max(county_data, function(d) {
+      x_ph.domain([0, d3.max(BigData.county_data, function(d) {
         if (isNaN(d[NONWHITE_ph]) == true && isNaN(d[WHITE_ph]) == true){
           return d[SELECTED_VARIABLE_ph]
         }else if (isNaN(d[NONWHITE_ph]) == true && isNaN(d[WHITE_ph]) == false) {
