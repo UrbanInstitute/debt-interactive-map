@@ -1641,13 +1641,6 @@ function ready(error, us, county, state, county2, state2) {
       return d.properties[variable]
     })
 
-    // console.log(BigData.tmp_county.properties[variable])
-    // console.log(BigData)
-    // for (var i = 0; i < BigData.tmp_county.length; i++) {
-    //   console.log(BigData.tmp_county[i].properties[variable])
-    // }
-    // console.log(max)
-
     var quantize = d3.scaleThreshold()
       .domain(BREAKS[variable])
       .range(["#cfe8f3", "#73bfe2", "#1696d2", "#0a4c6a", "#000000"])        
@@ -1690,10 +1683,19 @@ function ready(error, us, county, state, county2, state2) {
         d3.select(this)
           .text(function(){
             var min = d3.min(BigData.tmp_county, function(d) {
+              if (d.properties[variable] == "n<50") {
+                return 10000000
+              } else {
+                return d.properties[variable]  
+              }
               return d.properties[variable]
             })
             var max = d3.max(BigData.tmp_county, function(d) {
-              return d.properties[variable]
+              if (d.properties[variable] == "n<50") {
+                return 0
+              } else {
+                return d.properties[variable]  
+              }              
             })
             var array = BREAKS[variable]
             if (i==0) {
