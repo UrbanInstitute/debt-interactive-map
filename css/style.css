@@ -305,8 +305,17 @@ h2 {
 
 #dropdown-header-button .ui-selectmenu-text {
   padding-top: 10px;
+  padding-bottom: 10px;
 }
 
+#dropdown-header-button:focus {
+  outline: none !important;
+}
+
+.ui-menu-item-wrapper:hover {
+  background-color: #000 !important;
+  color: #fff !important;
+}
 
 .ui-icon {
   padding-right: 20px;  
@@ -994,7 +1003,7 @@ html .ui-button.ui-state-disabled:active {
     outline: none !important;
 } 
 
-  #dropdown-div {
+  #dropdown-div, #topdrop-div {
     display: block;
     float: left;
   }
