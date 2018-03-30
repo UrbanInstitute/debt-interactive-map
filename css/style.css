@@ -568,6 +568,21 @@ path.hover {
 .group-4 > .cell-column > td:nth-child(2), .group-4 .cell-column > td:nth-child(3) {
   opacity: 0;
 }
+
+.student.group-4 > .cell-data > td:nth-child(2), .student.group-4 .cell-data > td:nth-child(3) {
+  opacity: 1;
+}
+.student.group-4 > .cell-column > td:nth-child(2), .student.group-4 .cell-column > td:nth-child(3) {
+  opacity: 1;
+}
+
+.student.group-5 > .cell-data > td:nth-child(2), .student.group-5 .cell-data > td:nth-child(3) {
+  opacity: 0;
+}
+.student.group-5 > .cell-column > td:nth-child(2), .student.group-5 .cell-column > td:nth-child(3) {
+  opacity: 0;
+}
+
 .left-table2 {
   float: left;
   width: 5px;

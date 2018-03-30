@@ -205,6 +205,9 @@ function ready(error, us, county, state, county2, state2) {
         type = "medical"
       },
       change: function(event, d){
+
+        table.selectAll('tbody').classed('selected', false);
+        table.select('tbody').classed('selected', true)
         
         BigData = changeData(d.item.value);
         type = d.item.value;
@@ -733,7 +736,7 @@ console.log(BigData)
         var level = (zoomState == true && previousState == d["properties"]["abbr"]) ? "county": "state";
         var county = d.properties["county"]
         var abbr = d.properties["abbr"]
-        if (d3.select(this).classed('selected') == true) { 
+        if (d3.select(this).classed('selected') == true) {
           $(".tagit-new").css("display", "block")
           d3.select(this).classed('selected', false)
           if (level == "county") { 
@@ -821,7 +824,9 @@ console.log(BigData)
         // $(".state-borders").css("pointer-events", "none")
         // $(".counties").css("pointer-events", "all")
         addTag(state, null, abbr)
+        console.log(d3.select("tbody.group-0").classed("selected"))
         zoomMap(width, d, level)
+        console.log(d3.select("tbody.group-0").classed("selected"))
         updateBars(SELECTED_VARIABLE, d)
       })
       .on('mouseover', function(d) { 
@@ -2193,9 +2198,13 @@ console.log(BigData)
     }
   }
   function updateTable(data,type) { 
+      
+    console.log(d3.select("tbody.group-0").classed("selected"))
 
     var columns = ["All", "White", "NonWhite"]    
     var rowNumbers = [1,2,3]    
+
+    console.log(d3.select("tbody.group-0").classed("selected"))
 
     if (type) {
       if (type == "medical") {
@@ -2210,9 +2219,18 @@ console.log(BigData)
       var tbody = table.selectAll('tbody')
           .data(rowData)
 
+      tbody.classed(type,true)
+
+      console.log(d3.select("tbody.group-0").classed("selected"))
+
+
+        // tbody.attr("class", function(d, i) {
+        //     return type + " group group-" + i
+        //   })
+
         tbody.enter().append("tbody")
           .attr("class", function(d, i) {
-            return "new group group-" + i
+            return type + " new group group-" + i
           })
           // .merge(tbody)
           .on('click', function(d) { 
@@ -2230,13 +2248,7 @@ console.log(BigData)
             updateMap(d)
           })
     
-      tbody.exit().remove();  
-
-      // ERROR HERE FIX
-
-      // changes. the highlighted tbody on change of data
-      table.selectAll('tbody').classed('selected', false);
-      table.select('tbody').classed('selected', true)
+      tbody.exit().remove();        
     
       var tr = table.selectAll('tbody.new').selectAll('tr')
           .data(rowNumbers)
@@ -2298,9 +2310,6 @@ console.log(BigData)
       // create a means. (ABOVE) for passing through new data to the tables. 
     }
     
-    
-
-    
     var data = (zoomNational == true) ? data : data["properties"];
     d3.selectAll("p.note1, p.note2").style("opacity", 0)
     d3.selectAll(".cell-data")
@@ -2342,6 +2351,7 @@ console.log(BigData)
 
 
   function zoomMap(width, d,zoomLevel) { 
+
     var x, y, k;
     d3.select(".state-borders").selectAll("path")
       .classed("hide", false)
@@ -2372,7 +2382,7 @@ console.log(BigData)
       // k = 4;
       // centered = selectedState.properties.state;
       var data = (zoomLevel == "state") ? d3.select("path#" + selectedState.properties.abbr).datum() : d;
-      console.log(type)
+
       updateTable(data,type)
 
       if (active.node() === this) return reset();
