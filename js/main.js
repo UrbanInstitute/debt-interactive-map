@@ -218,7 +218,26 @@ function ready(error, us, county, state, county2, state2) {
         setVariable(type_variable,true)
         updateMap(type_variable)            
 
+        var type_category = (type == "medical") ? categoryData : categoryData2;
+        // update mobile categories        
+
+        var optionsCategory = d3.select("#category-select").selectAll('option')
+          .data(type_category)
+
+        optionsCategory.enter()
+          .append('option')
+          .merge(optionsCategory)
+          .html(function(d) {
+            return d.label
+          })
+          .attr('value', function(d) {
+            return d.variable
+          })
         
+        optionsCategory.exit().remove()
+
+
+
 
         if (zoomNational == true) {          
           var us_data = BigData.state_data[0]["values"][0]
@@ -456,6 +475,15 @@ function ready(error, us, county, state, county2, state2) {
     {label: "Share without health insurance", variable: "perc_pop_no_ins" },
     {label: "Average household income", variable: "avg_income"}]
     
+    var categoryData2 = [{label: "Share with student loan debt&#x207A;", variable: "perc_stud_debt"},
+    {label: "Median student loan debt&#x207A;", variable: "med_stud_debt"},
+    {label: "Share with student loan debt in collections&#x207A;", variable: "perc_stud_debt_collect"},
+    {label: "Median student loan debt in collections&#x207A;", variable: "med_stud_debt_collect"},
+    {label: "Median monthly student loan payment&#x207A;", variable: "med_mon_pmt"},
+    {label: "Nonwhite population share", variable: "perc_pop_nw"},
+    {label: "Share without a Bachelor’s degree", variable: "perc_no_bach"},
+    {label: "Average household income", variable: "avg_income" }]
+
     var table = d3.select("#table-div")
 
     var stateMenu = d3.select(".state-menu")
@@ -1729,7 +1757,7 @@ function ready(error, us, county, state, county2, state2) {
   }
 
   function updateBars(variable, selected) { 
-    // console.log(BigData.state_data["0"]["values"][0])
+
     var us_data = BigData.state_data[0]["values"][0]
     for (var key in us_data) {
         if (us_data.hasOwnProperty(key)) { 
@@ -1821,7 +1849,7 @@ function ready(error, us, county, state, county2, state2) {
       State
         .each(function() {
           d3.select(this).select(".bar-ph")
-            .data(BigData.state_data_ph)
+            .data(state_data_ph)
             .transition()
             .duration(300)
             // .attr("height", y_ph.bandwidth())
@@ -1836,7 +1864,7 @@ function ready(error, us, county, state, county2, state2) {
               }
             })
           d3.select(this).select(".data-label-ph")
-            .data(BigData.state_data_ph)
+            .data(state_data_ph)
             .attr("x", function(d) { 
               var parentClass = $(this).closest(".rect-g").attr("class")
               if (parentClass.search("All") > -1) {
