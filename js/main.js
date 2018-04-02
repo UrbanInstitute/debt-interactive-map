@@ -64,11 +64,16 @@ function setZoom(national, state, county, national_st) {
 function selectedStatePh() {
 
 }
+
 var initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width() - 15
 setWidth(initialWidth, IS_MOBILE, IS_PHONE)
 setZoom(true,false, false)
-setVariable("perc_debt_collect")
-setVariable("perc_debt_collect", true)
+
+// reset when changing up first topic
+setVariable("perc_stud_debt")
+setVariable("perc_stud_debt", true)
+
+
 var setHeight = tdMap*.7;
 var width =  tdMap,  //(IS_MOBILE && !IS_PHONE) ? tdMap : (tdMap) - margin.right-margin.left,
     height = (IS_PHONE) ? (width) - margin.top-margin.bottom :  setHeight,//(width*.57) - margin.top-margin.bottom,     
@@ -184,16 +189,7 @@ function ready(error, us, county, state, county2, state2) {
   var countyData = us.objects.counties.geometries;
   var stateData = us.objects.states.geometries;
 
-  // dropdown-header
-
-  // $( "#dropdown-header" ).click(function() {
-    // var CATEGORY = "fake";  
-    // console.log('clickz')
-    // changeData(CATEGORY);
-  // });
-
-// CHANGE DATA SET
-
+  // CHANGE DATA SET
   $( "#dropdown-header" ).selectmenu({
       open: function( event, ui ) {
 
@@ -202,7 +198,7 @@ function ready(error, us, county, state, county2, state2) {
 
       },
       create: function(event, ui){
-        type = "medical"
+        type = "student"
       },
       change: function(event, d){
 
@@ -235,8 +231,6 @@ function ready(error, us, county, state, county2, state2) {
         $('#category-select').val(type_category[0].variable);
 
         $("#category-select").selectmenu("refresh")
-
-
 
         // to be used when ready
         var type_variable = (type == "medical") ? "perc_debt_collect" : "perc_stud_debt";
@@ -278,16 +272,10 @@ function ready(error, us, county, state, county2, state2) {
       state_data = BigData.state_data,
       county_data = BigData.county_data;
 
-// console.log(BigData)
-
-
     // update data bound to counties 
-
-    // console.log(tmp_county)
 
     var countiesD3 = d3.selectAll(".counties")
     .selectAll("path")
-    // .data(tmp_county)  
     .each(function(d){
       d3.select(this)
         .datum(tmp_county.filter(function(o){ return o.id == d.id})[0])
@@ -300,8 +288,6 @@ function ready(error, us, county, state, county2, state2) {
           .datum(tmp_state.filter(function(o){ return o.properties.abbr == d.properties.abbr})[0])
       })  
 
-    // update map colors
-
     return BigData
 
   }
@@ -309,7 +295,7 @@ function ready(error, us, county, state, county2, state2) {
   // ENDDDDDD dropdown header topic change logic
 
   // first time through use "county" and "state" which are medical info. CHANGE if you want diff
-  var BigData = OverallTransformData(us,county,state,countyData,stateData);
+  var BigData = OverallTransformData(us,county2,state2,countyData,stateData);
   var tmp_state = BigData.tmp_state,
     tmp_county = BigData.tmp_county,
     filteredCounties = BigData.filteredCounties,
@@ -552,7 +538,7 @@ function ready(error, us, county, state, county2, state2) {
         .attr("id", "category-select")
       var optionsCategory = categoryMenu
         .selectAll('option')
-        .data(categoryData)
+        .data(categoryData2)
       optionsCategory.enter()
         .append('option')
         .html(function(d) {
@@ -752,6 +738,8 @@ function ready(error, us, county, state, county2, state2) {
     var g = svg.append("g")
       .attr("class", "map-g")
       .attr("transform", "translate(" + (-10) + "," + (translateHeight) + ")scale(" +mapScale + ")")
+
+
 
     g.append("g")
       .attr("class", "counties")
@@ -1182,9 +1170,21 @@ function ready(error, us, county, state, county2, state2) {
 
     $("#table-div").empty()
     var columns = ["All", "White", "NonWhite"]
-    var groups = ["Share with any debt in collections<span class=\"large\">&#x207A;</span>", "Median debt in collections<span class=\"large\">&#x207A;</span>", "Share with medical debt in collections<span class=\"large\">&#x207A;</span>", "Median medical debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
     var rowNumbers = [1,2,3]
-    var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]
+    
+    if (type) {
+      if (type == "medical") {
+        var groups = ["Percent with any debt in collections<span class=\"large\">&#x207A;</span>", "Median debt in collections<span class=\"large\">&#x207A;</span>", "Share with medical debt in collections<span class=\"large\">&#x207A;</span>", "Median medical debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
+        var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]    
+      } else if (type == "student") {
+        var groups = ["Share with student loan debt<span class=\"large\">&#x207A;</span>","Median student loan debt<span class=\"large\">&#x207A;</span>","Share with student loan debt in collections<span class=\"large\">&#x207A;</span>","Median student loan debt in collections<span class=\"large\">&#x207A;</span>","Median monthly student loan payment<span class=\"large\">&#x207A;</span>","Nonwhite population share","Share without a Bachelor’s degree","Average household income"];
+        var rowData = ["perc_stud_debt","med_stud_debt","perc_stud_debt_collect","med_stud_debt_collect","med_mon_pmt","perc_pop_nw","perc_no_bach","avg_income"]    
+      }
+    }
+
+    // var groups = ["Share with any debt in collections<span class=\"large\">&#x207A;</span>", "Median debt in collections<span class=\"large\">&#x207A;</span>", "Share with medical debt in collections<span class=\"large\">&#x207A;</span>", "Median medical debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
+    
+    // var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]
     var table = d3.select("#table-div")
       .append("table")
         tbody = table.selectAll('tbody')

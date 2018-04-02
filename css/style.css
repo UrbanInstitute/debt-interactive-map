@@ -571,10 +571,10 @@ path.hover {
   pointer-events: all;
 }
 
-.group-4 > .cell-data > td:nth-child(2), .group-4 .cell-data > td:nth-child(3) {
+.group-5 > .cell-data > td:nth-child(2), .group-5 .cell-data > td:nth-child(3) {
   opacity: 0;
 }
-.group-4 > .cell-column > td:nth-child(2), .group-4 .cell-column > td:nth-child(3) {
+.group-5 > .cell-column > td:nth-child(2), .group-5 .cell-column > td:nth-child(3) {
   opacity: 0;
 }
 
