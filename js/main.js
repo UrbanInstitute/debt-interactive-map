@@ -237,8 +237,6 @@ function ready(error, us, county, state, county2, state2) {
         optionsCategory.exit().remove()
 
 
-
-
         if (zoomNational == true) {          
           var us_data = BigData.state_data[0]["values"][0]
           for (var key in us_data) {
@@ -381,7 +379,7 @@ function ready(error, us, county, state, county2, state2) {
         var tag = (ui.tag[0]["textContent"]);
         var county = (tag.search(",") > 0) ? tag.split(",")[0] : "";
         var state = (tag.search(",") > 0) ? (tag.split(", ")[1]).slice(0,-1) : tag.slice(0,-1);
-        var geoData = tmp_county 
+        var geoData = BigData.tmp_county 
         var geoType = (tag.search(",") > 0) ? "county" : "state";
         var geography = (geoType == "county") ? county : state;
         selectedLocation()
@@ -402,8 +400,10 @@ function ready(error, us, county, state, county2, state2) {
             return d.properties["state"] == state;
           }
         })
+
         var data = filteredData[0]
         updateBars(SELECTED_VARIABLE, data)
+        console.log(data)
         zoomMap(width, data, geoType)
         if (geoType == "county") { 
           addTag(data["properties"]["state"], county, state)
@@ -2197,7 +2197,9 @@ function ready(error, us, county, state, county2, state2) {
       //   $("li#state").css("margin-right", "20px")
       // }
       setZoom(false,true, false)
+      console.log(abbr)
       createSearchArray(abbr)
+     
       $("li#state").on('click', function() { 
         d3.selectAll("path.selectedNational").classed("selectedNational", false)
         d3.selectAll('li.tagit-choice').remove()
@@ -2212,7 +2214,9 @@ function ready(error, us, county, state, county2, state2) {
         zoomMap(width, null, "national")
         createSearchArray("")
       })
+
     if (county != undefined) { 
+
       var newTag = $("ul.tagit").append('<li id="county" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable"></li>')
       $('li#county').insertBefore(".tagit-new").append('<span class="tagit-label">' + county + '</span>')
       $('li#county').append('<a class="tagit-close"</a>')
@@ -2220,10 +2224,13 @@ function ready(error, us, county, state, county2, state2) {
       $("li#county > a.tagit-close").append('<span class="ui-icon ui-icon-close"</span>')
       setZoom(false,true, true)
       $(".tagit-new").css("display", "none")
-        var filteredData = BigData.tmp_county.filter(function(d) {
-          return d.properties["county"] == county;
-        })
+      var filteredData = BigData.tmp_county.filter(function(d) {
+        return d.properties["county"] == county;
+      })
+
+
       $("li#county").on('click', function() {
+        // for when you click on the x of the county. 
         var stateData = BigData.tmp_state.filter(function(d) {
           return d.properties["state"] == state
         })
@@ -2243,7 +2250,8 @@ function ready(error, us, county, state, county2, state2) {
         // console.log(stateData[0].properties)                  
         updateTable(stateData[0],type)
       })
-        updateBars(SELECTED_VARIABLE, filteredData[0])
+      
+      updateBars(SELECTED_VARIABLE, filteredData[0])
     }
   }
   function updateTable(data,type) { 
@@ -2432,7 +2440,9 @@ function ready(error, us, county, state, county2, state2) {
       // centered = selectedState.properties.state;
       var data = (zoomLevel == "state") ? d3.select("path#" + selectedState.properties.abbr).datum() : d;
 
-
+      console.log(d)
+      // console.log(d3.select("path#" + d.properties.abbr).classed("active", true))
+      console.log(BigData)
       updateTable(data,type)
 
       if (active.node() === this) return reset();
