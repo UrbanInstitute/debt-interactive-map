@@ -1791,25 +1791,49 @@ function ready(error, us, county, state, county2, state2) {
     var WHITE_ph = variable + "_wh"
     var NONWHITE_ph = variable + "_nw"
     var data = BigData.county_data;
+    
+    // console.log(variable)
+    // console.log(selected)
+
     /**MOBILE**/
-    if (IS_PHONE) { 
+    if (IS_PHONE) {   
+
+      // console.log(variable)
+      // console.log(selected)
+
+
       var state_data_ph = BigData.state_data.filter(function(d) {
         return d.state == selectedStatePh
       })
       var county_data_ph = BigData.county_data.filter(function(d) {
         return d.county == selectedCountyPh && d.state == selectedStatePh
       })
+      
+      // console.log(data)
+      // console.log(WHITE_ph)
+      // console.log(NONWHITE_ph)
+
       x_ph.domain([0, d3.max(data, function(d) {
+        var xxxx;
+
         if (isNaN(d[NONWHITE_ph]) == true && isNaN(d[WHITE_ph]) == true){
-          return d[variable]
+          xxxx = d[variable]
         }else if (isNaN(d[NONWHITE_ph]) == true && isNaN(d[WHITE_ph]) == false) {
-          return Math.max(d[WHITE_ph], d[variable])
+          xxxx = Math.max(d[WHITE_ph], d[variable])
         }else if (isNaN(d[WHITE_ph] == true && isNaN(d[NONWHITE_ph])) == false) {
-          return Math.max(d[NONWHITE_ph], d[variable])
+          xxxx = Math.max(d[NONWHITE_ph], d[variable])
         }else {
-          return Math.max(d[WHITE_ph], d[NONWHITE_ph], d[variable])
+          xxxx = Math.max(d[WHITE_ph], d[NONWHITE_ph], d[variable])
         }
+
+        if (isNaN(xxxx) == true) {         
+          xxxx = 0  
+        }      
+
+        return xxxx
       })])
+
+
       var National = d3.select(".bar-group-ph.National").selectAll(".category-ph")
       National
         .each(function() {

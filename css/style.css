@@ -1012,6 +1012,7 @@ html .ui-button.ui-state-disabled:active {
 
   #dropdown-header-button {
     color: #454545;
+    text-transform: unset;
     width: calc(100% - 150px) !important;
   }
 
