@@ -1693,11 +1693,27 @@ function ready(error, us, county, state, county2, state2) {
               }              
             })
             var array = BREAKS[variable]
+            
+            // README because of time restraints and uncertainty in how scales are calculated, some of these are being manually set
             if (i==0) {
-              return formatNumber(min, "min")
+              if (variable == "med_mon_pmt") {
+                return "$95"
+              } else {
+                return formatNumber(min, "min")  
+              }              
             }else if (i==5) {
-              return formatNumber(max, "max")
-            }else { 
+              if (variable == "perc_stud_debt") {
+                return "32%"
+              } else if (variable == "perc_stud_debt_collect") {
+                return "12%"
+              } else if (variable == "med_mon_pmt") {
+                return "$275"
+              } else if (variable == "perc_no_bach") {
+                return "98%"
+              } else {
+                return formatNumber(max, "max")  
+              }              
+            } else { 
               return formatNumber(array[i-1])
             }
           })
