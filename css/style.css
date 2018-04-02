@@ -993,6 +993,33 @@ html .ui-button.ui-state-disabled:active {
     background-color: #fff;
   }
 
+  .current-menu {
+    box-shadow: none;
+    height: unset;
+  }
+
+  .current-menu .dropdown-label {    
+    padding: 0;
+  }
+
+  #dropdown-header-button > span.ui-selectmenu-icon.ui-icon.ui-icon-triangle-1-s {
+    margin-top: 9.5px !important;
+  }
+
+  .ui-selectmenu-button.ui-button {
+    width: calc(100% - 150px) !important;
+  }
+
+  #dropdown-header-button {
+    color: #454545;
+    width: calc(100% - 150px) !important;
+  }
+
+  #dropdown-header-button .ui-selectmenu-text  {
+    padding: 0px;
+    padding-top: 2px;
+  }
+
   .category-menu {
     border-bottom: 1px solid grey;
 
