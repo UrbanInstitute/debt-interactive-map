@@ -134,7 +134,7 @@ function OverallTransformData(us, county, state, countyData, stateData) {
     })
   
   var us_data_ph = state_data.filter(function(d) {
-    return d.state == "USA"
+    return isNaN(+d.key)
   })
   var filteredCounties = county_data.filter(function(d) {
     return d.state == "USA"
@@ -212,20 +212,11 @@ function ready(error, us, county, state, county2, state2) {
         BigData = changeData(d.item.value);
         type = d.item.value;
 
-        // to be used when ready
-        var type_variable = (type == "medical") ? "perc_debt_collect" : "perc_stud_debt";
-        setVariable(type_variable)
-        setVariable(type_variable,true)
-        updateMap(type_variable)            
-
         var type_category = (type == "medical") ? categoryData : categoryData2;
         // update mobile categories        
 
         var optionsCategory = d3.select("#category-select").selectAll('option')
           .data(type_category)
-
-
-        console.log(optionsCategory.data())
 
         optionsCategory.enter()
           .append('option')
@@ -244,6 +235,16 @@ function ready(error, us, county, state, county2, state2) {
         $('#category-select').val(type_category[0].variable);
 
         $("#category-select").selectmenu("refresh")
+
+
+
+        // to be used when ready
+        var type_variable = (type == "medical") ? "perc_debt_collect" : "perc_stud_debt";
+        setVariable(type_variable)
+        setVariable(type_variable,true)
+        updateMap(type_variable)            
+
+
 
         if (zoomNational == true) {          
           var us_data = BigData.state_data[0]["values"][0]
@@ -411,7 +412,6 @@ function ready(error, us, county, state, county2, state2) {
 
         var data = filteredData[0]
         updateBars(SELECTED_VARIABLE, data)
-        console.log(data)
         zoomMap(width, data, geoType)
         if (geoType == "county") { 
           addTag(data["properties"]["state"], county, state)
@@ -1767,7 +1767,6 @@ function ready(error, us, county, state, county2, state2) {
         return (isNaN(d.properties[variable]) == true) ? "#adabac" : quantize(d.properties[variable]);
     })
     var selected = (d3.select("path.selected").node() != null) ? (d3.select("path.selected").datum()) : undefined
-    console.log(variable)
     updateBars(variable, selected)
     //REMOVE WHITE AND NONWHITE BARS IF NONWHITE POP VARIABLE IS SELECTED
     if (variable == "perc_pop_nw") {
@@ -1782,9 +1781,6 @@ function ready(error, us, county, state, county2, state2) {
   }
 
   function updateBars(variable, selected) { 
-
-    console.log(selected)
-    console.log(variable)
 
     var us_data = BigData.state_data[0]["values"][0]
     for (var key in us_data) {
@@ -1804,15 +1800,9 @@ function ready(error, us, county, state, county2, state2) {
     var NONWHITE_ph = variable + "_nw"
     var data = BigData.county_data;
     
-    // console.log(variable)
-    // console.log(selected)
 
     /**MOBILE**/
     if (IS_PHONE) {   
-
-      // console.log(variable)
-      // console.log(selected)
-
 
       var state_data_ph = BigData.state_data.filter(function(d) {
         return d.state == selectedStatePh
@@ -1820,10 +1810,6 @@ function ready(error, us, county, state, county2, state2) {
       var county_data_ph = BigData.county_data.filter(function(d) {
         return d.county == selectedCountyPh && d.state == selectedStatePh
       })
-      
-      // console.log(data)
-      // console.log(WHITE_ph)
-      // console.log(NONWHITE_ph)
 
       x_ph.domain([0, d3.max(data, function(d) {
         var xxxx;
@@ -1844,7 +1830,6 @@ function ready(error, us, county, state, county2, state2) {
 
         return xxxx
       })])
-
 
       var National = d3.select(".bar-group-ph.National").selectAll(".category-ph")
       National
@@ -2131,7 +2116,6 @@ function ready(error, us, county, state, county2, state2) {
             d3.select(this).select(".data-label")
               .data([stateData])
               .attr("y", function(d) {
-                // console.log(d)
                 var parentClass = d3.select(this.parentNode).attr('class');
                 if (parentClass.search("All") > -1) {
                   return (isNaN(d[variable]) != true) ? y(d[variable]) - 16 : barHeight - 8;
@@ -2249,7 +2233,6 @@ function ready(error, us, county, state, county2, state2) {
       //   $("li#state").css("margin-right", "20px")
       // }
       setZoom(false,true, false)
-      console.log(abbr)
       createSearchArray(abbr)
      
       $("li#state").on('click', function() { 
@@ -2298,8 +2281,8 @@ function ready(error, us, county, state, county2, state2) {
         d3.selectAll(".counties > path.selected")
           .classed("selected", false)
         updateBars(SELECTED_VARIABLE, filteredData[0])    
-        // console.log('special')
-        // console.log(stateData[0].properties)                  
+
+
         updateTable(stateData[0],type)
       })
       
@@ -2307,8 +2290,7 @@ function ready(error, us, county, state, county2, state2) {
     }
   }
   function updateTable(data,type) { 
-
-    // console.log(data.properties)
+    
 
 
     var columns = ["All", "White", "NonWhite"]    
