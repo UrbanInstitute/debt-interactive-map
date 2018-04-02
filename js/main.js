@@ -224,6 +224,9 @@ function ready(error, us, county, state, county2, state2) {
         var optionsCategory = d3.select("#category-select").selectAll('option')
           .data(type_category)
 
+
+        console.log(optionsCategory.data())
+
         optionsCategory.enter()
           .append('option')
           .merge(optionsCategory)
@@ -236,6 +239,11 @@ function ready(error, us, county, state, county2, state2) {
         
         optionsCategory.exit().remove()
 
+
+        // console.log(type_category[0].variable)
+        $('#category-select').val(type_category[0].variable);
+
+        $("#category-select").selectmenu("refresh")
 
         if (zoomNational == true) {          
           var us_data = BigData.state_data[0]["values"][0]
@@ -1759,6 +1767,7 @@ function ready(error, us, county, state, county2, state2) {
         return (isNaN(d.properties[variable]) == true) ? "#adabac" : quantize(d.properties[variable]);
     })
     var selected = (d3.select("path.selected").node() != null) ? (d3.select("path.selected").datum()) : undefined
+    console.log(variable)
     updateBars(variable, selected)
     //REMOVE WHITE AND NONWHITE BARS IF NONWHITE POP VARIABLE IS SELECTED
     if (variable == "perc_pop_nw") {
@@ -1773,6 +1782,9 @@ function ready(error, us, county, state, county2, state2) {
   }
 
   function updateBars(variable, selected) { 
+
+    console.log(selected)
+    console.log(variable)
 
     var us_data = BigData.state_data[0]["values"][0]
     for (var key in us_data) {
@@ -2480,9 +2492,6 @@ function ready(error, us, county, state, county2, state2) {
       // centered = selectedState.properties.state;
       var data = (zoomLevel == "state") ? d3.select("path#" + selectedState.properties.abbr).datum() : d;
 
-      console.log(d)
-      // console.log(d3.select("path#" + d.properties.abbr).classed("active", true))
-      console.log(BigData)
       updateTable(data,type)
 
       if (active.node() === this) return reset();
