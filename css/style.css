@@ -133,9 +133,7 @@ a {
 a:hover {
   color: #000;
 }
-.appendixButton {
-  margin-left: 15px !important;
-}
+
 .footerButton {
     height: 20;
     float: left;
@@ -149,7 +147,12 @@ a:hover {
     text-decoration: none !important;
     color: #333 !important;
     margin: 14px 0;
-    line-height: 20px
+    line-height: 20px;
+    margin-right: 15px;
+}
+
+.appendixButton {
+  margin-right: 0px;
 }
 
 .footerButton:hover {
@@ -1097,6 +1100,12 @@ html .ui-button.ui-state-disabled:active {
     padding-bottom: 45px;
   }
 
+}
+
+@media screen and (max-width: 387px) {
+  .appendixButton {
+    margin-top: 0px;
+  }
 }
 
 @media print{
