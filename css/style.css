@@ -23,8 +23,8 @@ hr {
   font-size: 16px;
 }
 #date {
-  font-style: italic;
-  font-size: 12px;
+  font-style: normal;
+  font-size: 14px;
   color: #fff;
 }
 path.domain {
@@ -95,9 +95,10 @@ input:-moz-placeholder { text-overflow: ellipsis; }
 .intro-wrap {
     height: auto;
     z-index: 20000;
-    max-width: 1000px;
+    max-width: 700px;
     margin: 0 auto;
     text-align: center;
+    font-style: italic;
 }
 .select-table {
   font-style: italic;
@@ -126,7 +127,7 @@ input:-moz-placeholder { text-overflow: ellipsis; }
 }*/
 a {
     text-decoration: none;
-    color: #12719e;
+    color: #1696d2;
     cursor: pointer;
 }
 a:hover {
@@ -262,12 +263,13 @@ table {
 #intro-text {
   background-color: rgba(17, 46, 59, 0.8);
   padding: 42px;
+  padding-bottom: 85px;
 }
 h1 {
-  font-size: 24px;
+  font-size: 36px;
   color: #fff;
   letter-spacing: .5px;
-
+  font-style: normal !important;
 }
 h2 {
   font-size: 18px;
@@ -288,16 +290,16 @@ h2 {
   width: 100% !important;
   max-width: 1200px !important;
   background-color: #fff;
-  height: 40px;
+  height: 60px;
   margin-right: 20px;
   margin: 0 auto;
-  margin-top: -20px;
+  margin-top: -30px;
   box-shadow: 1px 2px 9px -3px;
 }
 
 .current-menu .dropdown-label {
   padding-left: 20px;
-  padding-top: 10px;
+  padding-top: 20px;
 }
 
 #dropdown-header-button {
@@ -309,8 +311,8 @@ h2 {
 }
 
 #dropdown-header-button .ui-selectmenu-text {
-  padding-top: 10px;
-  padding-bottom: 10px;
+  padding-top: 15px;
+  padding-bottom: 16px;
 }
 
 #dropdown-header-button:focus {
@@ -331,7 +333,7 @@ h2 {
 }
 
 #dropdown-header-button > span.ui-selectmenu-icon.ui-icon.ui-icon-triangle-1-s {
-  margin-top: 15.5px !important;
+  margin-top: 25.5px !important;
   height: 12px !important;
 }
 
@@ -499,7 +501,7 @@ path.hide {
 }
 #location {
   font-size: 18px;
-  font-weight: 600;
+  font-weight: 700;
   height: 29px;
   text-transform: uppercase;
 }
@@ -781,11 +783,12 @@ html .ui-button.ui-state-disabled:active {
 
 .dropdown-label {
   float: left;
-  font-size: 16px;
+  font-size: 14px;
+  color: #696969;
 }
 
 .ui-selectmenu-text {
-  font-size: 16px !important;
+  font-size: 22px !important;
 }
 
 .dropdown-label.disabled {
