@@ -466,7 +466,7 @@ function ready(error, us, county, state, county2, state2) {
     {label: "Share with medical debt in collections&#x207A;", variable: "perc_debt_med"},
     {label: "Median medical debt in collections&#x207A;", variable: "med_debt_med"},
     {label: "Nonwhite population share", variable: "perc_pop_nw"},
-    {label: "Share without health insurance", variable: "perc_pop_no_ins" },
+    {label: "Share without health insurance coverage", variable: "perc_pop_no_ins" },
     {label: "Average household income", variable: "avg_income"}]
     
     var categoryData2 = [{label: "Share with student loan debt&#x207A;", variable: "perc_stud_debt"},
@@ -475,7 +475,7 @@ function ready(error, us, county, state, county2, state2) {
     {label: "Median student loan debt in collections&#x207A;", variable: "med_stud_debt_collect"},
     {label: "Median monthly student loan payment&#x207A;", variable: "med_mon_pmt"},
     {label: "Nonwhite population share", variable: "perc_pop_nw"},
-    {label: "Share without a Bachelor’s degree", variable: "perc_no_bach"},
+    {label: "Share without a bachelor’s degree", variable: "perc_no_bach"},
     {label: "Average household income", variable: "avg_income" }]
 
     var table = d3.select("#table-div")
@@ -1174,7 +1174,7 @@ function ready(error, us, county, state, county2, state2) {
     
     if (type) {
       if (type == "medical") {
-        var groups = ["Percent with any debt in collections<span class=\"large\">&#x207A;</span>", "Median debt in collections<span class=\"large\">&#x207A;</span>", "Share with medical debt in collections<span class=\"large\">&#x207A;</span>", "Median medical debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
+        var groups = ["Share with any debt in collections<span class=\"large\">&#x207A;</span>", "Median debt in collections<span class=\"large\">&#x207A;</span>", "Share with medical debt in collections<span class=\"large\">&#x207A;</span>", "Median medical debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
         var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]    
       } else if (type == "student") {
         var groups = ["Share with student loan debt<span class=\"large\">&#x207A;</span>","Median student loan debt<span class=\"large\">&#x207A;</span>","Share with student loan debt in collections<span class=\"large\">&#x207A;</span>","Median student loan debt in collections<span class=\"large\">&#x207A;</span>","Median monthly student loan payment<span class=\"large\">&#x207A;</span>","Nonwhite population share","Share without a Bachelor’s degree","Average household income"];
@@ -2300,7 +2300,7 @@ function ready(error, us, county, state, county2, state2) {
 
     if (type) {
       if (type == "medical") {
-        var groups = ["Percent with any debt in collections<span class=\"large\">&#x207A;</span>", "Median debt in collections<span class=\"large\">&#x207A;</span>", "Share with medical debt in collections<span class=\"large\">&#x207A;</span>", "Median medical debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
+        var groups = ["Share with any debt in collections<span class=\"large\">&#x207A;</span>", "Median debt in collections<span class=\"large\">&#x207A;</span>", "Share with medical debt in collections<span class=\"large\">&#x207A;</span>", "Median medical debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
         var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]    
       } else if (type == "student") {
         var groups = ["Share with student loan debt<span class=\"large\">&#x207A;</span>","Median student loan debt<span class=\"large\">&#x207A;</span>","Share with student loan debt in collections<span class=\"large\">&#x207A;</span>","Median student loan debt in collections<span class=\"large\">&#x207A;</span>","Median monthly student loan payment<span class=\"large\">&#x207A;</span>","Nonwhite population share","Share without a Bachelor’s degree","Average household income"];
