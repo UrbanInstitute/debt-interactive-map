@@ -1050,7 +1050,12 @@ html .ui-button.ui-state-disabled:active {
   #dropdown-div, #topdrop-div {
     display: block;
     float: left;
+    width: 100%;
   }
+  .ui-icon {
+    padding-right: 10px;
+  }
+
   .main-table {
     display: none;
   }
@@ -1061,6 +1066,10 @@ html .ui-button.ui-state-disabled:active {
 }
 
 @media screen and (max-width: 550px) {
+  .ui-icon {
+    padding-right: 0px;
+  }
+
   .label > .group-label-ph {
     opacity: 0;
   }

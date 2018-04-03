@@ -605,7 +605,7 @@ function ready(error, us, county, state, county2, state2) {
     .selectmenu({
       open: function(event,ui) {
         var dropdownWidth = $("#dropdown-div").width()
-        var dropdownTop = $(".banner").height() + 113
+        var dropdownTop = $(".banner").height() + 143
         $(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").css("top", dropdownTop + "px")
         $("ul#state-select-menu").css("width", dropdownWidth + "px")
         $("ul#state-select-menu").css("margin-left", "-137px")
@@ -653,7 +653,7 @@ function ready(error, us, county, state, county2, state2) {
     .selectmenu({
       open: function(event,ui) {
         var dropdownWidth = $("#dropdown-div").width()
-        var dropdownTop = $(".banner").height() + 175
+        var dropdownTop = $(".banner").height() + 202
         $(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").css("top", dropdownTop + "px")
         $("ul#county-select-menu").css("width", dropdownWidth + "px")
         $("ul#county-select-menu").css("margin-left", "-137px")
@@ -682,7 +682,7 @@ function ready(error, us, county, state, county2, state2) {
     .selectmenu({
       open: function(event,ui) {
         var dropdownWidth = $("#dropdown-div").width()
-        var dropdownTop = $(".banner").height() + 232
+        var dropdownTop = $(".banner").height() + 263
         $(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").css("top", dropdownTop + "px")
         $("ul#category-select-menu").css("width", dropdownWidth + "px")
         $("ul#category-select-menu").css("margin-left", "-137px")
