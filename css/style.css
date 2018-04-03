@@ -1029,6 +1029,14 @@ html .ui-button.ui-state-disabled:active {
     padding-top: 2px;
   }
 
+  .ui-selectmenu-text {
+    font-size: 16px !important;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
   .category-menu {
     border-bottom: 1px solid grey;
 
@@ -1077,6 +1085,7 @@ html .ui-button.ui-state-disabled:active {
   }
   #intro-text{
     padding: 30px 15px;
+    padding-bottom: 45px;
   }
 
 }
