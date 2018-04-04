@@ -2570,15 +2570,23 @@ function ready(error, us, county, state, county2, state2) {
       var barWidth_ph = (IS_PHONESM) ? width : width*.85;
       var x_ph = d3.scaleLinear().range([0, barWidth_ph]);
       x_ph.domain([0, d3.max(BigData.county_data, function(d) {
+        var xxxx;
         if (isNaN(d[NONWHITE_ph]) == true && isNaN(d[WHITE_ph]) == true){
-          return d[SELECTED_VARIABLE_ph]
+          xxxx = d[SELECTED_VARIABLE_ph]
         }else if (isNaN(d[NONWHITE_ph]) == true && isNaN(d[WHITE_ph]) == false) {
-          return Math.max(d[WHITE_ph], d[SELECTED_VARIABLE_ph])
+          xxxx = Math.max(d[WHITE_ph], d[SELECTED_VARIABLE_ph])
         }else if (isNaN(d[WHITE_ph] == true && isNaN(d[NONWHITE_ph])) == false) {
-          return Math.max(d[NONWHITE_ph], d[SELECTED_VARIABLE_ph])
+          xxxx = Math.max(d[NONWHITE_ph], d[SELECTED_VARIABLE_ph])
         }else {
-          return Math.max(d[WHITE_ph], d[NONWHITE_ph], d[SELECTED_VARIABLE_ph])
+          xxxx = Math.max(d[WHITE_ph], d[NONWHITE_ph], d[SELECTED_VARIABLE_ph])
         }
+
+        if (isNaN(xxxx) == true) {         
+          xxxx = 0  
+        } 
+
+        return xxxx;
+
       })])
       d3.selectAll(".bar-group-ph").selectAll(".category-ph")
         .each(function(d,i) {
@@ -2610,13 +2618,17 @@ function ready(error, us, county, state, county2, state2) {
         .attr("width", barWidth_ph)
         .attr("height", barSvgHeight_ph)
       d3.selectAll(".bar-ph")
-        .attr("width", function(d) {  
+        .attr("width", function(d) {            
           var parentClass = d3.select(this.parentNode).attr('class');
-          if (parentClass.search("All") > -1) {
+          if (parentClass.search("All") > -1) {            
             return (isNaN(d[SELECTED_VARIABLE_ph]) != true) ? x_ph(d[SELECTED_VARIABLE_ph]) : 0
           }else if (parentClass.search("Non") > -1) {
+            // console.log("fart1")
             return (isNaN(d[NONWHITE_ph]) != true) ?  x_ph(d[NONWHITE_ph]) : 0
           }else{
+            // console.log(+d[WHITE_ph])
+            // console.log(x_ph.domain())
+            // console.log(x_ph(+d[WHITE_ph]))
             return (isNaN(d[WHITE_ph]) != true) ?  x_ph(d[WHITE_ph]) : 0
           }
         })
