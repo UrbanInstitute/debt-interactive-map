@@ -854,9 +854,6 @@ function ready(error, us, county, state, county2, state2) {
         updateBars(SELECTED_VARIABLE, d)
       })
       .on('mouseover', function(d) {         
-        d3.selectAll(".hover")
-          .classed("hover", false)
-
 
         if (zoomNational == true || zoomNational_St == true) {                 
           hoverLocation("", d.properties.abbr, "state");
