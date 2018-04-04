@@ -864,9 +864,7 @@ function ready(error, us, county, state, county2, state2) {
 
         }
       })
-      .on('mouseleave', function(d) { 
-        d3.selectAll(".hover")
-          .classed("hover", false)        
+      .on('mouseleave', function(d) {         
 
         if (zoomNational==true || zoomNational_St == true) {
           if (d3.select(".state-borders > path.selected").node() != undefined && zoomNational_St != true) {
@@ -892,6 +890,9 @@ function ready(error, us, county, state, county2, state2) {
         }
       })
       .on('mouseout', function(d) { 
+        d3.selectAll(".hover")
+          .classed("hover", false)
+
         if (zoomNational==true || zoomNational_St == true) {
           if (d3.select(".state-borders > path.selected").node() != undefined && zoomNational_St != true) {
             var state = d3.select(".state-borders > path.selected").datum().properties.state
