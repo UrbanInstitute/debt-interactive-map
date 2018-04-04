@@ -853,9 +853,7 @@ function ready(error, us, county, state, county2, state2) {
         zoomMap(width, d, level)        
         updateBars(SELECTED_VARIABLE, d)
       })
-      .on('mouseover', function(d) { 
-        // d3.selectAll(".hover")
-        //   .classed("hover", false)
+      .on('mouseover', function(d) {         
 
         if (zoomNational == true || zoomNational_St == true) {                 
           hoverLocation("", d.properties.abbr, "state");
@@ -867,6 +865,9 @@ function ready(error, us, county, state, county2, state2) {
         }
       })
       .on('mouseleave', function(d) { 
+        d3.selectAll(".hover")
+          .classed("hover", false)        
+
         if (zoomNational==true || zoomNational_St == true) {
           if (d3.select(".state-borders > path.selected").node() != undefined && zoomNational_St != true) {
             var state = d3.select(".state-borders > path.selected").datum().properties.state
