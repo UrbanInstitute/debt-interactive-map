@@ -581,10 +581,10 @@ path.hover {
   pointer-events: all;
 }
 
-.group-5 > .cell-data > td:nth-child(2), .group-5 .cell-data > td:nth-child(3) {
+.group-4 > .cell-data > td:nth-child(2), .group-4 .cell-data > td:nth-child(3) {
   opacity: 0;
 }
-.group-5 > .cell-column > td:nth-child(2), .group-5 .cell-column > td:nth-child(3) {
+.group-4 > .cell-column > td:nth-child(2), .group-4 .cell-column > td:nth-child(3) {
   opacity: 0;
 }
 
@@ -595,10 +595,10 @@ path.hover {
   opacity: 1;
 }
 
-.student.group-5 > .cell-data > td:nth-child(2), .student.group-5 .cell-data > td:nth-child(3) {
+.student.group-6 > .cell-data > td:nth-child(2), .student.group-6 .cell-data > td:nth-child(3) {
   opacity: 0;
 }
-.student.group-5 > .cell-column > td:nth-child(2), .student.group-5 .cell-column > td:nth-child(3) {
+.student.group-6 > .cell-column > td:nth-child(2), .student.group-6 .cell-column > td:nth-child(3) {
   opacity: 0;
 }
 
