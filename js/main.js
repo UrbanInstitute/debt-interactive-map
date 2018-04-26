@@ -1,7 +1,7 @@
 var IS_MOBILE;
 var IS_PHONE;
 var IS_PHONESM;
-var BREAKS ={"perc_debt_collect":[0.22, .31, .39, .49],"med_debt_collect":[1200, 1500, 1800, 2300], "perc_debt_med":[.11,.18,.26,.34], "med_debt_med":[500,700,950,1250], "perc_pop_nw":[.13,.28,.46,.67], "perc_pop_no_ins":[.08,.13,.18,.26], "avg_income":[52650,63850,77900,101050],"perc_stud_debt":[0.10,0.13,0.16,0.20],"med_stud_debt": [12550,15050,17450,20350],"perc_stud_debt_collect": [0.01,0.02,0.03,0.06],"perc_stud_debt_collect_STUD": [0.01,0.02,0.03,0.06],"med_stud_debt_collect": [6150,7550,9000,10700],"med_mon_pmt": [135,155,175,195],"perc_no_bach": [0.59,0.71,0.79,0.85]};
+var BREAKS ={"perc_debt_collect":[0.22, .31, .39, .49],"med_debt_collect":[1200, 1500, 1800, 2300], "perc_debt_med":[.11,.18,.26,.34], "med_debt_med":[500,700,950,1250], "perc_pop_nw":[.13,.28,.46,.67], "perc_pop_no_ins":[.08,.13,.18,.26], "avg_income":[52650,63850,77900,101050],"perc_stud_debt":[0.10,0.13,0.16,0.20],"med_stud_debt": [12550,15050,17450,20350],"perc_stud_debt_collect": [0.01,0.02,0.03,0.06],"perc_stud_debt_collect_STUD": [0.07,0.13,0.2,0.3],"med_stud_debt_collect": [6150,7550,9000,10700],"med_mon_pmt": [135,155,175,195],"perc_no_bach": [0.59,0.71,0.79,0.85]};
 var legendWidth = {"perc_debt_collect": 60,"perc_debt_med": 58,"med_debt_collect": 73,"med_debt_med": 70,"perc_pop_nw": 63,"perc_pop_no_ins": 60,"avg_income": 89,"perc_stud_debt":89,"med_stud_debt":89,"perc_stud_debt_collect":89,"perc_stud_debt_collect_STUD":89,"med_stud_debt_collect":89,"med_mon_pmt":89,"perc_no_bach":89};
 
 // var legendTranslate = {"perc_debt_collect": width-60, "perc_debt_med": 644, "med_debt_collect": 628, "med_debt_med":631, "perc_pop_nw":638, "perc_pop_no_ins": 642, "avg_income":615}
@@ -469,7 +469,7 @@ function ready(error, us, county, state, county2, state2) {
     
     var categoryData2 = [{label: "Share with student loan debt&#x207A;", variable: "perc_stud_debt"},
     {label: "Median student loan debt&#x207A;", variable: "med_stud_debt"},
-    {label: "Share with student loan debt in collections (i.e., default), among those with student loan debt&#x207A;", variable: "perc_stud_debt_collect_STUD"},    
+    {label: "Share with student loan debt in collections (i.e., default), among those with student loan debt&#x207A;<sup>&dagger;</sup>", variable: "perc_stud_debt_collect_STUD"},    
     {label: "Median student loan debt in collections&#x207A;", variable: "med_stud_debt_collect"},
     {label: "Median monthly student loan payment&#x207A;", variable: "med_mon_pmt"},
     {label: "Share with student loan debt in collections&#x207A;", variable: "perc_stud_debt_collect"},
@@ -1177,7 +1177,7 @@ function ready(error, us, county, state, county2, state2) {
         var groups = ["Share with any debt in collections<span class=\"large\">&#x207A;</span>", "Median debt in collections<span class=\"large\">&#x207A;</span>", "Share with medical debt in collections<span class=\"large\">&#x207A;</span>", "Median medical debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
         var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]    
       } else if (type == "student") {
-        var groups = [ "Share with student loan debt<span class=\"large\">&#x207A;</span>","Median student loan debt<span class=\"large\">&#x207A;</span>","Share with student loan debt in collections (i.e., default), among those with student loan debt<span class=\"large\">&#x207A;</span>","Median student loan debt in collections<span class=\"large\">&#x207A;</span>","Median monthly student loan payment<span class=\"large\">&#x207A;</span>","Share with student loan debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share","Share without a bachelor’s degree","Average household income"];
+        var groups = [ "Share with student loan debt<span class=\"large\">&#x207A;</span>","Median student loan debt<span class=\"large\">&#x207A;</span>","Share with student loan debt in collections (i.e., default), among those with student loan debt<span class=\"large\">&#x207A;<sup>&dagger;</sup></span>","Median student loan debt in collections<span class=\"large\">&#x207A;</span>","Median monthly student loan payment<span class=\"large\">&#x207A;</span>","Share with student loan debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share","Share without a bachelor’s degree","Average household income"];
         var rowData = ["perc_stud_debt","med_stud_debt","perc_stud_debt_collect_STUD","med_stud_debt_collect","med_mon_pmt","perc_stud_debt_collect","perc_pop_nw","perc_no_bach","avg_income"]    
       }
     }
@@ -1715,7 +1715,7 @@ function ready(error, us, county, state, county2, state2) {
               } else if (variable == "perc_stud_debt_collect") {
                 return "12%"
               } else if (variable == "perc_stud_debt_collect_STUD") {
-                return "99%"
+                return "67%"
               } else if (variable == "med_mon_pmt") {
                 return "$275"
               } else if (variable == "perc_no_bach") {
@@ -1795,7 +1795,7 @@ function ready(error, us, county, state, county2, state2) {
         }
     }      
 
-    d3.select("#notes-section").selectAll("p.note2, p.note1").style("opacity", 0)
+    d3.select("#notes-section").selectAll("p.note2, p.note1").style("opacity", 1)
     // d3.selectAll(".note-header").html("<b>Note:</b>")
 
     var WHITE_ph = variable + "_wh"
@@ -2305,7 +2305,7 @@ function ready(error, us, county, state, county2, state2) {
         var groups = ["Share with any debt in collections<span class=\"large\">&#x207A;</span>", "Median debt in collections<span class=\"large\">&#x207A;</span>", "Share with medical debt in collections<span class=\"large\">&#x207A;</span>", "Median medical debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
         var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]    
       } else if (type == "student") {
-        var groups = [ "Share with student loan debt<span class=\"large\">&#x207A;</span>","Median student loan debt<span class=\"large\">&#x207A;</span>","Share with student loan debt in collections (i.e., default), among those with student loan debt&#x207A;","Median student loan debt in collections<span class=\"large\">&#x207A;</span>","Median monthly student loan payment<span class=\"large\">&#x207A;</span>","Share with student loan debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share","Share without a bachelor’s degree","Average household income"];
+        var groups = [ "Share with student loan debt<span class=\"large\">&#x207A;</span>","Median student loan debt<span class=\"large\">&#x207A;</span>","Share with student loan debt in collections (i.e., default), among those with student loan debt&#x207A;<sup>&dagger;</sup>","Median student loan debt in collections<span class=\"large\">&#x207A;</span>","Median monthly student loan payment<span class=\"large\">&#x207A;</span>","Share with student loan debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share","Share without a bachelor’s degree","Average household income"];
         var rowData = ["perc_stud_debt","med_stud_debt","perc_stud_debt_collect_STUD","med_stud_debt_collect","med_mon_pmt","perc_stud_debt_collect","perc_pop_nw","perc_no_bach","avg_income"]    
       }
 
@@ -2404,7 +2404,7 @@ function ready(error, us, county, state, county2, state2) {
     }
     // console.log(data)
     var data = (zoomNational == true) ? data : data["properties"];
-    d3.selectAll("p.note1, p.note2").style("opacity", 0)
+    d3.selectAll("p.note1, p.note2").style("opacity", 1)
     d3.selectAll(".cell-data")
       .each(function(d,i) { 
         var rowVariable = [rowData[i]],

@@ -49,9 +49,13 @@ path.domain {
   float: left;
   border-bottom: 1px solid #d2d2d2;
 }
-p.note1, p.note2 {
-  opacity:0;
+p.note1, p.note2, p.note3 {
+  opacity:1;
   font-size: 11px;
+}
+.highlightChange{
+  font-weight: bold;
+  color: #00ff00;
 }
 .ui-state-default .ui-icon {
     background-image: url(../img/close-sign2.png) !important;
