@@ -2261,7 +2261,7 @@ function ready(error, us, county, state, county2, state2) {
       setZoom(false,true, true)
       $(".tagit-new").css("display", "none")
       var filteredData = BigData.tmp_county.filter(function(d) {
-        return d.properties["county"] == county;
+        return (d.properties["county"] == county && d.properties["state"] == state);
       })
 
 
