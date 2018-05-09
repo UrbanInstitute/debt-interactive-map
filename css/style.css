@@ -14,7 +14,10 @@ hr {
   background-color: #d2d2d2;
   border: none;
 }
-
+.dagger {
+  vertical-align: super;    
+  font-style: normal;
+}
 .legend-title {
   font-weight: bold;
   font-size: 15px;
