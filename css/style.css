@@ -14,13 +14,20 @@ hr {
   background-color: #d2d2d2;
   border: none;
 }
-
+.dagger {
+  vertical-align: super;    
+  font-style: normal;
+}
 .legend-title {
   font-weight: bold;
   font-size: 15px;
 }
 .large {
   font-size: 16px;
+}
+
+.annotation {
+  font-style: italic;
 }
 #date {
   font-style: normal;
@@ -41,6 +48,7 @@ path.domain {
 .ui-menu-item-wrapper {
   padding: 25px 15px !important;
   text-align: left !important;
+  font-size: 14px !important;
 
 }
 #mobile-content {
@@ -49,9 +57,22 @@ path.domain {
   float: left;
   border-bottom: 1px solid #d2d2d2;
 }
-p.note1, p.note2 {
-  opacity:0;
+p.note1, p.note2, p.note3, p.note4 {
+  opacity:1;
   font-size: 11px;
+}
+
+td sup {
+  font-size: 10px;
+}
+
+text tspan {
+ font-size: 10px; 
+}
+
+.highlightChange{
+  font-weight: bold;
+  color: #00ff00;
 }
 .ui-state-default .ui-icon {
     background-image: url(../img/close-sign2.png) !important;
@@ -581,10 +602,10 @@ path.hover {
   pointer-events: all;
 }
 
-.group-5 > .cell-data > td:nth-child(2), .group-5 .cell-data > td:nth-child(3) {
+.group-4 > .cell-data > td:nth-child(2), .group-4 .cell-data > td:nth-child(3) {
   opacity: 0;
 }
-.group-5 > .cell-column > td:nth-child(2), .group-5 .cell-column > td:nth-child(3) {
+.group-4 > .cell-column > td:nth-child(2), .group-4 .cell-column > td:nth-child(3) {
   opacity: 0;
 }
 
@@ -595,10 +616,10 @@ path.hover {
   opacity: 1;
 }
 
-.student.group-5 > .cell-data > td:nth-child(2), .student.group-5 .cell-data > td:nth-child(3) {
+.student.group-6 > .cell-data > td:nth-child(2), .student.group-6 .cell-data > td:nth-child(3) {
   opacity: 0;
 }
-.student.group-5 > .cell-column > td:nth-child(2), .student.group-5 .cell-column > td:nth-child(3) {
+.student.group-6 > .cell-column > td:nth-child(2), .student.group-6 .cell-column > td:nth-child(3) {
   opacity: 0;
 }
 

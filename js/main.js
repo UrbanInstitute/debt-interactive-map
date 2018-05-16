@@ -1,8 +1,9 @@
 var IS_MOBILE;
 var IS_PHONE;
 var IS_PHONESM;
-var BREAKS ={"perc_debt_collect":[0.22, .31, .39, .49], "med_debt_collect":[1200, 1500, 1800, 2300], "perc_debt_med":[.11,.18,.26,.34], "med_debt_med":[500,700,950,1250], "perc_pop_nw":[.13,.28,.46,.67], "perc_pop_no_ins":[.08,.13,.18,.26], "avg_income":[52650,63850,77900,101050],"perc_stud_debt":[0.10,0.13,0.16,0.20],"med_stud_debt": [12550,15050,17450,20350],"perc_stud_debt_collect": [0.01,0.02,0.03,0.06],"med_stud_debt_collect": [6150,7550,9000,10700],"med_mon_pmt": [135,155,175,195],"perc_no_bach": [0.59,0.71,0.79,0.85]};
-var legendWidth = {"perc_debt_collect": 60,"perc_debt_med": 58,"med_debt_collect": 73,"med_debt_med": 70,"perc_pop_nw": 63,"perc_pop_no_ins": 60,"avg_income": 89,"perc_stud_debt":89,"med_stud_debt":89,"perc_stud_debt_collect":89,"med_stud_debt_collect":89,"med_mon_pmt":89,"perc_no_bach":89}
+var BREAKS ={"perc_debt_collect":[0.22, .31, .39, .49],"med_debt_collect":[1200, 1500, 1800, 2300], "perc_debt_med":[.11,.18,.26,.34], "med_debt_med":[500,700,950,1250], "perc_pop_nw":[.13,.28,.46,.67], "perc_pop_no_ins":[.08,.13,.18,.26], "avg_income":[52650,63850,77900,101050],"perc_stud_debt":[0.10,0.13,0.16,0.20],"med_stud_debt": [12550,15050,17450,20350],"perc_stud_debt_collect": [0.01,0.02,0.03,0.06],"perc_stud_debt_collect_STUD": [0.07,0.13,0.2,0.3],"med_stud_debt_collect": [6150,7550,9000,10700],"med_mon_pmt": [135,155,175,195],"perc_no_bach": [0.59,0.71,0.79,0.85]};
+var legendWidth = {"perc_debt_collect": 60,"perc_debt_med": 58,"med_debt_collect": 73,"med_debt_med": 70,"perc_pop_nw": 63,"perc_pop_no_ins": 60,"avg_income": 89,"perc_stud_debt":60,"med_stud_debt":89,"perc_stud_debt_collect":60,"perc_stud_debt_collect_STUD":60,"med_stud_debt_collect":89,"med_mon_pmt":70,"perc_no_bach":60};
+
 // var legendTranslate = {"perc_debt_collect": width-60, "perc_debt_med": 644, "med_debt_collect": 628, "med_debt_med":631, "perc_pop_nw":638, "perc_pop_no_ins": 642, "avg_income":615}
 
 var SELECTED_VARIABLE;
@@ -87,12 +88,9 @@ d3.queue()
     .defer(d3.json, "data/us-10m.v1.json")
     .defer(d3.csv, "data/county_medical.csv")
     .defer(d3.csv, "data/state_medical.csv")
-    .defer(d3.tsv, "data/county_student3.tsv")
-    .defer(d3.csv, "data/state_student3.csv")    
-    .await(ready);
-
-    // .defer(d3.csv, "data/county_fake.csv")
-    // .defer(d3.csv, "data/state_fake.csv")    
+    .defer(d3.tsv, "data/county_student4.tsv")
+    .defer(d3.csv, "data/state_student4.csv")    
+    .await(ready); 
 
 function transformData(geography){
   var geography_nested = d3.nest()
@@ -217,17 +215,15 @@ function ready(error, us, county, state, county2, state2) {
         optionsCategory.enter()
           .append('option')
           .merge(optionsCategory)
-          .html(function(d) {
+          .html(function(d) {            
             return d.label
           })
           .attr('value', function(d) {
             return d.variable
-          })
+          })        
         
         optionsCategory.exit().remove()
 
-
-        // console.log(type_category[0].variable)
         $('#category-select').val(type_category[0].variable);
 
         $("#category-select").selectmenu("refresh")
@@ -461,19 +457,20 @@ function ready(error, us, county, state, county2, state2) {
     .range(["#cfe8f3", "#73bfe2", "#1696d2", "#0a4c6a", "#000000"])  
 
  /*ADD DROPDOWNS*/
-    var categoryData = [{label: "Share with any debt in collections&#x207A;", variable: "perc_debt_collect"},
-    {label: "Median debt in collections&#x207A;", variable: "med_debt_collect"},
-    {label: "Share with medical debt in collections&#x207A;", variable: "perc_debt_med"},
-    {label: "Median medical debt in collections&#x207A;", variable: "med_debt_med"},
+    var categoryData = [{label: "Share with any debt in collections<i>ᵃ</i>", variable: "perc_debt_collect"},
+    {label: "Median debt in collections<i>ᵃ</i>", variable: "med_debt_collect"},
+    {label: "Share with medical debt in collections<i>ᵃ</i>", variable: "perc_debt_med"},
+    {label: "Median medical debt in collections<i>ᵃ</i>", variable: "med_debt_med"},
     {label: "Nonwhite population share", variable: "perc_pop_nw"},
     {label: "Share without health insurance coverage", variable: "perc_pop_no_ins" },
     {label: "Average household income", variable: "avg_income"}]
     
-    var categoryData2 = [{label: "Share with student loan debt&#x207A;", variable: "perc_stud_debt"},
-    {label: "Median student loan debt&#x207A;", variable: "med_stud_debt"},
-    {label: "Share with student loan debt in collections&#x207A;", variable: "perc_stud_debt_collect"},
-    {label: "Median student loan debt in collections&#x207A;", variable: "med_stud_debt_collect"},
-    {label: "Median monthly student loan payment&#x207A;", variable: "med_mon_pmt"},
+    var categoryData2 = [{label: "Share with student loan debt<i>ᵃ</i>", variable: "perc_stud_debt"},
+    {label: "Median student loan debt<i>ᵃ</i>", variable: "med_stud_debt"},
+    {label: "Share of student loan holders with student loan debt in collections<i>ᵃ ᵈ</i>", variable: "perc_stud_debt_collect_STUD"},    
+    {label: "Median student loan debt in collections<i>ᵃ</i>", variable: "med_stud_debt_collect"},
+    {label: "Median monthly student loan payment<i>ᵃ</i>", variable: "med_mon_pmt"},
+    {label: "Share of people with credit records who have student loan debt in collections<i>ᵃ ᵉ</i>", variable: "perc_stud_debt_collect"},
     {label: "Nonwhite population share", variable: "perc_pop_nw"},
     {label: "Share without a bachelor’s degree", variable: "perc_no_bach"},
     {label: "Average household income", variable: "avg_income" }]
@@ -542,11 +539,12 @@ function ready(error, us, county, state, county2, state2) {
       optionsCategory.enter()
         .append('option')
         .html(function(d) {
-          return d.label
+          return d.label          
         })
         .attr('value', function(d) {
           return d.variable
         })
+
   function reset() {
     active.classed("active", false);
     active = d3.select(null);
@@ -1175,15 +1173,15 @@ function ready(error, us, county, state, county2, state2) {
     
     if (type) {
       if (type == "medical") {
-        var groups = ["Share with any debt in collections<span class=\"large\">&#x207A;</span>", "Median debt in collections<span class=\"large\">&#x207A;</span>", "Share with medical debt in collections<span class=\"large\">&#x207A;</span>", "Median medical debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
+        var groups = ["Share with any debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Median debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Share with medical debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Median medical debt in collections<span class=\"annotation\"><sup>a</sup></span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
         var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]    
       } else if (type == "student") {
-        var groups = ["Share with student loan debt<span class=\"large\">&#x207A;</span>","Median student loan debt<span class=\"large\">&#x207A;</span>","Share with student loan debt in collections<span class=\"large\">&#x207A;</span>","Median student loan debt in collections<span class=\"large\">&#x207A;</span>","Median monthly student loan payment<span class=\"large\">&#x207A;</span>","Nonwhite population share","Share without a bachelor’s degree","Average household income"];
-        var rowData = ["perc_stud_debt","med_stud_debt","perc_stud_debt_collect","med_stud_debt_collect","med_mon_pmt","perc_pop_nw","perc_no_bach","avg_income"]    
+        var groups = [ "Share with student loan debt<span class=\"annotation\"><sup>a</sup></span>","Median student loan debt<span class=\"annotation\"><sup>a</sup></span>","Share of student loan holders with student loan debt in collections<span class=\"annotation\"><sup>a</sup> <sup>d</sup></span>","Median student loan debt in collections<span class=\"annotation\"><sup>a</sup></span>","Median monthly student loan payment<span class=\"annotation\"><sup>a</sup></span>","Share of people with credit records who have student loan debt in collections<span class=\"annotation\"><sup>a</sup> <sup>e</sup></span>","Nonwhite population share","Share without a bachelor’s degree","Average household income"];
+        var rowData = ["perc_stud_debt","med_stud_debt","perc_stud_debt_collect_STUD","med_stud_debt_collect","med_mon_pmt","perc_stud_debt_collect","perc_pop_nw","perc_no_bach","avg_income"]    
       }
     }
 
-    // var groups = ["Share with any debt in collections<span class=\"large\">&#x207A;</span>", "Median debt in collections<span class=\"large\">&#x207A;</span>", "Share with medical debt in collections<span class=\"large\">&#x207A;</span>", "Median medical debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
+    // var groups = ["Share with any debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Median debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Share with medical debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Median medical debt in collections<span class=\"annotation\"><sup>a</sup></span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
     
     // var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]
     var table = d3.select("#table-div")
@@ -1192,7 +1190,7 @@ function ready(error, us, county, state, county2, state2) {
           .data(rowData)
           .enter().append("tbody")
           .attr("class", function(d, i) {
-            return "group group-" + i
+            return "student group group-" + i
           })
           .on('click', function(d) { 
             d3.selectAll('tbody')
@@ -1715,6 +1713,8 @@ function ready(error, us, county, state, county2, state2) {
                 return "32%"
               } else if (variable == "perc_stud_debt_collect") {
                 return "12%"
+              } else if (variable == "perc_stud_debt_collect_STUD") {
+                return "67%"
               } else if (variable == "med_mon_pmt") {
                 return "$275"
               } else if (variable == "perc_no_bach") {
@@ -1794,7 +1794,7 @@ function ready(error, us, county, state, county2, state2) {
         }
     }      
 
-    d3.select("#notes-section").selectAll("p.note2, p.note1").style("opacity", 0)
+    d3.select("#notes-section").selectAll("p.note2, p.note1").style("opacity", 1)
     // d3.selectAll(".note-header").html("<b>Note:</b>")
 
     var WHITE_ph = variable + "_wh"
@@ -1862,12 +1862,12 @@ function ready(error, us, county, state, county2, state2) {
               }
             })
             .attr("y", 12)
-            .text(function(d) { 
+            .html(function(d) { 
               var parentClass = $(this).closest(".rect-g").attr("class")
               if (parentClass.search("All") > -1) { 
-                var noData = (d[variable] == "n<50") ? "n/a*" : "n/a**"
-                var noData_wh = (d[WHITE_ph] == "n<50") ? "n/a*" : "n/a**"
-                var noData_nw = (d[NONWHITE_ph] == "n<50") ? "n/a*" : "n/a**"
+                var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+                var noData_wh = (d[WHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+                var noData_nw = (d[NONWHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
                 if (d[NONWHITE_ph] == "n<50" || (d[WHITE_ph]) == "n<50" || (d[variable]) == "n<50") { 
                   d3.select("#notes-section > p.note1").style("opacity", 1)
                 }
@@ -1913,10 +1913,10 @@ function ready(error, us, county, state, county2, state2) {
                 return (isNaN(d[WHITE_ph]) != true) ? x_ph(d[WHITE_ph]) + 5 : 0
               }
             })
-            .text(function(d) { 
-              var noData = (d[variable] == "n<50") ? "n/a*" : "n/a**"
-              var noData_wh = (d[WHITE_ph] == "n<50") ? "n/a*" : "n/a**"
-              var noData_nw = (d[NONWHITE_ph] == "n<50") ? "n/a*" : "n/a**"
+            .html(function(d) { 
+              var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+              var noData_wh = (d[WHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+              var noData_nw = (d[NONWHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
               var parentClass = $(this).closest(".rect-g").attr("class")
               if (d[NONWHITE_ph] == "n<50" || (d[WHITE_ph]) == "n<50" || (d[variable]) == "n<50") { 
                 d3.select("#notes-section > p.note1").style("opacity", 1)
@@ -1965,10 +1965,11 @@ function ready(error, us, county, state, county2, state2) {
                   return (isNaN(d[WHITE_ph]) != true) ? x_ph(d[WHITE_ph]) + 5 : 0
                 }
               })
-              .text(function(d) { 
-                var noData = (d[variable] == "n<50") ? "n/a*" : "n/a**"
-                var noData_wh = (d[WHITE_ph] == "n<50") ? "n/a*" : "n/a**"
-                var noData_nw = (d[NONWHITE_ph] == "n<50") ? "n/a*" : "n/a**"
+              .html(function(d) { 
+                var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+                var noData_wh = (d[WHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+                var noData_nw = (d[NONWHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+
                 if (d[NONWHITE_ph] == "n<50" || (d[WHITE_ph]) == "n<50" || (d[variable]) == "n<50") { 
                   d3.select("#notes-section > p.note1").style("opacity", 1)
                 }
@@ -1983,6 +1984,7 @@ function ready(error, us, county, state, county2, state2) {
                 }else{
                   return (isNaN(d[WHITE_ph]) != true) ? formatNumber(d[WHITE_ph]) : noData_wh
                 }
+                // return "<tspan font-style='italic'>fart</tspan>"
               })
           })
       }
@@ -2060,10 +2062,10 @@ function ready(error, us, county, state, county2, state2) {
                   return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) - 16 : barHeight - 8;
                 }
               })
-            .text(function(d) { 
-              var noData = (d[variable] == "n<50") ? "n/a*" : "n/a**"
-              var noData_wh = (d[WHITE] == "n<50") ? "n/a*" : "n/a**"
-              var noData_nw = (d[NONWHITE] == "n<50") ? "n/a*" : "n/a**"
+            .html(function(d) { 
+              var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+              var noData_wh = (d[WHITE] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+              var noData_nw = (d[NONWHITE] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
               var parentClass = d3.select(this.parentNode).attr('class');
               if (parentClass.search("All") > -1) {
                 return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
@@ -2126,10 +2128,10 @@ function ready(error, us, county, state, county2, state2) {
                   return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) - 16 : barHeight - 8;
                 }
               })
-              .text(function(d) { 
-                var noData = (d[variable] == "n<50") ? "n/a*" : "n/a**"
-                var noData_wh = (d[WHITE] == "n<50") ? "n/a*" : "n/a**"
-                var noData_nw = (d[NONWHITE] == "n<50") ? "n/a*" : "n/a**"
+              .html(function(d) { 
+                var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+                var noData_wh = (d[WHITE] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+                var noData_nw = (d[NONWHITE] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
                 var parentClass = d3.select(this.parentNode).attr('class');
                 if (parentClass.search("All") > -1) {
                   return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
@@ -2196,10 +2198,10 @@ function ready(error, us, county, state, county2, state2) {
                     return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) - 16 : barHeight - 8;
                   }
                 })
-                .text(function(d) { 
-                  var noData = (d[variable] == "n<50") ? "n/a*" : "n/a**"
-                  var noData_wh = (d[WHITE] == "n<50") ? "n/a*" : "n/a**"
-                  var noData_nw = (d[NONWHITE] == "n<50") ? "n/a*" : "n/a**"
+                .html(function(d) { 
+                  var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+                  var noData_wh = (d[WHITE] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+                  var noData_nw = (d[NONWHITE] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
                   var parentClass = d3.select(this.parentNode).attr('class');
                   if (parentClass.search("All") > -1) {
                     return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
@@ -2301,11 +2303,11 @@ function ready(error, us, county, state, county2, state2) {
 
     if (type) {
       if (type == "medical") {
-        var groups = ["Share with any debt in collections<span class=\"large\">&#x207A;</span>", "Median debt in collections<span class=\"large\">&#x207A;</span>", "Share with medical debt in collections<span class=\"large\">&#x207A;</span>", "Median medical debt in collections<span class=\"large\">&#x207A;</span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
+        var groups = ["Share with any debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Median debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Share with medical debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Median medical debt in collections<span class=\"annotation\"><sup>a</sup></span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
         var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]    
       } else if (type == "student") {
-        var groups = ["Share with student loan debt<span class=\"large\">&#x207A;</span>","Median student loan debt<span class=\"large\">&#x207A;</span>","Share with student loan debt in collections<span class=\"large\">&#x207A;</span>","Median student loan debt in collections<span class=\"large\">&#x207A;</span>","Median monthly student loan payment<span class=\"large\">&#x207A;</span>","Nonwhite population share","Share without a bachelor’s degree","Average household income"];
-        var rowData = ["perc_stud_debt","med_stud_debt","perc_stud_debt_collect","med_stud_debt_collect","med_mon_pmt","perc_pop_nw","perc_no_bach","avg_income"]    
+        var groups = [ "Share with student loan debt<span class=\"annotation\"><sup>a</sup></span>","Median student loan debt<span class=\"annotation\"><sup>a</sup></span>","Share of student loan holders with student loan debt in collections<span class=\"annotation\"><sup>a</sup> <sup>d</sup></span>","Median student loan debt in collections<span class=\"annotation\"><sup>a</sup></span>","Median monthly student loan payment<span class=\"annotation\"><sup>a</sup></span>","Share of people with credit records who have student loan debt in collections<span class=\"annotation\"><sup>a</sup> <sup>e</sup></span>","Nonwhite population share","Share without a bachelor’s degree","Average household income"];
+        var rowData = ["perc_stud_debt","med_stud_debt","perc_stud_debt_collect_STUD","med_stud_debt_collect","med_mon_pmt","perc_stud_debt_collect","perc_pop_nw","perc_no_bach","avg_income"]    
       }
 
       // based on type, define the groups and rowdata
@@ -2403,7 +2405,7 @@ function ready(error, us, county, state, county2, state2) {
     }
     // console.log(data)
     var data = (zoomNational == true) ? data : data["properties"];
-    d3.selectAll("p.note1, p.note2").style("opacity", 0)
+    d3.selectAll("p.note1, p.note2").style("opacity", 1)
     d3.selectAll(".cell-data")
       .each(function(d,i) { 
         var rowVariable = [rowData[i]],
@@ -2416,22 +2418,22 @@ function ready(error, us, county, state, county2, state2) {
           d3.select("p.note2").style("opacity", 1)
         }
         d3.select(this).selectAll("td")
-          .text(function(d,i) { 
+          .html(function(d,i) { 
             if (i==0) { 
               if (isNaN(data[rowVariable]) == true) {
-                return (data[rowVariable] == "n<50") ? "n/a*" : "n/a**"
+                return (data[rowVariable] == "n<50") ? "n/a<sup><i>b</i></sup>" : "n/a<sup><i>c</i></sup>"
               }else {
                 return formatNumber(data[rowVariable]);
               }
             }else if (i==1){ 
               if (isNaN(data[rowVariable_wh]) == true) {
-                return (data[rowVariable_wh] == "n<50") ? "n/a*" : "n/a**"
+                return (data[rowVariable_wh] == "n<50") ? "n/a<sup><i>b</i></sup>" : "n/a<sup><i>c</i></sup>"
               }else {
                 return formatNumber(data[rowVariable_wh]);
               }
             }else if (i==2) {
               if (isNaN(data[rowVariable_nw]) == true) {
-                return (data[rowVariable_nw] == "n<50") ? "n/a*" : "n/a**"
+                return (data[rowVariable_nw] == "n<50") ? "n/a<sup><i>b</i></sup>" : "n/a<sup><i>c</i></sup>"
               }else {
                 return formatNumber(data[rowVariable_nw]);
               }
@@ -2624,19 +2626,15 @@ function ready(error, us, county, state, county2, state2) {
           if (parentClass.search("All") > -1) {            
             return (isNaN(d[SELECTED_VARIABLE_ph]) != true) ? x_ph(d[SELECTED_VARIABLE_ph]) : 0
           }else if (parentClass.search("Non") > -1) {
-            // console.log("fart1")
             return (isNaN(d[NONWHITE_ph]) != true) ?  x_ph(d[NONWHITE_ph]) : 0
           }else{
-            // console.log(+d[WHITE_ph])
-            // console.log(x_ph.domain())
-            // console.log(x_ph(+d[WHITE_ph]))
             return (isNaN(d[WHITE_ph]) != true) ?  x_ph(d[WHITE_ph]) : 0
           }
         })
       d3.selectAll(".data-label-ph")
         .attr("x", function(d) { 
           var parentClass = $(this).closest(".rect-g").attr("class")
-          if (parentClass.search("All") > -1) {// console.log((isNaN(d[SELECTED_VARIABLE]) != true) ? x_ph(d[SELECTED_VARIABLE]) + 5 : 5)
+          if (parentClass.search("All") > -1) {
             return (isNaN(d[SELECTED_VARIABLE_ph]) != true) ? x_ph(d[SELECTED_VARIABLE_ph]) + 5 : 0
           }else if (parentClass.search("Non") > -1) {
             return (isNaN(d[NONWHITE_ph]) != true) ? x_ph(d[NONWHITE_ph]) + 5 : 0
