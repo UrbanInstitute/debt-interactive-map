@@ -57,10 +57,19 @@ path.domain {
   float: left;
   border-bottom: 1px solid #d2d2d2;
 }
-p.note1, p.note2, p.note3 {
+p.note1, p.note2, p.note3, p.note4 {
   opacity:1;
   font-size: 11px;
 }
+
+td sup {
+  font-size: 10px;
+}
+
+text tspan {
+ font-size: 10px; 
+}
+
 .highlightChange{
   font-weight: bold;
   color: #00ff00;
