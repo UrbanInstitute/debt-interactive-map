@@ -1177,7 +1177,7 @@ function ready(error, us, county, state, county2, state2) {
         var groups = ["Share with any debt in collections <span class=\"annotation\"><sup>a</sup></span>", "Median debt in collections <span class=\"annotation\"><sup>a</sup></span>", "Share with medical debt in collections <span class=\"annotation\"><sup>a</sup></span>", "Median medical debt in collections <span class=\"annotation\"><sup>a</sup></span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
         var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]    
       } else if (type == "student") {
-        var groups = [ "Share with student loan debt <span class=\"annotation\"><sup>a</sup></span>","Median student loan debt <span class=\"annotation\"><sup>a</sup></span>","Share of student loan holders with student loan debt in collections <span class=\"annotation\"><sup>a</sup> <sup><i>d</i></sup></span>","Median student loan debt in collections <span class=\"annotation\"><sup>a</sup></span>","Median monthly student loan payment <span class=\"annotation\"><sup>a</sup></span>","Share of people with credit records who have student loan debt in collections <span class=\"annotation\"><sup>a</sup> <sup>e</sup></span>","Nonwhite population share","Share without a bachelor’s degree","Average household income"];
+        var groups = [ "Share with student loan debt <span class=\"annotation\"><sup>a</sup></span>","Median student loan debt <span class=\"annotation\"><sup>a</sup></span>","Share of student loan holders with student loan debt in collections <span class=\"annotation\"><sup>a</sup> <sup>d</sup></span>","Median student loan debt in collections <span class=\"annotation\"><sup>a</sup></span>","Median monthly student loan payment <span class=\"annotation\"><sup>a</sup></span>","Share of people with credit records who have student loan debt in collections <span class=\"annotation\"><sup>a</sup> <sup>e</sup></span>","Nonwhite population share","Share without a bachelor’s degree","Average household income"];
         var rowData = ["perc_stud_debt","med_stud_debt","perc_stud_debt_collect_STUD","med_stud_debt_collect","med_mon_pmt","perc_stud_debt_collect","perc_pop_nw","perc_no_bach","avg_income"]    
       }
     }
@@ -1966,7 +1966,7 @@ function ready(error, us, county, state, county2, state2) {
                   return (isNaN(d[WHITE_ph]) != true) ? x_ph(d[WHITE_ph]) + 5 : 0
                 }
               })
-              .text(function(d) { 
+              .html(function(d) { 
                 var noData = (d[variable] == "n<50") ? "n/a<sup><i>b</i></sup>" : "n/a<sup><i>c</i></sup>"
                 var noData_wh = (d[WHITE_ph] == "n<50") ? "n/a<sup><i>b</i></sup>" : "n/a<sup><i>c</i></sup>"
                 var noData_nw = (d[NONWHITE_ph] == "n<50") ? "n/a<sup><i>b</i></sup>" : "n/a<sup><i>c</i></sup>"
@@ -2305,7 +2305,7 @@ function ready(error, us, county, state, county2, state2) {
         var groups = ["Share with any debt in collections <span class=\"annotation\"><sup>a</sup></span>", "Median debt in collections <span class=\"annotation\"><sup>a</sup></span>", "Share with medical debt in collections <span class=\"annotation\"><sup>a</sup></span>", "Median medical debt in collections <span class=\"annotation\"><sup>a</sup></span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
         var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]    
       } else if (type == "student") {
-        var groups = [ "Share with student loan debt <span class=\"annotation\"><sup>a</sup></span>","Median student loan debt <span class=\"annotation\"><sup>a</sup></span>","Share of student loan holders with student loan debt in collections<span class=\"annotation\"><sup>a</sup></span><sup> d</sup>","Median student loan debt in collections <span class=\"annotation\"><sup>a</sup></span>","Median monthly student loan payment <span class=\"annotation\"><sup>a</sup></span>","Share of people with credit records who have student loan debt in collections <span class=\"annotation\"><sup>a</sup> <sup>e</sup></span>","Nonwhite population share","Share without a bachelor’s degree","Average household income"];
+        var groups = [ "Share with student loan debt <span class=\"annotation\"><sup>a</sup></span>","Median student loan debt <span class=\"annotation\"><sup>a</sup></span>","Share of student loan holders with student loan debt in collections <span class=\"annotation\"><sup>a</sup> <sup>d</sup></span>","Median student loan debt in collections <span class=\"annotation\"><sup>a</sup></span>","Median monthly student loan payment <span class=\"annotation\"><sup>a</sup></span>","Share of people with credit records who have student loan debt in collections <span class=\"annotation\"><sup>a</sup> <sup>e</sup></span>","Nonwhite population share","Share without a bachelor’s degree","Average household income"];
         var rowData = ["perc_stud_debt","med_stud_debt","perc_stud_debt_collect_STUD","med_stud_debt_collect","med_mon_pmt","perc_stud_debt_collect","perc_pop_nw","perc_no_bach","avg_income"]    
       }
 
