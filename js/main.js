@@ -15,7 +15,6 @@ var zoomNational;
 var zoomCounty;
 var zoomNational_St;
 var type;
-// var CATEGORY = "fake";
 var tdMap;
 var active = d3.select(null);
 // var margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55}
@@ -227,6 +226,7 @@ function ready(error, us, county, state, county2, state2) {
         $('#category-select').val(type_category[0].variable);
 
         $("#category-select").selectmenu("refresh")
+
 
         // to be used when ready
         var type_variable = (type == "medical") ? "perc_debt_collect" : "perc_stud_debt";
@@ -452,6 +452,7 @@ function ready(error, us, county, state, county2, state2) {
   var max = d3.max(BigData.tmp_county, function(d) { 
     return d.properties[SELECTED_VARIABLE]
   })
+  // console.log(max)
   var quantize = d3.scaleThreshold()
     .domain(BREAKS[SELECTED_VARIABLE])
     .range(["#cfe8f3", "#73bfe2", "#1696d2", "#0a4c6a", "#000000"])  
@@ -1117,7 +1118,9 @@ function ready(error, us, county, state, county2, state2) {
           var max = d3.max(BigData.tmp_county, function(d) { 
             return d.properties[SELECTED_VARIABLE]
           })
-          return formatNumber(max, "max")
+
+          // return formatNumber(max, "max")
+          return Math.ceil(max*100) + "%"
         })
       }
     }
@@ -1719,10 +1722,10 @@ function ready(error, us, county, state, county2, state2) {
                 return "$275"
               } else if (variable == "perc_no_bach") {
                 return "98%"
-              } else {
+              } else {                
                 return formatNumber(max, "max")  
               }              
-            } else { 
+            } else {               
               return formatNumber(array[i-1])
             }
           })
