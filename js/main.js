@@ -73,6 +73,57 @@ setZoom(true,false, false)
 setVariable("perc_stud_debt")
 setVariable("perc_stud_debt", true)
 
+// console.log("hello")
+// window.location.hash = "home";
+
+// console.log(window.location.hash)
+// console.log('fart')
+
+// console.log(history)
+
+
+// Initial query load ????????/
+// updateQueryString("","","")
+
+function updateQueryString(type,variable,state,county){
+
+  var queryString = "";
+
+  if (type) {
+    queryString += "?type=" + type;
+  } else {
+    queryString += "";
+  }
+
+  if (type) {
+    queryString += "?variable=" + variable;
+  } else {
+    queryString += "";
+  }
+
+  if (state) {
+    queryString += "?state=" + state;
+  } else {
+    queryString += "";
+  }
+
+  if (county) {
+    queryString += "?county=" + county;
+  } else {
+    queryString += "";
+  }
+
+  if (history.pushState) {
+    // console.log(window.location)
+      var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + queryString;
+      window.history.pushState({path:newurl},'',newurl); //this seems to reload the page?
+      console.log(newurl)
+  }
+
+
+}
+
+
 
 var setHeight = tdMap*.7;
 var width =  tdMap,  //(IS_MOBILE && !IS_PHONE) ? tdMap : (tdMap) - margin.right-margin.left,
@@ -197,13 +248,14 @@ function ready(error, us, county, state, county2, state2) {
       create: function(event, ui){
         type = "student"
       },
-      change: function(event, d){
+      change: function(event, d){        
 
         table.selectAll('tbody').classed('selected', false);
         table.select('tbody').classed('selected', true)
         
         BigData = changeData(d.item.value);
         type = d.item.value;
+   
 
         var type_category = (type == "medical") ? categoryData : categoryData2;
         // update mobile categories        
@@ -228,13 +280,15 @@ function ready(error, us, county, state, county2, state2) {
         $("#category-select").selectmenu("refresh")
 
 
+        // DW note: this will need to get updated when we move to more than TWO variable sets. 
         // to be used when ready
         var type_variable = (type == "medical") ? "perc_debt_collect" : "perc_stud_debt";
         setVariable(type_variable)
         setVariable(type_variable,true)
-        updateMap(type_variable)            
+        updateMap(type_variable)                    
 
-
+        var stateQuery;
+        var countyQuery;
 
         if (zoomNational == true) {          
           var us_data = BigData.state_data[0]["values"][0]
@@ -249,16 +303,21 @@ function ready(error, us, county, state, county2, state2) {
           }                    
           updateTable(us_data,type)
         } else if (zoomCounty == true) {
+          countyQuery = d3.select("g.counties").selectAll("path.selected").datum().id;
+          stateQuery = d3.select("path#" + selectedState.properties.abbr).datum().id;
           updateTable(d3.select("g.counties").selectAll("path.selected").datum(),type)
         } else if (zoomState == true) {
-          updateTable(d3.select("path#" + selectedState.properties.abbr).datum(),type)
+          stateQuery = d3.select("path#" + selectedState.properties.abbr).datum().id;
+          updateTable(d3.select("path#" + selectedState.properties.abbr).datum(),type);
         }
+
+        updateQueryString(type,type_variable,stateQuery,countyQuery)
       }
     });
 
 
 
-  function changeData(CATEGORY) {  
+  function changeData(CATEGORY) {
     
     var BigData = (CATEGORY === "medical") ? OverallTransformData(us,county,state,countyData,stateData) : OverallTransformData(us,county2,state2,countyData,stateData)
     var tmp_state = BigData.tmp_state,
@@ -365,7 +424,7 @@ function ready(error, us, county, state, county2, state2) {
             return false;
         }
       },
-      afterTagAdded: function(event, ui) { 
+      afterTagAdded: function(event, ui) {         
         ($(".search-div > .ui-widget").css("height", 60))
         var tag = (ui.tag[0]["textContent"]);
         var county = (tag.search(",") > 0) ? tag.split(",")[0] : "";
@@ -401,6 +460,10 @@ function ready(error, us, county, state, county2, state2) {
           var filter = data["properties"]["abbr"]
           createSearchArray(filter)
         }
+
+        var stateQuery = filteredData["0"].properties.state_id;
+        var countyQuery = (geoType == "county") ? filteredData["0"].properties.id : null;
+        updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
       },
       afterTagRemoved: function(event,ui) { 
          var tag = (ui.tag[0]["textContent"]);
@@ -751,32 +814,45 @@ function ready(error, us, county, state, county2, state2) {
           return (isNaN(d.properties[SELECTED_VARIABLE]) == true) ? "#adabac" : quantize(d.properties[SELECTED_VARIABLE]);
       })
       .on('click', function(d) { 
-        var state = d.properties.state;
+
+        // when clicked on state, this is a state click if outside of current state
+        // otherwise this is county click. 
+
+        var state = d.properties.state;        
         var stateData = BigData.tmp_state.filter(function(d){ 
           return d.properties.state == state
-        })
+        })        
         var selectedState = stateData[0]
+        
         var previousState = (d3.select(".state-borders > path.selected").node() != null) ? d3.select(".state-borders > path.selected").attr("id") : ""
         var selectedCounty = (d["properties"])
         var level = (zoomState == true && previousState == d["properties"]["abbr"]) ? "county": "state";
         var county = d.properties["county"]
         var abbr = d.properties["abbr"]
+
+        var countyQuery;
+        var stateQuery = selectedState.id;
+
         if (d3.select(this).classed('selected') == true) {
+          // This is the part where you unselect the county if you click on a selected county. 
+
           $(".tagit-new").css("display", "block")
           d3.select(this).classed('selected', false)
           if (level == "county") { 
             $('ul.tagit > li:nth-child(2)').remove()
             setZoom(false, true, false)                
             updateTable(selectedState,type)
-            updateBars(SELECTED_VARIABLE, d)
+            updateBars(SELECTED_VARIABLE, d)                        
           }
-        }else { 
+        }else {
           reset()
           var county = (level == "state") ? null : county;
+          countyQuery = (level == "state") ? null : d.properties.id
           addTag(state, county, abbr)
           zoomMap(width, d, level)
           updateBars(SELECTED_VARIABLE, d)
         }
+        updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
       })
       .on('mouseover', function(d) {
         var previousState = (d3.select(".state-borders > path.selected").node() != null) ? d3.select(".state-borders > path.selected").attr("id") : ""
@@ -840,6 +916,9 @@ function ready(error, us, county, state, county2, state2) {
         return d.properties.abbr
       })
       .on('click', function(d) {
+
+        // stateClick 1 is here
+
         d3.selectAll(".selectedNational").classed("selectedNational", false)
         var state = d.properties.state;
         // var county = d.properties.county;
@@ -851,6 +930,11 @@ function ready(error, us, county, state, county2, state2) {
         addTag(state, null, abbr)        
         zoomMap(width, d, level)        
         updateBars(SELECTED_VARIABLE, d)
+
+        var stateQuery = d.properties.id;
+        var countyQuery;
+        updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
+
       })
       .on('mouseover', function(d) {         
 
@@ -1208,6 +1292,20 @@ function ready(error, us, county, state, county2, state2) {
             // }
             setVariable(d)
             updateMap(d)
+
+            var stateQuery;
+            var countyQuery;
+
+            // Add in the querystring
+            if (d3.select("g.counties").selectAll("path.selected")._groups["0"].length !== 0) {
+              countyQuery = d3.select("g.counties").selectAll("path.selected").datum().id;  
+            }
+
+            if (selectedState) {
+              stateQuery = d3.select("path#" + selectedState.properties.abbr).datum().id;  
+            }
+            
+            updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
           })
     table.select('tbody').classed('selected', true)
     
@@ -2254,6 +2352,10 @@ function ready(error, us, county, state, county2, state2) {
         setZoom(true,false, false)
         zoomMap(width, null, "national")
         createSearchArray("")
+
+        var stateQuery;
+        var countyQuery;
+        updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
       })
 
     if (county != undefined) { 
@@ -2290,6 +2392,10 @@ function ready(error, us, county, state, county2, state2) {
 
 
         updateTable(stateData[0],type)
+        var stateQuery = stateData[0].id;
+        var countyQuery;
+        updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
+
       })
       
       updateBars(SELECTED_VARIABLE, filteredData[0])
@@ -2330,7 +2436,7 @@ function ready(error, us, county, state, county2, state2) {
             return type + " new group group-" + i
           })
           // .merge(tbody)
-          .on('click', function(d) { 
+          .on('click', function(d) {             
             d3.selectAll('tbody')
               .classed('selected', false)
             d3.select(this)
