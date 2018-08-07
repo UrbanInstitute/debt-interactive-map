@@ -61,33 +61,11 @@ function setZoom(national, state, county, national_st) {
   zoomNational_St = national_st;
 }
 
-function selectedStatePh() {
-
-}
-
 var initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width() - 15
 setWidth(initialWidth, IS_MOBILE, IS_PHONE)
-setZoom(true,false, false)
-
-// reset when changing up first topic
-setVariable("perc_stud_debt")
-setVariable("perc_stud_debt", true)
-
-// console.log("hello")
-// window.location.hash = "home";
-
-// console.log(window.location.hash)
-// console.log('fart')
-
-// console.log(history)
-
-
-// Initial query load ????????/
-// updateQueryString("","","")
 
 function decodeQuery(location) {
   var Startquery = location.split("?")
-  console.log(Startquery)
   for (var i = Startquery.length - 1; i >= 0; i--) {
     if (Startquery[i].substring(0, 4) === "type") {
       Startquery[i] = Startquery[i].substr(5);
@@ -264,132 +242,6 @@ function ready(error, us, county, state, county2, state2) {
   var countyData = us.objects.counties.geometries;
   var stateData = us.objects.states.geometries;
 
-  // CHANGE DATA SET
-  $( "#dropdown-header" ).selectmenu({
-      open: function( event, ui ) {
-
-      },
-      close: function(event, ui){
-
-      },
-      create: function(event, ui){
-        type = "student"
-      },
-      change: function(event, d){        
-
-        table.selectAll('tbody').classed('selected', false);
-        table.select('tbody').classed('selected', true)
-        
-        BigData = changeData(d.item.value);
-        type = d.item.value;
-   
-
-        var type_category = (type == "medical") ? categoryData : categoryData2;
-        // update mobile categories        
-
-        var optionsCategory = d3.select("#category-select").selectAll('option')
-          .data(type_category)
-
-        optionsCategory.enter()
-          .append('option')
-          .merge(optionsCategory)
-          .html(function(d) {            
-            return d.label
-          })
-          .attr('value', function(d) {
-            return d.variable
-          })        
-        
-        optionsCategory.exit().remove()
-
-        $('#category-select').val(type_category[0].variable);
-
-        $("#category-select").selectmenu("refresh")
-
-
-        // DW note: this will need to get updated when we move to more than TWO variable sets. 
-        // to be used when ready
-        var type_variable = (type == "medical") ? "perc_debt_collect" : "perc_stud_debt";
-        setVariable(type_variable)
-        setVariable(type_variable,true)
-        updateMap(type_variable)                    
-
-        var stateQuery;
-        var countyQuery;
-
-        if (zoomNational == true) {          
-          var us_data = BigData.state_data[0]["values"][0]
-          for (var key in us_data) {
-              if (us_data.hasOwnProperty(key)) { 
-                  if (+us_data[key] == NaN || +us_data[key] == 0){
-                    us_data[key = us_data[key]]
-                  }else {
-                    us_data[key] = +us_data[key]
-                  }
-              }
-          }                    
-          updateTable(us_data,type)
-        } else if (zoomCounty == true) {
-          countyQuery = d3.select("g.counties").selectAll("path.selected").datum().id;
-          stateQuery = d3.select("path#" + selectedState.properties.abbr).datum().id;
-          updateTable(d3.select("g.counties").selectAll("path.selected").datum(),type)
-        } else if (zoomState == true) {
-          stateQuery = d3.select("path#" + selectedState.properties.abbr).datum().id;
-          updateTable(d3.select("path#" + selectedState.properties.abbr).datum(),type);
-        }
-
-        updateQueryString(type,type_variable,stateQuery,countyQuery)
-      }
-    });
-
-
-
-  function changeData(CATEGORY) {
-    
-    var BigData = (CATEGORY === "medical") ? OverallTransformData(us,county,state,countyData,stateData) : OverallTransformData(us,county2,state2,countyData,stateData)
-    var tmp_state = BigData.tmp_state,
-      tmp_county = BigData.tmp_county,
-      filteredCounties = BigData.filteredCounties,
-      us_data_ph = BigData.us_data_ph,
-      state_data = BigData.state_data,
-      county_data = BigData.county_data;
-
-    // update data bound to counties 
-
-    var countiesD3 = d3.selectAll(".counties")
-    .selectAll("path")
-    .each(function(d){
-      d3.select(this)
-        .datum(tmp_county.filter(function(o){ return o.id == d.id})[0])
-    })  
-
-    var statesD3 = d3.selectAll(".state-borders")
-      .selectAll("path")
-      .each(function(d){
-        d3.select(this)
-          .datum(tmp_state.filter(function(o){ return o.properties.abbr == d.properties.abbr})[0])
-      })  
-
-    return BigData
-
-  }
-
-  // ENDDDDDD dropdown header topic change logic
-
-  // first time through use "county" and "state" which are medical info. CHANGE if you want diff
-
-  // If there's a url search query, do a bunch of stuff like create the beginning zoom variables
-  if (window.location.search) {    
-    var Startquery = decodeQuery(window.location.search)
-  }
-  else {
-    var Startquery = "national";
-    
-  }
-  console.log(Startquery)
-  // var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + queryString;
-  //     window.history.pushState({path:newurl},'',newurl); //this seems to reload the page?
-  //     console.log(newurl)
 
   var BigData = OverallTransformData(us,county2,state2,countyData,stateData);
   var tmp_state = BigData.tmp_state,
@@ -399,6 +251,49 @@ function ready(error, us, county, state, county2, state2) {
     state_data = BigData.state_data,
     county_data = BigData.county_data;
 
+  // first time through use "county" and "state" which are medical info. CHANGE if you want diff
+
+  // If there's a url search query, do a bunch of stuff like create the beginning zoom variables
+  if (window.location.search) {    
+    var Startquery = decodeQuery(window.location.search)
+
+    
+    console.log(Startquery[0])  
+    // BigData = changeData(Startquery[0]);    
+    // BigData = changeData("medical");
+    // This doesn't appear to be doing anything...
+
+
+    // if Startquery[0] === medical, do one thing, otherwise, do another. or could use case sensitive for the overalltransformdata
+    // var BigData = OverallTransformData(us,county2,state2,countyData,stateData);
+  }
+  else {
+    // var Startquery = "national";
+    // var BigData = OverallTransformData(us,county2,state2,countyData,stateData);
+  }
+  
+  // console.log(BigData)
+
+  // if type and variable don't match, remove the variable and go down to type (reset variable)
+  // if variable doesn't exist, do the top variable
+
+  // Need to do all the things in the select menu
+    // change data set
+    // set the variable
+  // select the state (optional)
+  // select the county (optional)
+
+  setZoom(true,false, false)
+
+// when we adjust this to a medical item, it allows the LEGEND to change but the data doesn't work in the map
+    // Even when "big data" is changed above using changeData
+// when we adjust this to a DIFFERENT student item, it changes the map AND legend, but not the spot on the left hand side in the table. (but uupper and lower end is a NaN?????)
+  setVariable("perc_stud_debt")
+  setVariable("perc_stud_debt", true)
+
+
+
+
 
   /*END*/
 
@@ -406,29 +301,6 @@ function ready(error, us, county, state, county2, state2) {
 
   $("#location").html("National")
 
-  function createSearchArray(filter) { 
-    var searchArray = [];
-    if (zoomNational == true) {
-      for (var i = 0; i<tmp_state.length; i++){
-       searchArray.push(tmp_state[i]["properties"]["state"])
-      }
-      for (var i = 0; i<tmp_county.length; i++){
-       searchArray.push(tmp_county[i]["properties"]["county"] + ", " + tmp_county[i]["properties"]["abbr"])
-      }
-    }else if (zoomState == true) { 
-      for (var i = 0; i<tmp_county.length; i++){ 
-        if (tmp_county[i]["properties"]["abbr"] == filter) {
-          searchArray.push(tmp_county[i]["properties"]["county"] + ", " + tmp_county[i]["properties"]["abbr"])
-        }
-      }
-    }
-   dropdown = searchArray
-   $('input[name="tags"]').tagit("option", {
-      availableTags: dropdown,
-    })
-  }
-  
-  // End Search Array
 
   $( "#searchBox" ).autocomplete({
     appendTo: ".search-div",
@@ -541,14 +413,11 @@ function ready(error, us, county, state, county2, state2) {
   });
   createSearchArray("")
 
-
-  // });
   var zoom = d3.zoom()
       // .translate([0, 0])
       // .scale(1)
       .scaleExtent([0, 8])
   //     .on("zoom", zoomed);
-
 
   var min = d3.min(BigData.tmp_county, function(d) {
     return d.properties[SELECTED_VARIABLE]
@@ -562,93 +431,237 @@ function ready(error, us, county, state, county2, state2) {
     .range(["#cfe8f3", "#73bfe2", "#1696d2", "#0a4c6a", "#000000"])  
 
  /*ADD DROPDOWNS*/
-    var categoryData = [{label: "Share with any debt in collections<i>ᵃ</i>", variable: "perc_debt_collect"},
-    {label: "Median debt in collections<i>ᵃ</i>", variable: "med_debt_collect"},
-    {label: "Share with medical debt in collections<i>ᵃ</i>", variable: "perc_debt_med"},
-    {label: "Median medical debt in collections<i>ᵃ</i>", variable: "med_debt_med"},
-    {label: "Nonwhite population share", variable: "perc_pop_nw"},
-    {label: "Share without health insurance coverage", variable: "perc_pop_no_ins" },
-    {label: "Average household income", variable: "avg_income"}]
+  var categoryData = [{label: "Share with any debt in collections<i>ᵃ</i>", variable: "perc_debt_collect"},
+  {label: "Median debt in collections<i>ᵃ</i>", variable: "med_debt_collect"},
+  {label: "Share with medical debt in collections<i>ᵃ</i>", variable: "perc_debt_med"},
+  {label: "Median medical debt in collections<i>ᵃ</i>", variable: "med_debt_med"},
+  {label: "Nonwhite population share", variable: "perc_pop_nw"},
+  {label: "Share without health insurance coverage", variable: "perc_pop_no_ins" },
+  {label: "Average household income", variable: "avg_income"}]
+  
+  var categoryData2 = [{label: "Share with student loan debt<i>ᵃ</i>", variable: "perc_stud_debt"},
+  {label: "Median student loan debt<i>ᵃ</i>", variable: "med_stud_debt"},
+  {label: "Share of student loan holders with student loan debt in collections<i>ᵃ ᵈ</i>", variable: "perc_stud_debt_collect_STUD"},    
+  {label: "Median student loan debt in collections<i>ᵃ</i>", variable: "med_stud_debt_collect"},
+  {label: "Median monthly student loan payment<i>ᵃ</i>", variable: "med_mon_pmt"},
+  {label: "Share of people with credit records who have student loan debt in collections<i>ᵃ ᵉ</i>", variable: "perc_stud_debt_collect"},
+  {label: "Nonwhite population share", variable: "perc_pop_nw"},
+  {label: "Share without a bachelor’s degree", variable: "perc_no_bach"},
+  {label: "Average household income", variable: "avg_income" }]
+
+  var table = d3.select("#table-div")
+
+  var stateMenu = d3.select(".state-menu")
+    .on('click', function() {
+      if ( d3.select(".state-menu.dropdown").classed("open") == true) {
+        $("#state-select").selectmenu('close')
+        d3.select(".state-menu.dropdown").classed("open", false)
+      }else {
+        d3.select(".state-menu.dropdown").classed("open", true)
+        $("#state-select").selectmenu('open')
+      }
+    })
+    .append("select")
+    .attr("id", "state-select")
+
+  var optionsState = stateMenu
+    .selectAll('option')
+    .data(state_data)
+  
+  optionsState.enter()
+    .append('option')
+    .text(function(d) {
+      return d.state
+    })
+    .attr('value', function(d) {
+      return d.state
+    })
+
+  var countyMenu = d3.select(".county-menu")
+    .on('click', function() {
+      if ( d3.select(".county-menu.dropdown").classed("open") == true) {
+        $("#county-select").selectmenu('close')
+        d3.select(".county-menu.dropdown").classed("open", false)
+      }else {
+        d3.select(".county-menu.dropdown").classed("open", true)
+        $("#county-select").selectmenu('open')
+      }
+    })
+    .append("select")
+    .attr("id", "county-select")
+
+  var optionsCounty = countyMenu
+    .selectAll('option')
+    .data(filteredCounties)
+
+  optionsCounty.enter()
+    .append('option')
+    .text(function(d) {
+      return d.county
+    })
+  
+  var categoryMenu = d3.select(".category-menu")
+    .on('click', function() {
+      if ( d3.select(".category-menu.dropdown").classed("open") == true) {
+        $("#category-select").selectmenu('close')
+        d3.select(".category-menu.dropdown").classed("open", false)
+      }else {
+        d3.select(".category-menu.dropdown").classed("open", true)
+        $("#category-select").selectmenu('open')
+      }
+    })
+    .append("select")
+    .attr("id", "category-select")
+
+  var optionsCategory = categoryMenu
+    .selectAll('option')
+    .data(categoryData2)
+  optionsCategory.enter()
+    .append('option')
+    .html(function(d) {
+      return d.label          
+    })
+    .attr('value', function(d) {
+      return d.variable
+    })
+
+
+// BEGIN FUNCTIONS!
+
+  // CHANGE DATA SET on dropdown at header
+  $( "#dropdown-header" ).selectmenu({
+      open: function( event, ui ) {
+
+      },
+      close: function(event, ui){
+
+      },
+      create: function(event, ui){
+        type = "student"
+      },
+      change: function(event, d){        
+
+        table.selectAll('tbody').classed('selected', false);
+        table.select('tbody').classed('selected', true)
+        
+        BigData = changeData(d.item.value);
+        type = d.item.value;
+   
+
+        var type_category = (type == "medical") ? categoryData : categoryData2;
+        // update mobile categories        
+
+        var optionsCategory = d3.select("#category-select").selectAll('option')
+          .data(type_category)
+
+        optionsCategory.enter()
+          .append('option')
+          .merge(optionsCategory)
+          .html(function(d) {            
+            return d.label
+          })
+          .attr('value', function(d) {
+            return d.variable
+          })        
+        
+        optionsCategory.exit().remove()
+
+        $('#category-select').val(type_category[0].variable);
+
+        $("#category-select").selectmenu("refresh")
+
+
+        // DW note: this will need to get updated when we move to more than TWO variable sets. 
+        // to be used when ready
+        var type_variable = (type == "medical") ? "perc_debt_collect" : "perc_stud_debt";
+        setVariable(type_variable)
+        setVariable(type_variable,true)
+        updateMap(type_variable)                    
+
+        var stateQuery;
+        var countyQuery;
+
+        if (zoomNational == true) {          
+          var us_data = BigData.state_data[0]["values"][0]
+          for (var key in us_data) {
+              if (us_data.hasOwnProperty(key)) { 
+                  if (+us_data[key] == NaN || +us_data[key] == 0){
+                    us_data[key = us_data[key]]
+                  }else {
+                    us_data[key] = +us_data[key]
+                  }
+              }
+          }                    
+          updateTable(us_data,type)
+        } else if (zoomCounty == true) {
+          countyQuery = d3.select("g.counties").selectAll("path.selected").datum().id;
+          stateQuery = d3.select("path#" + selectedState.properties.abbr).datum().id;
+          updateTable(d3.select("g.counties").selectAll("path.selected").datum(),type)
+        } else if (zoomState == true) {
+          stateQuery = d3.select("path#" + selectedState.properties.abbr).datum().id;
+          updateTable(d3.select("path#" + selectedState.properties.abbr).datum(),type);
+        }
+
+        updateQueryString(type,type_variable,stateQuery,countyQuery)
+      }
+    });
+
+  function changeData(CATEGORY) {
     
-    var categoryData2 = [{label: "Share with student loan debt<i>ᵃ</i>", variable: "perc_stud_debt"},
-    {label: "Median student loan debt<i>ᵃ</i>", variable: "med_stud_debt"},
-    {label: "Share of student loan holders with student loan debt in collections<i>ᵃ ᵈ</i>", variable: "perc_stud_debt_collect_STUD"},    
-    {label: "Median student loan debt in collections<i>ᵃ</i>", variable: "med_stud_debt_collect"},
-    {label: "Median monthly student loan payment<i>ᵃ</i>", variable: "med_mon_pmt"},
-    {label: "Share of people with credit records who have student loan debt in collections<i>ᵃ ᵉ</i>", variable: "perc_stud_debt_collect"},
-    {label: "Nonwhite population share", variable: "perc_pop_nw"},
-    {label: "Share without a bachelor’s degree", variable: "perc_no_bach"},
-    {label: "Average household income", variable: "avg_income" }]
+    var BigData = (CATEGORY === "medical") ? OverallTransformData(us,county,state,countyData,stateData) : OverallTransformData(us,county2,state2,countyData,stateData)
+    var tmp_state = BigData.tmp_state,
+      tmp_county = BigData.tmp_county,
+      filteredCounties = BigData.filteredCounties,
+      us_data_ph = BigData.us_data_ph,
+      state_data = BigData.state_data,
+      county_data = BigData.county_data;
 
-    var table = d3.select("#table-div")
+    // update data bound to counties 
 
-    var stateMenu = d3.select(".state-menu")
-      .on('click', function() {
-        if ( d3.select(".state-menu.dropdown").classed("open") == true) {
-          $("#state-select").selectmenu('close')
-          d3.select(".state-menu.dropdown").classed("open", false)
-        }else {
-          d3.select(".state-menu.dropdown").classed("open", true)
-          $("#state-select").selectmenu('open')
+    var countiesD3 = d3.selectAll(".counties")
+    .selectAll("path")
+    .each(function(d){
+      d3.select(this)
+        .datum(tmp_county.filter(function(o){ return o.id == d.id})[0])
+    })  
+
+    var statesD3 = d3.selectAll(".state-borders")
+      .selectAll("path")
+      .each(function(d){
+        d3.select(this)
+          .datum(tmp_state.filter(function(o){ return o.properties.abbr == d.properties.abbr})[0])
+      })  
+
+    return BigData
+
+  }
+
+  // ENDDDDDD dropdown header topic change logic
+
+  function createSearchArray(filter) { 
+    var searchArray = [];
+    if (zoomNational == true) {
+      for (var i = 0; i<tmp_state.length; i++){
+       searchArray.push(tmp_state[i]["properties"]["state"])
+      }
+      for (var i = 0; i<tmp_county.length; i++){
+       searchArray.push(tmp_county[i]["properties"]["county"] + ", " + tmp_county[i]["properties"]["abbr"])
+      }
+    }else if (zoomState == true) { 
+      for (var i = 0; i<tmp_county.length; i++){ 
+        if (tmp_county[i]["properties"]["abbr"] == filter) {
+          searchArray.push(tmp_county[i]["properties"]["county"] + ", " + tmp_county[i]["properties"]["abbr"])
         }
-      })
-      .append("select")
-      .attr("id", "state-select")
+      }
+    }
+   dropdown = searchArray
+   $('input[name="tags"]').tagit("option", {
+      availableTags: dropdown,
+    })
+  }
+  
+  // End Search Array
 
-    var optionsState = stateMenu
-      .selectAll('option')
-      .data(state_data)
-    optionsState.enter()
-      .append('option')
-      .text(function(d) {
-        return d.state
-      })
-      .attr('value', function(d) {
-        return d.state
-      })
-    var countyMenu = d3.select(".county-menu")
-      .on('click', function() {
-        if ( d3.select(".county-menu.dropdown").classed("open") == true) {
-          $("#county-select").selectmenu('close')
-          d3.select(".county-menu.dropdown").classed("open", false)
-        }else {
-          d3.select(".county-menu.dropdown").classed("open", true)
-          $("#county-select").selectmenu('open')
-        }
-      })
-      .append("select")
-      .attr("id", "county-select")
-    var optionsCounty = countyMenu
-      .selectAll('option')
-      .data(filteredCounties)
-    optionsCounty.enter()
-      .append('option')
-      .text(function(d) {
-        return d.county
-      })
-   var categoryMenu = d3.select(".category-menu")
-        .on('click', function() {
-          if ( d3.select(".category-menu.dropdown").classed("open") == true) {
-            $("#category-select").selectmenu('close')
-            d3.select(".category-menu.dropdown").classed("open", false)
-          }else {
-            d3.select(".category-menu.dropdown").classed("open", true)
-            $("#category-select").selectmenu('open')
-          }
-        })
-        .append("select")
-        .attr("id", "category-select")
-      var optionsCategory = categoryMenu
-        .selectAll('option')
-        .data(categoryData2)
-      optionsCategory.enter()
-        .append('option')
-        .html(function(d) {
-          return d.label          
-        })
-        .attr('value', function(d) {
-          return d.variable
-        })
 
   function reset() {
     active.classed("active", false);
@@ -659,6 +672,7 @@ function ready(error, us, county, state, county2, state2) {
         .style("stroke-width", "1.5px")
         .attr("transform", "");
   }
+
   function filterCountyMenu(selectedState) {
     var filteredCounties = county_data.filter(function(d) {
       return d.state == selectedState
@@ -821,223 +835,223 @@ function ready(error, us, county, state, county2, state2) {
   d3.select(".county-menu").select(".ui-icon")
     .classed("greyed", true)
   /*ADD MAP*/
-    var svg = d3.select("#map")
-      .append("svg")
+  var svg = d3.select("#map")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("overflow", "hidden")
+
+  svg.append("rect")
       .attr("width", width)
       .attr("height", height)
-      .attr("overflow", "hidden")
-
-    svg.append("rect")
-        .attr("width", width)
-        .attr("height", height)
-        .attr("class", "background")
-    
-    // var projection = d3.geoAlbersUsa()
-    var path = d3.geoPath()//.projection(projection)
-    // var states = topojson.feature(us, us.objects.states);
-    // projection.fitSize([width, height], states);
-    var translateHeight = (IS_MOBILE) ? height*.05 : height*.05
-    var mapScale = (IS_MOBILE) ? width/930 : width/1010
-    var g = svg.append("g")
-      .attr("class", "map-g")
-      .attr("transform", "translate(" + (-10) + "," + (translateHeight) + ")scale(" +mapScale + ")")
+      .attr("class", "background")
+  
+  // var projection = d3.geoAlbersUsa()
+  var path = d3.geoPath()//.projection(projection)
+  // var states = topojson.feature(us, us.objects.states);
+  // projection.fitSize([width, height], states);
+  var translateHeight = (IS_MOBILE) ? height*.05 : height*.05
+  var mapScale = (IS_MOBILE) ? width/930 : width/1010
+  var g = svg.append("g")
+    .attr("class", "map-g")
+    .attr("transform", "translate(" + (-10) + "," + (translateHeight) + ")scale(" +mapScale + ")")
 
 
 
-    g.append("g")
-      .attr("class", "counties")
-      .selectAll("path")
-      .data(tmp_county)
-      .enter().append("path")
-      .attr("d", path)
-      .attr("id", function (d) { return d.properties.abbr + d.id; })
-      .style("fill", function(d){ 
-          return (isNaN(d.properties[SELECTED_VARIABLE]) == true) ? "#adabac" : quantize(d.properties[SELECTED_VARIABLE]);
-      })
-      .on('click', function(d) { 
+  g.append("g")
+    .attr("class", "counties")
+    .selectAll("path")
+    .data(tmp_county)
+    .enter().append("path")
+    .attr("d", path)
+    .attr("id", function (d) { return d.properties.abbr + d.id; })
+    .style("fill", function(d){ 
+        return (isNaN(d.properties[SELECTED_VARIABLE]) == true) ? "#adabac" : quantize(d.properties[SELECTED_VARIABLE]);
+    })
+    .on('click', function(d) { 
 
-        // when clicked on state, this is a state click if outside of current state
-        // otherwise this is county click. 
+      // when clicked on state, this is a state click if outside of current state
+      // otherwise this is county click. 
 
-        var state = d.properties.state;        
-        var stateData = BigData.tmp_state.filter(function(d){ 
-          return d.properties.state == state
-        })        
-        var selectedState = stateData[0]
-        
-        var previousState = (d3.select(".state-borders > path.selected").node() != null) ? d3.select(".state-borders > path.selected").attr("id") : ""
-        var selectedCounty = (d["properties"])
-        var level = (zoomState == true && previousState == d["properties"]["abbr"]) ? "county": "state";
-        var county = d.properties["county"]
-        var abbr = d.properties["abbr"]
+      var state = d.properties.state;        
+      var stateData = BigData.tmp_state.filter(function(d){ 
+        return d.properties.state == state
+      })        
+      var selectedState = stateData[0]
+      
+      var previousState = (d3.select(".state-borders > path.selected").node() != null) ? d3.select(".state-borders > path.selected").attr("id") : ""
+      var selectedCounty = (d["properties"])
+      var level = (zoomState == true && previousState == d["properties"]["abbr"]) ? "county": "state";
+      var county = d.properties["county"]
+      var abbr = d.properties["abbr"]
 
-        var countyQuery;
-        var stateQuery = selectedState.id;
+      var countyQuery;
+      var stateQuery = selectedState.id;
 
-        if (d3.select(this).classed('selected') == true) {
-          // This is the part where you unselect the county if you click on a selected county. 
+      if (d3.select(this).classed('selected') == true) {
+        // This is the part where you unselect the county if you click on a selected county. 
 
-          $(".tagit-new").css("display", "block")
-          d3.select(this).classed('selected', false)
-          if (level == "county") { 
-            $('ul.tagit > li:nth-child(2)').remove()
-            setZoom(false, true, false)                
-            updateTable(selectedState,type)
-            updateBars(SELECTED_VARIABLE, d)                        
-          }
+        $(".tagit-new").css("display", "block")
+        d3.select(this).classed('selected', false)
+        if (level == "county") { 
+          $('ul.tagit > li:nth-child(2)').remove()
+          setZoom(false, true, false)                
+          updateTable(selectedState,type)
+          updateBars(SELECTED_VARIABLE, d)                        
+        }
+      }else {
+        reset()
+        var county = (level == "state") ? null : county;
+        countyQuery = (level == "state") ? null : d.properties.id
+        addTag(state, county, abbr)
+        zoomMap(width, d, level)
+        updateBars(SELECTED_VARIABLE, d)
+      }
+      updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
+    })
+    .on('mouseover', function(d) {
+      var previousState = (d3.select(".state-borders > path.selected").node() != null) ? d3.select(".state-borders > path.selected").attr("id") : ""
+      var hoveredState = d.properties.abbr
+      var geography = (zoomState == true && previousState == hoveredState) ? "county" : "state";
+      var county = (geography == "county") ? d.properties.county : ""
+      var state = d.properties.abbr
+      if (zoomNational == true ) { 
+        $(".state-borders").css("pointer-events", "all")
+        $(".counties").css("pointer-events", "none")
+        hoverLocation("", d.properties.abbr, "state");
+        updateBars(SELECTED_VARIABLE, d) 
+      }else{
+        if (geography == "state") { 
+          hoverLocation(county, state, geography)
+          updateBars(SELECTED_VARIABLE, d3.select("path#" + hoveredState).datum())
         }else {
-          reset()
-          var county = (level == "state") ? null : county;
-          countyQuery = (level == "state") ? null : d.properties.id
-          addTag(state, county, abbr)
-          zoomMap(width, d, level)
+          hoverLocation(county, state, geography)
           updateBars(SELECTED_VARIABLE, d)
         }
-        updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
-      })
-      .on('mouseover', function(d) {
-        var previousState = (d3.select(".state-borders > path.selected").node() != null) ? d3.select(".state-borders > path.selected").attr("id") : ""
-        var hoveredState = d.properties.abbr
-        var geography = (zoomState == true && previousState == hoveredState) ? "county" : "state";
-        var county = (geography == "county") ? d.properties.county : ""
-        var state = d.properties.abbr
-        if (zoomNational == true ) { 
-          $(".state-borders").css("pointer-events", "all")
-          $(".counties").css("pointer-events", "none")
-          hoverLocation("", d.properties.abbr, "state");
-          updateBars(SELECTED_VARIABLE, d) 
-        }else{
-          if (geography == "state") { 
-            hoverLocation(county, state, geography)
-            updateBars(SELECTED_VARIABLE, d3.select("path#" + hoveredState).datum())
-          }else {
-            hoverLocation(county, state, geography)
-            updateBars(SELECTED_VARIABLE, d)
-          }
-          // $(".state-borders").css("pointer-events", "none")
-          // $(".counties").css("pointer-events", "all")
+        // $(".state-borders").css("pointer-events", "none")
+        // $(".counties").css("pointer-events", "all")
 
-        }
-      })
-      .on('mouseout', function(d) { 
-        if (d3.select(".counties > path.selected").node() != undefined) { //IF A COUNTY IS SELECTED
-          var county = d3.select(".counties > path.selected").datum().properties.county
-          var abbr = d3.select(".counties > path.selected").datum().properties.abbr
-          d3.selectAll(".state-borders > path").classed("hide", true)
-          d3.select(".state-borders > path#" + abbr).classed("hide", false)
-          d3.select("#location").html(county + ", " + abbr )
+      }
+    })
+    .on('mouseout', function(d) { 
+      if (d3.select(".counties > path.selected").node() != undefined) { //IF A COUNTY IS SELECTED
+        var county = d3.select(".counties > path.selected").datum().properties.county
+        var abbr = d3.select(".counties > path.selected").datum().properties.abbr
+        d3.selectAll(".state-borders > path").classed("hide", true)
+        d3.select(".state-borders > path#" + abbr).classed("hide", false)
+        d3.select("#location").html(county + ", " + abbr )
+        d3.selectAll("path.selected").moveToFront()
+        d3.selectAll(".hover")
+          .classed("hover", false)
+          .classed("hoverNational", false)
+        setZoom(false, true, true)
+        updateBars(SELECTED_VARIABLE, d3.select(".counties > path.selected").datum())
+      }else if (d3.select(".state-borders > path.selected").node() != undefined) { //IF A STATE IS SELECTED
+        var state = d3.select(".state-borders > path.selected").datum().properties.state
+        var abbr = d3.select(".state-borders > path.selected").datum().properties.abbr
+        d3.selectAll(".state-borders > path").classed("hide", true)
+        d3.select(".state-borders > path#" + abbr).classed("hide", false)
+        d3.select("#location").html(state)
+        d3.selectAll("path.selected").moveToFront()
+        d3.selectAll(".hover")
+        .classed("hover", false)
+        .classed("hoverNational", false)
+        setZoom(false, true, false)
+        updateBars(SELECTED_VARIABLE, d3.select(".state-borders > path.selected").datum())
+      }
+    })  
+
+  g.append("g")
+    .attr("class", "state-borders")
+    .selectAll("path")
+    .data(tmp_state)
+    .enter().append("path")
+    .attr("d", path)
+    .attr("id", function(d){
+      return d.properties.abbr
+    })
+    .on('click', function(d) {
+
+      // stateClick 1 is here
+
+      d3.selectAll(".selectedNational").classed("selectedNational", false)
+      var state = d.properties.state;
+      // var county = d.properties.county;
+      var abbr = d.properties.abbr;
+      var level = "state"
+      setZoom(false, true, false)
+      // $(".state-borders").css("pointer-events", "none")
+      // $(".counties").css("pointer-events", "all")
+      addTag(state, null, abbr)        
+      zoomMap(width, d, level)        
+      updateBars(SELECTED_VARIABLE, d)
+
+      var stateQuery = d.properties.id;
+      var countyQuery;
+      updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
+
+    })
+    .on('mouseover', function(d) {         
+
+      if (zoomNational == true || zoomNational_St == true) {                 
+        hoverLocation("", d.properties.abbr, "state");
+        updateBars(SELECTED_VARIABLE, d) 
+      }else {
+        // $(".state-borders").css("pointer-events", "none")
+        // $(".counties").css("pointer-events", "all")
+
+      }
+    })
+    .on('mouseleave', function(d) {         
+
+      if (zoomNational==true || zoomNational_St == true) {
+        if (d3.select(".state-borders > path.selected").node() != undefined && zoomNational_St != true) {
+          var state = d3.select(".state-borders > path.selected").datum().properties.state
+          d3.select("#location").html(state)
           d3.selectAll("path.selected").moveToFront()
+        }else if (zoomNational_St == true){ 
           d3.selectAll(".hover")
             .classed("hover", false)
             .classed("hoverNational", false)
-          setZoom(false, true, true)
-          updateBars(SELECTED_VARIABLE, d3.select(".counties > path.selected").datum())
-        }else if (d3.select(".state-borders > path.selected").node() != undefined) { //IF A STATE IS SELECTED
+          d3.selectAll("path.selected").moveToFront()
+          var selected = (d3.select(".counties > path.selected").size() > 0) ? d3.select(".counties > path.selected").datum() : d3.select(".state-borders > path.selected").datum()
+          var geography = (d3.select(".counties > path.selected").size() > 0) ? selected.properties["county"] + ", " + selected.properties["abbr"] : selected.properties["state"];
+          d3.select('#location').html(geography)
+          updateBars(SELECTED_VARIABLE, selected)
+        }else { 
+          d3.select('#location').html("National")
+          d3.selectAll(".hover")
+            .classed("hover", false)
+            .classed("hoverNational", false)
+          updateBars(SELECTED_VARIABLE, undefined)
+        }
+      }
+    })
+    .on('mouseout', function(d) {         
+
+      if (zoomNational==true || zoomNational_St == true) {
+        if (d3.select(".state-borders > path.selected").node() != undefined && zoomNational_St != true) {
           var state = d3.select(".state-borders > path.selected").datum().properties.state
-          var abbr = d3.select(".state-borders > path.selected").datum().properties.abbr
-          d3.selectAll(".state-borders > path").classed("hide", true)
-          d3.select(".state-borders > path#" + abbr).classed("hide", false)
           d3.select("#location").html(state)
           d3.selectAll("path.selected").moveToFront()
+        }else if (zoomNational_St == true){ 
           d3.selectAll(".hover")
-          .classed("hover", false)
-          .classed("hoverNational", false)
-          setZoom(false, true, false)
-          updateBars(SELECTED_VARIABLE, d3.select(".state-borders > path.selected").datum())
+            .classed("hover", false)
+            .classed("hoverNational", false)
+          d3.selectAll("path.selected").moveToFront()
+          var selected = (d3.select(".counties > path.selected").size() > 0) ? d3.select(".counties > path.selected").datum() : d3.select(".state-borders > path.selected").datum()
+          var geography = (d3.select(".counties > path.selected").size() > 0) ? selected.properties["county"] + ", " + selected.properties["abbr"] : selected.properties["state"];
+          d3.select('#location').html(geography)
+          updateBars(SELECTED_VARIABLE, selected)
+        }else { 
+          d3.select('#location').html("National")
+          d3.selectAll(".hover")
+            .classed("hover", false)
+            .classed("hoverNational", false)
+          updateBars(SELECTED_VARIABLE, undefined)
         }
-      })  
-
-    g.append("g")
-      .attr("class", "state-borders")
-      .selectAll("path")
-      .data(tmp_state)
-      .enter().append("path")
-      .attr("d", path)
-      .attr("id", function(d){
-        return d.properties.abbr
-      })
-      .on('click', function(d) {
-
-        // stateClick 1 is here
-
-        d3.selectAll(".selectedNational").classed("selectedNational", false)
-        var state = d.properties.state;
-        // var county = d.properties.county;
-        var abbr = d.properties.abbr;
-        var level = "state"
-        setZoom(false, true, false)
-        // $(".state-borders").css("pointer-events", "none")
-        // $(".counties").css("pointer-events", "all")
-        addTag(state, null, abbr)        
-        zoomMap(width, d, level)        
-        updateBars(SELECTED_VARIABLE, d)
-
-        var stateQuery = d.properties.id;
-        var countyQuery;
-        updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
-
-      })
-      .on('mouseover', function(d) {         
-
-        if (zoomNational == true || zoomNational_St == true) {                 
-          hoverLocation("", d.properties.abbr, "state");
-          updateBars(SELECTED_VARIABLE, d) 
-        }else {
-          // $(".state-borders").css("pointer-events", "none")
-          // $(".counties").css("pointer-events", "all")
-
-        }
-      })
-      .on('mouseleave', function(d) {         
-
-        if (zoomNational==true || zoomNational_St == true) {
-          if (d3.select(".state-borders > path.selected").node() != undefined && zoomNational_St != true) {
-            var state = d3.select(".state-borders > path.selected").datum().properties.state
-            d3.select("#location").html(state)
-            d3.selectAll("path.selected").moveToFront()
-          }else if (zoomNational_St == true){ 
-            d3.selectAll(".hover")
-              .classed("hover", false)
-              .classed("hoverNational", false)
-            d3.selectAll("path.selected").moveToFront()
-            var selected = (d3.select(".counties > path.selected").size() > 0) ? d3.select(".counties > path.selected").datum() : d3.select(".state-borders > path.selected").datum()
-            var geography = (d3.select(".counties > path.selected").size() > 0) ? selected.properties["county"] + ", " + selected.properties["abbr"] : selected.properties["state"];
-            d3.select('#location').html(geography)
-            updateBars(SELECTED_VARIABLE, selected)
-          }else { 
-            d3.select('#location').html("National")
-            d3.selectAll(".hover")
-              .classed("hover", false)
-              .classed("hoverNational", false)
-            updateBars(SELECTED_VARIABLE, undefined)
-          }
-        }
-      })
-      .on('mouseout', function(d) {         
-
-        if (zoomNational==true || zoomNational_St == true) {
-          if (d3.select(".state-borders > path.selected").node() != undefined && zoomNational_St != true) {
-            var state = d3.select(".state-borders > path.selected").datum().properties.state
-            d3.select("#location").html(state)
-            d3.selectAll("path.selected").moveToFront()
-          }else if (zoomNational_St == true){ 
-            d3.selectAll(".hover")
-              .classed("hover", false)
-              .classed("hoverNational", false)
-            d3.selectAll("path.selected").moveToFront()
-            var selected = (d3.select(".counties > path.selected").size() > 0) ? d3.select(".counties > path.selected").datum() : d3.select(".state-borders > path.selected").datum()
-            var geography = (d3.select(".counties > path.selected").size() > 0) ? selected.properties["county"] + ", " + selected.properties["abbr"] : selected.properties["state"];
-            d3.select('#location').html(geography)
-            updateBars(SELECTED_VARIABLE, selected)
-          }else { 
-            d3.select('#location').html("National")
-            d3.selectAll(".hover")
-              .classed("hover", false)
-              .classed("hoverNational", false)
-            updateBars(SELECTED_VARIABLE, undefined)
-          }
-        }
-      })
+      }
+    })
 
 
     /*ZOOM OUT BUTTON*/
@@ -2702,7 +2716,7 @@ function ready(error, us, county, state, county2, state2) {
   }
 
   $(window).resize(function() { 
-    setScreenState (d3.select("#isMobile").style("display") == "block", d3.select("#isPhone").style("display") == "block", d3.select("#isPhoneSm").style("display") == "block" )
+    setScreenState = (d3.select("#isMobile").style("display") == "block", d3.select("#isPhone").style("display") == "block", d3.select("#isPhoneSm").style("display") == "block" )
     initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width() 
     barSvgHeight = (IS_MOBILE) ? 185 : 130
     barSvgHeight_ph = (IS_PHONESM) ? 200 : 173
@@ -2958,5 +2972,3 @@ function ready(error, us, county, state, county2, state2) {
 
 
 };
-
-
