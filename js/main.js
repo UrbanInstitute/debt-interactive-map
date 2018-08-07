@@ -85,6 +85,30 @@ setVariable("perc_stud_debt", true)
 // Initial query load ????????/
 // updateQueryString("","","")
 
+function decodeQuery(location) {
+  var Startquery = location.split("?")
+  console.log(Startquery)
+  for (var i = Startquery.length - 1; i >= 0; i--) {
+    if (Startquery[i].substring(0, 4) === "type") {
+      Startquery[i] = Startquery[i].substr(5);
+    }
+    else if (Startquery[i].substring(0, 4) === "vari") {
+      Startquery[i] = Startquery[i].substr(9);
+    }
+    else if (Startquery[i].substring(0, 4) === "stat") {
+      Startquery[i] = Startquery[i].substr(6);
+    } 
+    else if (Startquery[i].substring(0, 4) === "coun") {
+      Startquery[i] = Startquery[i].substr(7);
+    } else {
+      Startquery.shift()
+    }
+  }
+
+
+  return Startquery;
+}
+
 function updateQueryString(type,variable,state,county){
 
   var queryString = "";
@@ -120,8 +144,7 @@ function updateQueryString(type,variable,state,county){
   if (history.pushState) {
     // console.log(window.location)
       var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + queryString;
-      window.history.pushState({path:newurl},'',newurl); //this seems to reload the page?
-      console.log(newurl)
+      window.history.pushState({path:newurl},'',newurl); //this seems to reload the page?      
   }
 
 
@@ -354,6 +377,20 @@ function ready(error, us, county, state, county2, state2) {
   // ENDDDDDD dropdown header topic change logic
 
   // first time through use "county" and "state" which are medical info. CHANGE if you want diff
+
+  // If there's a url search query, do a bunch of stuff like create the beginning zoom variables
+  if (window.location.search) {    
+    var Startquery = decodeQuery(window.location.search)
+  }
+  else {
+    var Startquery = "national";
+    
+  }
+  console.log(Startquery)
+  // var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + queryString;
+  //     window.history.pushState({path:newurl},'',newurl); //this seems to reload the page?
+  //     console.log(newurl)
+
   var BigData = OverallTransformData(us,county2,state2,countyData,stateData);
   var tmp_state = BigData.tmp_state,
     tmp_county = BigData.tmp_county,
