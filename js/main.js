@@ -108,6 +108,10 @@ function updateQueryString(type,variable,state,county){
   }
 
   if (county) {
+    if (county.toString().length === 4) {
+      county = "0" + county.toString();
+    }
+
     queryString += "?county=" + county;
   } else {
     queryString += "";
