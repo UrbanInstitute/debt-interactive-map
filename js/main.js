@@ -15,6 +15,7 @@ var zoomNational;
 var zoomCounty;
 var zoomNational_St;
 var type;
+var typeVar;
 var tdMap;
 var active = d3.select(null);
 // var margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55}
@@ -97,7 +98,7 @@ function updateQueryString(type,variable,state,county){
     queryString += "";
   }
 
-  if (type) {
+  if (variable) {
     queryString += "?variable=" + variable;
   } else {
     queryString += "";
@@ -241,9 +242,58 @@ function ready(error, us, county, state, county2, state2) {
   // geographical data
   var countyData = us.objects.counties.geometries;
   var stateData = us.objects.states.geometries;
+  
+  if (window.location.search) {    
+    // If there's a url search query, do a bunch of stuff like create the beginning zoom variables
 
+    // DECODE the query
+    var Startquery = decodeQuery(window.location.search)
 
-  var BigData = OverallTransformData(us,county2,state2,countyData,stateData);
+    console.log(Startquery)    
+    
+    // set dataset
+    type = Startquery[0]
+    if (type === "medical") {
+      var BigData = OverallTransformData(us,county,state,countyData,stateData);
+    } else if (type === "student") {
+      var BigData = OverallTransformData(us,county2,state2,countyData,stateData);
+    } else {
+      // in future other data types
+      var BigData = OverallTransformData(us,county2,state2,countyData,stateData);
+    }
+
+    // if Startquery[0] === medical, do one thing, otherwise, do another. or could use case sensitive for the overalltransformdata
+
+    // set variable
+      // NEED conditional to ensure that the wrong variable is not present    
+    typeVar = Startquery[1]
+
+    // set left hand table variable names
+      // this is done by setting "type" above. 
+
+    // set drop down item
+      // this is done below the set up of the drop down. look for refresh
+
+    // set visual variable place
+
+    // select the state (optional)
+    // select the county (optional)
+
+  }
+
+  // If there is no query at the beginning
+  else {
+    // var Startquery = "national";
+    type = "student"
+    var BigData = OverallTransformData(us,county2,state2,countyData,stateData);    
+    typeVar = "perc_stud_debt"
+
+    // when we adjust this to a DIFFERENT student item, it changes the map AND legend, but not the spot on the left hand side in the table. (but uupper and lower end is a NaN?????)
+  }
+    
+  setVariable(typeVar)
+  setVariable(typeVar, true)
+
   var tmp_state = BigData.tmp_state,
     tmp_county = BigData.tmp_county,
     filteredCounties = BigData.filteredCounties,
@@ -251,45 +301,17 @@ function ready(error, us, county, state, county2, state2) {
     state_data = BigData.state_data,
     county_data = BigData.county_data;
 
-  // first time through use "county" and "state" which are medical info. CHANGE if you want diff
-
-  // If there's a url search query, do a bunch of stuff like create the beginning zoom variables
-  if (window.location.search) {    
-    var Startquery = decodeQuery(window.location.search)
-
-    
-    console.log(Startquery[0])  
-    // BigData = changeData(Startquery[0]);    
-    // BigData = changeData("medical");
-    // This doesn't appear to be doing anything...
-
-
-    // if Startquery[0] === medical, do one thing, otherwise, do another. or could use case sensitive for the overalltransformdata
-    // var BigData = OverallTransformData(us,county2,state2,countyData,stateData);
-  }
-  else {
-    // var Startquery = "national";
-    // var BigData = OverallTransformData(us,county2,state2,countyData,stateData);
-  }
-  
   // console.log(BigData)
 
   // if type and variable don't match, remove the variable and go down to type (reset variable)
   // if variable doesn't exist, do the top variable
 
-  // Need to do all the things in the select menu
-    // change data set
-    // set the variable
-  // select the state (optional)
-  // select the county (optional)
 
   setZoom(true,false, false)
 
 // when we adjust this to a medical item, it allows the LEGEND to change but the data doesn't work in the map
     // Even when "big data" is changed above using changeData
-// when we adjust this to a DIFFERENT student item, it changes the map AND legend, but not the spot on the left hand side in the table. (but uupper and lower end is a NaN?????)
-  setVariable("perc_stud_debt")
-  setVariable("perc_stud_debt", true)
+
 
 
 
@@ -537,11 +559,13 @@ function ready(error, us, county, state, county2, state2) {
 
       },
       create: function(event, ui){
-        type = "student"
+        // type = "student"
+
       },
       change: function(event, d){        
 
         table.selectAll('tbody').classed('selected', false);
+        console.log(table.selectAll('tbody'))
         table.select('tbody').classed('selected', true)
         
         BigData = changeData(d.item.value);
@@ -567,7 +591,6 @@ function ready(error, us, county, state, county2, state2) {
         optionsCategory.exit().remove()
 
         $('#category-select').val(type_category[0].variable);
-
         $("#category-select").selectmenu("refresh")
 
 
@@ -604,7 +627,14 @@ function ready(error, us, county, state, county2, state2) {
 
         updateQueryString(type,type_variable,stateQuery,countyQuery)
       }
+    
+    
+
     });
+
+  // Update the currently viewing section in the event that its been updated by the query string on load
+  $('#dropdown-header').val(type)
+  $('#dropdown-header').selectmenu("refresh")
 
   function changeData(CATEGORY) {
     
@@ -1362,7 +1392,9 @@ function ready(error, us, county, state, county2, state2) {
             
             updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
           })
-    table.select('tbody').classed('selected', true)
+    
+    table.selectAll("tbody").filter(function(d) { return d === typeVar}).classed('selected', true)
+
     
     var us_data = state_data[0]["values"][0]
     for (var key in us_data) {
