@@ -1253,8 +1253,12 @@ function ready(error, us, county, state, county2, state2) {
         .attr("y",keyHeight*i + 23)
         .attr("text-anchor", "end")
         .text(function(){
-          var min = d3.min(BigData.tmp_county, function(d) { 
-            return d.properties[SELECTED_VARIABLE]
+        var min = d3.min(BigData.tmp_county, function(d) { 
+            if (d.properties[SELECTED_VARIABLE] == "n<50") {
+                return 1000000000000
+              } else {
+                return d.properties[SELECTED_VARIABLE]
+              }
           })
           var array = BREAKS[SELECTED_VARIABLE]
           return (i==0) ? formatNumber(min, "min") : formatNumber((array[i-1]))
@@ -1288,11 +1292,13 @@ function ready(error, us, county, state, county2, state2) {
         .attr("y",keyHeight*i + 23)
         .text(function(){
           var max = d3.max(BigData.tmp_county, function(d) { 
-            return d.properties[SELECTED_VARIABLE]
+              if (d.properties[SELECTED_VARIABLE] == "n<50") {
+                return -100
+              } else {
+                return d.properties[SELECTED_VARIABLE]
+              }
           })
-
-          // return formatNumber(max, "max")
-          return Math.ceil(max*100) + "%"
+          return formatNumber(max,"max")
         })
       }
     }
@@ -1848,7 +1854,7 @@ function ready(error, us, county, state, county2, state2) {
     var percent = d3.format(",.0%"),
         number = d3.format("$,.0f");
     if (type == "max") {
-      return (d<1) ? percent(Math.ceil(d * 10) / 10 ) : number( Math.ceil((d+1)/10)*10)
+      return (d<1) ? percent(Math.ceil(d * 100) / 100 ) : number( Math.ceil((d+1)/10)*10)
     }else if (type == "min") {
       return (d<1) ? percent(Math.floor(d * 100) / 100 ) : number( Math.floor((d+1)/10)*10)
     }else {
