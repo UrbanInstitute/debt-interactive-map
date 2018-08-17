@@ -275,6 +275,9 @@ function ready(error, us, county, state, county2, state2) {
       // this is done below the set up of the drop down. look for refresh
 
     // set visual variable place
+      // this is done below ADD TABLE in the 1300s of the code
+
+    // NOTE FOR TOMORROW. FOR SOME REASON THE LEGEND BARS AREN'T WORKING FOR SOME BUT NOT ALL VARIABLES, MAYBE ONLY THE $ FOR STUDENT?
 
     // select the state (optional)
     // select the county (optional)
@@ -1362,7 +1365,7 @@ function ready(error, us, county, state, county2, state2) {
           .data(rowData)
           .enter().append("tbody")
           .attr("class", function(d, i) {
-            return "student group group-" + i
+            return type + " group group-" + i
           })
           .on('click', function(d) { 
             d3.selectAll('tbody')
@@ -1394,7 +1397,6 @@ function ready(error, us, county, state, county2, state2) {
           })
     
     table.selectAll("tbody").filter(function(d) { return d === typeVar}).classed('selected', true)
-
     
     var us_data = state_data[0]["values"][0]
     for (var key in us_data) {
