@@ -158,6 +158,8 @@ function formatNumber(d, type) {
   }
 }
 
+
+// The following 4 function x
 function barY(d,dis,variable,NONWHITE,WHITE,y,barHeight) {
   var parentClass = d3.select(dis.parentNode).attr('class');
   if (parentClass.search("All") > -1) { 
@@ -353,6 +355,9 @@ function ready(error, us, county, state, county2, state2) {
     // set visual variable place
       // this is done below ADD TABLE in the 1300s of the code
 
+
+// To do tomorrow (Tuesday)
+// Make the initial load of the tool able to handle the different variety of things for BAR charts...use the functions create today instead of more simple original install
 
 
     // select the state (optional)
@@ -1855,24 +1860,10 @@ function ready(error, us, county, state, county2, state2) {
       })
       .attr("width", x.bandwidth())
       .attr("y", function(d) { 
-        var parentClass = d3.select(this.parentNode).attr('class');
-        if (parentClass.search("All") > -1) {
-          return y(d[SELECTED_VARIABLE])
-        }else if (parentClass.search("Non") > -1) {
-          return y(d[NONWHITE])
-        }else{
-          return y(d[WHITE])
-        }
+        return barY(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,y,barHeight)
       })
       .attr("height", function(d) {
-        var parentClass = d3.select(this.parentNode).attr('class');
-        if (parentClass.search("All") > -1) {
-          return barHeight - y(d[SELECTED_VARIABLE])
-        }else if (parentClass.search("Non") > -1){
-          return barHeight - y(d[NONWHITE])
-        }else{
-          return barHeight - y(d[WHITE])
-        }
+        return barH(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,y,barHeight)        
       })
     d3.selectAll(".rect-g")
       .each(function(d,i) {
@@ -1882,14 +1873,7 @@ function ready(error, us, county, state, county2, state2) {
         .attr("class", "bar-text")
         .attr("x", 0)
         .attr("y", function(d) {
-          var parentClass = d3.select(this.parentNode).attr('class');
-          if (parentClass.search("All") > -1) {
-            return y(d[SELECTED_VARIABLE]) - 16
-          }else if (parentClass.search("Non") > -1) {
-            return y(d[NONWHITE]) - 16
-          }else{
-            return y(d[WHITE]) - 16
-          }
+          return labelY(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,barHeight,y)
         })
         .attr("dy", ".71em")
         .attr("text-anchor", "start")
