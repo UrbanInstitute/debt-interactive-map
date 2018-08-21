@@ -355,11 +355,6 @@ function ready(error, us, county, state, county2, state2) {
     // set visual variable place
       // this is done below ADD TABLE in the 1300s of the code
 
-
-// To do tomorrow (Tuesday)
-// Make the initial load of the tool able to handle the different variety of things for BAR charts...use the functions create today instead of more simple original install
-
-
     // select the state (optional)
     // select the county (optional)
 
@@ -443,11 +438,16 @@ function ready(error, us, county, state, county2, state2) {
             return false;
         }
       },
-      afterTagAdded: function(event, ui) {         
+      afterTagAdded: function(event, ui) {
+
+        // console.log(event)         
+        // // console.log(ui)        
+
         ($(".search-div > .ui-widget").css("height", 60))
         var tag = (ui.tag[0]["textContent"]);
         var county = (tag.search(",") > 0) ? tag.split(",")[0] : "";
         var state = (tag.search(",") > 0) ? (tag.split(", ")[1]).slice(0,-1) : tag.slice(0,-1);
+
         var geoData = BigData.tmp_county 
         var geoType = (tag.search(",") > 0) ? "county" : "state";
         var geography = (geoType == "county") ? county : state;
@@ -474,6 +474,12 @@ function ready(error, us, county, state, county2, state2) {
         updateBars(SELECTED_VARIABLE, data)
         zoomMap(width, data, geoType)
         if (geoType == "county") { 
+          console.log(data)
+
+          console.log(data["properties"])
+          console.log(county)
+          console.log(state)
+          
           addTag(data["properties"]["state"], county, state)
         }else {
           var filter = data["properties"]["abbr"]
@@ -648,8 +654,7 @@ function ready(error, us, county, state, county2, state2) {
       },
       change: function(event, d){        
 
-        table.selectAll('tbody').classed('selected', false);
-        console.log(table.selectAll('tbody'))
+        table.selectAll('tbody').classed('selected', false);        
         table.select('tbody').classed('selected', true)
         
         BigData = changeData(d.item.value);
@@ -719,6 +724,11 @@ function ready(error, us, county, state, county2, state2) {
   // Update the currently viewing section in the event that its been updated by the query string on load
   $('#dropdown-header').val(type)
   $('#dropdown-header').selectmenu("refresh")
+
+
+
+
+
 
   function changeData(CATEGORY) {
     
@@ -948,6 +958,9 @@ function ready(error, us, county, state, county2, state2) {
     .addClass("ui-menu-icons customicons")
   d3.select(".county-menu").select(".ui-icon")
     .classed("greyed", true)
+  
+
+
   /*ADD MAP*/
   var svg = d3.select("#map")
     .append("svg")
@@ -969,8 +982,6 @@ function ready(error, us, county, state, county2, state2) {
   var g = svg.append("g")
     .attr("class", "map-g")
     .attr("transform", "translate(" + (-10) + "," + (translateHeight) + ")scale(" +mapScale + ")")
-
-
 
   g.append("g")
     .attr("class", "counties")
@@ -1216,7 +1227,6 @@ function ready(error, us, county, state, county2, state2) {
           .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
           .style("stroke-width", 1.5 / k + "px");
   }
-
 
   /*LEGEND*/
   /*MOBILE*/
@@ -2020,7 +2030,6 @@ function ready(error, us, county, state, county2, state2) {
     var WHITE_ph = variable + "_wh"
     var NONWHITE_ph = variable + "_nw"
     var data = BigData.county_data;
-    
 
     /**MOBILE**/
     if (IS_PHONE) {   
@@ -2355,7 +2364,8 @@ function ready(error, us, county, state, county2, state2) {
     hidelimited(variable)
   }
 
-  function addTag(state, county, abbr) { 
+  function addTag(state, county, abbr) {     
+
       var widgetHeight = (IS_MOBILE) ? 80 : 60;
       ($(".search-div > .ui-widget").css("height", widgetHeight))
       d3.selectAll('li.tagit-choice').remove()
@@ -2587,7 +2597,6 @@ function ready(error, us, county, state, county2, state2) {
 
 
   function zoomMap(width, d,zoomLevel) { 
-
     var x, y, k;
     d3.select(".state-borders").selectAll("path")
       .classed("hide", false)
@@ -2948,5 +2957,37 @@ function ready(error, us, county, state, county2, state2) {
  
   })
 
+  // Zoom the map if the urlquery contains state and/or county
+  
+
+  if (Startquery[3] || Startquery[2]) {
+    var geoData = BigData.tmp_county 
+    var geoType = (Startquery[3]) ? "county" : "state";
+
+    // var geography = (geoType == "county") ? county : state;
+    // selectedLocation()
+
+    var filteredData = geoData.filter(function(d) {
+      if (geoType == "county") {
+        return d.id == Startquery[3];
+      }else { 
+        return d.properties["state_id"] == Startquery[2];
+      }
+    })
+
+    // console.log(filteredData)
+
+    var data = filteredData[0]
+
+    updateBars(typeVar, data)
+    zoomMap(width, data, geoType)
+
+    if (geoType == "county") { 
+      addTag(data.properties.state,data.properties.county,data.properties.abbr)
+    }else {
+      // var filter = data["properties"]["abbr"]
+      // createSearchArray(filter)
+    }
+  }
 
 };
