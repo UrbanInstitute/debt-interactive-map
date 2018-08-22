@@ -159,7 +159,7 @@ function formatNumber(d, type) {
 }
 
 
-// The following 4 function x
+// The following 4 function are for building the bars
 function barY(d,dis,variable,NONWHITE,WHITE,y,barHeight) {
   var parentClass = d3.select(dis.parentNode).attr('class');
   if (parentClass.search("All") > -1) { 
@@ -439,10 +439,7 @@ function ready(error, us, county, state, county2, state2) {
             return false;
         }
       },
-      afterTagAdded: function(event, ui) {
-
-        // console.log(event)         
-        // // console.log(ui)        
+      afterTagAdded: function(event, ui) {      
 
         ($(".search-div > .ui-widget").css("height", 60))
         var tag = (ui.tag[0]["textContent"]);
@@ -453,16 +450,7 @@ function ready(error, us, county, state, county2, state2) {
         var geoType = (tag.search(",") > 0) ? "county" : "state";
         var geography = (geoType == "county") ? county : state;
         selectedLocation()
-        // var filteredCounty = tmp_county.filter(function(d) { 
-          // if (geoType == "county"){
-          //   return d.properties["county"] == county && d.properties["abbr"] == state
-          // }else {
-        //     return d.properties["county"] == tagContent;
-        //   // }
-        // })
-        // var filteredState = tmp_state.filter(function(d) {
-        //   return d.properties["state"] == tagContent
-        // })
+
         var filteredData = geoData.filter(function(d) {
           if (geoType == "county") {
             return d.properties["county"] == county && d.properties["abbr"] == state;
@@ -475,12 +463,6 @@ function ready(error, us, county, state, county2, state2) {
         updateBars(SELECTED_VARIABLE, data)
         zoomMap(width, data, geoType)
         if (geoType == "county") { 
-          console.log(data)
-
-          console.log(data["properties"])
-          console.log(county)
-          console.log(state)
-          
           addTag(data["properties"]["state"], county, state)
         }else {
           var filter = data["properties"]["abbr"]
@@ -1446,9 +1428,7 @@ function ready(error, us, county, state, county2, state2) {
       }
     }
 
-    // var groups = ["Share with any debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Median debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Share with medical debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Median medical debt in collections<span class=\"annotation\"><sup>a</sup></span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
-    
-    // var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]
+
     var table = d3.select("#table-div")
       .append("table")
         tbody = table.selectAll('tbody')
@@ -1479,7 +1459,8 @@ function ready(error, us, county, state, county2, state2) {
               countyQuery = d3.select("g.counties").selectAll("path.selected").datum().id;  
             }
 
-            if (selectedState) {
+            
+            if (d3.select("g.state-borders").selectAll("path.selected")._groups[0].length !== 0) {
               stateQuery = d3.select("path#" + selectedState.properties.abbr).datum().id;  
             }
             
@@ -2399,6 +2380,7 @@ function ready(error, us, county, state, county2, state2) {
 
         var stateQuery;
         var countyQuery;
+        console.log('herdfe')
         updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
       })
 
