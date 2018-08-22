@@ -1011,6 +1011,7 @@ function ready(error, us, county, state, county2, state2) {
         reset()
         var county = (level == "state") ? null : county;
         countyQuery = (level == "state") ? null : d.properties.id
+        
         addTag(state, county, abbr)
         zoomMap(width, d, level)
         updateBars(SELECTED_VARIABLE, d)
@@ -2346,8 +2347,7 @@ function ready(error, us, county, state, county2, state2) {
     hidelimited(variable)
   }
 
-  function addTag(state, county, abbr) {     
-
+  function addTag(state, county, abbr) {   
       var widgetHeight = (IS_MOBILE) ? 80 : 60;
       ($(".search-div > .ui-widget").css("height", widgetHeight))
       d3.selectAll('li.tagit-choice').remove()
@@ -2380,7 +2380,6 @@ function ready(error, us, county, state, county2, state2) {
 
         var stateQuery;
         var countyQuery;
-        console.log('herdfe')
         updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
       })
 
@@ -2941,7 +2940,6 @@ function ready(error, us, county, state, county2, state2) {
   })
 
   // Zoom the map if the urlquery contains state and/or county
-  
 
   if (Startquery[3] || Startquery[2]) {
     var geoData = BigData.tmp_county 
@@ -2968,6 +2966,7 @@ function ready(error, us, county, state, county2, state2) {
     if (geoType == "county") { 
       addTag(data.properties.state,data.properties.county,data.properties.abbr)
     }else {
+      addTag(data.properties.state,null,data.properties.abbr)
       var filter = data["properties"]["abbr"]
       createSearchArray(filter)
     }
