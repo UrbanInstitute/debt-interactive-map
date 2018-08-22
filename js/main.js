@@ -690,7 +690,8 @@ function ready(error, us, county, state, county2, state2) {
               }
           }                    
           updateTable(us_data,type)
-        } else if (zoomCounty == true) {
+        } else if (zoomCounty == true) {          
+
           countyQuery = d3.select("g.counties").selectAll("path.selected").datum().id;
           stateQuery = d3.select("path#" + selectedState.properties.abbr).datum().id;
           updateTable(d3.select("g.counties").selectAll("path.selected").datum(),type)
@@ -698,6 +699,17 @@ function ready(error, us, county, state, county2, state2) {
           stateQuery = d3.select("path#" + selectedState.properties.abbr).datum().id;
           updateTable(d3.select("path#" + selectedState.properties.abbr).datum(),type);
         }
+
+
+          // Only works on load... need to know on resize too. 
+          // need to set statequery and county query differently for the currently viewing updatequery
+        console.log(IS_MOBILE)
+        console.log(IS_PHONE)
+        // if (IS_PHONE === true) {
+        //   console.log('here')
+        // } else if (IS_MOBILE) {
+        //   console.log("fart")
+        // }
 
         updateQueryString(type,type_variable,stateQuery,countyQuery)
       }
@@ -913,11 +925,9 @@ function ready(error, us, county, state, county2, state2) {
         d3.select(".group-label-ph2.County").text(selectedPlace)
         d3.select(".group-label-ph.County").text(selectedPlace)
 
-        // add county to query string
-
+        // add county/state to query string
         var countyQuery = ui.item.element.context.__data__.key;
-        var stateQuery = parseInt(countyQuery.substring(0,2));  
-        console.log(stateQuery)
+        var stateQuery = parseInt(countyQuery.substring(0,2));          
         updateQueryString(type,selectedCategory,stateQuery,countyQuery)
 
       }
@@ -945,7 +955,15 @@ function ready(error, us, county, state, county2, state2) {
         selectedLocation()
         updateBars(selectedCategory, selectedStatePh)
         setVariable(selectedCategory, true)
-        updateQueryString(type,selectedCategory)
+        
+        
+        var countyQuery = $("#county-select")[0].selectedOptions[0].__data__.key;
+        var stateQuery = $("#state-select")[0].selectedOptions[0].__data__.key
+        console.log(countyQuery)
+        console.log(stateQuery)
+
+
+        updateQueryString(type,selectedCategory,stateQuery,countyQuery)
 
         if (selectedCategory == "perc_pop_nw") {
           d3.selectAll(".bar-group-ph").selectAll(".category-ph.White").attr("display", "none")
