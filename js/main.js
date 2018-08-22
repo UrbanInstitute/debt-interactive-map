@@ -327,9 +327,9 @@ function ready(error, us, county, state, county2, state2) {
     // DECODE the query
     var Startquery = decodeQuery(window.location.search)
 
-    // console.log(Startquery)    
+    console.log(Startquery)    
     
-    // set dataset
+    // set dataset (student vs. medical)
     type = Startquery[0]
     if (type === "medical") {
       var BigData = OverallTransformData(us,county,state,countyData,stateData);
@@ -339,8 +339,6 @@ function ready(error, us, county, state, county2, state2) {
       // in future other data types
       var BigData = OverallTransformData(us,county2,state2,countyData,stateData);
     }
-
-    // if Startquery[0] === medical, do one thing, otherwise, do another. or could use case sensitive for the overalltransformdata
 
     // set variable
       // NEED conditional to ensure that the wrong variable is not present    
@@ -358,6 +356,7 @@ function ready(error, us, county, state, county2, state2) {
 
     // select the state (optional)
     // select the county (optional)
+      // DONE AT THE VERY BOTTOM OF THE ENTIRE READY/JS SCRIPT
 
   }
 
@@ -571,6 +570,9 @@ function ready(error, us, county, state, county2, state2) {
     .attr('value', function(d) {
       return d.state
     })
+    .attr("value2", function(d){
+      return d.key
+    })
 
   var countyMenu = d3.select(".county-menu")
     .on('click', function() {
@@ -596,7 +598,7 @@ function ready(error, us, county, state, county2, state2) {
     })
   
   var categoryMenu = d3.select(".category-menu")
-    .on('click', function() {
+    .on('click', function() {      
       if ( d3.select(".category-menu.dropdown").classed("open") == true) {
         $("#category-select").selectmenu('close')
         d3.select(".category-menu.dropdown").classed("open", false)
@@ -635,7 +637,7 @@ function ready(error, us, county, state, county2, state2) {
         // type = "student"
 
       },
-      change: function(event, d){        
+      change: function(event, d){
 
         table.selectAll('tbody').classed('selected', false);        
         table.select('tbody').classed('selected', true)
@@ -843,7 +845,7 @@ function ready(error, us, county, state, county2, state2) {
       },
       change: function(event, ui) {
         selectedLocation()
-        var selectedState = ui.item.value
+        var selectedState = ui.item.value;
         if (selectedState != "USA") {
           $(".bar-State").css("display", "block")
           $(".label-State").css("display", "block")
@@ -854,6 +856,16 @@ function ready(error, us, county, state, county2, state2) {
           var selectedPlace = ui.item.value
           var selectedCategory = $("#category-select").val()
           updateBars(selectedCategory, selectedPlace)
+
+          // console.log(selectedState)
+          // console.log(selectedCategory)
+          // console.log(selectedPlace)
+          // console.log(type)
+
+          // add state to query string
+          var stateQuery = ui.item.element.context.attributes[1].value;
+          updateQueryString(type,selectedCategory,stateQuery)
+
           d3.select(".group-label-ph2.State").text(selectedPlace)
           d3.select(".group-label-ph.State").text(selectedPlace)
 
@@ -864,7 +876,10 @@ function ready(error, us, county, state, county2, state2) {
           $(".label-State").css("display", "none")
           d3.select(".county-menu").select(".ui-icon")
             .classed("greyed", true)
-
+          
+          // remove state from query string
+          var selectedCategory = $("#category-select").val()
+          updateQueryString(type,selectedCategory,stateQuery)
         }
 
         filterCountyMenu(selectedState)
@@ -898,10 +913,18 @@ function ready(error, us, county, state, county2, state2) {
         d3.select(".group-label-ph2.County").text(selectedPlace)
         d3.select(".group-label-ph.County").text(selectedPlace)
 
+        // add county to query string
+
+        var countyQuery = ui.item.element.context.__data__.key;
+        var stateQuery = parseInt(countyQuery.substring(0,2));  
+        console.log(stateQuery)
+        updateQueryString(type,selectedCategory,stateQuery,countyQuery)
+
       }
     })
     .selectmenu("menuWidget")
     .addClass("ui-menu-icons customicons")
+  
   $("#category-select")
     .selectmenu({
       open: function(event,ui) {
@@ -922,6 +945,8 @@ function ready(error, us, county, state, county2, state2) {
         selectedLocation()
         updateBars(selectedCategory, selectedStatePh)
         setVariable(selectedCategory, true)
+        updateQueryString(type,selectedCategory)
+
         if (selectedCategory == "perc_pop_nw") {
           d3.selectAll(".bar-group-ph").selectAll(".category-ph.White").attr("display", "none")
           d3.selectAll(".bar-group-ph").selectAll(".category-ph.Nonwhite").attr("display", "none")
@@ -2940,36 +2965,37 @@ function ready(error, us, county, state, county2, state2) {
   })
 
   // Zoom the map if the urlquery contains state and/or county
+  if (Startquery) {
+    if (Startquery[3] || Startquery[2]) {
+      var geoData = BigData.tmp_county 
+      var geoType = (Startquery[3]) ? "county" : "state";
 
-  if (Startquery[3] || Startquery[2]) {
-    var geoData = BigData.tmp_county 
-    var geoType = (Startquery[3]) ? "county" : "state";
+      // var geography = (geoType == "county") ? county : state;
+      // selectedLocation()
 
-    // var geography = (geoType == "county") ? county : state;
-    // selectedLocation()
+      var filteredData = geoData.filter(function(d) {
+        if (geoType == "county") {
+          return d.id == Startquery[3];
+        }else { 
+          return d.properties["state_id"] == Startquery[2];
+        }
+      })
 
-    var filteredData = geoData.filter(function(d) {
-      if (geoType == "county") {
-        return d.id == Startquery[3];
-      }else { 
-        return d.properties["state_id"] == Startquery[2];
+      // console.log(filteredData)
+
+      var data = filteredData[0]
+
+      updateBars(typeVar, data)
+      zoomMap(width, data, geoType)
+
+      if (geoType == "county") { 
+        addTag(data.properties.state,data.properties.county,data.properties.abbr)
+      }else {
+        addTag(data.properties.state,null,data.properties.abbr)
+        var filter = data["properties"]["abbr"]
+        createSearchArray(filter)
       }
-    })
-
-    // console.log(filteredData)
-
-    var data = filteredData[0]
-
-    updateBars(typeVar, data)
-    zoomMap(width, data, geoType)
-
-    if (geoType == "county") { 
-      addTag(data.properties.state,data.properties.county,data.properties.abbr)
-    }else {
-      addTag(data.properties.state,null,data.properties.abbr)
-      var filter = data["properties"]["abbr"]
-      createSearchArray(filter)
     }
-  }
+  };
 
 };
