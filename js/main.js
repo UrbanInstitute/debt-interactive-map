@@ -327,7 +327,7 @@ function ready(error, us, county, state, county2, state2) {
     // DECODE the query
     var Startquery = decodeQuery(window.location.search)
 
-    console.log(Startquery)    
+    // console.log(Startquery)    
     
     // set dataset
     type = Startquery[0]
@@ -354,6 +354,7 @@ function ready(error, us, county, state, county2, state2) {
 
     // set visual variable place
       // this is done below ADD TABLE in the 1300s of the code
+
 
     // select the state (optional)
     // select the county (optional)
@@ -2273,7 +2274,7 @@ function ready(error, us, county, state, county2, state2) {
                 return labelY(d,this,variable,NONWHITE,WHITE,barHeight,y)
               })
             .html(function(d) { 
-              return labelHTML(d,this,variable,WHITE,NONWHITE)              
+              return labelHTML(d,this,variable,NONWHITE,WHITE)              
             })
         })
       if ( (zoomNational == true) && selected == null) {         
@@ -2310,7 +2311,7 @@ function ready(error, us, county, state, county2, state2) {
                 return labelY(d,this,variable,NONWHITE,WHITE,barHeight,y)
               })
               .html(function(d) { 
-                return labelHTML(d,this,variable,WHITE,NONWHITE)                
+                return labelHTML(d,this,variable,NONWHITE,WHITE)              
               })
           })
             if (countyID.slice(0,2) == state || countyIDHov.slice(0,2) == state) { 
@@ -2350,7 +2351,7 @@ function ready(error, us, county, state, county2, state2) {
                   return labelY(d,this,variable,NONWHITE,WHITE,barHeight,y)                  
                 })
                 .html(function(d) { 
-                  return labelHTML(d,this,variable,WHITE,NONWHITE)
+                  return labelHTML(d,this,variable,NONWHITE,WHITE)              
                 })
               })
           }else {
@@ -2985,8 +2986,8 @@ function ready(error, us, county, state, county2, state2) {
     if (geoType == "county") { 
       addTag(data.properties.state,data.properties.county,data.properties.abbr)
     }else {
-      // var filter = data["properties"]["abbr"]
-      // createSearchArray(filter)
+      var filter = data["properties"]["abbr"]
+      createSearchArray(filter)
     }
   }
 
