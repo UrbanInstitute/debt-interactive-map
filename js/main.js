@@ -961,9 +961,21 @@ function ready(error, us, county, state, county2, state2) {
         updateBars(selectedCategory, selectedStatePh)
         setVariable(selectedCategory, true)
         
-        
-        var countyQuery = $("#county-select")[0].selectedOptions[0].__data__.key;
-        var stateQuery = $("#state-select")[0].selectedOptions[0].__data__.key
+        // var countyQuery = $("#county-select")[0].selectedOptions[0].__data__.key;
+        // stateQuery = $("#state-select")[0].selectedOptions[0].__data__.key      
+        var stateQuery = $("#state-select")[0].selectedOptions[0].__data__.key          
+          if (stateQuery != "USA") {
+            if ($("#county-select")[0].length > 0 && $("#county-select")[0].selectedOptions[0].value != "") {
+              countyQuery = $("#county-select")[0].selectedOptions[0].__data__.key
+            }
+            else {
+              countyQuery = ""
+            }
+          } else {
+            countyQuery = ""
+            stateQuery = ""
+          }
+
         console.log(countyQuery)
         console.log(stateQuery)
 
