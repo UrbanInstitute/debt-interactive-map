@@ -706,15 +706,19 @@ function ready(error, us, county, state, county2, state2) {
           // need to set statequery and county query differently for the currently viewing updatequery
 
         if (IS_PHONE === true) {
-          console.log($("#state-select")[0].selectedOptions[0].__data__.key)
           stateQuery = $("#state-select")[0].selectedOptions[0].__data__.key          
-          if ($("#county-select")[0].length > 0 && $("#county-select")[0].selectedOptions[0].value != "") {
-            console.log('true')
-            countyQuery = $("#county-select")[0].selectedOptions[0].__data__.key
-          }
-          else {
+          if (stateQuery != "USA") {
+            if ($("#county-select")[0].length > 0 && $("#county-select")[0].selectedOptions[0].value != "") {
+              countyQuery = $("#county-select")[0].selectedOptions[0].__data__.key
+            }
+            else {
+              countyQuery = ""
+            }
+          } else {
             countyQuery = ""
+            stateQuery = ""
           }
+
         } 
 
         updateQueryString(type,type_variable,stateQuery,countyQuery)
