@@ -44,6 +44,7 @@ function setScreenState(mobile, phone, phonesm){
   IS_PHONE = phone
   IS_PHONESM = phonesm
 }
+
 setScreenState (d3.select("#isMobile").style("display") == "block", d3.select("#isPhone").style("display") == "block", d3.select("#isPhoneSm").style("display") == "block" )
 
 function setVariable(variable, phone) {
@@ -703,13 +704,18 @@ function ready(error, us, county, state, county2, state2) {
 
           // Only works on load... need to know on resize too. 
           // need to set statequery and county query differently for the currently viewing updatequery
-        console.log(IS_MOBILE)
-        console.log(IS_PHONE)
-        // if (IS_PHONE === true) {
-        //   console.log('here')
-        // } else if (IS_MOBILE) {
-        //   console.log("fart")
-        // }
+
+        if (IS_PHONE === true) {
+          console.log($("#state-select")[0].selectedOptions[0].__data__.key)
+          stateQuery = $("#state-select")[0].selectedOptions[0].__data__.key          
+          if ($("#county-select")[0].length > 0 && $("#county-select")[0].selectedOptions[0].value != "") {
+            console.log('true')
+            countyQuery = $("#county-select")[0].selectedOptions[0].__data__.key
+          }
+          else {
+            countyQuery = ""
+          }
+        } 
 
         updateQueryString(type,type_variable,stateQuery,countyQuery)
       }
@@ -868,11 +874,6 @@ function ready(error, us, county, state, county2, state2) {
           var selectedPlace = ui.item.value
           var selectedCategory = $("#category-select").val()
           updateBars(selectedCategory, selectedPlace)
-
-          // console.log(selectedState)
-          // console.log(selectedCategory)
-          // console.log(selectedPlace)
-          // console.log(type)
 
           // add state to query string
           var stateQuery = ui.item.element.context.attributes[1].value;
@@ -2728,7 +2729,7 @@ function ready(error, us, county, state, county2, state2) {
   }
 
   $(window).resize(function() { 
-    setScreenState = (d3.select("#isMobile").style("display") == "block", d3.select("#isPhone").style("display") == "block", d3.select("#isPhoneSm").style("display") == "block" )
+    setScreenState (d3.select("#isMobile").style("display") === "block", d3.select("#isPhone").style("display") === "block", d3.select("#isPhoneSm").style("display") === "block" )
     initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width() 
     barSvgHeight = (IS_MOBILE) ? 185 : 130
     barSvgHeight_ph = (IS_PHONESM) ? 200 : 173
