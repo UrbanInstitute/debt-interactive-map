@@ -72,37 +72,16 @@ setWidth(initialWidth, IS_MOBILE, IS_PHONE)
 function decodeQuery(location) {
   
   var Startquery = location.split("?")
-   var obj = {},
-      qPos = location.indexOf("?"),
-      tokens = location.substr(qPos + 1).split('&'),
-      i = tokens.length - 1;
-      if (qPos !== -1 || query.indexOf("=") !== -1) {
-        for (; i >= 0; i--) {
-          var s = tokens[i].split('=');
-          obj[unescape(s[0])] = s.hasOwnProperty(1) ? unescape(s[1]) : null;
-        };
-      }
-    console.log(obj)
-    // return obj;
-
-  // for (var i = Startquery.length - 1; i >= 0; i--) {
-  //   if (Startquery[i].substring(0, 4) === "type") {
-  //     Startquery[i] = Startquery[i].substr(5);
-  //   }
-  //   else if (Startquery[i].substring(0, 4) === "vari") {
-  //     Startquery[i] = Startquery[i].substr(9);
-  //   }
-  //   else if (Startquery[i].substring(0, 4) === "stat") {
-  //     Startquery[i] = Startquery[i].substr(6);
-  //   } 
-  //   else if (Startquery[i].substring(0, 4) === "coun") {
-  //     Startquery[i] = Startquery[i].substr(7);
-  //   } else {
-  //     Startquery.shift()
-  //   }
-  // }
-
-
+  var obj = {},
+    qPos = location.indexOf("?"),
+    tokens = location.substr(qPos + 1).split('&'),
+    i = tokens.length - 1;
+    if (qPos !== -1 || query.indexOf("=") !== -1) {
+      for (; i >= 0; i--) {
+        var s = tokens[i].split('=');
+        obj[unescape(s[0])] = s.hasOwnProperty(1) ? unescape(s[1]) : null;
+      };
+    }
   return obj;
 }
 
@@ -344,12 +323,16 @@ function ready(error, us, county, state, county2, state2) {
 
     console.log(Startquery)    
     
+    var defaultFirst;
+
     // set dataset (student vs. medical)
     type = Startquery["type"]
     if (type === "medical") {
       var BigData = OverallTransformData(us,county,state,countyData,stateData);
+      defaultFirst = "perc_debt_collect"
     } else if (type === "student") {
       var BigData = OverallTransformData(us,county2,state2,countyData,stateData);
+      defaultFirst = "perc_stud_debt"
     } else {
       // in future other data types
       var BigData = OverallTransformData(us,county2,state2,countyData,stateData);
@@ -357,7 +340,14 @@ function ready(error, us, county, state, county2, state2) {
 
     // set variable
       // NEED conditional to ensure that the wrong variable is not present    
-    typeVar = Startquery["variable"]
+    
+    if (!Startquery["variable"]) {
+      typeVar = defaultFirst
+      Startquery["variable"] = typeVar;
+      updateQueryString(type,typeVar)
+    } else {
+      typeVar  = Startquery["variable"]
+    }     
 
     // set left hand table variable names
       // this is done by setting "type" above. 
@@ -373,6 +363,7 @@ function ready(error, us, county, state, county2, state2) {
     // select the county (optional)
       // DONE AT THE VERY BOTTOM OF THE ENTIRE READY/JS SCRIPT
 
+    // need to do mobile!
   }
 
   // If there is no query at the beginning
@@ -3012,6 +3003,16 @@ function ready(error, us, county, state, county2, state2) {
   // Zoom the map if the urlquery contains state and/or county
   if (Startquery) {
     if (Startquery["county"] || Startquery["state"]) {
+
+      // if there is a county but no state listed
+      if (!Startquery["state"]) {
+        // add state to startquery
+        stateQuery = parseInt(Startquery["county"].substring(0,2));
+        Startquery["state"] = stateQuery;
+        // add state to url string
+        updateQueryString(type,typeVar,stateQuery,Startquery["county"])
+      }
+
       var geoData = BigData.tmp_county 
       var geoType = (Startquery["county"]) ? "county" : "state";
 
