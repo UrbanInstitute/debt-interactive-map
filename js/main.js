@@ -364,6 +364,7 @@ function ready(error, us, county, state, county2, state2) {
       // DONE AT THE VERY BOTTOM OF THE ENTIRE READY/JS SCRIPT
 
     // need to do mobile!
+    // set the category/variable (both the set and the exact one)
   }
 
   // If there is no query at the beginning
@@ -614,11 +615,19 @@ function ready(error, us, county, state, county2, state2) {
       }
     })
     .append("select")
-    .attr("id", "category-select")
-
+    .attr("id", "category-select")  
+  
   var optionsCategory = categoryMenu
     .selectAll('option')
-    .data(categoryData2)
+    .data(function(d){
+      if (!Startquery) {
+        return categoryData2
+      } else if (Startquery["type"] === "student") {
+        return categoryData2
+      } else {
+        return categoryData
+      }
+    })
   optionsCategory.enter()
     .append('option')
     .html(function(d) {
@@ -627,6 +636,7 @@ function ready(error, us, county, state, county2, state2) {
     .attr('value', function(d) {
       return d.variable
     })
+
 
 
 // BEGIN FUNCTIONS!
@@ -3042,6 +3052,7 @@ function ready(error, us, county, state, county2, state2) {
         createSearchArray(filter)
       }
     }
-  };
-
+    $('#category-select').val(Startquery["variable"]);
+    $("#category-select").selectmenu("refresh")
+  };   
 };
