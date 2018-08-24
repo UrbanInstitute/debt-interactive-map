@@ -70,26 +70,40 @@ var initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-t
 setWidth(initialWidth, IS_MOBILE, IS_PHONE)
 
 function decodeQuery(location) {
+  
   var Startquery = location.split("?")
-  for (var i = Startquery.length - 1; i >= 0; i--) {
-    if (Startquery[i].substring(0, 4) === "type") {
-      Startquery[i] = Startquery[i].substr(5);
-    }
-    else if (Startquery[i].substring(0, 4) === "vari") {
-      Startquery[i] = Startquery[i].substr(9);
-    }
-    else if (Startquery[i].substring(0, 4) === "stat") {
-      Startquery[i] = Startquery[i].substr(6);
-    } 
-    else if (Startquery[i].substring(0, 4) === "coun") {
-      Startquery[i] = Startquery[i].substr(7);
-    } else {
-      Startquery.shift()
-    }
-  }
+   var obj = {},
+      qPos = location.indexOf("?"),
+      tokens = location.substr(qPos + 1).split('&'),
+      i = tokens.length - 1;
+      if (qPos !== -1 || query.indexOf("=") !== -1) {
+        for (; i >= 0; i--) {
+          var s = tokens[i].split('=');
+          obj[unescape(s[0])] = s.hasOwnProperty(1) ? unescape(s[1]) : null;
+        };
+      }
+    console.log(obj)
+    // return obj;
+
+  // for (var i = Startquery.length - 1; i >= 0; i--) {
+  //   if (Startquery[i].substring(0, 4) === "type") {
+  //     Startquery[i] = Startquery[i].substr(5);
+  //   }
+  //   else if (Startquery[i].substring(0, 4) === "vari") {
+  //     Startquery[i] = Startquery[i].substr(9);
+  //   }
+  //   else if (Startquery[i].substring(0, 4) === "stat") {
+  //     Startquery[i] = Startquery[i].substr(6);
+  //   } 
+  //   else if (Startquery[i].substring(0, 4) === "coun") {
+  //     Startquery[i] = Startquery[i].substr(7);
+  //   } else {
+  //     Startquery.shift()
+  //   }
+  // }
 
 
-  return Startquery;
+  return obj;
 }
 
 function updateQueryString(type,variable,state,county){
@@ -103,13 +117,13 @@ function updateQueryString(type,variable,state,county){
   }
 
   if (variable) {
-    queryString += "?variable=" + variable;
+    queryString += "&variable=" + variable;
   } else {
     queryString += "";
   }
 
   if (state) {
-    queryString += "?state=" + state;
+    queryString += "&state=" + state;
   } else {
     queryString += "";
   }
@@ -119,7 +133,7 @@ function updateQueryString(type,variable,state,county){
       county = "0" + county.toString();
     }
 
-    queryString += "?county=" + county;
+    queryString += "&county=" + county;
   } else {
     queryString += "";
   }
@@ -331,7 +345,7 @@ function ready(error, us, county, state, county2, state2) {
     console.log(Startquery)    
     
     // set dataset (student vs. medical)
-    type = Startquery[0]
+    type = Startquery["type"]
     if (type === "medical") {
       var BigData = OverallTransformData(us,county,state,countyData,stateData);
     } else if (type === "student") {
@@ -343,7 +357,7 @@ function ready(error, us, county, state, county2, state2) {
 
     // set variable
       // NEED conditional to ensure that the wrong variable is not present    
-    typeVar = Startquery[1]
+    typeVar = Startquery["variable"]
 
     // set left hand table variable names
       // this is done by setting "type" above. 
@@ -975,10 +989,6 @@ function ready(error, us, county, state, county2, state2) {
             countyQuery = ""
             stateQuery = ""
           }
-
-        console.log(countyQuery)
-        console.log(stateQuery)
-
 
         updateQueryString(type,selectedCategory,stateQuery,countyQuery)
 
@@ -3001,18 +3011,18 @@ function ready(error, us, county, state, county2, state2) {
 
   // Zoom the map if the urlquery contains state and/or county
   if (Startquery) {
-    if (Startquery[3] || Startquery[2]) {
+    if (Startquery["county"] || Startquery["state"]) {
       var geoData = BigData.tmp_county 
-      var geoType = (Startquery[3]) ? "county" : "state";
+      var geoType = (Startquery["county"]) ? "county" : "state";
 
       // var geography = (geoType == "county") ? county : state;
       // selectedLocation()
 
       var filteredData = geoData.filter(function(d) {
         if (geoType == "county") {
-          return d.id == Startquery[3];
+          return d.id == Startquery["county"];
         }else { 
-          return d.properties["state_id"] == Startquery[2];
+          return d.properties["state_id"] == Startquery["state"];
         }
       })
 
