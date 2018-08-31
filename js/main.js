@@ -321,7 +321,7 @@ function ready(error, us, county, state, county2, state2) {
     // DECODE the query
     var Startquery = decodeQuery(window.location.search)
 
-    console.log(Startquery)    
+    // console.log(Startquery)    
     
     var defaultFirst;
 
@@ -565,6 +565,7 @@ function ready(error, us, county, state, county2, state2) {
     .append("select")
     .attr("id", "state-select")
 
+// console.log(state_data)
   var optionsState = stateMenu
     .selectAll('option')
     .data(state_data)
@@ -820,9 +821,11 @@ function ready(error, us, county, state, county2, state2) {
   }
 
   function filterCountyMenu(selectedState) {
+
     var filteredCounties = county_data.filter(function(d) {
       return d.state == selectedState
     })
+
         var optionsCounty = countyMenu
           .selectAll('option')
           .data(filteredCounties)
@@ -3037,22 +3040,38 @@ function ready(error, us, county, state, county2, state2) {
         }
       })
 
-      // console.log(filteredData)
+      //  convert state number to state name      
 
       var data = filteredData[0]
 
       updateBars(typeVar, data)
       zoomMap(width, data, geoType)
 
+      $("#state-select").val(filteredData[0].properties.state)
+      $("#state-select").selectmenu("refresh")
+      filterCountyMenu(filteredData[0].properties.state)
+      d3.select(".county-menu").select(".ui-icon")
+        .classed("greyed", false)
+      $("#county-select").selectmenu("refresh")
+
       if (geoType == "county") { 
         addTag(data.properties.state,data.properties.county,data.properties.abbr)
+
+        $("#county-select").val(filteredData[0])
+        $("#county-select").selectmenu("refresh")
+        
+
       }else {
         addTag(data.properties.state,null,data.properties.abbr)
         var filter = data["properties"]["abbr"]
         createSearchArray(filter)
       }
+
+
     }
+
     $('#category-select').val(Startquery["variable"]);
     $("#category-select").selectmenu("refresh")
+
   };   
 };
