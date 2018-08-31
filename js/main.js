@@ -894,7 +894,7 @@ function ready(error, us, county, state, county2, state2) {
           d3.select(".county-menu").select(".ui-icon")
             .classed("greyed", false)
           var selectedPlace = ui.item.value
-          var selectedCategory = $("#category-select").val()
+          var selectedCategory = $("#category-select").val()          
 
           updateBars(selectedCategory, selectedPlace)
 
@@ -944,10 +944,7 @@ function ready(error, us, county, state, county2, state2) {
         $(".bar-County").css("display", "block")
         $(".label-County").css("display", "block")
         var selectedPlace = ui.item.value
-        var selectedCategory = $("#category-select").val()
-
-          console.log(selectedPlace)
-
+        var selectedCategory = $("#category-select").val()        
 
         updateBars(selectedCategory, selectedPlace)
         d3.select(".group-label-ph2.County").text(selectedPlace)
@@ -3054,28 +3051,43 @@ function ready(error, us, county, state, county2, state2) {
       
       zoomMap(width, data, geoType)
 
+      // do stuff for county and mobile
       $("#state-select").val(filteredData[0].properties.state)
-      $("#state-select").selectmenu("refresh")
-      filterCountyMenu(filteredData[0].properties.state)
-
+      $("#state-select").selectmenu("refresh")      
+      selectedLocation()
       $(".bar-State").css("display", "block")
       $(".label-State").css("display", "block")
 
-updateBars(typeVar, data)
+      updateBars(typeVar, filteredData[0].properties.state)
+
+      d3.select(".group-label-ph2.State").text(filteredData[0].properties.state)
+      d3.select(".group-label-ph.State").text(filteredData[0].properties.state)
+
+      filterCountyMenu(filteredData[0].properties.state)
+
       d3.select(".county-menu").select(".ui-icon").classed("greyed", false)
       $("#county-select").selectmenu("refresh")
 
       if (geoType == "county") { 
         addTag(data.properties.state,data.properties.county,data.properties.abbr)
 
+        // do stuff for county and mobile
+
         $(".bar-County").css("display", "block")
         $(".label-County").css("display", "block")
+        console.log(filteredData[0])
         $("#county-select").val(filteredData[0].properties.county)
         $("#county-select").selectmenu("refresh")
-        
+                
+        // $(".bar-County").css("display", "block")
+        // $(".label-County").css("display", "block")
         // var selectedPlace = ui.item.value
         // var selectedCategory = $("#category-select").val()
-        // updateBars(selectedCategory, selectedPlace)
+        selectedLocation()
+
+        updateBars(typeVar, filteredData[0].properties.county)
+        d3.select(".group-label-ph2.County").text(filteredData[0].properties.county)
+        d3.select(".group-label-ph.County").text(filteredData[0].properties.county)
 
       }else {
         addTag(data.properties.state,null,data.properties.abbr)
