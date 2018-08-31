@@ -822,7 +822,7 @@ function ready(error, us, county, state, county2, state2) {
 
   function filterCountyMenu(selectedState) {
 
-    var filteredCounties = county_data.filter(function(d) {
+      var filteredCounties = county_data.filter(function(d) {
       return d.state == selectedState
     })
 
@@ -895,6 +895,7 @@ function ready(error, us, county, state, county2, state2) {
             .classed("greyed", false)
           var selectedPlace = ui.item.value
           var selectedCategory = $("#category-select").val()
+
           updateBars(selectedCategory, selectedPlace)
 
           // add state to query string
@@ -944,6 +945,10 @@ function ready(error, us, county, state, county2, state2) {
         $(".label-County").css("display", "block")
         var selectedPlace = ui.item.value
         var selectedCategory = $("#category-select").val()
+
+          console.log(selectedPlace)
+
+
         updateBars(selectedCategory, selectedPlace)
         d3.select(".group-label-ph2.County").text(selectedPlace)
         d3.select(".group-label-ph.County").text(selectedPlace)
@@ -983,6 +988,8 @@ function ready(error, us, county, state, county2, state2) {
         // stateQuery = $("#state-select")[0].selectedOptions[0].__data__.key      
         var stateQuery = $("#state-select")[0].selectedOptions[0].__data__.key          
           if (stateQuery != "USA") {
+            
+            // DW Fix this here          
             if ($("#county-select")[0].length > 0 && $("#county-select")[0].selectedOptions[0].value != "") {
               countyQuery = $("#county-select")[0].selectedOptions[0].__data__.key
             }
@@ -3044,22 +3051,31 @@ function ready(error, us, county, state, county2, state2) {
 
       var data = filteredData[0]
 
-      updateBars(typeVar, data)
+      
       zoomMap(width, data, geoType)
 
       $("#state-select").val(filteredData[0].properties.state)
       $("#state-select").selectmenu("refresh")
       filterCountyMenu(filteredData[0].properties.state)
-      d3.select(".county-menu").select(".ui-icon")
-        .classed("greyed", false)
+
+      $(".bar-State").css("display", "block")
+      $(".label-State").css("display", "block")
+
+updateBars(typeVar, data)
+      d3.select(".county-menu").select(".ui-icon").classed("greyed", false)
       $("#county-select").selectmenu("refresh")
 
       if (geoType == "county") { 
         addTag(data.properties.state,data.properties.county,data.properties.abbr)
 
-        $("#county-select").val(filteredData[0])
+        $(".bar-County").css("display", "block")
+        $(".label-County").css("display", "block")
+        $("#county-select").val(filteredData[0].properties.county)
         $("#county-select").selectmenu("refresh")
         
+        // var selectedPlace = ui.item.value
+        // var selectedCategory = $("#category-select").val()
+        // updateBars(selectedCategory, selectedPlace)
 
       }else {
         addTag(data.properties.state,null,data.properties.abbr)
