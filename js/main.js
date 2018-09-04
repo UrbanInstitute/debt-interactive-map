@@ -152,7 +152,7 @@ function formatNumber(d, type) {
 }
 
 
-// The following 4 function are for building the bars
+// The following 4 function are for building the bars on desktop
 function barY(d,dis,variable,NONWHITE,WHITE,y,barHeight) {
   var parentClass = d3.select(dis.parentNode).attr('class');
   if (parentClass.search("All") > -1) { 
@@ -175,7 +175,7 @@ function barH(d,dis,variable,NONWHITE,WHITE,y,barHeight) {
   }
 }
 
-function labelY(d,dis,variable,NONWHITE,WHITE,barHeight,y) {
+function labelY(d,dis,variable,NONWHITE,WHITE,y,barHeight) {
   var parentClass = d3.select(dis.parentNode).attr('class');
   if (parentClass.search("All") > -1) {
     return (isNaN(d[variable]) != true) ? y(d[variable]) - 16 : barHeight -8;
@@ -200,6 +200,72 @@ function labelHTML(d,dis,variable,NONWHITE,WHITE) {
   }
 }
 
+// The following 3 function are for building the bars on mobile and print
+function barW(d,dis,variable,NONWHITE_ph,WHITE_ph,x_ph) {  
+  var parentClass = d3.select(dis.parentNode).attr('class');
+  if (parentClass.search("All") > -1) {
+    return (isNaN(d[variable]) != true) ? x_ph(d[variable]) : 0
+  }else if (parentClass.search("Non") > -1) {
+    return (isNaN(d[NONWHITE_ph]) != true) ?  x_ph(d[NONWHITE_ph]) : 0
+  }else{
+    return (isNaN(d[WHITE_ph]) != true) ?  x_ph(d[WHITE_ph]) : 0
+  }
+
+}
+
+function barX(d,dis,variable,NONWHITE_ph,WHITE_ph,x_ph) {
+  var parentClass = $(dis).closest(".rect-g").attr("class")
+  if (parentClass.search("All") > -1) {
+    return (isNaN(d[variable]) != true) ? x_ph(d[variable]) + 5 : 0
+  }else if (parentClass.search("Non") > -1) {
+    return (isNaN(d[NONWHITE_ph]) != true) ? x_ph(d[NONWHITE_ph]) + 5 : 0
+  }else{
+    return (isNaN(d[WHITE_ph]) != true) ? x_ph(d[WHITE_ph]) + 5 : 0
+  }
+}
+
+function labelHTML_ph(d,dis,variable,NONWHITE_ph,WHITE_ph,yes) {
+  if (yes === "yes") {
+    console.log(d)
+  }
+  // var parentClass = $(dis).closest(".rect-g").attr("class")
+  // if (parentClass.search("All") > -1) { 
+  //   var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+  //   var noData_wh = (d[WHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+  //   var noData_nw = (d[NONWHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+  //   if (d[NONWHITE_ph] == "n<50" || (d[WHITE_ph]) == "n<50" || (d[variable]) == "n<50") { 
+  //     d3.select("#notes-section > p.note1").style("opacity", 1)
+  //   }
+  //   if ((d[variable]) == "N/A" || (d[NONWHITE_ph]) == "N/A" || (d[WHITE_ph]) == "N/A") {
+  //     d3.select("#notes-section > p.note2").style("opacity", 1)
+  //   }
+  //   return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
+  // }else if (parentClass.search("Non") > -1) {
+  //   return (isNaN(d[NONWHITE_ph]) != true) ? formatNumber(d[NONWHITE_ph]) : noData_nw
+  // }else{
+  //   return (isNaN(d[WHITE_ph]) != true) ? formatNumber(d[WHITE_ph]) : noData_wh
+  // }
+
+
+  var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+  var noData_wh = (d[WHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+  var noData_nw = (d[NONWHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+  var parentClass = $(dis).closest(".rect-g").attr("class")
+  if (d[NONWHITE_ph] == "n<50" || (d[WHITE_ph]) == "n<50" || (d[variable]) == "n<50") { 
+    d3.select("#notes-section > p.note1").style("opacity", 1)
+
+  }
+  if ((d[variable]) == "N/A" || (d[NONWHITE_ph]) == "N/A" || (d[WHITE_ph]) == "N/A") {
+    d3.select("#notes-section > p.note2").style("opacity", 1)
+  }
+  if (parentClass.search("All") > -1) { 
+    return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
+  }else if (parentClass.search("Non") > -1) {
+    return (isNaN(d[NONWHITE_ph]) != true) ? formatNumber(d[NONWHITE_ph]) : noData_nw
+  }else{
+    return (isNaN(d[WHITE_ph]) != true) ? formatNumber(d[WHITE_ph]) : noData_wh
+  }  
+}
 
 
 var setHeight = tdMap*.7;
@@ -924,7 +990,6 @@ function ready(error, us, county, state, county2, state2) {
           
           // remove state from query string
           var selectedCategory = $("#category-select").val()
-
           updateQueryString(type,selectedCategory,stateQuery)
         }
 
@@ -1960,7 +2025,7 @@ function ready(error, us, county, state, county2, state2) {
         .attr("class", "bar-text")
         .attr("x", 0)
         .attr("y", function(d) {
-          return labelY(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,barHeight,y)
+          return labelY(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,y,barHeight)
         })
         .attr("dy", ".71em")
         .attr("text-anchor", "start")
@@ -2090,6 +2155,9 @@ function ready(error, us, county, state, county2, state2) {
 
   function updateBars(variable, selected) { 
 
+    console.log(variable)
+    console.log(selected)
+
     var us_data = BigData.state_data[0]["values"][0]
     for (var key in us_data) {
         if (us_data.hasOwnProperty(key)) { 
@@ -2145,47 +2213,17 @@ function ready(error, us, county, state, county2, state2) {
             .data(BigData.us_data_ph)
             .transition()
             .duration(300)
-            .attr("width", function(d) { 
-              var parentClass = d3.select(this.parentNode).attr('class');
-              if (parentClass.search("All") > -1) {
-                return (isNaN(d[variable]) != true) ? x_ph(d[variable]) : 0
-              }else if (parentClass.search("Non") > -1) {
-                return (isNaN(d[NONWHITE_ph]) != true) ?  x_ph(d[NONWHITE_ph]) : 0
-              }else{
-                return (isNaN(d[WHITE_ph]) != true) ?  x_ph(d[WHITE_ph]) : 0
-              }
+            .attr("width", function(d) {
+              return barW(d,this,variable,NONWHITE_ph,WHITE_ph,x_ph)
             })
           d3.select(this).select(".data-label-ph")
             .data(BigData.us_data_ph)
             .attr("x", function(d) { 
-              var parentClass = $(this).closest(".rect-g").attr("class")
-              if (parentClass.search("All") > -1) {
-                return (isNaN(d[variable]) != true) ? x_ph(d[variable]) + 5 : 0
-              }else if (parentClass.search("Non") > -1) {
-                return (isNaN(d[NONWHITE_ph]) != true) ? x_ph(d[NONWHITE_ph]) + 5 : 0
-              }else{
-                return (isNaN(d[WHITE_ph]) != true) ? x_ph(d[WHITE_ph]) + 5 : 0
-              }
+              return barX(d,this,variable,NONWHITE_ph,WHITE_ph,x_ph)
             })
             .attr("y", 12)
             .html(function(d) { 
-              var parentClass = $(this).closest(".rect-g").attr("class")
-              if (parentClass.search("All") > -1) { 
-                var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-                var noData_wh = (d[WHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-                var noData_nw = (d[NONWHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-                if (d[NONWHITE_ph] == "n<50" || (d[WHITE_ph]) == "n<50" || (d[variable]) == "n<50") { 
-                  d3.select("#notes-section > p.note1").style("opacity", 1)
-                }
-                if ((d[variable]) == "N/A" || (d[NONWHITE_ph]) == "N/A" || (d[WHITE_ph]) == "N/A") {
-                  d3.select("#notes-section > p.note2").style("opacity", 1)
-                }
-                return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
-              }else if (parentClass.search("Non") > -1) {
-                return (isNaN(d[NONWHITE_ph]) != true) ? formatNumber(d[NONWHITE_ph]) : noData_nw
-              }else{
-                return (isNaN(d[WHITE_ph]) != true) ? formatNumber(d[WHITE_ph]) : noData_wh
-              }
+              return labelHTML_ph(d,this,variable,NONWHITE_ph,WHITE_ph)
             })
         })
 
@@ -2198,46 +2236,15 @@ function ready(error, us, county, state, county2, state2) {
             .duration(300)
             // .attr("height", y_ph.bandwidth())
             .attr("width", function(d) { 
-              var parentClass = d3.select(this.parentNode).attr('class');
-              if (parentClass.search("All") > -1) { 
-                return (isNaN(d[variable]) != true) ? x_ph(d[variable]) : 0
-              }else if (parentClass.search("Non") > -1) {
-                return (isNaN(d[NONWHITE_ph]) != true) ?x_ph(d[NONWHITE_ph]) : 0
-              }else{
-                return (isNaN(d[WHITE_ph]) != true) ? x_ph(d[WHITE_ph]) : 0
-              }
+              return barW(d,this,variable,NONWHITE_ph,WHITE_ph,x_ph)
             })
           d3.select(this).select(".data-label-ph")
             .data(state_data_ph)
             .attr("x", function(d) { 
-              var parentClass = $(this).closest(".rect-g").attr("class")
-              if (parentClass.search("All") > -1) {
-                return (isNaN(d[variable]) != true) ? x_ph(d[variable]) + 5 : 0
-              }else if (parentClass.search("Non") > -1) { 
-                return (isNaN(d[NONWHITE_ph]) != true) ? x_ph(d[NONWHITE_ph]) + 5 : 0
-              }else{
-                return (isNaN(d[WHITE_ph]) != true) ? x_ph(d[WHITE_ph]) + 5 : 0
-              }
+              return barX(d,this,variable,NONWHITE_ph,WHITE_ph,x_ph)
             })
             .html(function(d) { 
-              var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-              var noData_wh = (d[WHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-              var noData_nw = (d[NONWHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-              var parentClass = $(this).closest(".rect-g").attr("class")
-              if (d[NONWHITE_ph] == "n<50" || (d[WHITE_ph]) == "n<50" || (d[variable]) == "n<50") { 
-                d3.select("#notes-section > p.note1").style("opacity", 1)
-
-              }
-              if ((d[variable]) == "N/A" || (d[NONWHITE_ph]) == "N/A" || (d[WHITE_ph]) == "N/A") {
-                d3.select("#notes-section > p.note2").style("opacity", 1)
-              }
-              if (parentClass.search("All") > -1) { 
-                return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
-              }else if (parentClass.search("Non") > -1) {
-                return (isNaN(d[NONWHITE_ph]) != true) ? formatNumber(d[NONWHITE_ph]) : noData_nw
-              }else{
-                return (isNaN(d[WHITE_ph]) != true) ? formatNumber(d[WHITE_ph]) : noData_wh
-              }
+              return labelHTML_ph(d,this,variable,NONWHITE_ph,WHITE_ph)
             })
         })
       if (selectedCountyPh != "") {
@@ -2250,47 +2257,15 @@ function ready(error, us, county, state, county2, state2) {
               .duration(300)
               // .attr("height", y_ph.bandwidth())
               .attr("width", function(d) { 
-                var parentClass = d3.select(this.parentNode).attr('class');
-                if (parentClass.search("All") > -1) { 
-                  return (isNaN(d[variable]) != true) ? x_ph(d[variable]) : 0
-                }else if (parentClass.search("Non") > -1) {
-                  return (isNaN(d[NONWHITE_ph]) != true) ? x_ph(d[NONWHITE_ph]) : 0
-                }else{
-                  return (isNaN(d[WHITE_ph]) != true) ? x_ph(d[WHITE_ph]) : 0
-                }
+                return barW(d,this,variable,NONWHITE_ph,WHITE_ph,x_ph)
               })
             d3.select(this).select(".data-label-ph")
               .data(county_data_ph)
               .attr("x", function(d) { 
-                var parentClass = $(this).closest(".rect-g").attr("class")
-                if (parentClass.search("All") > -1) {
-                  return (isNaN(d[variable]) != true) ? x_ph(d[variable]) + 5 : 0
-                }else if (parentClass.search("Non") > -1) {
-                  return (isNaN(d[NONWHITE_ph]) != true) ? x_ph(d[NONWHITE_ph]) + 5 : 0
-                }else{
-                  return (isNaN(d[WHITE_ph]) != true) ? x_ph(d[WHITE_ph]) + 5 : 0
-                }
+                return barX(d,this,variable,NONWHITE_ph,WHITE_ph,x_ph)
               })
               .html(function(d) { 
-                var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-                var noData_wh = (d[WHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-                var noData_nw = (d[NONWHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-
-                if (d[NONWHITE_ph] == "n<50" || (d[WHITE_ph]) == "n<50" || (d[variable]) == "n<50") { 
-                  d3.select("#notes-section > p.note1").style("opacity", 1)
-                }
-                if ((d[variable]) == "N/A" || (d[NONWHITE_ph]) == "N/A" || (d[WHITE_ph]) == "N/A") {
-                  d3.select("#notes-section > p.note2").style("opacity", 1)
-                }
-                var parentClass = $(this).closest(".rect-g").attr("class")
-                if (parentClass.search("All") > -1) { 
-                  return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
-                }else if (parentClass.search("Non") > -1) {
-                  return (isNaN(d[NONWHITE_ph]) != true) ? formatNumber(d[NONWHITE_ph]) : noData_nw
-                }else{
-                  return (isNaN(d[WHITE_ph]) != true) ? formatNumber(d[WHITE_ph]) : noData_wh
-                }
-                // return "<tspan font-style='italic'>fart</tspan>"
+                return labelHTML_ph(d,this,variable,NONWHITE_ph,WHITE_ph,"yes")
               })
           })
       }
@@ -2347,7 +2322,7 @@ function ready(error, us, county, state, county2, state2) {
             d3.select(this).select(".data-label")
               .data([us_data])
               .attr("y", function(d) {
-                return labelY(d,this,variable,NONWHITE,WHITE,barHeight,y)
+                return labelY(d,this,variable,NONWHITE,WHITE,y,barHeight)
               })
             .html(function(d) { 
               return labelHTML(d,this,variable,NONWHITE,WHITE)              
@@ -2384,7 +2359,7 @@ function ready(error, us, county, state, county2, state2) {
             d3.select(this).select(".data-label")
               .data([stateData])
               .attr("y", function(d) {
-                return labelY(d,this,variable,NONWHITE,WHITE,barHeight,y)
+                return labelY(d,this,variable,NONWHITE,WHITE,y,barHeight)
               })
               .html(function(d) { 
                 return labelHTML(d,this,variable,NONWHITE,WHITE)              
@@ -2424,7 +2399,7 @@ function ready(error, us, county, state, county2, state2) {
               d3.select(this).select(".data-label")
                 .data([countyData])
                 .attr("y", function(d) {
-                  return labelY(d,this,variable,NONWHITE,WHITE,barHeight,y)                  
+                  return labelY(d,this,variable,NONWHITE,WHITE,y,barHeight)
                 })
                 .html(function(d) { 
                   return labelHTML(d,this,variable,NONWHITE,WHITE)              
