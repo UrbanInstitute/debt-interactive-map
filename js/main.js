@@ -225,9 +225,6 @@ function barX(d,dis,variable,NONWHITE_ph,WHITE_ph,x_ph) {
 }
 
 function labelHTML_ph(d,dis,variable,NONWHITE_ph,WHITE_ph,yes) {
-  if (yes === "yes") {
-    console.log(d)
-  }
   // var parentClass = $(dis).closest(".rect-g").attr("class")
   // if (parentClass.search("All") > -1) { 
   //   var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
@@ -1704,13 +1701,13 @@ function ready(error, us, county, state, county2, state2) {
   // x_ph.domain([0, d3.max(state_data, function(d) { return d[SELECTED_VARIABLE]; })]);
   x_ph.domain([0, d3.max(BigData.county_data, function(d) {
     if (isNaN(d[NONWHITE_ph]) == true && isNaN(d[WHITE_ph]) == true){
-      return d[SELECTED_VARIABLE_ph]
+      return +d[SELECTED_VARIABLE_ph]
     }else if (isNaN(d[NONWHITE_ph]) == true && isNaN(d[WHITE_ph]) == false) {
-      return Math.max(d[WHITE_ph], d[SELECTED_VARIABLE_ph])
+      return Math.max(+d[WHITE_ph], +d[SELECTED_VARIABLE_ph])
     }else if (isNaN(d[WHITE_ph]) == true && isNaN(d[NONWHITE_ph]) == false) {
-      return Math.max(d[NONWHITE_ph], d[SELECTED_VARIABLE_ph])
+      return Math.max(+d[NONWHITE_ph], +d[SELECTED_VARIABLE_ph])
     }else {
-      return Math.max(d[WHITE_ph], d[NONWHITE_ph], d[SELECTED_VARIABLE_ph])
+      return Math.max(+d[WHITE_ph], +d[NONWHITE_ph], +d[SELECTED_VARIABLE_ph])
     }
   })])
   y_ph.domain(us_data_ph.map(function(d) { return d[SELECTED_VARIABLE_ph]; }));
@@ -1865,14 +1862,14 @@ function ready(error, us, county, state, county2, state2) {
       .attr("y", 0)
       .attr("class", "bar-ph")
       .attr("height", y_ph.bandwidth())
-      .attr("width", function(d) { 
+      .attr("width", function(d) {         
         var parentClass = d3.select(this.parentNode).attr('class');
-        if (parentClass.search("All") > -1) {
-          return x_ph(d[SELECTED_VARIABLE_ph])
+        if (parentClass.search("All") > -1) {      
+          return x_ph(+d[SELECTED_VARIABLE_ph])
         }else if (parentClass.search("Non") > -1) {
-          return x_ph(d[NONWHITE_ph])
+          return x_ph(+d[NONWHITE_ph])
         }else{
-          return x_ph(d[WHITE_ph])
+          return x_ph(+d[WHITE_ph])
         }
       })
       .attr("fill", function(d) { 
@@ -3075,7 +3072,7 @@ function ready(error, us, county, state, county2, state2) {
 
         updateBars(typeVar, filteredData[0].properties.county)
         d3.select(".group-label-ph2.County").text(filteredData[0].properties.county)
-        d3.select(".group-label-ph.County").text(filteredData[0].properties.county)
+        d3.select(".group-label-ph.County").text(filteredData[0].properties.county)      
 
       }else {
         addTag(data.properties.state,null,data.properties.abbr)
@@ -3085,6 +3082,22 @@ function ready(error, us, county, state, county2, state2) {
 
 
     }
+
+        console.log(typeVar)
+       // if (typeVar == "perc_pop_nw") {
+       //    d3.selectAll(".bar-group-ph").selectAll(".category-ph.White").attr("display", "none")
+       //    d3.selectAll(".bar-group-ph").selectAll(".category-ph.Nonwhite").attr("display", "none")
+       //    d3.selectAll(".bar_ph").select("svg").attr("height", 80)
+       //    d3.selectAll(".label").select(".svg2").attr("height", 38)
+       //  }else {
+       //    console.log('erereeere')
+       //    var bar_phHeight = (IS_PHONESM == true) ? 200 : 173; 
+       //    d3.selectAll(".bar-group-ph").selectAll(".category-ph.White").attr("display", "block")
+       //    d3.selectAll(".bar-group-ph").selectAll(".category-ph.Nonwhite").attr("display", "block")
+       //    d3.selectAll(".bar_ph").select("svg").attr("height", bar_phHeight)
+       //    d3.selectAll(".label").select(".svg2").attr("height", 130)
+
+       //  }  
 
     $('#category-select').val(Startquery["variable"]);
     $("#category-select").selectmenu("refresh")
