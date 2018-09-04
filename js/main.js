@@ -202,6 +202,7 @@ function labelHTML(d,dis,variable,NONWHITE,WHITE) {
 
 // The following 3 function are for building the bars on mobile and print
 function barW(d,dis,variable,NONWHITE_ph,WHITE_ph,x_ph) {  
+  console.log('wassup')
   var parentClass = d3.select(dis.parentNode).attr('class');
   if (parentClass.search("All") > -1) {
     return (isNaN(d[variable]) != true) ? x_ph(d[variable]) : 0
@@ -225,24 +226,6 @@ function barX(d,dis,variable,NONWHITE_ph,WHITE_ph,x_ph) {
 }
 
 function labelHTML_ph(d,dis,variable,NONWHITE_ph,WHITE_ph,yes) {
-  // var parentClass = $(dis).closest(".rect-g").attr("class")
-  // if (parentClass.search("All") > -1) { 
-  //   var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-  //   var noData_wh = (d[WHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-  //   var noData_nw = (d[NONWHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-  //   if (d[NONWHITE_ph] == "n<50" || (d[WHITE_ph]) == "n<50" || (d[variable]) == "n<50") { 
-  //     d3.select("#notes-section > p.note1").style("opacity", 1)
-  //   }
-  //   if ((d[variable]) == "N/A" || (d[NONWHITE_ph]) == "N/A" || (d[WHITE_ph]) == "N/A") {
-  //     d3.select("#notes-section > p.note2").style("opacity", 1)
-  //   }
-  //   return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
-  // }else if (parentClass.search("Non") > -1) {
-  //   return (isNaN(d[NONWHITE_ph]) != true) ? formatNumber(d[NONWHITE_ph]) : noData_nw
-  // }else{
-  //   return (isNaN(d[WHITE_ph]) != true) ? formatNumber(d[WHITE_ph]) : noData_wh
-  // }
-
 
   var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
   var noData_wh = (d[WHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
@@ -263,6 +246,23 @@ function labelHTML_ph(d,dis,variable,NONWHITE_ph,WHITE_ph,yes) {
     return (isNaN(d[WHITE_ph]) != true) ? formatNumber(d[WHITE_ph]) : noData_wh
   }  
 }
+
+// this function hides white/non-white for the "percent non-white" question
+function hideBars(variable) {
+  if (variable == "perc_pop_nw") {
+    d3.selectAll(".bar-group-ph").selectAll(".category-ph.White").attr("display", "none")
+    d3.selectAll(".bar-group-ph").selectAll(".category-ph.Nonwhite").attr("display", "none")
+    d3.selectAll(".bar_ph").select("svg").attr("height", 80)
+    d3.selectAll(".label").select(".svg2").attr("height", 38)
+  }else {
+    var bar_phHeight = (IS_PHONESM == true) ? 200 : 173; 
+    d3.selectAll(".bar-group-ph").selectAll(".category-ph.White").attr("display", "block")
+    d3.selectAll(".bar-group-ph").selectAll(".category-ph.Nonwhite").attr("display", "block")
+    d3.selectAll(".bar_ph").select("svg").attr("height", bar_phHeight)
+    d3.selectAll(".label").select(".svg2").attr("height", 130)
+  }
+}
+
 
 
 var setHeight = tdMap*.7;
@@ -1078,19 +1078,7 @@ function ready(error, us, county, state, county2, state2) {
 
         updateQueryString(type,selectedCategory,stateQuery,countyQuery)
 
-        if (selectedCategory == "perc_pop_nw") {
-          d3.selectAll(".bar-group-ph").selectAll(".category-ph.White").attr("display", "none")
-          d3.selectAll(".bar-group-ph").selectAll(".category-ph.Nonwhite").attr("display", "none")
-          d3.selectAll(".bar_ph").select("svg").attr("height", 80)
-          d3.selectAll(".label").select(".svg2").attr("height", 38)
-        }else {
-          var bar_phHeight = (IS_PHONESM == true) ? 200 : 173; 
-          d3.selectAll(".bar-group-ph").selectAll(".category-ph.White").attr("display", "block")
-          d3.selectAll(".bar-group-ph").selectAll(".category-ph.Nonwhite").attr("display", "block")
-          d3.selectAll(".bar_ph").select("svg").attr("height", bar_phHeight)
-          d3.selectAll(".label").select(".svg2").attr("height", 130)
-
-        }
+        hideBars(selectedCategory)
       }
     })
     .selectmenu("menuWidget")
@@ -1817,24 +1805,25 @@ function ready(error, us, county, state, county2, state2) {
     rectG_ph.selectAll(".data-label-ph")
       .data([us_data])
       .attr("x", function(d) { 
-        var parentClass = $(this).closest(".rect-g").attr("class")
-        if (parentClass.search("All") > -1) { 
-          return x_ph(d[SELECTED_VARIABLE_ph]) + 5
-        }else if (parentClass.search("Non") > -1) {
-          return x_ph(d[NONWHITE_ph]) + 5
-        }else{
-          return x_ph(d[WHITE_ph]) + 5
-        }
+        return barX(d,this,SELECTED_VARIABLE_ph,NONWHITE_ph,WHITE_ph,x_ph)
       })
       .text(function(d) { 
+        console.log(isNaN(d[NONWHITE_ph]))
         var parentClass = $(this).closest(".rect-g").attr("class")
-        if (parentClass.search("All") > -1) { 
-          return formatNumber(d[SELECTED_VARIABLE_ph])
-        }else if (parentClass.search("Non") > -1) {
-          return formatNumber(d[NONWHITE_ph])
-        }else{
-          return formatNumber(d[WHITE_ph])
+        if (SELECTED_VARIABLE_ph !== "perc_pop_nw") {
+          if (parentClass.search("All") > -1) { 
+            return formatNumber(d[SELECTED_VARIABLE_ph])
+          }else if (parentClass.search("Non") > -1) {
+            return formatNumber(d[NONWHITE_ph])
+          }else{
+            return formatNumber(d[WHITE_ph])
+          }
+        } else {
+          if (parentClass.search("All") > -1) {
+            return formatNumber(d[SELECTED_VARIABLE_ph])
+          }
         }
+        
       })
     rectG_ph
       .append("g")
@@ -1862,15 +1851,26 @@ function ready(error, us, county, state, county2, state2) {
       .attr("y", 0)
       .attr("class", "bar-ph")
       .attr("height", y_ph.bandwidth())
-      .attr("width", function(d) {         
-        var parentClass = d3.select(this.parentNode).attr('class');
-        if (parentClass.search("All") > -1) {      
-          return x_ph(+d[SELECTED_VARIABLE_ph])
-        }else if (parentClass.search("Non") > -1) {
-          return x_ph(+d[NONWHITE_ph])
-        }else{
-          return x_ph(+d[WHITE_ph])
+      .attr("width", function(d) {        
+        var parentClass = d3.select(this.parentNode).attr('class');      
+        if (SELECTED_VARIABLE_ph !== "perc_pop_nw") {
+          if (parentClass.search("All") > -1) {      
+            return x_ph(+d[SELECTED_VARIABLE_ph])
+          }else if (parentClass.search("Non") > -1) {
+            return x_ph(+d[NONWHITE_ph])
+          }else{
+            return x_ph(+d[WHITE_ph])
+          }          
+        } else {
+          if (parentClass.search("All") > -1) {
+            return x_ph(+d[SELECTED_VARIABLE_ph])
+          }
+          else {
+            return 0;
+          }
+          
         }
+
       })
       .attr("fill", function(d) { 
         var parentClass = d3.select(this.parentNode).attr('class');
@@ -1883,6 +1883,9 @@ function ready(error, us, county, state, county2, state2) {
         }
       })
   }
+
+  // this hides "white" and "non-white"
+  hideBars(SELECTED_VARIABLE_ph)
 
     /*DESKTOP*/
 
@@ -2152,9 +2155,6 @@ function ready(error, us, county, state, county2, state2) {
 
   function updateBars(variable, selected) { 
 
-    console.log(variable)
-    console.log(selected)
-
     var us_data = BigData.state_data[0]["values"][0]
     for (var key in us_data) {
         if (us_data.hasOwnProperty(key)) { 
@@ -2266,6 +2266,10 @@ function ready(error, us, county, state, county2, state2) {
               })
           })
       }
+
+    
+    hideBars(variable)
+
     }else {
       /*DESKTOP*/
     var data =  BigData.county_data;
@@ -2821,7 +2825,7 @@ function ready(error, us, county, state, county2, state2) {
         .attr("width", barWidth_ph)
         .attr("height", barSvgHeight_ph)
       d3.selectAll(".bar-ph")
-        .attr("width", function(d) {            
+        .attr("width", function(d) {     
           var parentClass = d3.select(this.parentNode).attr('class');
           if (parentClass.search("All") > -1) {            
             return (isNaN(d[SELECTED_VARIABLE_ph]) != true) ? x_ph(d[SELECTED_VARIABLE_ph]) : 0
@@ -3083,21 +3087,6 @@ function ready(error, us, county, state, county2, state2) {
 
     }
 
-        console.log(typeVar)
-       // if (typeVar == "perc_pop_nw") {
-       //    d3.selectAll(".bar-group-ph").selectAll(".category-ph.White").attr("display", "none")
-       //    d3.selectAll(".bar-group-ph").selectAll(".category-ph.Nonwhite").attr("display", "none")
-       //    d3.selectAll(".bar_ph").select("svg").attr("height", 80)
-       //    d3.selectAll(".label").select(".svg2").attr("height", 38)
-       //  }else {
-       //    console.log('erereeere')
-       //    var bar_phHeight = (IS_PHONESM == true) ? 200 : 173; 
-       //    d3.selectAll(".bar-group-ph").selectAll(".category-ph.White").attr("display", "block")
-       //    d3.selectAll(".bar-group-ph").selectAll(".category-ph.Nonwhite").attr("display", "block")
-       //    d3.selectAll(".bar_ph").select("svg").attr("height", bar_phHeight)
-       //    d3.selectAll(".label").select(".svg2").attr("height", 130)
-
-       //  }  
 
     $('#category-select').val(Startquery["variable"]);
     $("#category-select").selectmenu("refresh")
