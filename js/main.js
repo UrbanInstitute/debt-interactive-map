@@ -888,7 +888,18 @@ function ready(error, us, county, state, county2, state2) {
         d3.select(".state-menu").select(".ui-icon")
           .classed("arrow-up", false)
       },
-      change: function(event, ui) {
+      focus: function(event, ui) {
+
+      },
+      change: function(event, ui) {      
+        
+        // if change is happening because of cmd-r keydown, break out of the cycle, and don't change the query string, etc. 
+        // note the event is happening BEFORE this, so $("#state-select").val() has already changed.
+        // note the value change is BEFORE "change" and AFTER "focus" but both are triggered. 
+        if (event.handleObj.type === "keydown" && event.key === "r") {
+          return;
+        }
+
         selectedLocation()
         var selectedState = ui.item.value;
         if (selectedState != "USA") {
@@ -947,6 +958,14 @@ function ready(error, us, county, state, county2, state2) {
           .classed("arrow-up", false)
       },
       change: function(event, ui) {
+
+        // if change is happening because of cmd-r keydown, break out of the cycle, and don't change the query string, etc.         
+        console.log(event)
+        if (event.handleObj.type === "keydown" && event.key === "r") {
+          console.log('herrrrr')
+          return;
+        }
+
         selectedLocation()
         $(".bar-County").css("display", "block")
         $(".label-County").css("display", "block")
