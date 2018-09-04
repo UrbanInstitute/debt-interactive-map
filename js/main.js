@@ -87,8 +87,6 @@ function decodeQuery(location) {
 
 function updateQueryString(type,variable,state,county){
 
-console.log('here')
-
   var queryString = "";
 
   if (type) {
@@ -120,7 +118,6 @@ console.log('here')
   }
 
   if (history.pushState) {
-    // console.log(window.location)
       var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + queryString;
       window.history.pushState({path:newurl},'',newurl); //this seems to reload the page?      
   }
@@ -323,7 +320,6 @@ function ready(error, us, county, state, county2, state2) {
     // DECODE the query
     var Startquery = decodeQuery(window.location.search)
 
-    // console.log(Startquery)    
     
     var defaultFirst;
 
@@ -346,7 +342,6 @@ function ready(error, us, county, state, county2, state2) {
     if (!Startquery["variable"]) {
       typeVar = defaultFirst
       Startquery["variable"] = typeVar;
-      console.log("Portugal")
       updateQueryString(type,typeVar)
     } else {
       typeVar  = Startquery["variable"]
@@ -390,7 +385,6 @@ function ready(error, us, county, state, county2, state2) {
     state_data = BigData.state_data,
     county_data = BigData.county_data;
 
-  // console.log(BigData)
 
   // if type and variable don't match, remove the variable and go down to type (reset variable)
   // if variable doesn't exist, do the top variable
@@ -480,7 +474,7 @@ function ready(error, us, county, state, county2, state2) {
 
         var stateQuery = filteredData["0"].properties.state_id;
         var countyQuery = (geoType == "county") ? filteredData["0"].properties.id : null;
-        console.log("Niger")
+
         updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
       },
       afterTagRemoved: function(event,ui) { 
@@ -529,8 +523,7 @@ function ready(error, us, county, state, county2, state2) {
   })
   var max = d3.max(BigData.tmp_county, function(d) { 
     return d.properties[SELECTED_VARIABLE]
-  })
-  // console.log(max)
+  })  
   var quantize = d3.scaleThreshold()
     .domain(BREAKS[SELECTED_VARIABLE])
     .range(["#cfe8f3", "#73bfe2", "#1696d2", "#0a4c6a", "#000000"])  
@@ -741,7 +734,6 @@ function ready(error, us, county, state, county2, state2) {
 
         } 
 
-        console.log("Iceland")
         updateQueryString(type,type_variable,stateQuery,countyQuery)
       }
     
@@ -916,7 +908,7 @@ function ready(error, us, county, state, county2, state2) {
 
           // add state to query string
           var stateQuery = ui.item.element.context.attributes[1].value;
-          console.log("New Zealand")
+
           updateQueryString(type,selectedCategory,stateQuery)
 
           d3.select(".group-label-ph2.State").text(selectedPlace)
@@ -932,7 +924,7 @@ function ready(error, us, county, state, county2, state2) {
           
           // remove state from query string
           var selectedCategory = $("#category-select").val()
-          console.log("Georgia")
+
           updateQueryString(type,selectedCategory,stateQuery)
         }
 
@@ -959,10 +951,8 @@ function ready(error, us, county, state, county2, state2) {
       },
       change: function(event, ui) {
 
-        // if change is happening because of cmd-r keydown, break out of the cycle, and don't change the query string, etc.         
-        console.log(event)
+        // if change is happening because of cmd-r keydown, break out of the cycle, and don't change the query string, etc.
         if (event.handleObj.type === "keydown" && event.key === "r") {
-          console.log('herrrrr')
           return;
         }
 
@@ -978,8 +968,7 @@ function ready(error, us, county, state, county2, state2) {
 
         // add county/state to query string
         var countyQuery = ui.item.element.context.__data__.key;
-        var stateQuery = parseInt(countyQuery.substring(0,2));          
-        console.log("Belize")
+        var stateQuery = parseInt(countyQuery.substring(0,2));                
         updateQueryString(type,selectedCategory,stateQuery,countyQuery)
 
       }
@@ -1025,7 +1014,6 @@ function ready(error, us, county, state, county2, state2) {
             stateQuery = ""
           }
 
-        console.log("Benin")
         updateQueryString(type,selectedCategory,stateQuery,countyQuery)
 
         if (selectedCategory == "perc_pop_nw") {
@@ -1122,7 +1110,6 @@ function ready(error, us, county, state, county2, state2) {
         zoomMap(width, d, level)
         updateBars(SELECTED_VARIABLE, d)
       }
-      console.log("Nauru")
       updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
     })
     .on('mouseover', function(d) {
@@ -1204,7 +1191,6 @@ function ready(error, us, county, state, county2, state2) {
 
       var stateQuery = d.properties.id;
       var countyQuery;
-      console.log("Mauritius")
       updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
 
     })
@@ -1572,8 +1558,7 @@ function ready(error, us, county, state, county2, state2) {
             if (d3.select("g.state-borders").selectAll("path.selected")._groups[0].length !== 0) {
               stateQuery = d3.select("path#" + selectedState.properties.abbr).datum().id;  
             }
-            
-            console.log("Brazil")
+
             updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
           })
     
@@ -2489,7 +2474,7 @@ function ready(error, us, county, state, county2, state2) {
 
         var stateQuery;
         var countyQuery;
-        console.log("Nauru")
+
         updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
       })
 
@@ -2529,7 +2514,6 @@ function ready(error, us, county, state, county2, state2) {
         updateTable(stateData[0],type)
         var stateQuery = stateData[0].id;
         var countyQuery;
-        console.log("Saudi Arabia")
         updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
 
       })
@@ -2648,7 +2632,7 @@ function ready(error, us, county, state, county2, state2) {
 
       // create a means. (ABOVE) for passing through new data to the tables. 
     }
-    // console.log(data)
+
     var data = (zoomNational == true) ? data : data["properties"];
     d3.selectAll("p.note1, p.note2").style("opacity", 1)
     d3.selectAll(".cell-data")
@@ -3060,7 +3044,7 @@ function ready(error, us, county, state, county2, state2) {
         stateQuery = parseInt(Startquery["county"].substring(0,2));
         Startquery["state"] = stateQuery;
         // add state to url string
-        console.log("San Marino")
+
         updateQueryString(type,typeVar,stateQuery,Startquery["county"])
       }
 
