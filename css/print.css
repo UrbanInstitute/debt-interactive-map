@@ -1,0 +1,101 @@
+/* line 12, ../sass/print.scss */
+.print {
+  width: 220mm;
+  background: #fff;
+}
+/* line 28, ../sass/print.scss */
+.print #header-pinned, .print #map {
+  display: none;
+}
+/* line 37, ../sass/print.scss */
+.print .banner-wrapper .banner {
+  background-image: none;
+  background: #fff;
+  margin-top: 0px;
+}
+/* line 42, ../sass/print.scss */
+.print .banner-wrapper .banner h1, .print .banner-wrapper .banner h2 {
+  color: #000 !important;
+}
+/* line 44, ../sass/print.scss */
+.print .banner-wrapper .banner h1 {
+  font-size: 15px;
+  margin-top: 10px;
+}
+/* line 49, ../sass/print.scss */
+.print .banner-wrapper .banner h2 {
+  font-size: 10px;
+  margin-top: 60px;
+}
+/* line 54, ../sass/print.scss */
+.print .banner-wrapper .banner #intro-text {
+  background: #fff;
+  padding: 0px;
+}
+/* line 58, ../sass/print.scss */
+.print .banner-wrapper .banner #intro-text .intro-wrap {
+  font-style: normal;
+  text-align: left;
+  max-width: none;
+}
+/* line 63, ../sass/print.scss */
+.print .banner-wrapper .banner #intro-text .intro-wrap .inner {
+  padding-left: 120px;
+}
+/* line 67, ../sass/print.scss */
+.print .banner-wrapper .banner #intro-text .intro-wrap .full.logo {
+  display: block;
+  float: left;
+}
+/* line 71, ../sass/print.scss */
+.print .banner-wrapper .banner #intro-text .intro-wrap .full.logo img {
+  width: 100px;
+}
+/* line 76, ../sass/print.scss */
+.print .banner-wrapper .banner #intro-text .intro-wrap #date {
+  display: none;
+}
+/* line 87, ../sass/print.scss */
+.print .banner-wrapper .current-menu.dropdown {
+  width: unset !important;
+  max-width: none !important;
+  background-color: transparent;
+  height: 0;
+  margin-right: 0px;
+  margin: 0;
+  padding: 0px;
+  box-shadow: none;
+  position: absolute;
+  top: 35px;
+  left: 120px;
+}
+/* line 102, ../sass/print.scss */
+.print .banner-wrapper .current-menu.dropdown .dropdown-label {
+  display: none;
+}
+/* line 106, ../sass/print.scss */
+.print .banner-wrapper .current-menu.dropdown #dropdown-header-button {
+  width: 100% !important;
+}
+/* line 109, ../sass/print.scss */
+.print .banner-wrapper .current-menu.dropdown #dropdown-header-button .ui-selectmenu-text {
+  font-size: 13px !important;
+  margin: 0px;
+  padding: 0px;
+}
+/* line 116, ../sass/print.scss */
+.print .banner-wrapper .current-menu.dropdown span .ui-selectmenu-icon.ui-icon.ui-icon-triangle-1-s {
+  display: none;
+}
+/* line 125, ../sass/print.scss */
+.print .td-map {
+  background-color: #fff;
+}
+/* line 128, ../sass/print.scss */
+.print .td-map #legend-div {
+  display: none;
+}
+/* line 140, ../sass/print.scss */
+.print .td-table #notes-div, .print .td-table .search-div-main, .print .td-table .select-table {
+  display: none;
+}

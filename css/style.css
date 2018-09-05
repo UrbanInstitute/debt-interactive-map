@@ -1193,11 +1193,11 @@ html .ui-button.ui-state-disabled:active {
  .counties {
   stroke-width: 0px;
  }
-path.hide {
-  fill: none !important;
-  opacity: 0 !important;
-  stroke-width: 1px !important;
-}
+  path.hide {
+    fill: none !important;
+    opacity: 0 !important;
+    stroke-width: 1px !important;
+  }
  #map {
   margin-bottom: 5px;
  }
@@ -1207,4 +1207,9 @@ path.hide {
  #copyright {
   margin-bottom: 0px;
  }
+}
+
+
+.full.logo {
+  display: none;
 }

@@ -15,6 +15,9 @@
   <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic,900" rel="stylesheet" type="text/css">
   <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
   <link href="css/jquery.tagit.css" rel="stylesheet" type="text/css">
+   
+  <link rel="stylesheet" type="text/css" href="css/print.css"/>
+
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@urbaninstitute">
   <meta name="twitter:creator" content="@urbaninstitute">
@@ -49,7 +52,7 @@
 </head>
 
 
-<body>
+<body class="print">
   
 <!-- Google Tag Manager -->
 <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-MKBD2W"
@@ -62,6 +65,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
 
 <!--URBAN HEADER-->
+<div class="print cover"></div>
+
 <div class="banner-wrapper">
   <div id="header-pinned" class="no-touch">   
     <a target="_blank" href="https://www.urban.org" title="Home" rel="home" class="site-logo"></a>
@@ -88,7 +93,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <div class="banner">
     <div id="intro-text">
       <div class="intro-wrap">
-        <h1>Debt in America: An Interactive Map</h1>
+        <div class="full logo">
+          <img src="img/print-logo-full.png">
+        </div>
+        <div class="inner">
+          <h1>Debt in America: An Interactive Map</h1>          
+        </div>        
         <h2>Credit can be a lifeline during emergencies and a bridge to education and homeownership. But debt, which can stem from credit or unpaid bills, often burdens families and communities and exacerbates wealth inequality. This map shows the geography of debt in America at the national, state, and county levels. How does your community compare?</h2>
         <div id="date">Last updated May 16, 2018</div>
       </div>
