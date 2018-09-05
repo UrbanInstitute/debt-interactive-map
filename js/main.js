@@ -4,6 +4,9 @@ var IS_PHONESM;
 var BREAKS ={"perc_debt_collect":[0.22, .31, .39, .49],"med_debt_collect":[1200, 1500, 1800, 2300], "perc_debt_med":[.11,.18,.26,.34], "med_debt_med":[500,700,950,1250], "perc_pop_nw":[.13,.28,.46,.67], "perc_pop_no_ins":[.08,.13,.18,.26], "avg_income":[52650,63850,77900,101050],"perc_stud_debt":[0.10,0.13,0.16,0.20],"med_stud_debt": [12550,15050,17450,20350],"perc_stud_debt_collect": [0.01,0.02,0.03,0.06],"perc_stud_debt_collect_STUD": [0.07,0.13,0.2,0.3],"med_stud_debt_collect": [6150,7550,9000,10700],"med_mon_pmt": [135,155,175,195],"perc_no_bach": [0.59,0.71,0.79,0.85]};
 var legendWidth = {"perc_debt_collect": 60,"perc_debt_med": 58,"med_debt_collect": 73,"med_debt_med": 70,"perc_pop_nw": 63,"perc_pop_no_ins": 60,"avg_income": 89,"perc_stud_debt":60,"med_stud_debt":89,"perc_stud_debt_collect":60,"perc_stud_debt_collect_STUD":60,"med_stud_debt_collect":89,"med_mon_pmt":70,"perc_no_bach":60};
 
+// insert here any variables that only have 1 item, namely "Nonwhite population share" for now, and in the future, anything else similar.
+var limitedVars = ["perc_pop_nw"]      
+
 // var legendTranslate = {"perc_debt_collect": width-60, "perc_debt_med": 644, "med_debt_collect": 628, "med_debt_med":631, "perc_pop_nw":638, "perc_pop_no_ins": 642, "avg_income":615}
 
 var SELECTED_VARIABLE;
@@ -15,6 +18,7 @@ var zoomNational;
 var zoomCounty;
 var zoomNational_St;
 var type;
+var typeVar;
 var tdMap;
 var active = d3.select(null);
 // var margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55}
@@ -40,6 +44,7 @@ function setScreenState(mobile, phone, phonesm){
   IS_PHONE = phone
   IS_PHONESM = phonesm
 }
+
 setScreenState (d3.select("#isMobile").style("display") == "block", d3.select("#isPhone").style("display") == "block", d3.select("#isPhoneSm").style("display") == "block" )
 
 function setVariable(variable, phone) {
@@ -61,17 +66,203 @@ function setZoom(national, state, county, national_st) {
   zoomNational_St = national_st;
 }
 
-function selectedStatePh() {
+var initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width() - 15
+setWidth(initialWidth, IS_MOBILE, IS_PHONE)
+
+function decodeQuery(location) {
+  
+  var Startquery = location.split("?")
+  var obj = {},
+    qPos = location.indexOf("?"),
+    tokens = location.substr(qPos + 1).split('&'),
+    i = tokens.length - 1;
+    if (qPos !== -1 || query.indexOf("=") !== -1) {
+      for (; i >= 0; i--) {
+        var s = tokens[i].split('=');
+        obj[unescape(s[0])] = s.hasOwnProperty(1) ? unescape(s[1]) : null;
+      };
+    }
+  return obj;
+}
+
+function updateQueryString(type,variable,state,county){
+
+  var queryString = "";
+
+  if (type) {
+    queryString += "?type=" + type;
+  } else {
+    queryString += "";
+  }
+
+  if (variable) {
+    queryString += "&variable=" + variable;
+  } else {
+    queryString += "";
+  }
+
+  if (state) {
+    queryString += "&state=" + state;
+  } else {
+    queryString += "";
+  }
+
+  if (county) {
+    if (county.toString().length === 4) {
+      county = "0" + county.toString();
+    }
+
+    queryString += "&county=" + county;
+  } else {
+    queryString += "";
+  }
+
+  if (history.pushState) {
+      var newurl = window.location.protocol + "//" + window.location.host + window.location.pathname + queryString;
+      window.history.pushState({path:newurl},'',newurl); //this seems to reload the page?      
+  }
+
 
 }
 
-var initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width() - 15
-setWidth(initialWidth, IS_MOBILE, IS_PHONE)
-setZoom(true,false, false)
+function hidelimited(variable) {  
+  for (var i = 0; i < limitedVars.length; i++) {           
+    if (variable == limitedVars[i]) {      
+      d3.select("#County").selectAll(".White, .Nonwhite").style("opacity", 0)
+      d3.select("#State").selectAll(".White, .Nonwhite").style("opacity", 0)
+      d3.select("#National").selectAll(".White, .Nonwhite").style("opacity", 0)
+    }else {
+      d3.select("#County").selectAll(".White, .Nonwhite").style("opacity", 1)
+      d3.select("#State").selectAll(".White, .Nonwhite").style("opacity", 1)
+      d3.select("#National").selectAll(".White, .Nonwhite").style("opacity", 1)
+    } 
+  }
+}
 
-// reset when changing up first topic
-setVariable("perc_stud_debt")
-setVariable("perc_stud_debt", true)
+function formatNumber(d, type) { 
+  var percent = d3.format(",.0%"),
+      number = d3.format("$,.0f");
+  if (type == "max") {
+    return (d<1) ? percent(Math.ceil(d * 100) / 100 ) : number( Math.ceil((d+1)/10)*10)
+  }else if (type == "min") {
+    return (d<1) ? percent(Math.floor(d * 100) / 100 ) : number( Math.floor((d+1)/10)*10)
+  }else {
+    return (d<1) ? percent(d) : number(d);
+  }
+}
+
+
+// The following 4 function are for building the bars on desktop
+function barY(d,dis,variable,NONWHITE,WHITE,y,barHeight) {
+  var parentClass = d3.select(dis.parentNode).attr('class');
+  if (parentClass.search("All") > -1) { 
+    return (isNaN(d[variable]) != true) ? y(d[variable]) : barHeight;
+  }else if (parentClass.search("Non") > -1) {
+    return (isNaN(d[NONWHITE]) != true) ? y(d[NONWHITE]) : barHeight;
+  }else {
+    return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) : barHeight;
+  }
+}
+
+function barH(d,dis,variable,NONWHITE,WHITE,y,barHeight) {
+  var parentClass = d3.select(dis.parentNode).attr('class');
+  if (parentClass.search("All") > -1) { 
+    return (isNaN(d[variable]) != true) ? barHeight - y(d[variable]) : 0;
+  }else if (parentClass.search("Non") > -1){ 
+    return (isNaN(d[NONWHITE]) != true) ? barHeight - y(d[NONWHITE]) : 0;
+  }else {
+    return (isNaN(d[WHITE]) != true) ? barHeight - y(d[WHITE]) : 0;
+  }
+}
+
+function labelY(d,dis,variable,NONWHITE,WHITE,y,barHeight) {
+  var parentClass = d3.select(dis.parentNode).attr('class');
+  if (parentClass.search("All") > -1) {
+    return (isNaN(d[variable]) != true) ? y(d[variable]) - 16 : barHeight -8;
+  }else if (parentClass.search("Non") > -1) {
+    return (isNaN(d[NONWHITE]) != true) ? y(d[NONWHITE]) - 16 : barHeight - 8;
+  }else{
+    return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) - 16 : barHeight - 8;
+  }
+}
+
+function labelHTML(d,dis,variable,NONWHITE,WHITE) {
+  var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+  var noData_wh = (d[WHITE] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+  var noData_nw = (d[NONWHITE] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+  var parentClass = d3.select(dis.parentNode).attr('class');
+  if (parentClass.search("All") > -1) {
+    return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
+  }else if (parentClass.search("Non") > -1) {
+    return (isNaN(d[NONWHITE]) != true) ? formatNumber(d[NONWHITE]) : noData_nw
+  }else{
+    return (isNaN(d[WHITE]) != true) ? formatNumber(d[WHITE]) : noData_wh
+  }
+}
+
+// The following 3 function are for building the bars on mobile and print
+function barW(d,dis,variable,NONWHITE_ph,WHITE_ph,x_ph) {  
+  console.log('wassup')
+  var parentClass = d3.select(dis.parentNode).attr('class');
+  if (parentClass.search("All") > -1) {
+    return (isNaN(d[variable]) != true) ? x_ph(d[variable]) : 0
+  }else if (parentClass.search("Non") > -1) {
+    return (isNaN(d[NONWHITE_ph]) != true) ?  x_ph(d[NONWHITE_ph]) : 0
+  }else{
+    return (isNaN(d[WHITE_ph]) != true) ?  x_ph(d[WHITE_ph]) : 0
+  }
+
+}
+
+function barX(d,dis,variable,NONWHITE_ph,WHITE_ph,x_ph) {
+  var parentClass = $(dis).closest(".rect-g").attr("class")
+  if (parentClass.search("All") > -1) {
+    return (isNaN(d[variable]) != true) ? x_ph(d[variable]) + 5 : 0
+  }else if (parentClass.search("Non") > -1) {
+    return (isNaN(d[NONWHITE_ph]) != true) ? x_ph(d[NONWHITE_ph]) + 5 : 0
+  }else{
+    return (isNaN(d[WHITE_ph]) != true) ? x_ph(d[WHITE_ph]) + 5 : 0
+  }
+}
+
+function labelHTML_ph(d,dis,variable,NONWHITE_ph,WHITE_ph,yes) {
+
+  var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+  var noData_wh = (d[WHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+  var noData_nw = (d[NONWHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+  var parentClass = $(dis).closest(".rect-g").attr("class")
+  if (d[NONWHITE_ph] == "n<50" || (d[WHITE_ph]) == "n<50" || (d[variable]) == "n<50") { 
+    d3.select("#notes-section > p.note1").style("opacity", 1)
+
+  }
+  if ((d[variable]) == "N/A" || (d[NONWHITE_ph]) == "N/A" || (d[WHITE_ph]) == "N/A") {
+    d3.select("#notes-section > p.note2").style("opacity", 1)
+  }
+  if (parentClass.search("All") > -1) { 
+    return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
+  }else if (parentClass.search("Non") > -1) {
+    return (isNaN(d[NONWHITE_ph]) != true) ? formatNumber(d[NONWHITE_ph]) : noData_nw
+  }else{
+    return (isNaN(d[WHITE_ph]) != true) ? formatNumber(d[WHITE_ph]) : noData_wh
+  }  
+}
+
+// this function hides white/non-white for the "percent non-white" question
+function hideBars(variable) {
+  if (variable == "perc_pop_nw") {
+    d3.selectAll(".bar-group-ph").selectAll(".category-ph.White").attr("display", "none")
+    d3.selectAll(".bar-group-ph").selectAll(".category-ph.Nonwhite").attr("display", "none")
+    d3.selectAll(".bar_ph").select("svg").attr("height", 80)
+    d3.selectAll(".label").select(".svg2").attr("height", 38)
+  }else {
+    var bar_phHeight = (IS_PHONESM == true) ? 200 : 173; 
+    d3.selectAll(".bar-group-ph").selectAll(".category-ph.White").attr("display", "block")
+    d3.selectAll(".bar-group-ph").selectAll(".category-ph.Nonwhite").attr("display", "block")
+    d3.selectAll(".bar_ph").select("svg").attr("height", bar_phHeight)
+    d3.selectAll(".label").select(".svg2").attr("height", 130)
+  }
+}
+
 
 
 var setHeight = tdMap*.7;
@@ -185,113 +376,71 @@ function ready(error, us, county, state, county2, state2) {
   // geographical data
   var countyData = us.objects.counties.geometries;
   var stateData = us.objects.states.geometries;
+  
+  if (window.location.search) {    
+    // If there's a url search query, do a bunch of stuff like create the beginning zoom variables
 
-  // CHANGE DATA SET
-  $( "#dropdown-header" ).selectmenu({
-      open: function( event, ui ) {
+    // DECODE the query
+    var Startquery = decodeQuery(window.location.search)
 
-      },
-      close: function(event, ui){
-
-      },
-      create: function(event, ui){
-        type = "student"
-      },
-      change: function(event, d){
-
-        table.selectAll('tbody').classed('selected', false);
-        table.select('tbody').classed('selected', true)
-        
-        BigData = changeData(d.item.value);
-        type = d.item.value;
-
-        var type_category = (type == "medical") ? categoryData : categoryData2;
-        // update mobile categories        
-
-        var optionsCategory = d3.select("#category-select").selectAll('option')
-          .data(type_category)
-
-        optionsCategory.enter()
-          .append('option')
-          .merge(optionsCategory)
-          .html(function(d) {            
-            return d.label
-          })
-          .attr('value', function(d) {
-            return d.variable
-          })        
-        
-        optionsCategory.exit().remove()
-
-        $('#category-select').val(type_category[0].variable);
-
-        $("#category-select").selectmenu("refresh")
-
-
-        // to be used when ready
-        var type_variable = (type == "medical") ? "perc_debt_collect" : "perc_stud_debt";
-        setVariable(type_variable)
-        setVariable(type_variable,true)
-        updateMap(type_variable)            
-
-
-
-        if (zoomNational == true) {          
-          var us_data = BigData.state_data[0]["values"][0]
-          for (var key in us_data) {
-              if (us_data.hasOwnProperty(key)) { 
-                  if (+us_data[key] == NaN || +us_data[key] == 0){
-                    us_data[key = us_data[key]]
-                  }else {
-                    us_data[key] = +us_data[key]
-                  }
-              }
-          }                    
-          updateTable(us_data,type)
-        } else if (zoomCounty == true) {
-          updateTable(d3.select("g.counties").selectAll("path.selected").datum(),type)
-        } else if (zoomState == true) {
-          updateTable(d3.select("path#" + selectedState.properties.abbr).datum(),type)
-        }
-      }
-    });
-
-
-
-  function changeData(CATEGORY) {  
     
-    var BigData = (CATEGORY === "medical") ? OverallTransformData(us,county,state,countyData,stateData) : OverallTransformData(us,county2,state2,countyData,stateData)
-    var tmp_state = BigData.tmp_state,
-      tmp_county = BigData.tmp_county,
-      filteredCounties = BigData.filteredCounties,
-      us_data_ph = BigData.us_data_ph,
-      state_data = BigData.state_data,
-      county_data = BigData.county_data;
+    var defaultFirst;
 
-    // update data bound to counties 
+    // set dataset (student vs. medical)
+    type = Startquery["type"]
+    if (type === "medical") {
+      var BigData = OverallTransformData(us,county,state,countyData,stateData);
+      defaultFirst = "perc_debt_collect"
+    } else if (type === "student") {
+      var BigData = OverallTransformData(us,county2,state2,countyData,stateData);
+      defaultFirst = "perc_stud_debt"
+    } else {
+      // in future other data types
+      var BigData = OverallTransformData(us,county2,state2,countyData,stateData);
+    }
 
-    var countiesD3 = d3.selectAll(".counties")
-    .selectAll("path")
-    .each(function(d){
-      d3.select(this)
-        .datum(tmp_county.filter(function(o){ return o.id == d.id})[0])
-    })  
+    // set variable
+      // NEED conditional to ensure that the wrong variable is not present    
+    
+    if (!Startquery["variable"]) {
+      typeVar = defaultFirst
+      Startquery["variable"] = typeVar;
+      updateQueryString(type,typeVar)
+    } else {
+      typeVar  = Startquery["variable"]
+    }     
 
-    var statesD3 = d3.selectAll(".state-borders")
-      .selectAll("path")
-      .each(function(d){
-        d3.select(this)
-          .datum(tmp_state.filter(function(o){ return o.properties.abbr == d.properties.abbr})[0])
-      })  
+    // set left hand table variable names
+      // this is done by setting "type" above. 
 
-    return BigData
+    // set drop down item
+      // this is done below the set up of the drop down. look for refresh
 
+    // set visual variable place
+      // this is done below ADD TABLE in the 1300s of the code
+
+
+    // select the state (optional)
+    // select the county (optional)
+      // DONE AT THE VERY BOTTOM OF THE ENTIRE READY/JS SCRIPT
+
+    // need to do mobile!
+    // set the category/variable (both the set and the exact one)
   }
 
-  // ENDDDDDD dropdown header topic change logic
+  // If there is no query at the beginning
+  else {
+    // var Startquery = "national";
+    type = "student"
+    var BigData = OverallTransformData(us,county2,state2,countyData,stateData);    
+    typeVar = "perc_stud_debt"
 
-  // first time through use "county" and "state" which are medical info. CHANGE if you want diff
-  var BigData = OverallTransformData(us,county2,state2,countyData,stateData);
+    // when we adjust this to a DIFFERENT student item, it changes the map AND legend, but not the spot on the left hand side in the table. (but uupper and lower end is a NaN?????)
+  }
+    
+  setVariable(typeVar)
+  setVariable(typeVar, true)
+
   var tmp_state = BigData.tmp_state,
     tmp_county = BigData.tmp_county,
     filteredCounties = BigData.filteredCounties,
@@ -300,35 +449,26 @@ function ready(error, us, county, state, county2, state2) {
     county_data = BigData.county_data;
 
 
+  // if type and variable don't match, remove the variable and go down to type (reset variable)
+  // if variable doesn't exist, do the top variable
+
+
+  setZoom(true,false, false)
+
+// when we adjust this to a medical item, it allows the LEGEND to change but the data doesn't work in the map
+    // Even when "big data" is changed above using changeData
+
+
+
+
+
+
   /*END*/
 
   // NOT SURE WHAT THIS IS DOING....maybe creating the search pool for the filtering county/state search??
 
   $("#location").html("National")
 
-  function createSearchArray(filter) { 
-    var searchArray = [];
-    if (zoomNational == true) {
-      for (var i = 0; i<tmp_state.length; i++){
-       searchArray.push(tmp_state[i]["properties"]["state"])
-      }
-      for (var i = 0; i<tmp_county.length; i++){
-       searchArray.push(tmp_county[i]["properties"]["county"] + ", " + tmp_county[i]["properties"]["abbr"])
-      }
-    }else if (zoomState == true) { 
-      for (var i = 0; i<tmp_county.length; i++){ 
-        if (tmp_county[i]["properties"]["abbr"] == filter) {
-          searchArray.push(tmp_county[i]["properties"]["county"] + ", " + tmp_county[i]["properties"]["abbr"])
-        }
-      }
-    }
-   dropdown = searchArray
-   $('input[name="tags"]').tagit("option", {
-      availableTags: dropdown,
-    })
-  }
-  
-  // End Search Array
 
   $( "#searchBox" ).autocomplete({
     appendTo: ".search-div",
@@ -365,25 +505,18 @@ function ready(error, us, county, state, county2, state2) {
             return false;
         }
       },
-      afterTagAdded: function(event, ui) { 
+      afterTagAdded: function(event, ui) {      
+
         ($(".search-div > .ui-widget").css("height", 60))
         var tag = (ui.tag[0]["textContent"]);
         var county = (tag.search(",") > 0) ? tag.split(",")[0] : "";
         var state = (tag.search(",") > 0) ? (tag.split(", ")[1]).slice(0,-1) : tag.slice(0,-1);
+
         var geoData = BigData.tmp_county 
         var geoType = (tag.search(",") > 0) ? "county" : "state";
         var geography = (geoType == "county") ? county : state;
         selectedLocation()
-        // var filteredCounty = tmp_county.filter(function(d) { 
-          // if (geoType == "county"){
-          //   return d.properties["county"] == county && d.properties["abbr"] == state
-          // }else {
-        //     return d.properties["county"] == tagContent;
-        //   // }
-        // })
-        // var filteredState = tmp_state.filter(function(d) {
-        //   return d.properties["state"] == tagContent
-        // })
+
         var filteredData = geoData.filter(function(d) {
           if (geoType == "county") {
             return d.properties["county"] == county && d.properties["abbr"] == state;
@@ -401,6 +534,11 @@ function ready(error, us, county, state, county2, state2) {
           var filter = data["properties"]["abbr"]
           createSearchArray(filter)
         }
+
+        var stateQuery = filteredData["0"].properties.state_id;
+        var countyQuery = (geoType == "county") ? filteredData["0"].properties.id : null;
+
+        updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
       },
       afterTagRemoved: function(event,ui) { 
          var tag = (ui.tag[0]["textContent"]);
@@ -437,114 +575,300 @@ function ready(error, us, county, state, county2, state2) {
   });
   createSearchArray("")
 
-
-  // });
   var zoom = d3.zoom()
       // .translate([0, 0])
       // .scale(1)
       .scaleExtent([0, 8])
   //     .on("zoom", zoomed);
 
-
   var min = d3.min(BigData.tmp_county, function(d) {
     return d.properties[SELECTED_VARIABLE]
   })
   var max = d3.max(BigData.tmp_county, function(d) { 
     return d.properties[SELECTED_VARIABLE]
-  })
-  // console.log(max)
+  })  
   var quantize = d3.scaleThreshold()
     .domain(BREAKS[SELECTED_VARIABLE])
     .range(["#cfe8f3", "#73bfe2", "#1696d2", "#0a4c6a", "#000000"])  
 
  /*ADD DROPDOWNS*/
-    var categoryData = [{label: "Share with any debt in collections<i>ᵃ</i>", variable: "perc_debt_collect"},
-    {label: "Median debt in collections<i>ᵃ</i>", variable: "med_debt_collect"},
-    {label: "Share with medical debt in collections<i>ᵃ</i>", variable: "perc_debt_med"},
-    {label: "Median medical debt in collections<i>ᵃ</i>", variable: "med_debt_med"},
-    {label: "Nonwhite population share", variable: "perc_pop_nw"},
-    {label: "Share without health insurance coverage", variable: "perc_pop_no_ins" },
-    {label: "Average household income", variable: "avg_income"}]
-    
-    var categoryData2 = [{label: "Share with student loan debt<i>ᵃ</i>", variable: "perc_stud_debt"},
-    {label: "Median student loan debt<i>ᵃ</i>", variable: "med_stud_debt"},
-    {label: "Share of student loan holders with student loan debt in collections<i>ᵃ ᵈ</i>", variable: "perc_stud_debt_collect_STUD"},    
-    {label: "Median student loan debt in collections<i>ᵃ</i>", variable: "med_stud_debt_collect"},
-    {label: "Median monthly student loan payment<i>ᵃ</i>", variable: "med_mon_pmt"},
-    {label: "Share of people with credit records who have student loan debt in collections<i>ᵃ ᵉ</i>", variable: "perc_stud_debt_collect"},
-    {label: "Nonwhite population share", variable: "perc_pop_nw"},
-    {label: "Share without a bachelor’s degree", variable: "perc_no_bach"},
-    {label: "Average household income", variable: "avg_income" }]
+  var categoryData = [{label: "Share with any debt in collections<i>ᵃ</i>", variable: "perc_debt_collect"},
+  {label: "Median debt in collections<i>ᵃ</i>", variable: "med_debt_collect"},
+  {label: "Share with medical debt in collections<i>ᵃ</i>", variable: "perc_debt_med"},
+  {label: "Median medical debt in collections<i>ᵃ</i>", variable: "med_debt_med"},
+  {label: "Nonwhite population share", variable: "perc_pop_nw"},
+  {label: "Share without health insurance coverage", variable: "perc_pop_no_ins" },
+  {label: "Average household income", variable: "avg_income"}]
+  
+  var categoryData2 = [{label: "Share with student loan debt<i>ᵃ</i>", variable: "perc_stud_debt"},
+  {label: "Median student loan debt<i>ᵃ</i>", variable: "med_stud_debt"},
+  {label: "Share of student loan holders with student loan debt in collections<i>ᵃ ᵈ</i>", variable: "perc_stud_debt_collect_STUD"},    
+  {label: "Median student loan debt in collections<i>ᵃ</i>", variable: "med_stud_debt_collect"},
+  {label: "Median monthly student loan payment<i>ᵃ</i>", variable: "med_mon_pmt"},
+  {label: "Share of people with credit records who have student loan debt in collections<i>ᵃ ᵉ</i>", variable: "perc_stud_debt_collect"},
+  {label: "Nonwhite population share", variable: "perc_pop_nw"},
+  {label: "Share without a bachelor’s degree", variable: "perc_no_bach"},
+  {label: "Average household income", variable: "avg_income" }]
 
-    var table = d3.select("#table-div")
+  var table = d3.select("#table-div")
 
-    var stateMenu = d3.select(".state-menu")
-      .on('click', function() {
-        if ( d3.select(".state-menu.dropdown").classed("open") == true) {
-          $("#state-select").selectmenu('close')
-          d3.select(".state-menu.dropdown").classed("open", false)
-        }else {
-          d3.select(".state-menu.dropdown").classed("open", true)
-          $("#state-select").selectmenu('open')
+  var stateMenu = d3.select(".state-menu")
+    .on('click', function() {
+      if ( d3.select(".state-menu.dropdown").classed("open") == true) {
+        $("#state-select").selectmenu('close')
+        d3.select(".state-menu.dropdown").classed("open", false)
+      }else {
+        d3.select(".state-menu.dropdown").classed("open", true)
+        $("#state-select").selectmenu('open')
+      }
+    })
+    .append("select")
+    .attr("id", "state-select")
+
+// console.log(state_data)
+  var optionsState = stateMenu
+    .selectAll('option')
+    .data(state_data)
+  
+  optionsState.enter()
+    .append('option')
+    .text(function(d) {
+      return d.state
+    })
+    .attr('value', function(d) {
+      return d.state
+    })
+    .attr("value2", function(d){
+      return d.key
+    })
+
+  var countyMenu = d3.select(".county-menu")
+    .on('click', function() {
+      if ( d3.select(".county-menu.dropdown").classed("open") == true) {
+        $("#county-select").selectmenu('close')
+        d3.select(".county-menu.dropdown").classed("open", false)
+      }else {
+        d3.select(".county-menu.dropdown").classed("open", true)
+        $("#county-select").selectmenu('open')
+      }
+    })
+    .append("select")
+    .attr("id", "county-select")
+
+  var optionsCounty = countyMenu
+    .selectAll('option')
+    .data(filteredCounties)
+
+  optionsCounty.enter()
+    .append('option')
+    .text(function(d) {
+      return d.county
+    })
+  
+  var categoryMenu = d3.select(".category-menu")
+    .on('click', function() {      
+      if ( d3.select(".category-menu.dropdown").classed("open") == true) {
+        $("#category-select").selectmenu('close')
+        d3.select(".category-menu.dropdown").classed("open", false)
+      }else {
+        d3.select(".category-menu.dropdown").classed("open", true)
+        $("#category-select").selectmenu('open')
+      }
+    })
+    .append("select")
+    .attr("id", "category-select")  
+  
+  var optionsCategory = categoryMenu
+    .selectAll('option')
+    .data(function(d){
+      if (!Startquery) {
+        return categoryData2
+      } else if (Startquery["type"] === "student") {
+        return categoryData2
+      } else {
+        return categoryData
+      }
+    })
+  optionsCategory.enter()
+    .append('option')
+    .html(function(d) {
+      return d.label          
+    })
+    .attr('value', function(d) {
+      return d.variable
+    })
+
+
+
+// BEGIN FUNCTIONS!
+
+  // CHANGE DATA SET on dropdown at header
+  $( "#dropdown-header" ).selectmenu({
+      open: function( event, ui ) {
+
+      },
+      close: function(event, ui){
+
+      },
+      create: function(event, ui){
+        // type = "student"
+
+      },
+      change: function(event, d){
+
+        table.selectAll('tbody').classed('selected', false);        
+        table.select('tbody').classed('selected', true)
+        
+        BigData = changeData(d.item.value);
+        type = d.item.value;
+   
+
+        var type_category = (type == "medical") ? categoryData : categoryData2;
+        // update mobile categories        
+
+        var optionsCategory = d3.select("#category-select").selectAll('option')
+          .data(type_category)
+
+        optionsCategory.enter()
+          .append('option')
+          .merge(optionsCategory)
+          .html(function(d) {            
+            return d.label
+          })
+          .attr('value', function(d) {
+            return d.variable
+          })        
+        
+        optionsCategory.exit().remove()
+
+        $('#category-select').val(type_category[0].variable);
+        $("#category-select").selectmenu("refresh")
+
+
+        // DW note: this will need to get updated when we move to more than TWO variable sets. 
+        // to be used when ready
+        var type_variable = (type == "medical") ? "perc_debt_collect" : "perc_stud_debt";
+        setVariable(type_variable)
+        setVariable(type_variable,true)
+        updateMap(type_variable)                    
+
+        var stateQuery;
+        var countyQuery;
+
+        if (zoomNational == true) {          
+          var us_data = BigData.state_data[0]["values"][0]
+          for (var key in us_data) {
+              if (us_data.hasOwnProperty(key)) { 
+                  if (+us_data[key] == NaN || +us_data[key] == 0){
+                    us_data[key = us_data[key]]
+                  }else {
+                    us_data[key] = +us_data[key]
+                  }
+              }
+          }                    
+          updateTable(us_data,type)
+        } else if (zoomCounty == true) {          
+
+          countyQuery = d3.select("g.counties").selectAll("path.selected").datum().id;
+          stateQuery = d3.select("path#" + selectedState.properties.abbr).datum().id;
+          updateTable(d3.select("g.counties").selectAll("path.selected").datum(),type)
+        } else if (zoomState == true) {
+          stateQuery = d3.select("path#" + selectedState.properties.abbr).datum().id;
+          updateTable(d3.select("path#" + selectedState.properties.abbr).datum(),type);
         }
-      })
-      .append("select")
-      .attr("id", "state-select")
 
-    var optionsState = stateMenu
-      .selectAll('option')
-      .data(state_data)
-    optionsState.enter()
-      .append('option')
-      .text(function(d) {
-        return d.state
-      })
-      .attr('value', function(d) {
-        return d.state
-      })
-    var countyMenu = d3.select(".county-menu")
-      .on('click', function() {
-        if ( d3.select(".county-menu.dropdown").classed("open") == true) {
-          $("#county-select").selectmenu('close')
-          d3.select(".county-menu.dropdown").classed("open", false)
-        }else {
-          d3.select(".county-menu.dropdown").classed("open", true)
-          $("#county-select").selectmenu('open')
-        }
-      })
-      .append("select")
-      .attr("id", "county-select")
-    var optionsCounty = countyMenu
-      .selectAll('option')
-      .data(filteredCounties)
-    optionsCounty.enter()
-      .append('option')
-      .text(function(d) {
-        return d.county
-      })
-   var categoryMenu = d3.select(".category-menu")
-        .on('click', function() {
-          if ( d3.select(".category-menu.dropdown").classed("open") == true) {
-            $("#category-select").selectmenu('close')
-            d3.select(".category-menu.dropdown").classed("open", false)
-          }else {
-            d3.select(".category-menu.dropdown").classed("open", true)
-            $("#category-select").selectmenu('open')
+
+          // Only works on load... need to know on resize too. 
+          // need to set statequery and county query differently for the currently viewing updatequery
+
+        if (IS_PHONE === true) {
+          stateQuery = $("#state-select")[0].selectedOptions[0].__data__.key          
+          if (stateQuery != "USA") {
+            if ($("#county-select")[0].length > 0 && $("#county-select")[0].selectedOptions[0].value != "") {
+              countyQuery = $("#county-select")[0].selectedOptions[0].__data__.key
+            }
+            else {
+              countyQuery = ""
+            }
+          } else {
+            countyQuery = ""
+            stateQuery = ""
           }
-        })
-        .append("select")
-        .attr("id", "category-select")
-      var optionsCategory = categoryMenu
-        .selectAll('option')
-        .data(categoryData2)
-      optionsCategory.enter()
-        .append('option')
-        .html(function(d) {
-          return d.label          
-        })
-        .attr('value', function(d) {
-          return d.variable
-        })
+
+        } 
+
+        updateQueryString(type,type_variable,stateQuery,countyQuery)
+      }
+    
+    
+
+    });
+
+  // Update the currently viewing section in the event that its been updated by the query string on load
+  $('#dropdown-header').val(type)
+  $('#dropdown-header').selectmenu("refresh")
+
+
+
+
+
+
+  function changeData(CATEGORY) {
+    
+    var BigData = (CATEGORY === "medical") ? OverallTransformData(us,county,state,countyData,stateData) : OverallTransformData(us,county2,state2,countyData,stateData)
+    var tmp_state = BigData.tmp_state,
+      tmp_county = BigData.tmp_county,
+      filteredCounties = BigData.filteredCounties,
+      us_data_ph = BigData.us_data_ph,
+      state_data = BigData.state_data,
+      county_data = BigData.county_data;
+
+    // update data bound to counties 
+
+    var countiesD3 = d3.selectAll(".counties")
+    .selectAll("path")
+    .each(function(d){
+      d3.select(this)
+        .datum(tmp_county.filter(function(o){ return o.id == d.id})[0])
+    })  
+
+    var statesD3 = d3.selectAll(".state-borders")
+      .selectAll("path")
+      .each(function(d){
+        d3.select(this)
+          .datum(tmp_state.filter(function(o){ return o.properties.abbr == d.properties.abbr})[0])
+      })  
+
+    return BigData
+
+  }
+
+  // ENDDDDDD dropdown header topic change logic
+
+  function createSearchArray(filter) { 
+    var searchArray = [];
+    if (zoomNational == true) {
+      for (var i = 0; i<tmp_state.length; i++){
+       searchArray.push(tmp_state[i]["properties"]["state"])
+      }
+      for (var i = 0; i<tmp_county.length; i++){
+       searchArray.push(tmp_county[i]["properties"]["county"] + ", " + tmp_county[i]["properties"]["abbr"])
+      }
+    }else if (zoomState == true) { 
+      for (var i = 0; i<tmp_county.length; i++){ 
+        if (tmp_county[i]["properties"]["abbr"] == filter) {
+          searchArray.push(tmp_county[i]["properties"]["county"] + ", " + tmp_county[i]["properties"]["abbr"])
+        }
+      }
+    }
+   dropdown = searchArray
+   $('input[name="tags"]').tagit("option", {
+      availableTags: dropdown,
+    })
+  }
+  
+  // End Search Array
+
 
   function reset() {
     active.classed("active", false);
@@ -555,10 +879,13 @@ function ready(error, us, county, state, county2, state2) {
         .style("stroke-width", "1.5px")
         .attr("transform", "");
   }
+
   function filterCountyMenu(selectedState) {
-    var filteredCounties = county_data.filter(function(d) {
+
+      var filteredCounties = county_data.filter(function(d) {
       return d.state == selectedState
     })
+
         var optionsCounty = countyMenu
           .selectAll('option')
           .data(filteredCounties)
@@ -616,9 +943,20 @@ function ready(error, us, county, state, county2, state2) {
         d3.select(".state-menu").select(".ui-icon")
           .classed("arrow-up", false)
       },
-      change: function(event, ui) {
+      focus: function(event, ui) {
+
+      },
+      change: function(event, ui) {      
+        
+        // if change is happening because of cmd-r keydown, break out of the cycle, and don't change the query string, etc. 
+        // note the event is happening BEFORE this, so $("#state-select").val() has already changed.
+        // note the value change is BEFORE "change" and AFTER "focus" but both are triggered. 
+        if (event.handleObj.type === "keydown" && event.key === "r") {
+          return;
+        }
+
         selectedLocation()
-        var selectedState = ui.item.value
+        var selectedState = ui.item.value;
         if (selectedState != "USA") {
           $(".bar-State").css("display", "block")
           $(".label-State").css("display", "block")
@@ -627,8 +965,15 @@ function ready(error, us, county, state, county2, state2) {
           d3.select(".county-menu").select(".ui-icon")
             .classed("greyed", false)
           var selectedPlace = ui.item.value
-          var selectedCategory = $("#category-select").val()
+          var selectedCategory = $("#category-select").val()          
+
           updateBars(selectedCategory, selectedPlace)
+
+          // add state to query string
+          var stateQuery = ui.item.element.context.attributes[1].value;
+
+          updateQueryString(type,selectedCategory,stateQuery)
+
           d3.select(".group-label-ph2.State").text(selectedPlace)
           d3.select(".group-label-ph.State").text(selectedPlace)
 
@@ -639,7 +984,10 @@ function ready(error, us, county, state, county2, state2) {
           $(".label-State").css("display", "none")
           d3.select(".county-menu").select(".ui-icon")
             .classed("greyed", true)
-
+          
+          // remove state from query string
+          var selectedCategory = $("#category-select").val()
+          updateQueryString(type,selectedCategory,stateQuery)
         }
 
         filterCountyMenu(selectedState)
@@ -664,19 +1012,32 @@ function ready(error, us, county, state, county2, state2) {
           .classed("arrow-up", false)
       },
       change: function(event, ui) {
+
+        // if change is happening because of cmd-r keydown, break out of the cycle, and don't change the query string, etc.
+        if (event.handleObj.type === "keydown" && event.key === "r") {
+          return;
+        }
+
         selectedLocation()
         $(".bar-County").css("display", "block")
         $(".label-County").css("display", "block")
         var selectedPlace = ui.item.value
-        var selectedCategory = $("#category-select").val()
+        var selectedCategory = $("#category-select").val()        
+
         updateBars(selectedCategory, selectedPlace)
         d3.select(".group-label-ph2.County").text(selectedPlace)
         d3.select(".group-label-ph.County").text(selectedPlace)
+
+        // add county/state to query string
+        var countyQuery = ui.item.element.context.__data__.key;
+        var stateQuery = parseInt(countyQuery.substring(0,2));                
+        updateQueryString(type,selectedCategory,stateQuery,countyQuery)
 
       }
     })
     .selectmenu("menuWidget")
     .addClass("ui-menu-icons customicons")
+  
   $("#category-select")
     .selectmenu({
       open: function(event,ui) {
@@ -697,222 +1058,253 @@ function ready(error, us, county, state, county2, state2) {
         selectedLocation()
         updateBars(selectedCategory, selectedStatePh)
         setVariable(selectedCategory, true)
-        if (selectedCategory == "perc_pop_nw") {
-          d3.selectAll(".bar-group-ph").selectAll(".category-ph.White").attr("display", "none")
-          d3.selectAll(".bar-group-ph").selectAll(".category-ph.Nonwhite").attr("display", "none")
-          d3.selectAll(".bar_ph").select("svg").attr("height", 80)
-          d3.selectAll(".label").select(".svg2").attr("height", 38)
-        }else {
-          var bar_phHeight = (IS_PHONESM == true) ? 200 : 173; 
-          d3.selectAll(".bar-group-ph").selectAll(".category-ph.White").attr("display", "block")
-          d3.selectAll(".bar-group-ph").selectAll(".category-ph.Nonwhite").attr("display", "block")
-          d3.selectAll(".bar_ph").select("svg").attr("height", bar_phHeight)
-          d3.selectAll(".label").select(".svg2").attr("height", 130)
+        
+        // var countyQuery = $("#county-select")[0].selectedOptions[0].__data__.key;
+        // stateQuery = $("#state-select")[0].selectedOptions[0].__data__.key      
+        var stateQuery = $("#state-select")[0].selectedOptions[0].__data__.key          
+          if (stateQuery != "USA") {
+            
+            // DW Fix this here          
+            if ($("#county-select")[0].length > 0 && $("#county-select")[0].selectedOptions[0].value != "") {
+              countyQuery = $("#county-select")[0].selectedOptions[0].__data__.key
+            }
+            else {
+              countyQuery = ""
+            }
+          } else {
+            countyQuery = ""
+            stateQuery = ""
+          }
 
-        }
+        updateQueryString(type,selectedCategory,stateQuery,countyQuery)
+
+        hideBars(selectedCategory)
       }
     })
     .selectmenu("menuWidget")
     .addClass("ui-menu-icons customicons")
   d3.select(".county-menu").select(".ui-icon")
     .classed("greyed", true)
+  
+
+
   /*ADD MAP*/
-    var svg = d3.select("#map")
-      .append("svg")
+  var svg = d3.select("#map")
+    .append("svg")
+    .attr("width", width)
+    .attr("height", height)
+    .attr("overflow", "hidden")
+
+  svg.append("rect")
       .attr("width", width)
       .attr("height", height)
-      .attr("overflow", "hidden")
+      .attr("class", "background")
+  
+  // var projection = d3.geoAlbersUsa()
+  var path = d3.geoPath()//.projection(projection)
+  // var states = topojson.feature(us, us.objects.states);
+  // projection.fitSize([width, height], states);
+  var translateHeight = (IS_MOBILE) ? height*.05 : height*.05
+  var mapScale = (IS_MOBILE) ? width/930 : width/1010
+  var g = svg.append("g")
+    .attr("class", "map-g")
+    .attr("transform", "translate(" + (-10) + "," + (translateHeight) + ")scale(" +mapScale + ")")
 
-    svg.append("rect")
-        .attr("width", width)
-        .attr("height", height)
-        .attr("class", "background")
-    
-    // var projection = d3.geoAlbersUsa()
-    var path = d3.geoPath()//.projection(projection)
-    // var states = topojson.feature(us, us.objects.states);
-    // projection.fitSize([width, height], states);
-    var translateHeight = (IS_MOBILE) ? height*.05 : height*.05
-    var mapScale = (IS_MOBILE) ? width/930 : width/1010
-    var g = svg.append("g")
-      .attr("class", "map-g")
-      .attr("transform", "translate(" + (-10) + "," + (translateHeight) + ")scale(" +mapScale + ")")
+  g.append("g")
+    .attr("class", "counties")
+    .selectAll("path")
+    .data(tmp_county)
+    .enter().append("path")
+    .attr("d", path)
+    .attr("id", function (d) { return d.properties.abbr + d.id; })
+    .style("fill", function(d){ 
+        return (isNaN(d.properties[SELECTED_VARIABLE]) == true) ? "#adabac" : quantize(d.properties[SELECTED_VARIABLE]);
+    })
+    .on('click', function(d) { 
 
+      // when clicked on state, this is a state click if outside of current state
+      // otherwise this is county click. 
 
+      var state = d.properties.state;        
+      var stateData = BigData.tmp_state.filter(function(d){ 
+        return d.properties.state == state
+      })        
+      var selectedState = stateData[0]
+      
+      var previousState = (d3.select(".state-borders > path.selected").node() != null) ? d3.select(".state-borders > path.selected").attr("id") : ""
+      var selectedCounty = (d["properties"])
+      var level = (zoomState == true && previousState == d["properties"]["abbr"]) ? "county": "state";
+      var county = d.properties["county"]
+      var abbr = d.properties["abbr"]
 
-    g.append("g")
-      .attr("class", "counties")
-      .selectAll("path")
-      .data(tmp_county)
-      .enter().append("path")
-      .attr("d", path)
-      .attr("id", function (d) { return d.properties.abbr + d.id; })
-      .style("fill", function(d){ 
-          return (isNaN(d.properties[SELECTED_VARIABLE]) == true) ? "#adabac" : quantize(d.properties[SELECTED_VARIABLE]);
-      })
-      .on('click', function(d) { 
-        var state = d.properties.state;
-        var stateData = BigData.tmp_state.filter(function(d){ 
-          return d.properties.state == state
-        })
-        var selectedState = stateData[0]
-        var previousState = (d3.select(".state-borders > path.selected").node() != null) ? d3.select(".state-borders > path.selected").attr("id") : ""
-        var selectedCounty = (d["properties"])
-        var level = (zoomState == true && previousState == d["properties"]["abbr"]) ? "county": "state";
-        var county = d.properties["county"]
-        var abbr = d.properties["abbr"]
-        if (d3.select(this).classed('selected') == true) {
-          $(".tagit-new").css("display", "block")
-          d3.select(this).classed('selected', false)
-          if (level == "county") { 
-            $('ul.tagit > li:nth-child(2)').remove()
-            setZoom(false, true, false)                
-            updateTable(selectedState,type)
-            updateBars(SELECTED_VARIABLE, d)
-          }
-        }else { 
-          reset()
-          var county = (level == "state") ? null : county;
-          addTag(state, county, abbr)
-          zoomMap(width, d, level)
+      var countyQuery;
+      var stateQuery = selectedState.id;
+
+      if (d3.select(this).classed('selected') == true) {
+        // This is the part where you unselect the county if you click on a selected county. 
+
+        $(".tagit-new").css("display", "block")
+        d3.select(this).classed('selected', false)
+        if (level == "county") { 
+          $('ul.tagit > li:nth-child(2)').remove()
+          setZoom(false, true, false)                
+          updateTable(selectedState,type)
+          updateBars(SELECTED_VARIABLE, d)                        
+        }
+      }else {
+        reset()
+        var county = (level == "state") ? null : county;
+        countyQuery = (level == "state") ? null : d.properties.id
+        
+        addTag(state, county, abbr)
+        zoomMap(width, d, level)
+        updateBars(SELECTED_VARIABLE, d)
+      }
+      updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
+    })
+    .on('mouseover', function(d) {
+      var previousState = (d3.select(".state-borders > path.selected").node() != null) ? d3.select(".state-borders > path.selected").attr("id") : ""
+      var hoveredState = d.properties.abbr
+      var geography = (zoomState == true && previousState == hoveredState) ? "county" : "state";
+      var county = (geography == "county") ? d.properties.county : ""
+      var state = d.properties.abbr
+      if (zoomNational == true ) { 
+        $(".state-borders").css("pointer-events", "all")
+        $(".counties").css("pointer-events", "none")
+        hoverLocation("", d.properties.abbr, "state");
+        updateBars(SELECTED_VARIABLE, d) 
+      }else{
+        if (geography == "state") { 
+          hoverLocation(county, state, geography)
+          updateBars(SELECTED_VARIABLE, d3.select("path#" + hoveredState).datum())
+        }else {
+          hoverLocation(county, state, geography)
           updateBars(SELECTED_VARIABLE, d)
         }
-      })
-      .on('mouseover', function(d) {
-        var previousState = (d3.select(".state-borders > path.selected").node() != null) ? d3.select(".state-borders > path.selected").attr("id") : ""
-        var hoveredState = d.properties.abbr
-        var geography = (zoomState == true && previousState == hoveredState) ? "county" : "state";
-        var county = (geography == "county") ? d.properties.county : ""
-        var state = d.properties.abbr
-        if (zoomNational == true ) { 
-          $(".state-borders").css("pointer-events", "all")
-          $(".counties").css("pointer-events", "none")
-          hoverLocation("", d.properties.abbr, "state");
-          updateBars(SELECTED_VARIABLE, d) 
-        }else{
-          if (geography == "state") { 
-            hoverLocation(county, state, geography)
-            updateBars(SELECTED_VARIABLE, d3.select("path#" + hoveredState).datum())
-          }else {
-            hoverLocation(county, state, geography)
-            updateBars(SELECTED_VARIABLE, d)
-          }
-          // $(".state-borders").css("pointer-events", "none")
-          // $(".counties").css("pointer-events", "all")
+        // $(".state-borders").css("pointer-events", "none")
+        // $(".counties").css("pointer-events", "all")
 
-        }
-      })
-      .on('mouseout', function(d) { 
-        if (d3.select(".counties > path.selected").node() != undefined) { //IF A COUNTY IS SELECTED
-          var county = d3.select(".counties > path.selected").datum().properties.county
-          var abbr = d3.select(".counties > path.selected").datum().properties.abbr
-          d3.selectAll(".state-borders > path").classed("hide", true)
-          d3.select(".state-borders > path#" + abbr).classed("hide", false)
-          d3.select("#location").html(county + ", " + abbr )
+      }
+    })
+    .on('mouseout', function(d) { 
+      if (d3.select(".counties > path.selected").node() != undefined) { //IF A COUNTY IS SELECTED
+        var county = d3.select(".counties > path.selected").datum().properties.county
+        var abbr = d3.select(".counties > path.selected").datum().properties.abbr
+        d3.selectAll(".state-borders > path").classed("hide", true)
+        d3.select(".state-borders > path#" + abbr).classed("hide", false)
+        d3.select("#location").html(county + ", " + abbr )
+        d3.selectAll("path.selected").moveToFront()
+        d3.selectAll(".hover")
+          .classed("hover", false)
+          .classed("hoverNational", false)
+        setZoom(false, true, true)
+        updateBars(SELECTED_VARIABLE, d3.select(".counties > path.selected").datum())
+      }else if (d3.select(".state-borders > path.selected").node() != undefined) { //IF A STATE IS SELECTED
+        var state = d3.select(".state-borders > path.selected").datum().properties.state
+        var abbr = d3.select(".state-borders > path.selected").datum().properties.abbr
+        d3.selectAll(".state-borders > path").classed("hide", true)
+        d3.select(".state-borders > path#" + abbr).classed("hide", false)
+        d3.select("#location").html(state)
+        d3.selectAll("path.selected").moveToFront()
+        d3.selectAll(".hover")
+        .classed("hover", false)
+        .classed("hoverNational", false)
+        setZoom(false, true, false)
+        updateBars(SELECTED_VARIABLE, d3.select(".state-borders > path.selected").datum())
+      }
+    })  
+
+  g.append("g")
+    .attr("class", "state-borders")
+    .selectAll("path")
+    .data(tmp_state)
+    .enter().append("path")
+    .attr("d", path)
+    .attr("id", function(d){
+      return d.properties.abbr
+    })
+    .on('click', function(d) {
+
+      // stateClick 1 is here
+
+      d3.selectAll(".selectedNational").classed("selectedNational", false)
+      var state = d.properties.state;
+      // var county = d.properties.county;
+      var abbr = d.properties.abbr;
+      var level = "state"
+      setZoom(false, true, false)
+      // $(".state-borders").css("pointer-events", "none")
+      // $(".counties").css("pointer-events", "all")
+      addTag(state, null, abbr)        
+      zoomMap(width, d, level)        
+      updateBars(SELECTED_VARIABLE, d)
+
+      var stateQuery = d.properties.id;
+      var countyQuery;
+      updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
+
+    })
+    .on('mouseover', function(d) {         
+
+      if (zoomNational == true || zoomNational_St == true) {                 
+        hoverLocation("", d.properties.abbr, "state");
+        updateBars(SELECTED_VARIABLE, d) 
+      }else {
+        // $(".state-borders").css("pointer-events", "none")
+        // $(".counties").css("pointer-events", "all")
+
+      }
+    })
+    .on('mouseleave', function(d) {         
+
+      if (zoomNational==true || zoomNational_St == true) {
+        if (d3.select(".state-borders > path.selected").node() != undefined && zoomNational_St != true) {
+          var state = d3.select(".state-borders > path.selected").datum().properties.state
+          d3.select("#location").html(state)
           d3.selectAll("path.selected").moveToFront()
+        }else if (zoomNational_St == true){ 
           d3.selectAll(".hover")
             .classed("hover", false)
             .classed("hoverNational", false)
-          setZoom(false, true, true)
-          updateBars(SELECTED_VARIABLE, d3.select(".counties > path.selected").datum())
-        }else if (d3.select(".state-borders > path.selected").node() != undefined) { //IF A STATE IS SELECTED
+          d3.selectAll("path.selected").moveToFront()
+          var selected = (d3.select(".counties > path.selected").size() > 0) ? d3.select(".counties > path.selected").datum() : d3.select(".state-borders > path.selected").datum()
+          var geography = (d3.select(".counties > path.selected").size() > 0) ? selected.properties["county"] + ", " + selected.properties["abbr"] : selected.properties["state"];
+          d3.select('#location').html(geography)
+          updateBars(SELECTED_VARIABLE, selected)
+        }else { 
+          d3.select('#location').html("National")
+          d3.selectAll(".hover")
+            .classed("hover", false)
+            .classed("hoverNational", false)
+          updateBars(SELECTED_VARIABLE, undefined)
+        }
+      }
+    })
+    .on('mouseout', function(d) {         
+
+      if (zoomNational==true || zoomNational_St == true) {
+        if (d3.select(".state-borders > path.selected").node() != undefined && zoomNational_St != true) {
           var state = d3.select(".state-borders > path.selected").datum().properties.state
-          var abbr = d3.select(".state-borders > path.selected").datum().properties.abbr
-          d3.selectAll(".state-borders > path").classed("hide", true)
-          d3.select(".state-borders > path#" + abbr).classed("hide", false)
           d3.select("#location").html(state)
           d3.selectAll("path.selected").moveToFront()
+        }else if (zoomNational_St == true){ 
           d3.selectAll(".hover")
-          .classed("hover", false)
-          .classed("hoverNational", false)
-          setZoom(false, true, false)
-          updateBars(SELECTED_VARIABLE, d3.select(".state-borders > path.selected").datum())
+            .classed("hover", false)
+            .classed("hoverNational", false)
+          d3.selectAll("path.selected").moveToFront()
+          var selected = (d3.select(".counties > path.selected").size() > 0) ? d3.select(".counties > path.selected").datum() : d3.select(".state-borders > path.selected").datum()
+          var geography = (d3.select(".counties > path.selected").size() > 0) ? selected.properties["county"] + ", " + selected.properties["abbr"] : selected.properties["state"];
+          d3.select('#location').html(geography)
+          updateBars(SELECTED_VARIABLE, selected)
+        }else { 
+          d3.select('#location').html("National")
+          d3.selectAll(".hover")
+            .classed("hover", false)
+            .classed("hoverNational", false)
+          updateBars(SELECTED_VARIABLE, undefined)
         }
-      })  
-
-    g.append("g")
-      .attr("class", "state-borders")
-      .selectAll("path")
-      .data(tmp_state)
-      .enter().append("path")
-      .attr("d", path)
-      .attr("id", function(d){
-        return d.properties.abbr
-      })
-      .on('click', function(d) {
-        d3.selectAll(".selectedNational").classed("selectedNational", false)
-        var state = d.properties.state;
-        // var county = d.properties.county;
-        var abbr = d.properties.abbr;
-        var level = "state"
-        setZoom(false, true, false)
-        // $(".state-borders").css("pointer-events", "none")
-        // $(".counties").css("pointer-events", "all")
-        addTag(state, null, abbr)        
-        zoomMap(width, d, level)        
-        updateBars(SELECTED_VARIABLE, d)
-      })
-      .on('mouseover', function(d) {         
-
-        if (zoomNational == true || zoomNational_St == true) {                 
-          hoverLocation("", d.properties.abbr, "state");
-          updateBars(SELECTED_VARIABLE, d) 
-        }else {
-          // $(".state-borders").css("pointer-events", "none")
-          // $(".counties").css("pointer-events", "all")
-
-        }
-      })
-      .on('mouseleave', function(d) {         
-
-        if (zoomNational==true || zoomNational_St == true) {
-          if (d3.select(".state-borders > path.selected").node() != undefined && zoomNational_St != true) {
-            var state = d3.select(".state-borders > path.selected").datum().properties.state
-            d3.select("#location").html(state)
-            d3.selectAll("path.selected").moveToFront()
-          }else if (zoomNational_St == true){ 
-            d3.selectAll(".hover")
-              .classed("hover", false)
-              .classed("hoverNational", false)
-            d3.selectAll("path.selected").moveToFront()
-            var selected = (d3.select(".counties > path.selected").size() > 0) ? d3.select(".counties > path.selected").datum() : d3.select(".state-borders > path.selected").datum()
-            var geography = (d3.select(".counties > path.selected").size() > 0) ? selected.properties["county"] + ", " + selected.properties["abbr"] : selected.properties["state"];
-            d3.select('#location').html(geography)
-            updateBars(SELECTED_VARIABLE, selected)
-          }else { 
-            d3.select('#location').html("National")
-            d3.selectAll(".hover")
-              .classed("hover", false)
-              .classed("hoverNational", false)
-            updateBars(SELECTED_VARIABLE, undefined)
-          }
-        }
-      })
-      .on('mouseout', function(d) {         
-
-        if (zoomNational==true || zoomNational_St == true) {
-          if (d3.select(".state-borders > path.selected").node() != undefined && zoomNational_St != true) {
-            var state = d3.select(".state-borders > path.selected").datum().properties.state
-            d3.select("#location").html(state)
-            d3.selectAll("path.selected").moveToFront()
-          }else if (zoomNational_St == true){ 
-            d3.selectAll(".hover")
-              .classed("hover", false)
-              .classed("hoverNational", false)
-            d3.selectAll("path.selected").moveToFront()
-            var selected = (d3.select(".counties > path.selected").size() > 0) ? d3.select(".counties > path.selected").datum() : d3.select(".state-borders > path.selected").datum()
-            var geography = (d3.select(".counties > path.selected").size() > 0) ? selected.properties["county"] + ", " + selected.properties["abbr"] : selected.properties["state"];
-            d3.select('#location').html(geography)
-            updateBars(SELECTED_VARIABLE, selected)
-          }else { 
-            d3.select('#location').html("National")
-            d3.selectAll(".hover")
-              .classed("hover", false)
-              .classed("hoverNational", false)
-            updateBars(SELECTED_VARIABLE, undefined)
-          }
-        }
-      })
+      }
+    })
 
 
     /*ZOOM OUT BUTTON*/
@@ -963,7 +1355,6 @@ function ready(error, us, county, state, county2, state2) {
           .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
           .style("stroke-width", 1.5 / k + "px");
   }
-
 
   /*LEGEND*/
   /*MOBILE*/
@@ -1070,19 +1461,19 @@ function ready(error, us, county, state, county2, state2) {
         .attr("y",keyHeight*i + 23)
         .attr("x", 38)
         .style("fill", COLORRANGE[i])
-        // .on("mouseover",function(){ mouseEvent({type: "Legend", "class": (d3.select(this).attr("class"))}, "hover") })
-        // .on("mouseleave", function(){
-        //   d3.selectAll(".demphasized").classed("demphasized",false)
-        // })
-    //     .on("click",function(){ mouseEvent(dataID, {type: "Legend", "class": "q" + (this.getAttribute("x")/keyWidth) + "-4"}, "click") })
+
       legend.append("text")
         .attr("x", 33)
         .attr("class","legend-labels " + i)
         .attr("y",keyHeight*i + 23)
         .attr("text-anchor", "end")
         .text(function(){
-          var min = d3.min(BigData.tmp_county, function(d) { 
-            return d.properties[SELECTED_VARIABLE]
+        var min = d3.min(BigData.tmp_county, function(d) { 
+            if (d.properties[SELECTED_VARIABLE] == "n<50") {
+                return 1000000000000
+              } else {
+                return d.properties[SELECTED_VARIABLE]
+              }
           })
           var array = BREAKS[SELECTED_VARIABLE]
           return (i==0) ? formatNumber(min, "min") : formatNumber((array[i-1]))
@@ -1096,11 +1487,7 @@ function ready(error, us, county, state, county2, state2) {
         .attr("y",keyHeight*i + 10)
         .attr("x", 38)
         .style("fill", "#ADABAC")
-        // .on("mouseover",function(){ mouseEvent({type: "Legend", "class": (d3.select(this).attr("class"))}, "hover") })
-        // .on("mouseleave", function(){
-        //   d3.selectAll(".demphasized").classed("demphasized",false)
-        // })
-    //     .on("click",function(){ mouseEvent(dataID, {type: "Legend", "class": "q" + (this.getAttribute("x")/keyWidth) + "-4"}, "click") })
+        
       legend.append("text")
         .attr("x", 33)
         .attr("class","legend-labels " + i)
@@ -1116,11 +1503,13 @@ function ready(error, us, county, state, county2, state2) {
         .attr("y",keyHeight*i + 23)
         .text(function(){
           var max = d3.max(BigData.tmp_county, function(d) { 
-            return d.properties[SELECTED_VARIABLE]
+              if (d.properties[SELECTED_VARIABLE] == "n<50") {
+                return -100
+              } else {
+                return d.properties[SELECTED_VARIABLE]
+              }
           })
-
-          // return formatNumber(max, "max")
-          return Math.ceil(max*100) + "%"
+          return formatNumber(max,"max")
         })
       }
     }
@@ -1184,16 +1573,14 @@ function ready(error, us, county, state, county2, state2) {
       }
     }
 
-    // var groups = ["Share with any debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Median debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Share with medical debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Median medical debt in collections<span class=\"annotation\"><sup>a</sup></span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
-    
-    // var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]
+
     var table = d3.select("#table-div")
       .append("table")
         tbody = table.selectAll('tbody')
           .data(rowData)
           .enter().append("tbody")
           .attr("class", function(d, i) {
-            return "student group group-" + i
+            return type + " group group-" + i
           })
           .on('click', function(d) { 
             d3.selectAll('tbody')
@@ -1208,8 +1595,24 @@ function ready(error, us, county, state, county2, state2) {
             // }
             setVariable(d)
             updateMap(d)
+
+            var stateQuery;
+            var countyQuery;
+
+            // Add in the querystring
+            if (d3.select("g.counties").selectAll("path.selected")._groups["0"].length !== 0) {
+              countyQuery = d3.select("g.counties").selectAll("path.selected").datum().id;  
+            }
+
+            
+            if (d3.select("g.state-borders").selectAll("path.selected")._groups[0].length !== 0) {
+              stateQuery = d3.select("path#" + selectedState.properties.abbr).datum().id;  
+            }
+
+            updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
           })
-    table.select('tbody').classed('selected', true)
+    
+    table.selectAll("tbody").filter(function(d) { return d === typeVar}).classed('selected', true)
     
     var us_data = state_data[0]["values"][0]
     for (var key in us_data) {
@@ -1286,13 +1689,13 @@ function ready(error, us, county, state, county2, state2) {
   // x_ph.domain([0, d3.max(state_data, function(d) { return d[SELECTED_VARIABLE]; })]);
   x_ph.domain([0, d3.max(BigData.county_data, function(d) {
     if (isNaN(d[NONWHITE_ph]) == true && isNaN(d[WHITE_ph]) == true){
-      return d[SELECTED_VARIABLE_ph]
+      return +d[SELECTED_VARIABLE_ph]
     }else if (isNaN(d[NONWHITE_ph]) == true && isNaN(d[WHITE_ph]) == false) {
-      return Math.max(d[WHITE_ph], d[SELECTED_VARIABLE_ph])
+      return Math.max(+d[WHITE_ph], +d[SELECTED_VARIABLE_ph])
     }else if (isNaN(d[WHITE_ph]) == true && isNaN(d[NONWHITE_ph]) == false) {
-      return Math.max(d[NONWHITE_ph], d[SELECTED_VARIABLE_ph])
+      return Math.max(+d[NONWHITE_ph], +d[SELECTED_VARIABLE_ph])
     }else {
-      return Math.max(d[WHITE_ph], d[NONWHITE_ph], d[SELECTED_VARIABLE_ph])
+      return Math.max(+d[WHITE_ph], +d[NONWHITE_ph], +d[SELECTED_VARIABLE_ph])
     }
   })])
   y_ph.domain(us_data_ph.map(function(d) { return d[SELECTED_VARIABLE_ph]; }));
@@ -1402,24 +1805,25 @@ function ready(error, us, county, state, county2, state2) {
     rectG_ph.selectAll(".data-label-ph")
       .data([us_data])
       .attr("x", function(d) { 
-        var parentClass = $(this).closest(".rect-g").attr("class")
-        if (parentClass.search("All") > -1) { 
-          return x_ph(d[SELECTED_VARIABLE_ph]) + 5
-        }else if (parentClass.search("Non") > -1) {
-          return x_ph(d[NONWHITE_ph]) + 5
-        }else{
-          return x_ph(d[WHITE_ph]) + 5
-        }
+        return barX(d,this,SELECTED_VARIABLE_ph,NONWHITE_ph,WHITE_ph,x_ph)
       })
       .text(function(d) { 
+        console.log(isNaN(d[NONWHITE_ph]))
         var parentClass = $(this).closest(".rect-g").attr("class")
-        if (parentClass.search("All") > -1) { 
-          return formatNumber(d[SELECTED_VARIABLE_ph])
-        }else if (parentClass.search("Non") > -1) {
-          return formatNumber(d[NONWHITE_ph])
-        }else{
-          return formatNumber(d[WHITE_ph])
+        if (SELECTED_VARIABLE_ph !== "perc_pop_nw") {
+          if (parentClass.search("All") > -1) { 
+            return formatNumber(d[SELECTED_VARIABLE_ph])
+          }else if (parentClass.search("Non") > -1) {
+            return formatNumber(d[NONWHITE_ph])
+          }else{
+            return formatNumber(d[WHITE_ph])
+          }
+        } else {
+          if (parentClass.search("All") > -1) {
+            return formatNumber(d[SELECTED_VARIABLE_ph])
+          }
         }
+        
       })
     rectG_ph
       .append("g")
@@ -1447,15 +1851,26 @@ function ready(error, us, county, state, county2, state2) {
       .attr("y", 0)
       .attr("class", "bar-ph")
       .attr("height", y_ph.bandwidth())
-      .attr("width", function(d) { 
-        var parentClass = d3.select(this.parentNode).attr('class');
-        if (parentClass.search("All") > -1) {
-          return x_ph(d[SELECTED_VARIABLE_ph])
-        }else if (parentClass.search("Non") > -1) {
-          return x_ph(d[NONWHITE_ph])
-        }else{
-          return x_ph(d[WHITE_ph])
+      .attr("width", function(d) {        
+        var parentClass = d3.select(this.parentNode).attr('class');      
+        if (SELECTED_VARIABLE_ph !== "perc_pop_nw") {
+          if (parentClass.search("All") > -1) {      
+            return x_ph(+d[SELECTED_VARIABLE_ph])
+          }else if (parentClass.search("Non") > -1) {
+            return x_ph(+d[NONWHITE_ph])
+          }else{
+            return x_ph(+d[WHITE_ph])
+          }          
+        } else {
+          if (parentClass.search("All") > -1) {
+            return x_ph(+d[SELECTED_VARIABLE_ph])
+          }
+          else {
+            return 0;
+          }
+          
         }
+
       })
       .attr("fill", function(d) { 
         var parentClass = d3.select(this.parentNode).attr('class');
@@ -1468,6 +1883,9 @@ function ready(error, us, county, state, county2, state2) {
         }
       })
   }
+
+  // this hides "white" and "non-white"
+  hideBars(SELECTED_VARIABLE_ph)
 
     /*DESKTOP*/
 
@@ -1594,24 +2012,10 @@ function ready(error, us, county, state, county2, state2) {
       })
       .attr("width", x.bandwidth())
       .attr("y", function(d) { 
-        var parentClass = d3.select(this.parentNode).attr('class');
-        if (parentClass.search("All") > -1) {
-          return y(d[SELECTED_VARIABLE])
-        }else if (parentClass.search("Non") > -1) {
-          return y(d[NONWHITE])
-        }else{
-          return y(d[WHITE])
-        }
+        return barY(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,y,barHeight)
       })
       .attr("height", function(d) {
-        var parentClass = d3.select(this.parentNode).attr('class');
-        if (parentClass.search("All") > -1) {
-          return barHeight - y(d[SELECTED_VARIABLE])
-        }else if (parentClass.search("Non") > -1){
-          return barHeight - y(d[NONWHITE])
-        }else{
-          return barHeight - y(d[WHITE])
-        }
+        return barH(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,y,barHeight)        
       })
     d3.selectAll(".rect-g")
       .each(function(d,i) {
@@ -1621,14 +2025,7 @@ function ready(error, us, county, state, county2, state2) {
         .attr("class", "bar-text")
         .attr("x", 0)
         .attr("y", function(d) {
-          var parentClass = d3.select(this.parentNode).attr('class');
-          if (parentClass.search("All") > -1) {
-            return y(d[SELECTED_VARIABLE]) - 16
-          }else if (parentClass.search("Non") > -1) {
-            return y(d[NONWHITE]) - 16
-          }else{
-            return y(d[WHITE]) - 16
-          }
+          return labelY(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,y,barHeight)
         })
         .attr("dy", ".71em")
         .attr("text-anchor", "start")
@@ -1645,29 +2042,10 @@ function ready(error, us, county, state, county2, state2) {
         })
       })
 
-    // d3.selectAll(".bar-text")
-    //   .each(function(d,i) {console.log(i)
-    //     d3.select(this)
-    //       .classed(categories[i], true)
-    //   })
+  hidelimited(SELECTED_VARIABLE)
 
-    // barText
-    //   .append("text")
-
-
-    d3.selectAll("#State, #County").style("opacity", 0)
-
-  function formatNumber(d, type) { 
-    var percent = d3.format(",.0%"),
-        number = d3.format("$,.0f");
-    if (type == "max") {
-      return (d<1) ? percent(Math.ceil(d * 10) / 10 ) : number( Math.ceil((d+1)/10)*10)
-    }else if (type == "min") {
-      return (d<1) ? percent(Math.floor(d * 100) / 100 ) : number( Math.floor((d+1)/10)*10)
-    }else {
-      return (d<1) ? percent(d) : number(d);
-    }
-  }
+  // Dan NOTE this hides state and county off the bat, but we will need to update this at some point. 
+  d3.selectAll("#State, #County").style("opacity", 0)  
 
   function updateMap(variable) {
     
@@ -1772,16 +2150,7 @@ function ready(error, us, county, state, county2, state2) {
     })
     var selected = (d3.select("path.selected").node() != null) ? (d3.select("path.selected").datum()) : undefined
     updateBars(variable, selected)
-    //REMOVE WHITE AND NONWHITE BARS IF NONWHITE POP VARIABLE IS SELECTED
-    if (variable == "perc_pop_nw") {
-      d3.select("#County").selectAll(".White, .Nonwhite").style("opacity", 0)
-      d3.select("#State").selectAll(".White, .Nonwhite").style("opacity", 0)
-      d3.select("#National").selectAll(".White, .Nonwhite").style("opacity", 0)
-    }else {
-      d3.select("#County").selectAll(".White, .Nonwhite").style("opacity", 1)
-      d3.select("#State").selectAll(".White, .Nonwhite").style("opacity", 1)
-      d3.select("#National").selectAll(".White, .Nonwhite").style("opacity", 1)
-    }
+
   }
 
   function updateBars(variable, selected) { 
@@ -1803,7 +2172,6 @@ function ready(error, us, county, state, county2, state2) {
     var WHITE_ph = variable + "_wh"
     var NONWHITE_ph = variable + "_nw"
     var data = BigData.county_data;
-    
 
     /**MOBILE**/
     if (IS_PHONE) {   
@@ -1842,47 +2210,17 @@ function ready(error, us, county, state, county2, state2) {
             .data(BigData.us_data_ph)
             .transition()
             .duration(300)
-            .attr("width", function(d) { 
-              var parentClass = d3.select(this.parentNode).attr('class');
-              if (parentClass.search("All") > -1) {
-                return (isNaN(d[variable]) != true) ? x_ph(d[variable]) : 0
-              }else if (parentClass.search("Non") > -1) {
-                return (isNaN(d[NONWHITE_ph]) != true) ?  x_ph(d[NONWHITE_ph]) : 0
-              }else{
-                return (isNaN(d[WHITE_ph]) != true) ?  x_ph(d[WHITE_ph]) : 0
-              }
+            .attr("width", function(d) {
+              return barW(d,this,variable,NONWHITE_ph,WHITE_ph,x_ph)
             })
           d3.select(this).select(".data-label-ph")
             .data(BigData.us_data_ph)
             .attr("x", function(d) { 
-              var parentClass = $(this).closest(".rect-g").attr("class")
-              if (parentClass.search("All") > -1) {
-                return (isNaN(d[variable]) != true) ? x_ph(d[variable]) + 5 : 0
-              }else if (parentClass.search("Non") > -1) {
-                return (isNaN(d[NONWHITE_ph]) != true) ? x_ph(d[NONWHITE_ph]) + 5 : 0
-              }else{
-                return (isNaN(d[WHITE_ph]) != true) ? x_ph(d[WHITE_ph]) + 5 : 0
-              }
+              return barX(d,this,variable,NONWHITE_ph,WHITE_ph,x_ph)
             })
             .attr("y", 12)
             .html(function(d) { 
-              var parentClass = $(this).closest(".rect-g").attr("class")
-              if (parentClass.search("All") > -1) { 
-                var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-                var noData_wh = (d[WHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-                var noData_nw = (d[NONWHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-                if (d[NONWHITE_ph] == "n<50" || (d[WHITE_ph]) == "n<50" || (d[variable]) == "n<50") { 
-                  d3.select("#notes-section > p.note1").style("opacity", 1)
-                }
-                if ((d[variable]) == "N/A" || (d[NONWHITE_ph]) == "N/A" || (d[WHITE_ph]) == "N/A") {
-                  d3.select("#notes-section > p.note2").style("opacity", 1)
-                }
-                return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
-              }else if (parentClass.search("Non") > -1) {
-                return (isNaN(d[NONWHITE_ph]) != true) ? formatNumber(d[NONWHITE_ph]) : noData_nw
-              }else{
-                return (isNaN(d[WHITE_ph]) != true) ? formatNumber(d[WHITE_ph]) : noData_wh
-              }
+              return labelHTML_ph(d,this,variable,NONWHITE_ph,WHITE_ph)
             })
         })
 
@@ -1895,46 +2233,15 @@ function ready(error, us, county, state, county2, state2) {
             .duration(300)
             // .attr("height", y_ph.bandwidth())
             .attr("width", function(d) { 
-              var parentClass = d3.select(this.parentNode).attr('class');
-              if (parentClass.search("All") > -1) { 
-                return (isNaN(d[variable]) != true) ? x_ph(d[variable]) : 0
-              }else if (parentClass.search("Non") > -1) {
-                return (isNaN(d[NONWHITE_ph]) != true) ?x_ph(d[NONWHITE_ph]) : 0
-              }else{
-                return (isNaN(d[WHITE_ph]) != true) ? x_ph(d[WHITE_ph]) : 0
-              }
+              return barW(d,this,variable,NONWHITE_ph,WHITE_ph,x_ph)
             })
           d3.select(this).select(".data-label-ph")
             .data(state_data_ph)
             .attr("x", function(d) { 
-              var parentClass = $(this).closest(".rect-g").attr("class")
-              if (parentClass.search("All") > -1) {
-                return (isNaN(d[variable]) != true) ? x_ph(d[variable]) + 5 : 0
-              }else if (parentClass.search("Non") > -1) { 
-                return (isNaN(d[NONWHITE_ph]) != true) ? x_ph(d[NONWHITE_ph]) + 5 : 0
-              }else{
-                return (isNaN(d[WHITE_ph]) != true) ? x_ph(d[WHITE_ph]) + 5 : 0
-              }
+              return barX(d,this,variable,NONWHITE_ph,WHITE_ph,x_ph)
             })
             .html(function(d) { 
-              var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-              var noData_wh = (d[WHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-              var noData_nw = (d[NONWHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-              var parentClass = $(this).closest(".rect-g").attr("class")
-              if (d[NONWHITE_ph] == "n<50" || (d[WHITE_ph]) == "n<50" || (d[variable]) == "n<50") { 
-                d3.select("#notes-section > p.note1").style("opacity", 1)
-
-              }
-              if ((d[variable]) == "N/A" || (d[NONWHITE_ph]) == "N/A" || (d[WHITE_ph]) == "N/A") {
-                d3.select("#notes-section > p.note2").style("opacity", 1)
-              }
-              if (parentClass.search("All") > -1) { 
-                return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
-              }else if (parentClass.search("Non") > -1) {
-                return (isNaN(d[NONWHITE_ph]) != true) ? formatNumber(d[NONWHITE_ph]) : noData_nw
-              }else{
-                return (isNaN(d[WHITE_ph]) != true) ? formatNumber(d[WHITE_ph]) : noData_wh
-              }
+              return labelHTML_ph(d,this,variable,NONWHITE_ph,WHITE_ph)
             })
         })
       if (selectedCountyPh != "") {
@@ -1947,51 +2254,23 @@ function ready(error, us, county, state, county2, state2) {
               .duration(300)
               // .attr("height", y_ph.bandwidth())
               .attr("width", function(d) { 
-                var parentClass = d3.select(this.parentNode).attr('class');
-                if (parentClass.search("All") > -1) { 
-                  return (isNaN(d[variable]) != true) ? x_ph(d[variable]) : 0
-                }else if (parentClass.search("Non") > -1) {
-                  return (isNaN(d[NONWHITE_ph]) != true) ? x_ph(d[NONWHITE_ph]) : 0
-                }else{
-                  return (isNaN(d[WHITE_ph]) != true) ? x_ph(d[WHITE_ph]) : 0
-                }
+                return barW(d,this,variable,NONWHITE_ph,WHITE_ph,x_ph)
               })
             d3.select(this).select(".data-label-ph")
               .data(county_data_ph)
               .attr("x", function(d) { 
-                var parentClass = $(this).closest(".rect-g").attr("class")
-                if (parentClass.search("All") > -1) {
-                  return (isNaN(d[variable]) != true) ? x_ph(d[variable]) + 5 : 0
-                }else if (parentClass.search("Non") > -1) {
-                  return (isNaN(d[NONWHITE_ph]) != true) ? x_ph(d[NONWHITE_ph]) + 5 : 0
-                }else{
-                  return (isNaN(d[WHITE_ph]) != true) ? x_ph(d[WHITE_ph]) + 5 : 0
-                }
+                return barX(d,this,variable,NONWHITE_ph,WHITE_ph,x_ph)
               })
               .html(function(d) { 
-                var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-                var noData_wh = (d[WHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-                var noData_nw = (d[NONWHITE_ph] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-
-                if (d[NONWHITE_ph] == "n<50" || (d[WHITE_ph]) == "n<50" || (d[variable]) == "n<50") { 
-                  d3.select("#notes-section > p.note1").style("opacity", 1)
-                }
-                if ((d[variable]) == "N/A" || (d[NONWHITE_ph]) == "N/A" || (d[WHITE_ph]) == "N/A") {
-                  d3.select("#notes-section > p.note2").style("opacity", 1)
-                }
-                var parentClass = $(this).closest(".rect-g").attr("class")
-                if (parentClass.search("All") > -1) { 
-                  return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
-                }else if (parentClass.search("Non") > -1) {
-                  return (isNaN(d[NONWHITE_ph]) != true) ? formatNumber(d[NONWHITE_ph]) : noData_nw
-                }else{
-                  return (isNaN(d[WHITE_ph]) != true) ? formatNumber(d[WHITE_ph]) : noData_wh
-                }
-                // return "<tspan font-style='italic'>fart</tspan>"
+                return labelHTML_ph(d,this,variable,NONWHITE_ph,WHITE_ph,"yes")
               })
           })
       }
-    }else {    
+
+    
+    hideBars(variable)
+
+    }else {
       /*DESKTOP*/
     var data =  BigData.county_data;
 
@@ -2026,60 +2305,31 @@ function ready(error, us, county, state, county2, state2) {
     })])
 
       var National = d3.select("#National").selectAll(".category")
+      
       National
-        .each(function() {
+        .each(function() {          
+
           d3.select(this).select(".bar")
             .data([us_data])
             .transition()
             .duration(300)
             .attr("y", function(d) {  
-              var parentClass = d3.select(this.parentNode).attr('class');
-              if (parentClass.search("All") > -1) { 
-                return (isNaN(d[variable]) != true) ? y(d[variable]) : barHeight;
-              }else if (parentClass.search("Non") > -1) { 
-                return (isNaN(d[NONWHITE]) != true) ? y(d[NONWHITE]) : barHeight;
-              }else {
-                return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) : barHeight;
-              }
+              return barY(d,this,variable,NONWHITE,WHITE,y,barHeight)
             })
             .attr("height", function(d) { 
-              var parentClass = d3.select(this.parentNode).attr('class');
-              if (parentClass.search("All") > -1) { 
-                return (isNaN(d[variable]) != true) ? barHeight - y(d[variable]) : 0;
-              }else if (parentClass.search("Non") > -1){ 
-                return (isNaN(d[NONWHITE]) != true) ? barHeight - y(d[NONWHITE]) : 0;
-              }else {
-                return (isNaN(d[WHITE]) != true) ? barHeight - y(d[WHITE]) : 0;
-              }
+              return barH(d,this,variable,NONWHITE,WHITE,y,barHeight)
             })
 
             d3.select(this).select(".data-label")
               .data([us_data])
               .attr("y", function(d) {
-                var parentClass = d3.select(this.parentNode).attr('class');
-                if (parentClass.search("All") > -1) {
-                  return (isNaN(d[variable]) != true) ? y(d[variable]) - 16 : barHeight - 8;
-                }else if (parentClass.search("Non") > -1) {
-                  return (isNaN(d[NONWHITE]) != true) ? y(d[NONWHITE]) - 16 : barHeight - 8;
-                }else{
-                  return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) - 16 : barHeight - 8;
-                }
+                return labelY(d,this,variable,NONWHITE,WHITE,y,barHeight)
               })
             .html(function(d) { 
-              var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-              var noData_wh = (d[WHITE] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-              var noData_nw = (d[NONWHITE] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-              var parentClass = d3.select(this.parentNode).attr('class');
-              if (parentClass.search("All") > -1) {
-                return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
-              }else if (parentClass.search("Non") > -1) {
-                return (isNaN(d[NONWHITE]) != true) ? formatNumber(d[NONWHITE]) : noData_nw
-              }else{
-                return (isNaN(d[WHITE]) != true) ? formatNumber(d[WHITE]) : noData_wh
-              }
+              return labelHTML(d,this,variable,NONWHITE,WHITE)              
             })
         })
-      if ( (zoomNational == true) && selected == null) { 
+      if ( (zoomNational == true) && selected == null) {         
         d3.selectAll("#State, #County").style("opacity", 0)
       }else if (zoomNational_St && selected == null) {
       } else if (zoomNational == false || selected != null) { //IF MOUSE IS OVER A STATE OR COUNTY IN WHICHEVER VIEW
@@ -2092,57 +2342,28 @@ function ready(error, us, county, state, county2, state2) {
         var selectedState = d3.select("path#" + selected["properties"]["abbr"]).datum()
         var stateData = selectedState["properties"]
         d3.select("#State").select(".group-label-2").text(stateData["state"])
+        
         State
           .each(function() {
+
             d3.select(this).select(".bar")
               .data([stateData])
               .transition()
               .duration(300)
               .attr("y", function(d) {  
-                var parentClass = d3.select(this.parentNode).attr('class');
-                if (parentClass.search("All") > -1) { 
-                  return (isNaN(d[variable]) != true) ? y(d[variable]) : barHeight;
-                }else if (parentClass.search("Non") > -1) {
-                  return (isNaN(d[NONWHITE]) != true) ? y(d[NONWHITE]) : barHeight;
-                }else {
-                  return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) : barHeight;
-                }
+                return barY(d,this,variable,NONWHITE,WHITE,y,barHeight)
               })
               .attr("height", function(d) {
-                var parentClass = d3.select(this.parentNode).attr('class');
-                if (parentClass.search("All") > -1) {
-                  return (isNaN(d[variable]) != true) ? barHeight - y(d[variable]) : 0;
-                }else if (parentClass.search("Non") > -1){
-                  return (isNaN(d[NONWHITE]) != true) ? barHeight - y(d[NONWHITE]) : 0;
-                }else {
-                  return (isNaN(d[WHITE]) != true) ? barHeight - y(d[WHITE]) : 0;
-                }
+                return barH(d,this,variable,NONWHITE,WHITE,y,barHeight)
               })
 
             d3.select(this).select(".data-label")
               .data([stateData])
               .attr("y", function(d) {
-                var parentClass = d3.select(this.parentNode).attr('class');
-                if (parentClass.search("All") > -1) {
-                  return (isNaN(d[variable]) != true) ? y(d[variable]) - 16 : barHeight - 8;
-                }else if (parentClass.search("Non") > -1) {
-                  return (isNaN(d[NONWHITE]) != true) ? y(d[NONWHITE]) - 16 : barHeight - 8;
-                }else{
-                  return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) - 16 : barHeight - 8;
-                }
+                return labelY(d,this,variable,NONWHITE,WHITE,y,barHeight)
               })
               .html(function(d) { 
-                var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-                var noData_wh = (d[WHITE] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-                var noData_nw = (d[NONWHITE] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-                var parentClass = d3.select(this.parentNode).attr('class');
-                if (parentClass.search("All") > -1) {
-                  return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
-                }else if (parentClass.search("Non") > -1) {
-                  return (isNaN(d[NONWHITE]) != true) ? formatNumber(d[NONWHITE]) : noData_nw
-                }else{
-                  return (isNaN(d[WHITE]) != true) ? formatNumber(d[WHITE]) : noData_wh
-                }
+                return labelHTML(d,this,variable,NONWHITE,WHITE)              
               })
           })
             if (countyID.slice(0,2) == state || countyIDHov.slice(0,2) == state) { 
@@ -2165,54 +2386,24 @@ function ready(error, us, county, state, county2, state2) {
 
             County
               .each(function() {
+
                 d3.select(this).select(".bar")
                   .data([countyData])
                   .transition()
                   .duration(300)
                   .attr("y", function(d) {  
-                    var parentClass = d3.select(this.parentNode).attr('class');
-                    if (parentClass.search("All") > -1) { 
-                      return (isNaN(d[variable]) != true) ? y(d[variable]) : barHeight;
-                    }else if (parentClass.search("Non") > -1) {
-                      return (isNaN(d[NONWHITE]) != true) ? y(d[NONWHITE]) : barHeight;
-                    }else {
-                      return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) : barHeight;
-                    }
+                    return barY(d,this,variable,NONWHITE,WHITE,y,barHeight)
                   })
                   .attr("height", function(d) {
-                    var parentClass = d3.select(this.parentNode).attr('class');
-                    if (parentClass.search("All") > -1) {
-                      return (isNaN(d[variable]) != true) ? barHeight - y(d[variable]) : 0;
-                    }else if (parentClass.search("Non") > -1){
-                      return (isNaN(d[NONWHITE]) != true) ? barHeight - y(d[NONWHITE]) : 0;
-                    }else {
-                      return (isNaN(d[WHITE]) != true) ? barHeight - y(d[WHITE]) : 0;
-                    }
+                    return barH(d,this,variable,NONWHITE,WHITE,y,barHeight)
                   })
               d3.select(this).select(".data-label")
                 .data([countyData])
                 .attr("y", function(d) {
-                  var parentClass = d3.select(this.parentNode).attr('class');
-                  if (parentClass.search("All") > -1) {
-                    return (isNaN(d[variable]) != true) ? y(d[variable]) - 16 : barHeight -8;
-                  }else if (parentClass.search("Non") > -1) {
-                    return (isNaN(d[NONWHITE]) != true) ? y(d[NONWHITE]) - 16 : barHeight - 8;
-                  }else{
-                    return (isNaN(d[WHITE]) != true) ? y(d[WHITE]) - 16 : barHeight - 8;
-                  }
+                  return labelY(d,this,variable,NONWHITE,WHITE,y,barHeight)
                 })
                 .html(function(d) { 
-                  var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-                  var noData_wh = (d[WHITE] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-                  var noData_nw = (d[NONWHITE] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-                  var parentClass = d3.select(this.parentNode).attr('class');
-                  if (parentClass.search("All") > -1) {
-                    return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
-                  }else if (parentClass.search("Non") > -1) {
-                    return (isNaN(d[NONWHITE]) != true) ? formatNumber(d[NONWHITE]) : noData_nw
-                  }else{
-                    return (isNaN(d[WHITE]) != true) ? formatNumber(d[WHITE]) : noData_wh
-                  }
+                  return labelHTML(d,this,variable,NONWHITE,WHITE)              
                 })
               })
           }else {
@@ -2222,9 +2413,11 @@ function ready(error, us, county, state, county2, state2) {
         }
     }
 
+    //REMOVE WHITE AND NONWHITE BARS IF NONWHITE POP VARIABLE IS SELECTED
+    hidelimited(variable)
   }
 
-  function addTag(state, county, abbr) { 
+  function addTag(state, county, abbr) {   
       var widgetHeight = (IS_MOBILE) ? 80 : 60;
       ($(".search-div > .ui-widget").css("height", widgetHeight))
       d3.selectAll('li.tagit-choice').remove()
@@ -2254,6 +2447,11 @@ function ready(error, us, county, state, county2, state2) {
         setZoom(true,false, false)
         zoomMap(width, null, "national")
         createSearchArray("")
+
+        var stateQuery;
+        var countyQuery;
+
+        updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
       })
 
     if (county != undefined) { 
@@ -2290,6 +2488,10 @@ function ready(error, us, county, state, county2, state2) {
 
 
         updateTable(stateData[0],type)
+        var stateQuery = stateData[0].id;
+        var countyQuery;
+        updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
+
       })
       
       updateBars(SELECTED_VARIABLE, filteredData[0])
@@ -2330,7 +2532,7 @@ function ready(error, us, county, state, county2, state2) {
             return type + " new group group-" + i
           })
           // .merge(tbody)
-          .on('click', function(d) { 
+          .on('click', function(d) {             
             d3.selectAll('tbody')
               .classed('selected', false)
             d3.select(this)
@@ -2406,7 +2608,7 @@ function ready(error, us, county, state, county2, state2) {
 
       // create a means. (ABOVE) for passing through new data to the tables. 
     }
-    // console.log(data)
+
     var data = (zoomNational == true) ? data : data["properties"];
     d3.selectAll("p.note1, p.note2").style("opacity", 1)
     d3.selectAll(".cell-data")
@@ -2448,7 +2650,6 @@ function ready(error, us, county, state, county2, state2) {
 
 
   function zoomMap(width, d,zoomLevel) { 
-
     var x, y, k;
     d3.select(".state-borders").selectAll("path")
       .classed("hide", false)
@@ -2555,7 +2756,7 @@ function ready(error, us, county, state, county2, state2) {
   }
 
   $(window).resize(function() { 
-    setScreenState (d3.select("#isMobile").style("display") == "block", d3.select("#isPhone").style("display") == "block", d3.select("#isPhoneSm").style("display") == "block" )
+    setScreenState (d3.select("#isMobile").style("display") === "block", d3.select("#isPhone").style("display") === "block", d3.select("#isPhoneSm").style("display") === "block" )
     initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width() 
     barSvgHeight = (IS_MOBILE) ? 185 : 130
     barSvgHeight_ph = (IS_PHONESM) ? 200 : 173
@@ -2624,7 +2825,7 @@ function ready(error, us, county, state, county2, state2) {
         .attr("width", barWidth_ph)
         .attr("height", barSvgHeight_ph)
       d3.selectAll(".bar-ph")
-        .attr("width", function(d) {            
+        .attr("width", function(d) {     
           var parentClass = d3.select(this.parentNode).attr('class');
           if (parentClass.search("All") > -1) {            
             return (isNaN(d[SELECTED_VARIABLE_ph]) != true) ? x_ph(d[SELECTED_VARIABLE_ph]) : 0
@@ -2809,7 +3010,86 @@ function ready(error, us, county, state, county2, state2) {
  
   })
 
+  // Zoom the map if the urlquery contains state and/or county
+  if (Startquery) {
+    if (Startquery["county"] || Startquery["state"]) {
 
+      // if there is a county but no state listed
+      if (!Startquery["state"]) {
+        // add state to startquery
+        stateQuery = parseInt(Startquery["county"].substring(0,2));
+        Startquery["state"] = stateQuery;
+        // add state to url string
+
+        updateQueryString(type,typeVar,stateQuery,Startquery["county"])
+      }
+
+      var geoData = BigData.tmp_county 
+      var geoType = (Startquery["county"]) ? "county" : "state";
+
+      // var geography = (geoType == "county") ? county : state;
+      // selectedLocation()
+
+      var filteredData = geoData.filter(function(d) {
+        if (geoType == "county") {
+          return d.id == Startquery["county"];
+        }else { 
+          return d.properties["state_id"] == Startquery["state"];
+        }
+      })
+
+      //  convert state number to state name      
+
+      var data = filteredData[0]
+
+      
+      zoomMap(width, data, geoType)
+
+      // do stuff for county and mobile
+      $("#state-select").val(filteredData[0].properties.state)
+      $("#state-select").selectmenu("refresh")      
+      selectedLocation()
+      $(".bar-State").css("display", "block")
+      $(".label-State").css("display", "block")
+
+      updateBars(typeVar, filteredData[0].properties.state)
+
+      d3.select(".group-label-ph2.State").text(filteredData[0].properties.state)
+      d3.select(".group-label-ph.State").text(filteredData[0].properties.state)
+
+      filterCountyMenu(filteredData[0].properties.state)
+
+      d3.select(".county-menu").select(".ui-icon").classed("greyed", false)
+      $("#county-select").selectmenu("refresh")
+      if (geoType == "county") { 
+        addTag(data.properties.state,data.properties.county,data.properties.abbr)
+
+        // do stuff for county and mobile
+
+        $(".bar-County").css("display", "block")
+        $(".label-County").css("display", "block")
+        
+        $("#county-select").val(filteredData[0].properties.county)
+        $("#county-select").selectmenu("refresh")
+
+        selectedLocation()
+
+        updateBars(typeVar, filteredData[0].properties.county)
+        d3.select(".group-label-ph2.County").text(filteredData[0].properties.county)
+        d3.select(".group-label-ph.County").text(filteredData[0].properties.county)      
+
+      }else {
+        addTag(data.properties.state,null,data.properties.abbr)
+        var filter = data["properties"]["abbr"]
+        createSearchArray(filter)
+      }
+
+
+    }
+
+
+    $('#category-select').val(Startquery["variable"]);
+    $("#category-select").selectmenu("refresh")
+
+  };   
 };
-
-
