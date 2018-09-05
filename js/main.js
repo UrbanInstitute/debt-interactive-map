@@ -85,7 +85,7 @@ function decodeQuery(location) {
   return obj;
 }
 
-function updateQueryString(type,variable,state,county){
+function updateQueryString(type,variable,state,county,print){
 
   var queryString = "";
 
@@ -113,6 +113,12 @@ function updateQueryString(type,variable,state,county){
     }
 
     queryString += "&county=" + county;
+  } else {
+    queryString += "";
+  }
+
+  if (print) {
+    queryString += "&print=true"
   } else {
     queryString += "";
   }
@@ -368,6 +374,25 @@ function OverallTransformData(us, county, state, countyData, stateData) {
   return bigbig;
 }
 
+function buildprint(Startquery) { 
+  console.log('inside buildprint')
+
+  // grab the correct data and variables
+  if (Startquery) {
+    if (Startquery["county"] || Startquery["state"]) {
+      // state or county 
+    } 
+    else {
+      // national 
+    }
+  } else {
+    // defaults
+  }
+
+  // run a for loop through the variables
+
+  // updateBars(variable, selected)
+}
 
 function ready(error, us, county, state, county2, state2) {
   if (error) throw error;
@@ -425,7 +450,17 @@ function ready(error, us, county, state, county2, state2) {
       // DONE AT THE VERY BOTTOM OF THE ENTIRE READY/JS SCRIPT
 
     // need to do mobile!
-    // set the category/variable (both the set and the exact one)
+    // a lot happens at the bottom
+
+    // TRIGGER PRINT VIEW
+    if (Startquery["print"] === "true") {
+      console.log("start build print")
+      buildprint(Startquery)  
+    }
+    else{
+      console.log("no PRINT")
+    }
+    
   }
 
   // If there is no query at the beginning
@@ -2154,6 +2189,9 @@ function ready(error, us, county, state, county2, state2) {
   }
 
   function updateBars(variable, selected) { 
+
+console.log(variable)
+console.log(selected)
 
     var us_data = BigData.state_data[0]["values"][0]
     for (var key in us_data) {

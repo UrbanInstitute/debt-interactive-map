@@ -96,6 +96,6 @@
   display: none;
 }
 /* line 140, ../sass/print.scss */
-.print .td-table #notes-div, .print .td-table .search-div-main, .print .td-table .select-table {
+.print .td-table .search-div-main, .print .td-table .select-table {
   display: none;
 }

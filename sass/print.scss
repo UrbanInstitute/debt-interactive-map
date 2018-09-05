@@ -137,9 +137,14 @@ $icon-width-buffer: 20px;
 	.td-table {
 		// display: none;
 
-		#notes-div, .search-div-main, .select-table {
+		.search-div-main, .select-table {
 			display: none;
 		}	
+
+		#notes-section {
+			// font-size: 7px !important;
+
+		}
 	}
 }
 
