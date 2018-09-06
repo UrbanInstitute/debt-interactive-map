@@ -4,6 +4,18 @@ var IS_PHONESM;
 var BREAKS ={"perc_debt_collect":[0.22, .31, .39, .49],"med_debt_collect":[1200, 1500, 1800, 2300], "perc_debt_med":[.11,.18,.26,.34], "med_debt_med":[500,700,950,1250], "perc_pop_nw":[.13,.28,.46,.67], "perc_pop_no_ins":[.08,.13,.18,.26], "avg_income":[52650,63850,77900,101050],"perc_stud_debt":[0.10,0.13,0.16,0.20],"med_stud_debt": [12550,15050,17450,20350],"perc_stud_debt_collect": [0.01,0.02,0.03,0.06],"perc_stud_debt_collect_STUD": [0.07,0.13,0.2,0.3],"med_stud_debt_collect": [6150,7550,9000,10700],"med_mon_pmt": [135,155,175,195],"perc_no_bach": [0.59,0.71,0.79,0.85]};
 var legendWidth = {"perc_debt_collect": 60,"perc_debt_med": 58,"med_debt_collect": 73,"med_debt_med": 70,"perc_pop_nw": 63,"perc_pop_no_ins": 60,"avg_income": 89,"perc_stud_debt":60,"med_stud_debt":89,"perc_stud_debt_collect":60,"perc_stud_debt_collect_STUD":60,"med_stud_debt_collect":89,"med_mon_pmt":70,"perc_no_bach":60};
 
+var variableList = {
+  "medical":{
+    "groups": ["Share with any debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Median debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Share with medical debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Median medical debt in collections<span class=\"annotation\"><sup>a</sup></span>","Nonwhite population share", "Share without health insurance coverage","Average household income"],
+    "variables": ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]
+  },
+  "student":{
+    "groups":["Share with student loan debt<span class=\"annotation\"><sup>a</sup></span>","Median student loan debt<span class=\"annotation\"><sup>a</sup></span>","Share of student loan holders with student loan debt in collections<span class=\"annotation\"><sup>a</sup> <sup>d</sup></span>","Median student loan debt in collections<span class=\"annotation\"><sup>a</sup></span>","Median monthly student loan payment<span class=\"annotation\"><sup>a</sup></span>","Share of people with credit records who have student loan debt in collections<span class=\"annotation\"><sup>a</sup> <sup>e</sup></span>","Nonwhite population share","Share without a bachelor’s degree","Average household income"],
+    "variables":["perc_stud_debt","med_stud_debt","perc_stud_debt_collect_STUD","med_stud_debt_collect","med_mon_pmt","perc_stud_debt_collect","perc_pop_nw","perc_no_bach","avg_income"]       
+  }
+}
+
+
 // insert here any variables that only have 1 item, namely "Nonwhite population share" for now, and in the future, anything else similar.
 var limitedVars = ["perc_pop_nw"]      
 
@@ -374,7 +386,7 @@ function OverallTransformData(us, county, state, countyData, stateData) {
   return bigbig;
 }
 
-function buildprint(Startquery) { 
+function buildprint(Startquery,data) { 
   console.log('inside buildprint')
 
   // grab the correct data and variables
@@ -389,6 +401,13 @@ function buildprint(Startquery) {
     // defaults
   }
 
+  var groups = variableList[type]["groups"]
+  var rowData =  variableList[type]["variables"]
+
+  console.log(data)
+  for (var i = 0; i < rowData.length; i++) {
+    console.log(rowData[i])
+  }
   // run a for loop through the variables
     // run update bars with (variable(i))
     //
@@ -457,7 +476,7 @@ function ready(error, us, county, state, county2, state2) {
     // TRIGGER PRINT VIEW
     if (Startquery["print"] === "true") {
       console.log("start build print")
-      buildprint(Startquery)  
+      buildprint(Startquery,BigData)  
     }
     else{
       console.log("no PRINT")
@@ -1601,13 +1620,8 @@ function ready(error, us, county, state, county2, state2) {
     var rowNumbers = [1,2,3]
     
     if (type) {
-      if (type == "medical") {
-        var groups = ["Share with any debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Median debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Share with medical debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Median medical debt in collections<span class=\"annotation\"><sup>a</sup></span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
-        var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]    
-      } else if (type == "student") {
-        var groups = [ "Share with student loan debt<span class=\"annotation\"><sup>a</sup></span>","Median student loan debt<span class=\"annotation\"><sup>a</sup></span>","Share of student loan holders with student loan debt in collections<span class=\"annotation\"><sup>a</sup> <sup>d</sup></span>","Median student loan debt in collections<span class=\"annotation\"><sup>a</sup></span>","Median monthly student loan payment<span class=\"annotation\"><sup>a</sup></span>","Share of people with credit records who have student loan debt in collections<span class=\"annotation\"><sup>a</sup> <sup>e</sup></span>","Nonwhite population share","Share without a bachelor’s degree","Average household income"];
-        var rowData = ["perc_stud_debt","med_stud_debt","perc_stud_debt_collect_STUD","med_stud_debt_collect","med_mon_pmt","perc_stud_debt_collect","perc_pop_nw","perc_no_bach","avg_income"]    
-      }
+      var groups = variableList[type]["groups"]
+      var rowData =  variableList[type]["variables"]
     }
 
 
@@ -2537,23 +2551,14 @@ console.log(selected)
       updateBars(SELECTED_VARIABLE, filteredData[0])
     }
   }
-  function updateTable(data,type) { 
-    
-
+  function updateTable(data,type) {   
 
     var columns = ["All", "White", "NonWhite"]    
     var rowNumbers = [1,2,3]    
 
-    
-
     if (type) {
-      if (type == "medical") {
-        var groups = ["Share with any debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Median debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Share with medical debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Median medical debt in collections<span class=\"annotation\"><sup>a</sup></span>","Nonwhite population share", "Share without health insurance coverage","Average household income"]
-        var rowData = ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]    
-      } else if (type == "student") {
-        var groups = [ "Share with student loan debt<span class=\"annotation\"><sup>a</sup></span>","Median student loan debt<span class=\"annotation\"><sup>a</sup></span>","Share of student loan holders with student loan debt in collections<span class=\"annotation\"><sup>a</sup> <sup>d</sup></span>","Median student loan debt in collections<span class=\"annotation\"><sup>a</sup></span>","Median monthly student loan payment<span class=\"annotation\"><sup>a</sup></span>","Share of people with credit records who have student loan debt in collections<span class=\"annotation\"><sup>a</sup> <sup>e</sup></span>","Nonwhite population share","Share without a bachelor’s degree","Average household income"];
-        var rowData = ["perc_stud_debt","med_stud_debt","perc_stud_debt_collect_STUD","med_stud_debt_collect","med_mon_pmt","perc_stud_debt_collect","perc_pop_nw","perc_no_bach","avg_income"]    
-      }
+      var groups = variableList[type]["groups"]
+      var rowData =  variableList[type]["variables"]
 
       // based on type, define the groups and rowdata
       var tbody = table.selectAll('tbody')
