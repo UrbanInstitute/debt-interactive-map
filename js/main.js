@@ -433,10 +433,7 @@ function buildprint(Startquery,data) {
       .attr("width", "100%")
       .attr("height", "100%")
       .each(function(d,i){
-        console.log(d)
-        console.log(groups[i])
-
-        
+        buildPrintBars(this,d,groups[i],location,data)
       })
 
 
@@ -449,15 +446,96 @@ function buildprint(Startquery,data) {
     // })
 }
 
-function buildPrintBars(variable, varName, selected) { 
-  // console.log(variable)
-  // console.log(varName)
-  // console.log(selected)
-
-  // build the svg
-
+function buildPrintBars(dis,variable, varName, selected, bigdata) { 
+  var barSvgHeight = 185;
+  var barHeight = 70;
+  var barWidth = 42;
+  var width = 831;
+  var three =   ["National", "State", "County"]
 
   // populate the svg
+  var WHITE = variable + "_wh"
+  var NONWHITE = variable + "_nw"
+  var data = bigdata.county_data;
+  var categories = [variable, WHITE, NONWHITE]
+  var cat = ["All","White","Nonwhite"]
+
+  var x = d3.scaleBand()
+    .rangeRound([0, barWidth])
+
+  var y = d3.scaleLinear()
+    .rangeRound([barHeight, 0]);
+
+  //x domain
+  //y domain
+
+  var barG = d3.select(dis)
+    .selectAll("g")
+    .data(three)
+    .enter()
+      .append('g')
+      .attr("transform", function(d,i) {
+        return "translate(" + ( (width/3.1 + 5) * i) + "," + (20) + ")";
+      })
+      .attr("class", function(d) { 
+        return variable + d + " bar-group"
+      })
+    barG.append("text")
+      .text(function(d) {
+        return (d=="National") ? d : "";
+      })
+      .attr("class", function(d) {
+        return "group-label-2 " + d
+      })
+    
+    var subBarG = barG.selectAll("g")
+      .data(categories)
+      .enter()
+      .append("g")
+      .attr("class", function(d) {
+        return "category " + d
+      })
+      .attr("transform", function(d,i) {
+        return "translate(" + (60 * i ) + "," + 10 + ")";
+        // "translate(" + ((barWidth + 2) * i ) + "," + 10 + ")" 
+        // "translate(" + (60 * i ) + "," + 10 + ")"
+      })
+
+    var rectG = subBarG.append("g")
+      .attr("class", function(d) { 
+        return "rect-g2 " + d})
+      .attr("transform", function(d,i) {
+        return "translate(" + 0 +"," + 15+ ")"
+      })
+
+    rectG
+      .append("g")
+      .attr("class", "g-text2")
+      .append("text")
+      .attr("x", 0)
+      .attr("y", barHeight + 10)
+      .attr("dy", ".71em")
+      .attr("text-anchor", "start")
+      .text(function(d,i) { 
+        return cat[i]
+      });      
+
+      
+  // build the svg
+
+    // might could do this only once... before sending through 9 times...
+  //   var us_data = bigdata.state_data[0]["values"][0]
+  //   for (var key in us_data) {
+  //       if (us_data.hasOwnProperty(key)) { 
+  //           if (+us_data[key] == NaN || +us_data[key] == 0){
+  //             us_data[key = us_data[key]]
+  //           }else {
+  //             us_data[key] = +us_data[key]
+  //           }
+  //       }
+  //   }    
+
+
 
 } 
 
@@ -1986,6 +2064,7 @@ function ready(error, us, county, state, county2, state2) {
 
     /*DESKTOP*/
 
+// HERE DANIEL
 
     var barSvgHeight = (IS_MOBILE) ? 185 : 130;
     var barHeight = (IS_MOBILE) ? 90 : 65;
@@ -2369,7 +2448,7 @@ function ready(error, us, county, state, county2, state2) {
       }
 
     
-    hideBars(variable)
+     hideBars(variable)
 
     }else {
       /*DESKTOP*/
