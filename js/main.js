@@ -424,7 +424,6 @@ function buildprint(Startquery,data) {
       .html(function(d,i){
         return groups[i]
       })
-
   printContainer.selectAll(".print-chart")
     .append("svg")
       .attr("class",function(d){
@@ -433,6 +432,7 @@ function buildprint(Startquery,data) {
       .attr("width", "100%")
       .attr("height", "100%")
       .each(function(d,i){
+        console.log('here')
         buildPrintBars(this,d,groups[i],location,data)
       })
 
@@ -453,6 +453,19 @@ function buildPrintBars(dis,variable, varName, selected, bigdata) {
   var width = 831;
   var three =   ["National", "State", "County"]
 
+  // might could do this only once... before sending through 9 times...
+  var us_data = bigdata.state_data[0]["values"][0]
+  for (var key in us_data) {
+      if (us_data.hasOwnProperty(key)) { 
+          if (+us_data[key] == NaN || +us_data[key] == 0){
+            us_data[key = us_data[key]]
+          }else {
+            us_data[key] = +us_data[key]
+          }
+      }
+  }   
+
+
   // populate the svg
   var WHITE = variable + "_wh"
   var NONWHITE = variable + "_nw"
@@ -468,6 +481,8 @@ function buildPrintBars(dis,variable, varName, selected, bigdata) {
 
   //x domain
   //y domain
+
+
 
   var barG = d3.select(dis)
     .selectAll("g")
@@ -519,21 +534,44 @@ function buildPrintBars(dis,variable, varName, selected, bigdata) {
       .text(function(d,i) { 
         return cat[i]
       });      
-
       
+
+// var test = [0,1,2,3,4,5,6,7,8]
+    rectG.selectAll("rect")
+      .data([us_data])
+      // .data(test)
+      .enter()
+      .append("rect")
+      // .attr("x", function(d) { 
+      //   return d.abbr
+      // })
+      .attr("class", "bar")
+      .attr("fill", function(d,i) { 
+        // var parentClass = d3.select(this.parentNode).attr('class');
+        // if (parentClass.search("All") > -1) {
+        //   return "#fdbf11"
+        // }else if (parentClass.search("Non") > -1) {
+        //   return "#696969"
+        // }else{
+        //   return "#000000"
+        // }
+        // console.log(d)
+        return "Silver"
+      })
+      .attr("width", x.bandwidth())
+      .attr("y",100)
+      .attr("height",100)
+      // .attr("width", x.bandwidth())
+      // .attr("y", function(d) { 
+      //   return barY(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,y,barHeight)
+      // })
+      // .attr("height", function(d) {
+      //   return barH(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,y,barHeight)        
+      // })
+
   // build the svg
 
-    // might could do this only once... before sending through 9 times...
-  //   var us_data = bigdata.state_data[0]["values"][0]
-  //   for (var key in us_data) {
-  //       if (us_data.hasOwnProperty(key)) { 
-  //           if (+us_data[key] == NaN || +us_data[key] == 0){
-  //             us_data[key = us_data[key]]
-  //           }else {
-  //             us_data[key] = +us_data[key]
-  //           }
-  //       }
-  //   }    
+ 
 
 
 
@@ -2166,6 +2204,8 @@ function ready(error, us, county, state, county2, state2) {
         return "translate(" + 0 +"," + barHeight+ ")"
       })
       .call(xAxis)
+
+console.log(us_data)
 
     //add bars
     rectG.selectAll("rect")
