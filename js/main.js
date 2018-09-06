@@ -387,8 +387,6 @@ function OverallTransformData(us, county, state, countyData, stateData) {
 }
 
 function buildprint(Startquery,data) { 
-  console.log('inside buildprint')
-
   // grab the correct data and variables
   if (Startquery) {
     if (Startquery["county"] || Startquery["state"]) {
@@ -403,17 +401,65 @@ function buildprint(Startquery,data) {
 
   var groups = variableList[type]["groups"]
   var rowData =  variableList[type]["variables"]
+  var location = "Pennsylvania"
+  var locationNames = ["National","Pennsylvania","Montgomery, County"]
 
-  console.log(data)
-  for (var i = 0; i < rowData.length; i++) {
-    console.log(rowData[i])
-  }
-  // run a for loop through the variables
-    // run update bars with (variable(i))
-    //
+  // for (var i = 0; i < rowData.length; i++) {
+  //   buildPrintBars(rowData[i],groups[i],location)
+  // }
 
-  // updateBars(variable, selected)
+  var printContainer = d3.select("#print-chart-container")
+
+  // get rid of previous ones
+  printContainer.selectAll(".print-chart").remove()
+
+  //add current ones
+  printContainer.selectAll(".print-chart")
+    .data(rowData)
+    .enter()
+    .append("div")
+    .attr("class","print-chart")
+      .append("div")
+      .attr("class","inner")
+      .html(function(d,i){
+        return groups[i]
+      })
+
+  printContainer.selectAll(".print-chart")
+    .append("svg")
+      .attr("class",function(d){
+        return d
+      })
+      .attr("width", "100%")
+      .attr("height", "100%")
+      .each(function(d,i){
+        console.log(d)
+        console.log(groups[i])
+
+        
+      })
+
+
+    // .data(locationNames)
+    // .enter()
+    // .append("div")
+    // .attr("class","sub-charts")
+    // .html(function(d,i){
+    //   return d;
+    // })
 }
+
+function buildPrintBars(variable, varName, selected) { 
+  // console.log(variable)
+  // console.log(varName)
+  // console.log(selected)
+
+  // build the svg
+
+
+  // populate the svg
+
+} 
 
 function ready(error, us, county, state, county2, state2) {
   if (error) throw error;
@@ -2204,10 +2250,11 @@ function ready(error, us, county, state, county2, state2) {
 
   }
 
+
   function updateBars(variable, selected) { 
 
-console.log(variable)
-console.log(selected)
+  console.log(variable)
+  console.log(selected)
 
     var us_data = BigData.state_data[0]["values"][0]
     for (var key in us_data) {

@@ -125,8 +125,33 @@ $icon-width-buffer: 20px;
 	.td-map {
 		background-color: #fff;
 
-		#legend-div {
+		#legend-div, #bar-chart {
 			display: none;
+		}		
+
+		.print-chart {
+			height:100px;
+			width:100%;
+			background-color: pink;
+			margin-top:15px;
+			padding-bottom:15px;
+			border-bottom: 1px solid #D2D2D2;
+
+			svg {
+		    	background-color: blue;
+		    }
+		 //    .sub-charts {
+			// 	height: 75px;
+			//     width: 33.33%;
+			//     background-color: green;
+			//     margin-top:10px;		    
+			//     float: left;	
+			//     font-size: 9px;
+			// }
+		}
+		.inner {
+			font-weight: bold;
+			font-size: 10px;		
 		}		
 	}
 
@@ -135,7 +160,7 @@ $icon-width-buffer: 20px;
 // LEFT SIDE REDUCTION AND MANIPULATION
 //********************************************************************	
 	.td-table {
-		// display: none;
+		display: none;
 
 		.search-div-main, .select-table {
 			display: none;
