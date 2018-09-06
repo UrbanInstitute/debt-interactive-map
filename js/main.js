@@ -390,6 +390,8 @@ function buildprint(Startquery) {
   }
 
   // run a for loop through the variables
+    // run update bars with (variable(i))
+    //
 
   // updateBars(variable, selected)
 }
