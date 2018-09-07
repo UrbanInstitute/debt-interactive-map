@@ -388,25 +388,41 @@ function OverallTransformData(us, county, state, countyData, stateData) {
 
 function buildprint(Startquery,data) { 
   // grab the correct data and variables
+  var state_data;
+  var county_data;
+
+  // get state and county data
   if (Startquery) {
-    if (Startquery["county"] || Startquery["state"]) {
-      // state or county 
-    } 
-    else {
-      // national 
+    if (Startquery["county"]) {
+     county_data = data.county_data.filter(function(d) {
+        return d.key == Startquery["county"] && d.state_id == Startquery["state"]
+      })
     }
-  } else {
-    // defaults
+
+    if (Startquery["state"]) {
+      state_data = data.state_data.filter(function(d) {
+        return d.key == Startquery["state"]
+      })      
+    }
   }
 
+  // get us data.
+  var us_data = data.state_data[0]["values"][0]
+  for (var key in us_data) {
+      if (us_data.hasOwnProperty(key)) { 
+          if (+us_data[key] == NaN || +us_data[key] == 0){
+            us_data[key = us_data[key]]
+          }else {
+            us_data[key] = +us_data[key]
+          }
+      }
+  }   
+
+  var printdata = [us_data,state_data[0],county_data[0]]
   var groups = variableList[type]["groups"]
   var rowData =  variableList[type]["variables"]
   var location = "Pennsylvania"
   var locationNames = ["National","Pennsylvania","Montgomery, County"]
-
-  // for (var i = 0; i < rowData.length; i++) {
-  //   buildPrintBars(rowData[i],groups[i],location)
-  // }
 
   var printContainer = d3.select("#print-chart-container")
 
@@ -432,8 +448,7 @@ function buildprint(Startquery,data) {
       .attr("width", "100%")
       .attr("height", "100%")
       .each(function(d,i){
-        console.log('here')
-        buildPrintBars(this,d,groups[i],location,data)
+        buildPrintBars(this,d,groups[i],printdata)
       })
 
 
@@ -446,30 +461,17 @@ function buildprint(Startquery,data) {
     // })
 }
 
-function buildPrintBars(dis,variable, varName, selected, bigdata) { 
+function buildPrintBars(dis,variable, varName, printdata) { 
   var barSvgHeight = 185;
   var barHeight = 70;
   var barWidth = 42;
   var width = 831;
   var three =   ["National", "State", "County"]
 
-  // might could do this only once... before sending through 9 times...
-  var us_data = bigdata.state_data[0]["values"][0]
-  for (var key in us_data) {
-      if (us_data.hasOwnProperty(key)) { 
-          if (+us_data[key] == NaN || +us_data[key] == 0){
-            us_data[key = us_data[key]]
-          }else {
-            us_data[key] = +us_data[key]
-          }
-      }
-  }   
-
-
   // populate the svg
   var WHITE = variable + "_wh"
   var NONWHITE = variable + "_nw"
-  var data = bigdata.county_data;
+  // var data = bigdata.county_data;
   var categories = [variable, WHITE, NONWHITE]
   var cat = ["All","White","Nonwhite"]
 
@@ -535,69 +537,75 @@ function buildPrintBars(dis,variable, varName, selected, bigdata) {
         return cat[i]
       });      
 
+var counter = 0
     rectG
       .append("rect")
       .attr("class", "bar")
+      .attr("width", barWidth)
+      .attr("y", function(d,i) { 
+        // i is 0,1,2 depending, mapping to all, white, nonwhite
+        // d is same but with variables 
+        // counter is 0,1,2 mapping to national, state, county       
+        // return dataMaster[counter][d]
+        console.log(printdata[counter][d])
+        return 100
+        // return barY(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,y,barHeight)
+      })
+      .attr("height", function(d,i) {
+        return 100
+        // return barH(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,y,barHeight)        
+      })
       .attr("fill", function(d,i) { 
-        console.log(d)
+        // console.log(i)
         if (i % 3 === 0) {
           return "#fdbf11"
         }else if (i % 3 === 1) {
           return "#000000"
         }else{
+          // this counter iterates through to create a national, state, county watcher
+          counter += 1;      
           return "#696969"
         }        
       })
-      .attr("width", 50)
-      .attr("y",100)
-      .attr("height",100)
-
-
-
-    console.log(rectG)
 
 // selection here is messed up..........
 // recreate selection so that you're selecting all nine bars maybe? per row? not sure. 
 
 
-var test = [0,1,2,3,4,5,6,7,8]
-    rectG.selectAll("rect")
-      .data([us_data])
-      // .data(test)
-      .enter()
-      .append("rect")
-      // .attr("x", function(d) { 
-      //   return d.abbr
-      // })
-      .attr("class", "bar")
-      .attr("fill", function(d,i) { 
-        // var parentClass = d3.select(this.parentNode).attr('class');
-        // if (parentClass.search("All") > -1) {
-        //   return "#fdbf11"
-        // }else if (parentClass.search("Non") > -1) {
-        //   return "#696969"
-        // }else{
-        //   return "#000000"
-        // }
-        // console.log(d)
-        return "Silver"
-      })
-      .attr("width", x.bandwidth())
-      .attr("y",100)
-      .attr("height",100)
-      .attr("width", x.bandwidth())
-      .attr("y", function(d) { 
-        return barY(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,y,barHeight)
-      })
-      .attr("height", function(d) {
-        return barH(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,y,barHeight)        
-      })
+// var test = [0,1,2,3,4,5,6,7,8]
+//     rectG.selectAll("rect")
+//       .data([us_data])
+//       // .data(test)
+//       .enter()
+//       .append("rect")
+//       // .attr("x", function(d) { 
+//       //   return d.abbr
+//       // })
+//       .attr("class", "bar")
+//       .attr("fill", function(d,i) { 
+//         // var parentClass = d3.select(this.parentNode).attr('class');
+//         // if (parentClass.search("All") > -1) {
+//         //   return "#fdbf11"
+//         // }else if (parentClass.search("Non") > -1) {
+//         //   return "#696969"
+//         // }else{
+//         //   return "#000000"
+//         // }
+//         // console.log(d)
+//         return "Silver"
+//       })
+//       .attr("width", x.bandwidth())
+//       .attr("y",100)
+//       .attr("height",100)
+//       .attr("width", x.bandwidth())
+//       .attr("y", function(d) { 
+//         return barY(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,y,barHeight)
+//       })
+//       .attr("height", function(d) {
+//         return barH(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,y,barHeight)        
+//       })
 
-  // build the svg
-
- 
-
-
+//   // build the svg
 
 } 
 
@@ -614,7 +622,6 @@ function ready(error, us, county, state, county2, state2) {
 
     // DECODE the query
     var Startquery = decodeQuery(window.location.search)
-
     
     var defaultFirst;
 
@@ -660,8 +667,7 @@ function ready(error, us, county, state, county2, state2) {
     // a lot happens at the bottom
 
     // TRIGGER PRINT VIEW
-    if (Startquery["print"] === "true") {
-      console.log("start build print")
+    if (Startquery["print"] === "true") {      
       buildprint(Startquery,BigData)  
     }
     else{
@@ -2395,9 +2401,6 @@ console.log(us_data)
 
 
   function updateBars(variable, selected) { 
-
-  console.log(variable)
-  console.log(selected)
 
     var us_data = BigData.state_data[0]["values"][0]
     for (var key in us_data) {
