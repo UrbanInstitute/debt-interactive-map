@@ -534,9 +534,33 @@ function buildPrintBars(dis,variable, varName, selected, bigdata) {
       .text(function(d,i) { 
         return cat[i]
       });      
-      
 
-// var test = [0,1,2,3,4,5,6,7,8]
+    rectG
+      .append("rect")
+      .attr("class", "bar")
+      .attr("fill", function(d,i) { 
+        console.log(d)
+        if (i % 3 === 0) {
+          return "#fdbf11"
+        }else if (i % 3 === 1) {
+          return "#000000"
+        }else{
+          return "#696969"
+        }        
+      })
+      .attr("width", 50)
+      .attr("y",100)
+      .attr("height",100)
+
+
+
+    console.log(rectG)
+
+// selection here is messed up..........
+// recreate selection so that you're selecting all nine bars maybe? per row? not sure. 
+
+
+var test = [0,1,2,3,4,5,6,7,8]
     rectG.selectAll("rect")
       .data([us_data])
       // .data(test)
@@ -561,13 +585,13 @@ function buildPrintBars(dis,variable, varName, selected, bigdata) {
       .attr("width", x.bandwidth())
       .attr("y",100)
       .attr("height",100)
-      // .attr("width", x.bandwidth())
-      // .attr("y", function(d) { 
-      //   return barY(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,y,barHeight)
-      // })
-      // .attr("height", function(d) {
-      //   return barH(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,y,barHeight)        
-      // })
+      .attr("width", x.bandwidth())
+      .attr("y", function(d) { 
+        return barY(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,y,barHeight)
+      })
+      .attr("height", function(d) {
+        return barH(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,y,barHeight)        
+      })
 
   // build the svg
 
