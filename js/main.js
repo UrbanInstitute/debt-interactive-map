@@ -419,6 +419,7 @@ function buildprint(Startquery,data) {
   }   
 
   var printdata = [us_data,state_data[0],county_data[0]]
+
   var groups = variableList[type]["groups"]
   var rowData =  variableList[type]["variables"]
   var location = "Pennsylvania"
@@ -447,8 +448,18 @@ function buildprint(Startquery,data) {
       })
       .attr("width", "100%")
       .attr("height", "100%")
-      .each(function(d,i){
-        buildPrintBars(this,d,groups[i],printdata)
+      .each(function(d,i){                
+        // Max of d,d_wh,d_nw
+        var max = d3.max([+printdata[0][d],+printdata[0][d + "_wh"],+printdata[0][d + "_nw "],+printdata[1][d],+printdata[1][d + "_wh"],+printdata[1][d + "_nw "],+printdata[2][d],+printdata[2][d + "_wh"],+printdata[2][d + "_nw "]])
+        // console.log([+printdata[0][d],+printdata[0][d + "_wh"],+printdata[0][d + "_nw"],+printdata[1][d],+printdata[1][d + "_wh"],+printdata[1][d + "_nw"],+printdata[2][d],+printdata[2][d + "_wh"],+printdata[2][d + "_nw"]])
+        var y = d3.scaleLinear()
+          .domain([0, max]);   
+        //x domain
+        //y domain
+
+        // console.log(y.domain())
+
+        buildPrintBars(this,d,groups[i],printdata,y)
       })
 
 
@@ -461,9 +472,8 @@ function buildprint(Startquery,data) {
     // })
 }
 
-function buildPrintBars(dis,variable, varName, printdata) { 
+function buildPrintBars(dis,variable, varName, printdata,y) { 
   var barSvgHeight = 185;
-  var barHeight = 70;
   var barWidth = 42;
   var width = 831;
   var three =   ["National", "State", "County"]
@@ -475,15 +485,9 @@ function buildPrintBars(dis,variable, varName, printdata) {
   var categories = [variable, WHITE, NONWHITE]
   var cat = ["All","White","Nonwhite"]
 
-  var x = d3.scaleBand()
-    .rangeRound([0, barWidth])
-
-  var y = d3.scaleLinear()
-    .rangeRound([barHeight, 0]);
-
-  //x domain
-  //y domain
-
+  var barHeight = 70;
+                  
+  y.rangeRound([0, barHeight]);
 
 
   var barG = d3.select(dis)
@@ -537,7 +541,9 @@ function buildPrintBars(dis,variable, varName, printdata) {
         return cat[i]
       });      
 
-var counter = 0
+var counter1 = 0
+var counter2 = 0
+console.log('here')
     rectG
       .append("rect")
       .attr("class", "bar")
@@ -546,14 +552,21 @@ var counter = 0
         // i is 0,1,2 depending, mapping to all, white, nonwhite
         // d is same but with variables 
         // counter is 0,1,2 mapping to national, state, county       
-        // return dataMaster[counter][d]
-        console.log(printdata[counter][d])
-        return 100
-        // return barY(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,y,barHeight)
+        var result = isNaN(printdata[counter1][d]) ? 0 : y(printdata[counter1][d]) 
+        if (i % 3 === 2) {
+          counter1 +=1;
+        }        
+
+        return (0 + (barHeight -result))        
+        // return 0
       })
-      .attr("height", function(d,i) {
-        return 100
-        // return barH(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,y,barHeight)        
+      .attr("height", function(d,i) {        
+        console.log(counter2)
+        var result = isNaN(printdata[counter2][d]) ? 0 : y(printdata[counter2][d]) 
+        if (i % 3 === 2) {
+          counter2 +=1;
+        }
+        return result;
       })
       .attr("fill", function(d,i) { 
         // console.log(i)
@@ -563,7 +576,6 @@ var counter = 0
           return "#000000"
         }else{
           // this counter iterates through to create a national, state, county watcher
-          counter += 1;      
           return "#696969"
         }        
       })
