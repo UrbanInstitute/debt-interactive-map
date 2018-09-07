@@ -99,14 +99,9 @@
 .print .td-map .print-chart {
   height: 150px;
   width: 100%;
-  background-color: DARKSALMON;
   margin-top: 15px;
   padding-bottom: 15px;
   border-bottom: 1px solid #D2D2D2;
-}
-/* line 140, ../sass/print.scss */
-.print .td-map .print-chart svg {
-  background-color: LIGHTCORAL;
 }
 /* line 152, ../sass/print.scss */
 .print .td-map .inner {
