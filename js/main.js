@@ -481,7 +481,6 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
   var width = 831;
   var itemwidth = (barWidth*3) + 20;
   var spacer = (width - (3*itemwidth))/2;
-  console.log(spacer)
   var three =   ["National", "State", "County"]
 
   // populate the svg
@@ -491,7 +490,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
   var categories = [variable, WHITE, NONWHITE]
   var cat = ["All","White","Nonwhite"]
 
-  var barHeight = 50;
+  var barHeight = 70;
                   
   y.rangeRound([0, barHeight]);
 
@@ -503,8 +502,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
       .append('g')
       .attr("transform", function(d,i) {
         var left = i*itemwidth + i*spacer;
-        console.log(left)
-        return "translate(" + left + "," + 20 + ")";
+        return "translate(" + left + "," + 0 + ")";
       })
       .attr("class", function(d) { 
         return variable + d + " bar-group"
@@ -565,7 +563,8 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
           counter1 +=1;
         }        
 
-        return (0 + (barHeight -result))        
+        // console.log(printdata[counter1][d], result)
+        return (0 + (barHeight - result))        
         // return 0
       })
       .attr("height", function(d,i) {
