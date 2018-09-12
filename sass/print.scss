@@ -19,7 +19,7 @@ $icon-width-buffer: 20px;
 	margin: 40px;
 
 	.main-table {
-		display: block;
+		display: initial;
 	}
 
 
@@ -241,6 +241,47 @@ $icon-width-buffer: 20px;
 
 		}
 	}
+
+// *******************************************************************
+// BOTTOM REDUCTION
+//********************************************************************	
+	.bottom-container {
+		border-top: 0px;
+		background-color: #fff;
+
+		.bottom-content {
+			max-width: none;
+			padding-top: 0px;
+
+			h1.bottom-header {
+				font-size: 12px;
+				margin:0px;
+			}
+
+			.footerButton {
+				display: none;
+			}
+
+			.bottom-text {
+				font-size: 9px;
+				line-height: 100% !important;
+				font-style: normal;
+				margin-bottom: 0px;
+
+				em {
+					font-style: normal;
+				}
+
+			}
+
+			.credit-names, .credit-header {
+				font-size: 9px;
+				font-weight: 400;
+				line-height: 100%;
+			}
+		}	
+	}
+
 }
 
 

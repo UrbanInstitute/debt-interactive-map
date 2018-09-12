@@ -6,7 +6,7 @@
 }
 /* line 21, ../sass/print.scss */
 .print .main-table {
-  display: block;
+  display: initial;
 }
 /* line 40, ../sass/print.scss */
 .print #dropdown-div, .print #header-pinned, .print #map, .print #mobile-content, .print #notes-section {
@@ -175,9 +175,45 @@
 .print .td-table #table-div, .print .td-table .search-div-main, .print .td-table .select-table {
   display: none;
 }
+/* line 248, ../sass/print.scss */
+.print .bottom-container {
+  border-top: 0px;
+  background-color: #fff;
+}
+/* line 252, ../sass/print.scss */
+.print .bottom-container .bottom-content {
+  max-width: none;
+  padding-top: 0px;
+}
+/* line 256, ../sass/print.scss */
+.print .bottom-container .bottom-content h1.bottom-header {
+  font-size: 12px;
+  margin: 0px;
+}
+/* line 261, ../sass/print.scss */
+.print .bottom-container .bottom-content .footerButton {
+  display: none;
+}
+/* line 265, ../sass/print.scss */
+.print .bottom-container .bottom-content .bottom-text {
+  font-size: 9px;
+  line-height: 100% !important;
+  font-style: normal;
+  margin-bottom: 0px;
+}
+/* line 271, ../sass/print.scss */
+.print .bottom-container .bottom-content .bottom-text em {
+  font-style: normal;
+}
+/* line 277, ../sass/print.scss */
+.print .bottom-container .bottom-content .credit-names, .print .bottom-container .bottom-content .credit-header {
+  font-size: 9px;
+  font-weight: 400;
+  line-height: 100%;
+}
 
 @media print {
-  /* line 249, ../sass/print.scss */
+  /* line 290, ../sass/print.scss */
   .print {
     margin: 0px;
   }
