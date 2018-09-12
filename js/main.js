@@ -476,9 +476,12 @@ function buildprint(Startquery,data) {
 }
 
 function buildPrintBars(dis,variable, varName, printdata,y) {
-  var barSvgHeight = 130;
-  var barWidth = 42;
+  var barSvgHeight = 110;
+  var barWidth = 50;
   var width = 831;
+  var itemwidth = (barWidth*3) + 20;
+  var spacer = (width - (3*itemwidth))/2;
+  console.log(spacer)
   var three =   ["National", "State", "County"]
 
   // populate the svg
@@ -499,7 +502,9 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
     .enter()
       .append('g')
       .attr("transform", function(d,i) {
-        return "translate(" + ( (width/3.1 + 5) * i) + "," + (20) + ")";
+        var left = i*itemwidth + i*spacer;
+        console.log(left)
+        return "translate(" + left + "," + 20 + ")";
       })
       .attr("class", function(d) { 
         return variable + d + " bar-group"

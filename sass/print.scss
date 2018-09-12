@@ -109,7 +109,7 @@ $icon-width-buffer: 20px;
 		    margin: 0;
 		    padding: 0px;		    
 		    box-shadow: none;
-
+		    border: 0px;
 		    position: absolute;
     		top: 35px;
     		left: $icon-width + $icon-width-buffer;
@@ -125,10 +125,12 @@ $icon-width-buffer: 20px;
 				.ui-selectmenu-text {
 					font-size: 13px !important;
 					line-height: 120% !important;
-					font-weight: 400;
+					font-weight: 400 !important;
 					letter-spacing:0.05em;
 					margin: 0px;
 					padding: 0px;					
+					text-transform: uppercase;
+					color: rgb(35,151,208);
 				}	
 			}
 			span {
@@ -252,6 +254,7 @@ $icon-width-buffer: 20px;
 		.bottom-content {
 			max-width: none;
 			padding-top: 0px;
+			width: 100% !important;
 
 			h1.bottom-header {
 				font-size: 12px;
@@ -278,6 +281,10 @@ $icon-width-buffer: 20px;
 				font-size: 9px;
 				font-weight: 400;
 				line-height: 100%;
+			}
+
+			#copyright {
+				display: none;
 			}
 		}	
 	}
