@@ -1,5 +1,9 @@
-$icon-width: 100px;
+$icon-width: 84px;
 $icon-width-buffer: 20px;
+// $bar-container-height: 150px
+// $max-bar-height: $bar-container-height - 50px;
+
+// Print cover that makes it impossible to click on stuff.
 // .print.cover{
 // 	position: fixed;
 // 	top: 0px;
@@ -12,6 +16,14 @@ $icon-width-buffer: 20px;
 .print {
 	width: 220mm;
 	background: #fff;
+	margin: 40px;
+
+	.main-table {
+		display: block;
+	}
+
+
+
 	// .page {
 	// 	height: 320mm;
 	// 	position: relative;
@@ -25,7 +37,7 @@ $icon-width-buffer: 20px;
 //   display: none !important
 // }
 
-	#header-pinned, #map {
+	#dropdown-div, #header-pinned, #map, #mobile-content, #notes-section {
 		display:none;
 	}
 
@@ -34,6 +46,8 @@ $icon-width-buffer: 20px;
 //********************************************************************
 
 	.banner-wrapper{
+		position: relative;
+
 		.banner {
 			background-image: none;
 			background: #fff;
@@ -43,12 +57,14 @@ $icon-width-buffer: 20px;
 			
 			h1 {
 				font-size: 15px;
-				margin-top:10px;				
+				line-height: 130%;
+				padding-top: 8px;
 			}
 
 			h2 {
 				font-size: 10px;
-				margin-top: 60px;
+				margin-top: 50px;
+				line-height: 120%;
 			}
 
 			#intro-text {
@@ -108,8 +124,11 @@ $icon-width-buffer: 20px;
 
 				.ui-selectmenu-text {
 					font-size: 13px !important;
+					line-height: 120% !important;
+					font-weight: 400;
+					letter-spacing:0.05em;
 					margin: 0px;
-					padding: 0px;
+					padding: 0px;					
 				}	
 			}
 			span {
@@ -124,18 +143,67 @@ $icon-width-buffer: 20px;
 //********************************************************************
 	.td-map {
 		background-color: #fff;
+		box-shadow: inset 0px 0px 0px 0px;
+		padding-top: 20px;
 
-		#legend-div, #bar-chart {
+		.map-div {
+			margin: 0px;
+			
+			#location {
+				height: inherit;
+				font-weight: 400;
+				font-size: 12px;
+				padding-left: 0px !important;
+			}
+		}
+
+		#variable-name, #legend-div, #bar-chart {
 			display: none;
 		}		
 
+
+		// typography items, notes too.
+		.group-label-2 {
+			font-size: 9px;
+		}
+
+		.g-text2 text {
+			font-size: 9px;
+		}
+
+		#print-chart-notes {
+		line-height: 9px;
+			p {
+				display: inline;
+				font-style: italic;
+				font-size: 7px;
+				// line-height: 120%;
+
+
+				b {
+					font-style: normal !important;
+				}			
+
+				sup {
+					font-weight: 700;
+					font-size: 7px !important;
+					vertical-align: inherit;
+				}
+			}
+		}
+
+		// d3 bar charts
 		.print-chart {
-			height:150px;
+			height:130px;
 			width:100%;
 			// background-color: DARKSALMON;
 			margin-top:15px;
 			padding-bottom:15px;
 			border-bottom: 1px solid #D2D2D2;
+
+			&:last-child {
+				border-bottom: 0px;
+			}
 
 			svg {
 		    	// background-color: LIGHTCORAL;
@@ -161,8 +229,10 @@ $icon-width-buffer: 20px;
 //********************************************************************	
 	.td-table {
 		display: none;
+		// position: absolute;
+		// bottom: 0;
 
-		.search-div-main, .select-table {
+		#table-div, .search-div-main, .select-table {
 			display: none;
 		}	
 
@@ -174,3 +244,9 @@ $icon-width-buffer: 20px;
 }
 
 
+// print specific queries
+@media print{
+	.print {
+		margin: 0px;
+	}
+}

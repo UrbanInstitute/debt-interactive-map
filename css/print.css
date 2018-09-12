@@ -1,61 +1,72 @@
-/* line 12, ../sass/print.scss */
+/* line 16, ../sass/print.scss */
 .print {
   width: 220mm;
   background: #fff;
+  margin: 40px;
 }
-/* line 28, ../sass/print.scss */
-.print #header-pinned, .print #map {
+/* line 21, ../sass/print.scss */
+.print .main-table {
+  display: block;
+}
+/* line 40, ../sass/print.scss */
+.print #dropdown-div, .print #header-pinned, .print #map, .print #mobile-content, .print #notes-section {
   display: none;
 }
-/* line 37, ../sass/print.scss */
+/* line 48, ../sass/print.scss */
+.print .banner-wrapper {
+  position: relative;
+}
+/* line 51, ../sass/print.scss */
 .print .banner-wrapper .banner {
   background-image: none;
   background: #fff;
   margin-top: 0px;
 }
-/* line 42, ../sass/print.scss */
+/* line 56, ../sass/print.scss */
 .print .banner-wrapper .banner h1, .print .banner-wrapper .banner h2 {
   color: #000 !important;
 }
-/* line 44, ../sass/print.scss */
+/* line 58, ../sass/print.scss */
 .print .banner-wrapper .banner h1 {
   font-size: 15px;
-  margin-top: 10px;
+  line-height: 130%;
+  padding-top: 8px;
 }
-/* line 49, ../sass/print.scss */
+/* line 64, ../sass/print.scss */
 .print .banner-wrapper .banner h2 {
   font-size: 10px;
-  margin-top: 60px;
+  margin-top: 50px;
+  line-height: 120%;
 }
-/* line 54, ../sass/print.scss */
+/* line 70, ../sass/print.scss */
 .print .banner-wrapper .banner #intro-text {
   background: #fff;
   padding: 0px;
 }
-/* line 58, ../sass/print.scss */
+/* line 74, ../sass/print.scss */
 .print .banner-wrapper .banner #intro-text .intro-wrap {
   font-style: normal;
   text-align: left;
   max-width: none;
 }
-/* line 63, ../sass/print.scss */
+/* line 79, ../sass/print.scss */
 .print .banner-wrapper .banner #intro-text .intro-wrap .inner {
-  padding-left: 120px;
+  padding-left: 104px;
 }
-/* line 67, ../sass/print.scss */
+/* line 83, ../sass/print.scss */
 .print .banner-wrapper .banner #intro-text .intro-wrap .full.logo {
   display: block;
   float: left;
 }
-/* line 71, ../sass/print.scss */
+/* line 87, ../sass/print.scss */
 .print .banner-wrapper .banner #intro-text .intro-wrap .full.logo img {
-  width: 100px;
+  width: 84px;
 }
-/* line 76, ../sass/print.scss */
+/* line 92, ../sass/print.scss */
 .print .banner-wrapper .banner #intro-text .intro-wrap #date {
   display: none;
 }
-/* line 87, ../sass/print.scss */
+/* line 103, ../sass/print.scss */
 .print .banner-wrapper .current-menu.dropdown {
   width: unset !important;
   max-width: none !important;
@@ -67,52 +78,107 @@
   box-shadow: none;
   position: absolute;
   top: 35px;
-  left: 120px;
+  left: 104px;
 }
-/* line 102, ../sass/print.scss */
+/* line 118, ../sass/print.scss */
 .print .banner-wrapper .current-menu.dropdown .dropdown-label {
   display: none;
 }
-/* line 106, ../sass/print.scss */
+/* line 122, ../sass/print.scss */
 .print .banner-wrapper .current-menu.dropdown #dropdown-header-button {
   width: 100% !important;
 }
-/* line 109, ../sass/print.scss */
+/* line 125, ../sass/print.scss */
 .print .banner-wrapper .current-menu.dropdown #dropdown-header-button .ui-selectmenu-text {
   font-size: 13px !important;
+  line-height: 120% !important;
+  font-weight: 400;
+  letter-spacing: 0.05em;
   margin: 0px;
   padding: 0px;
 }
-/* line 116, ../sass/print.scss */
+/* line 135, ../sass/print.scss */
 .print .banner-wrapper .current-menu.dropdown span .ui-selectmenu-icon.ui-icon.ui-icon-triangle-1-s {
   display: none;
 }
-/* line 125, ../sass/print.scss */
+/* line 144, ../sass/print.scss */
 .print .td-map {
   background-color: #fff;
+  box-shadow: inset 0px 0px 0px 0px;
+  padding-top: 20px;
 }
-/* line 128, ../sass/print.scss */
-.print .td-map #legend-div, .print .td-map #bar-chart {
+/* line 149, ../sass/print.scss */
+.print .td-map .map-div {
+  margin: 0px;
+}
+/* line 152, ../sass/print.scss */
+.print .td-map .map-div #location {
+  height: inherit;
+  font-weight: 400;
+  font-size: 12px;
+  padding-left: 0px !important;
+}
+/* line 160, ../sass/print.scss */
+.print .td-map #variable-name, .print .td-map #legend-div, .print .td-map #bar-chart {
   display: none;
 }
-/* line 132, ../sass/print.scss */
+/* line 166, ../sass/print.scss */
+.print .td-map .group-label-2 {
+  font-size: 9px;
+}
+/* line 170, ../sass/print.scss */
+.print .td-map .g-text2 text {
+  font-size: 9px;
+}
+/* line 174, ../sass/print.scss */
+.print .td-map #print-chart-notes {
+  line-height: 9px;
+}
+/* line 176, ../sass/print.scss */
+.print .td-map #print-chart-notes p {
+  display: inline;
+  font-style: italic;
+  font-size: 7px;
+}
+/* line 183, ../sass/print.scss */
+.print .td-map #print-chart-notes p b {
+  font-style: normal !important;
+}
+/* line 187, ../sass/print.scss */
+.print .td-map #print-chart-notes p sup {
+  font-weight: 700;
+  font-size: 7px !important;
+  vertical-align: inherit;
+}
+/* line 196, ../sass/print.scss */
 .print .td-map .print-chart {
-  height: 150px;
+  height: 130px;
   width: 100%;
   margin-top: 15px;
   padding-bottom: 15px;
   border-bottom: 1px solid #D2D2D2;
 }
-/* line 152, ../sass/print.scss */
+/* line 204, ../sass/print.scss */
+.print .td-map .print-chart:last-child {
+  border-bottom: 0px;
+}
+/* line 220, ../sass/print.scss */
 .print .td-map .inner {
   font-weight: bold;
   font-size: 10px;
 }
-/* line 162, ../sass/print.scss */
+/* line 230, ../sass/print.scss */
 .print .td-table {
   display: none;
 }
-/* line 165, ../sass/print.scss */
-.print .td-table .search-div-main, .print .td-table .select-table {
+/* line 235, ../sass/print.scss */
+.print .td-table #table-div, .print .td-table .search-div-main, .print .td-table .select-table {
   display: none;
+}
+
+@media print {
+  /* line 249, ../sass/print.scss */
+  .print {
+    margin: 0px;
+  }
 }
