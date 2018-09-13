@@ -157,6 +157,10 @@ $icon-width-buffer: 20px;
 				font-size: 12px;
 				padding-left: 0px !important;
 			}
+
+			#print-button {
+				display: none;
+			}
 		}
 
 		#variable-name, #legend-div, #bar-chart {

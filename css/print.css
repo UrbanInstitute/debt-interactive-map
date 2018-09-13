@@ -121,106 +121,110 @@
   font-size: 12px;
   padding-left: 0px !important;
 }
-/* line 162, ../sass/print.scss */
+/* line 161, ../sass/print.scss */
+.print .td-map .map-div #print-button {
+  display: none;
+}
+/* line 166, ../sass/print.scss */
 .print .td-map #variable-name, .print .td-map #legend-div, .print .td-map #bar-chart {
   display: none;
 }
-/* line 168, ../sass/print.scss */
+/* line 172, ../sass/print.scss */
 .print .td-map .group-label-2 {
   font-size: 9px;
 }
-/* line 172, ../sass/print.scss */
+/* line 176, ../sass/print.scss */
 .print .td-map .g-text2 text {
   font-size: 9px;
 }
-/* line 176, ../sass/print.scss */
+/* line 180, ../sass/print.scss */
 .print .td-map #print-chart-notes {
   line-height: 9px;
 }
-/* line 178, ../sass/print.scss */
+/* line 182, ../sass/print.scss */
 .print .td-map #print-chart-notes p {
   display: inline;
   font-style: italic;
   font-size: 7px;
 }
-/* line 185, ../sass/print.scss */
+/* line 189, ../sass/print.scss */
 .print .td-map #print-chart-notes p b {
   font-style: normal !important;
 }
-/* line 189, ../sass/print.scss */
+/* line 193, ../sass/print.scss */
 .print .td-map #print-chart-notes p sup {
   font-weight: 700;
   font-size: 7px !important;
   vertical-align: inherit;
 }
-/* line 198, ../sass/print.scss */
+/* line 202, ../sass/print.scss */
 .print .td-map .print-chart {
   height: 130px;
   width: 100%;
   margin-top: 15px;
   border-bottom: 1px solid #D2D2D2;
 }
-/* line 206, ../sass/print.scss */
+/* line 210, ../sass/print.scss */
 .print .td-map .print-chart:last-child {
   border-bottom: 0px;
 }
-/* line 222, ../sass/print.scss */
+/* line 226, ../sass/print.scss */
 .print .td-map .inner {
   font-weight: bold;
   font-size: 10px;
 }
-/* line 232, ../sass/print.scss */
+/* line 236, ../sass/print.scss */
 .print .td-table {
   display: none;
 }
-/* line 237, ../sass/print.scss */
+/* line 241, ../sass/print.scss */
 .print .td-table #table-div, .print .td-table .search-div-main, .print .td-table .select-table {
   display: none;
 }
-/* line 250, ../sass/print.scss */
+/* line 254, ../sass/print.scss */
 .print .bottom-container {
   border-top: 0px;
   background-color: #fff;
 }
-/* line 254, ../sass/print.scss */
+/* line 258, ../sass/print.scss */
 .print .bottom-container .bottom-content {
   max-width: none;
   padding-top: 0px;
   width: 100% !important;
 }
-/* line 259, ../sass/print.scss */
+/* line 263, ../sass/print.scss */
 .print .bottom-container .bottom-content h1.bottom-header {
   font-size: 12px;
   margin: 0px;
 }
-/* line 264, ../sass/print.scss */
+/* line 268, ../sass/print.scss */
 .print .bottom-container .bottom-content .footerButton {
   display: none;
 }
-/* line 268, ../sass/print.scss */
+/* line 272, ../sass/print.scss */
 .print .bottom-container .bottom-content .bottom-text {
   font-size: 9px;
   line-height: 100% !important;
   font-style: normal;
   margin-bottom: 0px;
 }
-/* line 274, ../sass/print.scss */
+/* line 278, ../sass/print.scss */
 .print .bottom-container .bottom-content .bottom-text em {
   font-style: normal;
 }
-/* line 280, ../sass/print.scss */
+/* line 284, ../sass/print.scss */
 .print .bottom-container .bottom-content .credit-names, .print .bottom-container .bottom-content .credit-header {
   font-size: 9px;
   font-weight: 400;
   line-height: 100%;
 }
-/* line 286, ../sass/print.scss */
+/* line 290, ../sass/print.scss */
 .print .bottom-container .bottom-content #copyright {
   display: none;
 }
 
 @media print {
-  /* line 297, ../sass/print.scss */
+  /* line 301, ../sass/print.scss */
   .print {
     margin: 0px;
   }
