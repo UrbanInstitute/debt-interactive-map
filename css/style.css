@@ -543,6 +543,11 @@ path.hide {
   right: 0;
   top: 0;
   cursor: pointer;
+  text-align: center;
+}
+
+#print-button h3 {
+  margin-top: 14px;
 }
 
 #variable-name {

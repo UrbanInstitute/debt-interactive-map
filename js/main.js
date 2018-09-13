@@ -1357,7 +1357,7 @@ function ready(error, us, county, state, county2, state2) {
   /*ADD MAP*/
   var svg = d3.select("#map")
     .append("svg")
-    .attr("width", width)
+    .attr("width", width + 10)
     .attr("height", height)
     .attr("overflow", "hidden")
 
