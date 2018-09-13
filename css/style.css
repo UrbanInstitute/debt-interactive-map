@@ -540,7 +540,7 @@ path.hide {
   background-color: #000;
   color: #fff;
   position: absolute;
-  right: 0;
+  right: 16px;
   top: 0;
   cursor: pointer;
   text-align: center;
@@ -847,6 +847,10 @@ html .ui-button.ui-state-disabled:active {
   display: block;
 }
 @media (min-width : 1201px) {
+  #print-button { 
+    right: 0px;
+  }
+
   table.main-table {
     width: 100%;
     max-width: 1200px;

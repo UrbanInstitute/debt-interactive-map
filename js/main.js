@@ -1,3 +1,14 @@
+  if (window.location.search) {    
+    // If there's a url search query, do a bunch of stuff like create the beginning zoom variables
+
+    // DECODE the query
+    var Startquery = decodeQuery(window.location.search)
+    
+    if (Startquery["print"] === "true") {
+      d3.select("body").classed("print",true)
+    }
+}
+
 var IS_MOBILE;
 var IS_PHONE;
 var IS_PHONESM;
@@ -385,7 +396,9 @@ function OverallTransformData(us, county, state, countyData, stateData) {
   return bigbig;
 }
 
-function buildprint(Startquery,data) { 
+function buildprint(Startquery,data) {   
+  
+
   //build notes
   var notes = "<p><b>Notes:</b></p> " + $("#notes").html();
   $("#print-chart-notes").html(notes)
@@ -641,6 +654,10 @@ function ready(error, us, county, state, county2, state2) {
     // DECODE the query
     var Startquery = decodeQuery(window.location.search)
     
+    if (Startquery["print"] === "true") {
+      d3.select("body").classed("print",true)
+    }
+
     var defaultFirst;
 
     // set dataset (student vs. medical)
@@ -967,6 +984,13 @@ function ready(error, us, county, state, county2, state2) {
 
 
 // BEGIN FUNCTIONS!
+
+  // On click of print
+    d3.select("#print-button")
+      .on("click", function(){
+        console.log(window)
+        console.log(window.location.search)
+       window.open(window.location.search + "&print=true") })  
 
   // CHANGE DATA SET on dropdown at header
   $( "#dropdown-header" ).selectmenu({
