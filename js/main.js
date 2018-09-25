@@ -3036,7 +3036,11 @@ console.log(us_data)
   }
 
   $(window).resize(function() {
-    if (Startquery["print"] != "true") {
+    if (!Startquery) {
+      console.log("no query")
+    }
+
+    if (!Startquery || Startquery["print"] != "true") {
       setScreenState (d3.select("#isMobile").style("display") === "block", d3.select("#isPhone").style("display") === "block", d3.select("#isPhoneSm").style("display") === "block" )
       initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width() 
       barSvgHeight = (IS_MOBILE) ? 185 : 130
