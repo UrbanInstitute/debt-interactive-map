@@ -474,7 +474,6 @@ function buildprint(Startquery,data) {
         //y domain
 
         // console.log(y.domain())
-
         buildPrintBars(this,d,groups[i],printdata,y)
       })
 
@@ -507,7 +506,6 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
                   
   y.rangeRound([0, barHeight]);
 
-
   var barG = d3.select(dis)
     .selectAll("g")
     .data(three)
@@ -522,11 +520,18 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
       })
     barG.append("text")
       .text(function(d) {
-        return (d=="National") ? d : "";
+        if (d=="National") {
+          return d
+        } else if (d=="State") {
+          return printdata[1]["state"]
+        } else {
+          return printdata[2]["county"]  
+        }        
       })
       .attr("class", function(d) {
         return "group-label-2 " + d
       })
+      .attr("dy", "1.5em")
     
     var subBarG = barG.selectAll("g")
       .data(categories)
@@ -988,13 +993,10 @@ function ready(error, us, county, state, county2, state2) {
   // On click of print
     d3.select("#print-button")
       .on("click", function(){
-        // console.log(startquery)
-        console.log(type)
-        console.log(SELECTED_VARIABLE)
         if (!Startquery) {
           updateQueryString(type,SELECTED_VARIABLE)  
         }
-        
+
         window.open(window.location.search + "&print=true") 
       })  
 
@@ -3298,7 +3300,7 @@ console.log(us_data)
   })
 
   // Zoom the map if the urlquery contains state and/or county
-  if (Startquery) {
+  if (Startquery && Startquery["print"] != "true") {
     if (Startquery["county"] || Startquery["state"]) {
 
       // if there is a county but no state listed
