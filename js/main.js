@@ -988,9 +988,15 @@ function ready(error, us, county, state, county2, state2) {
   // On click of print
     d3.select("#print-button")
       .on("click", function(){
-        console.log(window)
-        console.log(window.location.search)
-       window.open(window.location.search + "&print=true") })  
+        // console.log(startquery)
+        console.log(type)
+        console.log(SELECTED_VARIABLE)
+        if (!Startquery) {
+          updateQueryString(type,SELECTED_VARIABLE)  
+        }
+        
+        window.open(window.location.search + "&print=true") 
+      })  
 
   // CHANGE DATA SET on dropdown at header
   $( "#dropdown-header" ).selectmenu({
@@ -3036,10 +3042,6 @@ console.log(us_data)
   }
 
   $(window).resize(function() {
-    if (!Startquery) {
-      console.log("no query")
-    }
-
     if (!Startquery || Startquery["print"] != "true") {
       setScreenState (d3.select("#isMobile").style("display") === "block", d3.select("#isPhone").style("display") === "block", d3.select("#isPhoneSm").style("display") === "block" )
       initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width() 
