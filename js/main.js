@@ -502,9 +502,10 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
   var categories = [variable, WHITE, NONWHITE]
   var cat = ["All","White","Nonwhite"]
 
-  var barHeight = 70;
+  var barHeight = 40;
+  var topMargin = 30;
                   
-  y.rangeRound([0, barHeight]);
+  y.rangeRound([25, barHeight]);
 
   var barG = d3.select(dis)
     .selectAll("g")
@@ -513,7 +514,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
       .append('g')
       .attr("transform", function(d,i) {
         var left = i*itemwidth + i*spacer;
-        return "translate(" + left + "," + 0 + ")";
+        return "translate(" + left + "," + topMargin + ")";
       })
       .attr("class", function(d) { 
         return variable + d + " bar-group"
@@ -531,7 +532,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
       .attr("class", function(d) {
         return "group-label-2 " + d
       })
-      .attr("dy", "1.5em")
+      .attr("dy", "-1.5em")
     
     var subBarG = barG.selectAll("g")
       .data(categories)
