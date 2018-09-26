@@ -563,11 +563,18 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
       .attr("dy", ".71em")
       .attr("text-anchor", "start")
       .text(function(d,i) { 
-        return cat[i]
+
+        if (d === "perc_pop_nw_wh" || d === "perc_pop_nw_nw") {
+          return ""
+        } else {
+          return cat[i]  
+        }        
       });      
 
     var counter1 = 0;
     var counter2 = 0;
+    var counter3 = 0;
+    var counter4 = 0;
 
     rectG
       .append("rect")
@@ -581,10 +588,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
         if (i % 3 === 2) {
           counter1 +=1;
         }        
-
-        // console.log(printdata[counter1][d], result)
         return (0 + (barHeight - result))        
-        // return 0
       })
       .attr("height", function(d,i) {
         var result = isNaN(printdata[counter2][d]) ? 0 : y(printdata[counter2][d]) 
@@ -604,6 +608,40 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
           return "#696969"
         }        
       })
+
+    rectG
+      .append("text")
+      .html(function(d,i) {
+        var raw = printdata[counter4][d];
+        var result;
+        if (isNaN(raw)) {
+          if (raw == "n<50") {
+            result = "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>"
+          } else if (raw == "N/A") {
+            result = "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+          } else {
+            result = ""
+          }          
+        } else {
+          result = formatNumber(raw)
+        }
+
+        if (i % 3 === 2) {
+          counter4 +=1;
+        }        
+        return result;   
+      })
+      .attr("class","print-bar-text")
+      .attr("dy", "-0.5em")
+      .attr("transform", function(d,i) {
+        // console.log(counter3)
+        var result = isNaN(printdata[counter3][d]) ? 0 : y(printdata[counter3][d]) 
+        if (i % 3 === 2) {
+          counter3 +=1;
+        }        
+        // return (0 + (barHeight - result))
+        return "translate(" + 0 + "," + (0 + (barHeight - result)) + ")";
+      });
 
 // selection here is messed up..........
 // recreate selection so that you're selecting all nine bars maybe? per row? not sure. 
@@ -2624,6 +2662,11 @@ console.log(us_data)
                 return labelY(d,this,variable,NONWHITE,WHITE,y,barHeight)
               })
             .html(function(d) { 
+              console.log(d)
+              console.log(this)
+              console.log(variable)
+              console.log(NONWHITE)
+              console.log(WHITE)
               return labelHTML(d,this,variable,NONWHITE,WHITE)              
             })
         })
