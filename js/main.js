@@ -1695,9 +1695,10 @@ function ready(error, us, county, state, county2, state2) {
 
   /*LEGEND*/
   /*MOBILE*/
+  var keyWidthPhMaster = width * 0.8;
   var svgPh = d3.select("#legend-div")
     .append("svg")
-    .attr("width", width*.95)
+    .attr("width", keyWidthPhMaster)
     .attr("height", 60)
   var legendPh = svgPh
     .append("g")
@@ -1711,7 +1712,7 @@ function ready(error, us, county, state, county2, state2) {
     .attr("x", 12)
     .attr("y", 17)
   // legendPh.append("text")
-  var keyWidthPh =   width/8;
+  var keyWidthPh =   keyWidthPhMaster/8;
   var keyHeightPh =  15;
   for (i=0; i<=6; i++){
     if(i  < 5){  
@@ -3195,9 +3196,12 @@ console.log(us_data)
         d3.selectAll("path.selected")
           .classed("selectedNational", true)
         //UPDATE MOBILE LEGEND
+        // possible place for consildation of code. SIMPLIFY
+        var keyWidthPhMaster = width * 0.8;
+
         var legendPh = d3.select("#legend-div").select("svg")
-          .attr("width", width*.95)
-        var keyWidthPh =   width/8;
+          .attr("width", keyWidthPhMaster)
+        var keyWidthPh =   keyWidthPhMaster/8;
         for (i=0; i<=6; i++){
           if(i  < 5){  
             legendPh.select(".rect" + i)
