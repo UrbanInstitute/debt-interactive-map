@@ -1730,7 +1730,11 @@ function ready(error, us, county, state, county2, state2) {
         .attr("text-anchor", "middle")
         .text(function(){
           var min = d3.min(BigData.tmp_county, function(d) { 
-            return d.properties[SELECTED_VARIABLE]
+            if (d.properties[SELECTED_VARIABLE] == "n<50") {
+                return 1000000000000
+              } else {
+                return d.properties[SELECTED_VARIABLE]
+              }
           })
           var array = BREAKS[SELECTED_VARIABLE]
           return (i==0) ? formatNumber(min, "min") : formatNumber((array[i-1]))
@@ -1761,9 +1765,13 @@ function ready(error, us, county, state, county2, state2) {
         .attr("text-anchor", "middle")
         .text(function(){
           var max = d3.max(BigData.tmp_county, function(d) { 
-            return d.properties[SELECTED_VARIABLE]
+              if (d.properties[SELECTED_VARIABLE] == "n<50") {
+                return -100
+              } else {
+                return d.properties[SELECTED_VARIABLE]
+              }
           })
-          return formatNumber(max, "max")
+          return formatNumber(max,"max")
         })
       }
     }
