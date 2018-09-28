@@ -1030,8 +1030,9 @@ function ready(error, us, county, state, county2, state2) {
 // BEGIN FUNCTIONS!
 
   // On click of print
-    d3.select("#print-button")
+    d3.selectAll(".print-button")
       .on("click", function(){
+        console.log("test")
         if (!Startquery) {
           updateQueryString(type,SELECTED_VARIABLE)  
         }

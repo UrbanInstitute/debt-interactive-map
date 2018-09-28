@@ -534,7 +534,7 @@ path.hide {
   text-transform: uppercase;
 }
 
-#print-button { 
+.print-button { 
   height: 45px;
   width: 93px;
   background-color: #000;
@@ -546,8 +546,14 @@ path.hide {
   text-align: center;
 }
 
-#print-button h3 {
+.print-button h3 {
   margin-top: 14px;
+}
+
+#mobile-print-container .print-button {
+  float: left;
+  position: relative;
+  right: auto
 }
 
 #variable-name {
@@ -847,7 +853,7 @@ html .ui-button.ui-state-disabled:active {
   display: block;
 }
 @media (min-width : 1201px) {
-  #print-button { 
+  .print-button { 
     right: 0px;
   }
 
