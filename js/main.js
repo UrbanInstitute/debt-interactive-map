@@ -397,7 +397,8 @@ function OverallTransformData(us, county, state, countyData, stateData) {
 }
 
 function buildprint(Startquery,data) {
-  
+  console.log(Startquery)
+  console.log(data)
 
   //build notes
   var notes = "<p><b>Notes:</b></p> " + $("#notes").html();
@@ -406,21 +407,8 @@ function buildprint(Startquery,data) {
   // grab the correct data and variables
   var state_data;
   var county_data;
+  var printdata = []
 
-  // get state and county data
-  if (Startquery) {
-    if (Startquery["county"]) {
-     county_data = data.county_data.filter(function(d) {
-        return d.key == Startquery["county"] && d.state_id == Startquery["state"]
-      })
-    }
-
-    if (Startquery["state"]) {
-      state_data = data.state_data.filter(function(d) {
-        return d.key == Startquery["state"]
-      })      
-    }
-  }
 
   // get us data.
   var us_data = data.state_data[0]["values"][0]
@@ -432,14 +420,28 @@ function buildprint(Startquery,data) {
             us_data[key] = +us_data[key]
           }
       }
-  }   
+  } 
+  printdata.push(us_data)  
 
-  var printdata = [us_data,state_data[0],county_data[0]]
+  // get state and county data
+  if (Startquery) {
+    if (Startquery["state"]) {
+      state_data = data.state_data.filter(function(d) {
+        return d.key == Startquery["state"]
+      })      
+      printdata.push(state_data[0])
+    }
+    if (Startquery["county"]) {
+     county_data = data.county_data.filter(function(d) {
+        return d.key == Startquery["county"] && d.state_id == Startquery["state"]
+      })
+
+     printdata.push(county_data[0])
+    }
+  }
 
   var groups = variableList[type]["groups"]
   var rowData =  variableList[type]["variables"]
-  var location = "Pennsylvania"
-  var locationNames = ["National","Pennsylvania","Montgomery, County"]
 
   var printContainer = d3.select("#print-chart-container")
 
@@ -466,25 +468,28 @@ function buildprint(Startquery,data) {
       .attr("height", "100%")
       .each(function(d,i){                
         // Max of d,d_wh,d_nw
-        var max = d3.max([+printdata[0][d],+printdata[0][d + "_wh"],+printdata[0][d + "_nw "],+printdata[1][d],+printdata[1][d + "_wh"],+printdata[1][d + "_nw "],+printdata[2][d],+printdata[2][d + "_wh"],+printdata[2][d + "_nw "]])
-        // console.log([+printdata[0][d],+printdata[0][d + "_wh"],+printdata[0][d + "_nw"],+printdata[1][d],+printdata[1][d + "_wh"],+printdata[1][d + "_nw"],+printdata[2][d],+printdata[2][d + "_wh"],+printdata[2][d + "_nw"]])
-        var y = d3.scaleLinear()
-          .domain([0, max]);   
-        //x domain
-        //y domain
+        var y = findPrintY(d,printdata)
 
-        // console.log(y.domain())
         buildPrintBars(this,d,groups[i],printdata,y)
       })
+}
 
+function findPrintY(d,printdata) {
+  
+  var nums = []
+  for (var i = 0; i < printdata.length; i++) {      
+    var items = [+printdata[i][d],+printdata[i][d + "_wh"],+printdata[i][d + "_nw"]]
+    for (var j = 0; j < items.length; j++) {
+      nums.push(items[j])
+    }
+  }
 
-    // .data(locationNames)
-    // .enter()
-    // .append("div")
-    // .attr("class","sub-charts")
-    // .html(function(d,i){
-    //   return d;
-    // })
+  var max = d3.max(nums)  
+
+  var y = d3.scaleLinear()
+    .domain([0, max]);   
+
+  return y;
 }
 
 function buildPrintBars(dis,variable, varName, printdata,y) {
@@ -493,8 +498,15 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
   var width = 831;
   var itemwidth = (barWidth*3) + 20;
   var spacer = (width - (3*itemwidth))/2;
-  var three =   ["National", "State", "County"]
-
+  
+  console.log(printdata.length)
+  if (printdata.length === 3) {
+    var places =   ["National", "State", "County"]  
+  } else if (printdata.length === 2) {
+    var places =   ["National", "State"]
+  } else {
+    var places =   ["National"]
+  }
   // populate the svg
   var WHITE = variable + "_wh"
   var NONWHITE = variable + "_nw"
@@ -509,7 +521,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
 
   var barG = d3.select(dis)
     .selectAll("g")
-    .data(three)
+    .data(places)
     .enter()
       .append('g')
       .attr("transform", function(d,i) {
@@ -1032,11 +1044,6 @@ function ready(error, us, county, state, county2, state2) {
   // On click of print
     d3.selectAll(".print-button")
       .on("click", function(){
-        
-        console.log(Startquery)
-        console.log(type)
-        console.log(SELECTED_VARIABLE)
-        console.log(window.location.search)
 
         if (!Startquery && window.location.search === "") {
           updateQueryString(type,SELECTED_VARIABLE)  
