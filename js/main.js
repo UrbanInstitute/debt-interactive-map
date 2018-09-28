@@ -444,6 +444,23 @@ function buildprint(Startquery,data) {
   var rowData =  variableList[type]["variables"]
 
   var printContainer = d3.select("#print-chart-container")
+  
+  // Set to national, try state, if state, try county. If good, county, if bad, state, if none, national.
+  var name = "National"
+
+  try {
+    name = printdata[1].state;
+    try {
+      name = printdata[2].county + ", " + printdata[2].state;
+    }
+    catch(err) {
+    }  
+  }
+  catch(err) {
+  }
+
+  // This should work but its getting overridden by things later in the process because it is the same title as on the regular 
+  $("#location").html(name)
 
   // get rid of previous ones
   printContainer.selectAll(".print-chart").remove()
@@ -499,7 +516,6 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
   var itemwidth = (barWidth*3) + 20;
   var spacer = (width - (3*itemwidth))/2;
   
-  console.log(printdata.length)
   if (printdata.length === 3) {
     var places =   ["National", "State", "County"]  
   } else if (printdata.length === 2) {
