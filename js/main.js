@@ -396,7 +396,7 @@ function OverallTransformData(us, county, state, countyData, stateData) {
   return bigbig;
 }
 
-function buildprint(Startquery,data) {   
+function buildprint(Startquery,data) {
   
 
   //build notes
@@ -1032,8 +1032,13 @@ function ready(error, us, county, state, county2, state2) {
   // On click of print
     d3.selectAll(".print-button")
       .on("click", function(){
-        console.log("test")
-        if (!Startquery) {
+        
+        console.log(Startquery)
+        console.log(type)
+        console.log(SELECTED_VARIABLE)
+        console.log(window.location.search)
+
+        if (!Startquery && window.location.search === "") {
           updateQueryString(type,SELECTED_VARIABLE)  
         }
 
@@ -2150,7 +2155,6 @@ function ready(error, us, county, state, county2, state2) {
         return barX(d,this,SELECTED_VARIABLE_ph,NONWHITE_ph,WHITE_ph,x_ph)
       })
       .text(function(d) { 
-        console.log(isNaN(d[NONWHITE_ph]))
         var parentClass = $(this).closest(".rect-g").attr("class")
         if (SELECTED_VARIABLE_ph !== "perc_pop_nw") {
           if (parentClass.search("All") > -1) { 
@@ -2333,8 +2337,6 @@ function ready(error, us, county, state, county2, state2) {
         return "translate(" + 0 +"," + barHeight+ ")"
       })
       .call(xAxis)
-
-console.log(us_data)
 
     //add bars
     rectG.selectAll("rect")
@@ -2672,11 +2674,6 @@ console.log(us_data)
                 return labelY(d,this,variable,NONWHITE,WHITE,y,barHeight)
               })
             .html(function(d) { 
-              console.log(d)
-              console.log(this)
-              console.log(variable)
-              console.log(NONWHITE)
-              console.log(WHITE)
               return labelHTML(d,this,variable,NONWHITE,WHITE)              
             })
         })
