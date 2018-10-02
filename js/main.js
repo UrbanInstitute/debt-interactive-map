@@ -43,6 +43,7 @@ var zoomNational_St;
 var type;
 var typeVar;
 var tdMap;
+var printNameFinal;
 var active = d3.select(null);
 // var margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55}
 
@@ -446,21 +447,19 @@ function buildprint(Startquery,data) {
   var printContainer = d3.select("#print-chart-container")
   
   // Set to national, try state, if state, try county. If good, county, if bad, state, if none, national.
-  var name = "National"
+  printNameFinal = "National"
 
   try {
-    name = printdata[1].state;
+    printNameFinal = printdata[1].state;
     try {
-      name = printdata[2].county + ", " + printdata[2].state;
+      printNameFinal = printdata[2].county + ", " + printdata[2].state;
     }
     catch(err) {
     }  
   }
   catch(err) {
   }
-
-  // This should work but its getting overridden by things later in the process because it is the same title as on the regular 
-  $("#location").html(name)
+  //add the printnamefinal at the very end of the script
 
   // get rid of previous ones
   printContainer.selectAll(".print-chart").remove()
@@ -3457,5 +3456,7 @@ function ready(error, us, county, state, county2, state2) {
     $('#category-select').val(Startquery["variable"]);
     $("#category-select").selectmenu("refresh")
 
-  };   
+  } else if (Startquery["print"] === "true") {
+    d3.select("#location").html(printNameFinal)    
+  }
 };
