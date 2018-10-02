@@ -397,10 +397,7 @@ function OverallTransformData(us, county, state, countyData, stateData) {
   return bigbig;
 }
 
-function buildprint(Startquery,data) {
-  console.log(Startquery)
-  console.log(data)
-
+function buildprint(Startquery,data) {  
   //build notes
   var notes = "<p><b>Notes:</b></p> " + $("#notes").html();
   $("#print-chart-notes").html(notes)
@@ -1522,7 +1519,7 @@ function ready(error, us, county, state, county2, state2) {
         countyQuery = (level == "state") ? null : d.properties.id
         
         addTag(state, county, abbr)
-        zoomMap(width, d, level)
+        zoomMap(width, d, level)          
         updateBars(SELECTED_VARIABLE, d)
       }
       updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
@@ -1602,6 +1599,8 @@ function ready(error, us, county, state, county2, state2) {
       // $(".counties").css("pointer-events", "all")
       addTag(state, null, abbr)        
       zoomMap(width, d, level)        
+      console.log(SELECTED_VARIABLE)
+          console.log(d)
       updateBars(SELECTED_VARIABLE, d)
 
       var stateQuery = d.properties.id;
@@ -2787,7 +2786,7 @@ function ready(error, us, county, state, county2, state2) {
     hidelimited(variable)
   }
 
-  function addTag(state, county, abbr) {   
+  function addTag(state, county, abbr) {
       var widgetHeight = (IS_MOBILE) ? 80 : 60;
       ($(".search-div > .ui-widget").css("height", widgetHeight))
       d3.selectAll('li.tagit-choice').remove()
@@ -3404,10 +3403,8 @@ function ready(error, us, county, state, county2, state2) {
       })
 
       //  convert state number to state name      
-
       var data = filteredData[0]
 
-      
       zoomMap(width, data, geoType)
 
       // do stuff for county and mobile
@@ -3417,8 +3414,6 @@ function ready(error, us, county, state, county2, state2) {
       $(".bar-State").css("display", "block")
       $(".label-State").css("display", "block")
 
-      updateBars(typeVar, filteredData[0].properties.state)
-
       d3.select(".group-label-ph2.State").text(filteredData[0].properties.state)
       d3.select(".group-label-ph.State").text(filteredData[0].properties.state)
 
@@ -3426,7 +3421,9 @@ function ready(error, us, county, state, county2, state2) {
 
       d3.select(".county-menu").select(".ui-icon").classed("greyed", false)
       $("#county-select").selectmenu("refresh")
+      var county = null;
       if (geoType == "county") { 
+
         addTag(data.properties.state,data.properties.county,data.properties.abbr)
 
         // do stuff for county and mobile
@@ -3442,13 +3439,19 @@ function ready(error, us, county, state, county2, state2) {
         updateBars(typeVar, filteredData[0].properties.county)
         d3.select(".group-label-ph2.County").text(filteredData[0].properties.county)
         d3.select(".group-label-ph.County").text(filteredData[0].properties.county)      
-
+        county = filteredData[0].properties.county;
       }else {
         addTag(data.properties.state,null,data.properties.abbr)
+        $('.ui-widget-content.ui-autocomplete-input').attr('placeholder', '')
         var filter = data["properties"]["abbr"]
-        createSearchArray(filter)
-      }
+        createSearchArray(filter)        
 
+        var stateData = BigData.tmp_state.filter(function(d){ 
+          return d.properties.state == data.properties.state;
+        })   
+        console.log(stateData[0])
+        updateBars(typeVar, stateData[0])
+      }
 
     }
 
