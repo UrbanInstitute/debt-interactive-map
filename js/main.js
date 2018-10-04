@@ -482,7 +482,6 @@ function buildprint(Startquery,data) {
       .each(function(d,i){                
         // Max of d,d_wh,d_nw
         var y = findPrintY(d,printdata)
-
         buildPrintBars(this,d,groups[i],printdata,y)
       })
 }
@@ -529,7 +528,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
   var barHeight = 40;
   var topMargin = 30;
                   
-  y.rangeRound([25, barHeight]);
+  y.rangeRound([0, barHeight]);
 
   var barG = d3.select(dis)
     .selectAll("g")
@@ -3436,7 +3435,7 @@ function ready(error, us, county, state, county2, state2) {
 
         selectedLocation()
 
-        updateBars(typeVar, filteredData[0].properties.county)
+        // updateBars(typeVar, filteredData[0].properties.county)
         d3.select(".group-label-ph2.County").text(filteredData[0].properties.county)
         d3.select(".group-label-ph.County").text(filteredData[0].properties.county)      
         county = filteredData[0].properties.county;
@@ -3449,7 +3448,6 @@ function ready(error, us, county, state, county2, state2) {
         var stateData = BigData.tmp_state.filter(function(d){ 
           return d.properties.state == data.properties.state;
         })   
-        console.log(stateData[0])
         updateBars(typeVar, stateData[0])
       }
 
