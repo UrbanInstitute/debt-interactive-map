@@ -475,7 +475,7 @@ function buildprint(Startquery,data) {
   printContainer.selectAll(".print-chart")
     .append("svg")
       .attr("class",function(d){
-        return d
+        return d + " print-row"
       })
       .attr("width", "100%")
       .attr("height", "100%")
@@ -484,6 +484,11 @@ function buildprint(Startquery,data) {
         var y = findPrintY(d,printdata)
         buildPrintBars(this,d,groups[i],printdata,y)
       })
+
+
+  // Add in bottom logos
+  var barsgroup = $(".print-chart")
+  console.log(barsgroup)
 }
 
 function findPrintY(d,printdata) {

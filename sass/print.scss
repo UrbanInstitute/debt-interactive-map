@@ -16,7 +16,7 @@ $icon-width-buffer: 20px;
 .print {
 	width: 220mm;
 	background: #fff;
-	margin: 40px;
+	// margin: 40px;
 
 	.main-table {
 		display: initial;
@@ -295,10 +295,30 @@ $icon-width-buffer: 20px;
 
 }
 
-
 // print specific queries
 @media print{
-	.print {
-		margin: 0px;
+	@page {
+		size: 210mm 297mm; /* portrait 
+		/* you can also specify margins here: */
+		margin: 15mm;	
+		/*margin-right: 45mm;  for compatibility with both A4 and Letter */
 	}
+    body.print a:after{
+ 		content: none !important;
+    }	
+
+	// .print {
+	// 	margin: 0px;
+	// }
+
+	.page-break { height:0; page-break-after:always; margin:0; border-top:none; }
+
+	.thin.logo img {
+	    height: 14px;
+	    margin-top: 30px;
+	    position: absolute;
+	    bottom: 0px;	 
+	}
+
+
 }

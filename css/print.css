@@ -2,7 +2,6 @@
 .print {
   width: 220mm;
   background: #fff;
-  margin: 40px;
 }
 /* line 21, ../sass/print.scss */
 .print .main-table {
@@ -225,8 +224,31 @@
 }
 
 @media print {
-  /* line 301, ../sass/print.scss */
-  .print {
-    margin: 0px;
+  @page {
+    size: 210mm 297mm;
+                   /* portrait 
+/* you can also specify margins here: */
+    margin: 15mm;
+    /*margin-right: 45mm;  for compatibility with both A4 and Letter */
+  }
+  /* line 306, ../sass/print.scss */
+  body.print a:after {
+    content: none !important;
+  }
+
+  /* line 314, ../sass/print.scss */
+  .page-break {
+    height: 0;
+    page-break-after: always;
+    margin: 0;
+    border-top: none;
+  }
+
+  /* line 316, ../sass/print.scss */
+  .thin.logo img {
+    height: 14px;
+    margin-top: 30px;
+    position: absolute;
+    bottom: 0px;
   }
 }
