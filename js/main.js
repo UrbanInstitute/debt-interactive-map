@@ -1,3 +1,5 @@
+// DWCut? if it might could be cut/consolidated
+
   if (window.location.search) {    
     // If there's a url search query, do a bunch of stuff like create the beginning zoom variables
 
@@ -724,11 +726,7 @@ function ready(error, us, county, state, county2, state2) {
     // If there's a url search query, do a bunch of stuff like create the beginning zoom variables
 
     // DECODE the query
-    var Startquery = decodeQuery(window.location.search)
-    
-    if (Startquery["print"] === "true") {
-      d3.select("body").classed("print",true)
-    }
+    // var Startquery = decodeQuery(window.location.search)  
 
     var defaultFirst;
 
@@ -747,7 +745,6 @@ function ready(error, us, county, state, county2, state2) {
 
     // set variable
       // NEED conditional to ensure that the wrong variable is not present    
-    
     if (!Startquery["variable"]) {
       typeVar = defaultFirst
       Startquery["variable"] = typeVar;
@@ -792,7 +789,8 @@ function ready(error, us, county, state, county2, state2) {
 
     // when we adjust this to a DIFFERENT student item, it changes the map AND legend, but not the spot on the left hand side in the table. (but uupper and lower end is a NaN?????)
   }
-    
+   
+  // DWCut? or consolidate? 
   setVariable(typeVar)
   setVariable(typeVar, true)
 
@@ -807,23 +805,17 @@ function ready(error, us, county, state, county2, state2) {
   // if type and variable don't match, remove the variable and go down to type (reset variable)
   // if variable doesn't exist, do the top variable
 
-
   setZoom(true,false, false)
-
-// when we adjust this to a medical item, it allows the LEGEND to change but the data doesn't work in the map
-    // Even when "big data" is changed above using changeData
-
-
-
-
 
 
   /*END*/
 
   // NOT SURE WHAT THIS IS DOING....maybe creating the search pool for the filtering county/state search??
 
-  $("#location").html("National")
+  // Begin change jquery UI items in the DOM
 
+  // DWCut? because we do it later on if print...could do no matter what?
+  $("#location").html("National")
 
   $( "#searchBox" ).autocomplete({
     appendTo: ".search-div",
@@ -872,6 +864,9 @@ function ready(error, us, county, state, county2, state2) {
         var geography = (geoType == "county") ? county : state;
         selectedLocation()
 
+        console.log('here')
+
+        // DWCut? Dedupe? write a function somewhere?
         var filteredData = geoData.filter(function(d) {
           if (geoType == "county") {
             return d.properties["county"] == county && d.properties["abbr"] == state;
@@ -980,7 +975,6 @@ function ready(error, us, county, state, county2, state2) {
     .append("select")
     .attr("id", "state-select")
 
-// console.log(state_data)
   var optionsState = stateMenu
     .selectAll('option')
     .data(state_data)
