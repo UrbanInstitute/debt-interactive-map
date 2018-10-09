@@ -926,10 +926,8 @@ function ready(error, us, county, state, county2, state2) {
   createSearchArray("")
 
   var zoom = d3.zoom()
-      // .translate([0, 0])
-      // .scale(1)
       .scaleExtent([0, 8])
-  //     .on("zoom", zoomed);
+
 
   var min = d3.min(BigData.tmp_county, function(d) {
     return d.properties[SELECTED_VARIABLE]
@@ -960,6 +958,8 @@ function ready(error, us, county, state, county2, state2) {
   {label: "Share without a bachelor’s degree", variable: "perc_no_bach"},
   {label: "Average household income", variable: "avg_income" }]
 
+
+// Create and populate Mobile Dropdowns options (mixing d3 and jquery...)
   var table = d3.select("#table-div")
 
   var stateMenu = d3.select(".state-menu")
@@ -1164,15 +1164,6 @@ function ready(error, us, county, state, county2, state2) {
 
     });
 
-  // Update the currently viewing section in the event that its been updated by the query string on load
-  $('#dropdown-header').val(type)
-  $('#dropdown-header').selectmenu("refresh")
-
-
-
-
-
-
   function changeData(CATEGORY) {
     
     var BigData = (CATEGORY === "medical") ? OverallTransformData(us,county,state,countyData,stateData) : OverallTransformData(us,county2,state2,countyData,stateData)
@@ -1242,42 +1233,42 @@ function ready(error, us, county, state, county2, state2) {
 
   function filterCountyMenu(selectedState) {
 
-      var filteredCounties = county_data.filter(function(d) {
+    var filteredCounties = county_data.filter(function(d) {
       return d.state == selectedState
     })
 
-        var optionsCounty = countyMenu
-          .selectAll('option')
-          .data(filteredCounties)
-        optionsCounty.exit().remove()
-        var optionsCountyEnter = optionsCounty.enter()
+    var optionsCounty = countyMenu
+      .selectAll('option')
+      .data(filteredCounties)
+    optionsCounty.exit().remove()
+    var optionsCountyEnter = optionsCounty.enter()
+      .append('option')
+      .text(function (d) { 
+        return d.county; 
+      })
+      .attr('value', function(d){ 
+        return d.county
+      })
+      optionsCounty.merge(optionsCountyEnter)
+        .text(function (d) { 
+          return d.county; 
+        })
+        .attr('value', function(d){ 
+          return d.county
+        })
+      if (selectedState != "USA") { 
+        d3.selectAll(".dropdown-label").classed("disabled", false)
+        d3.select("#county-select")
           .append('option')
-          .text(function (d) { 
-            return d.county; 
-          })
-          .attr('value', function(d){ 
-            return d.county
-          })
-        optionsCounty.merge(optionsCountyEnter)
-          .text(function (d) { 
-            return d.county; 
-          })
-          .attr('value', function(d){ 
-            return d.county
-          })
-        if (selectedState != "USA") { 
-          d3.selectAll(".dropdown-label").classed("disabled", false)
-          d3.select("#county-select")
-            .append('option')
-            .text("Select a county")
-            .attr('value', '')
-            .attr("selected", "selected")
-            .attr("disabled", "disabled")
-            .attr("hidden", "hidden")
-        }else {
-          d3.select(".county-menu").select(".dropdown-label").classed("disabled", true)
+          .text("Select a county")
+          .attr('value', '')
+          .attr("selected", "selected")
+          .attr("disabled", "disabled")
+          .attr("hidden", "hidden")
+      }else {
+        d3.select(".county-menu").select(".dropdown-label").classed("disabled", true)
 
-        }
+      }
     $("#county-select").selectmenu("refresh");
   }
 
@@ -1682,10 +1673,6 @@ function ready(error, us, county, state, county2, state2) {
       .attr('transform', function(d) {
         return 'translate(' + d.x + ',' + (height - 80 ) + ')'
       });
-      // .on('click', function(d) {
-      //   var factor = (this.id === 'zoom_in') ? 2 : .9;
-      //   zoomed(factor)
-      // })
 
     button
       .append("image")
@@ -1699,27 +1686,8 @@ function ready(error, us, county, state, county2, state2) {
         zoomMap(width, null, "national")
       })
 
-    // d3.select(".map-g")
-    //   .call(d3.zoom().on("zoom", function () {
-    //           d3.select(".map-g").attr("transform", d3.event.transform)
-    //   }))
-
-
-  function zoomed(factor) { 
-      setZoom(true, false, false)
-      var centroid = [width/2, height/2], //replace with variable d to center by county 
-          x = centroid[0],
-          y = centroid[1],
-          k = factor;
-      // var data = (zoomLevel == "state") ? d3.select("path#" + selectedState.properties.abbr).datum() : d;
-      g.transition()
-          .duration(750)
-          .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")scale(" + k + ")translate(" + -x + "," + -y + ")")
-          .style("stroke-width", 1.5 / k + "px");
-  }
-
   /*LEGEND*/
-  /*MOBILE*/
+  /*TABLET*/
   var keyWidthPhMaster = width * 0.8;
   var svgPh = d3.select("#legend-div")
     .append("svg")
@@ -1803,8 +1771,8 @@ function ready(error, us, county, state, county2, state2) {
  
   /*DESKTOP*/
   svg.append("rect")
-    .attr("width", function() { 
-      return (IS_MOBILE) ? 73: 57
+    .attr("width", function() {       
+      return 1000
     })
     .attr("class", "rect-div")
     .attr("height", 215)
@@ -3371,6 +3339,10 @@ function ready(error, us, county, state, county2, state2) {
         }
     }  
   })
+
+  // Update the currently viewing section in the event that its been updated by the query string on load
+  $('#dropdown-header').val(type)
+  $('#dropdown-header').selectmenu("refresh")
 
   // Zoom the map if the urlquery contains state and/or county
   if (Startquery && Startquery["print"] != "true") {
