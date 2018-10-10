@@ -298,6 +298,8 @@ $icon-width-buffer: 20px;
 		}	
 	}
 
+
+
 }
 
 // print specific queries
@@ -308,9 +310,12 @@ $icon-width-buffer: 20px;
 		margin: 15mm;	
 		/*margin-right: 45mm;  for compatibility with both A4 and Letter */
 	}
-    body.print a:after{
+    body.print a:after{    	
  		content: none !important;
     }	
+    body.print a {
+    	color: #000 !important;
+    }
 
 	// .print {
 	// 	margin: 0px;
