@@ -489,8 +489,16 @@ function buildprint(Startquery,data) {
 
 
   // Add in bottom logos
-  var barsgroup = $(".print-chart")
-  console.log(barsgroup)
+  var footerIcon = '<div class="print-footer-icon"><img src="img/print-footer.png"></div>';
+  
+  var firstpageBottom = $(".print-chart:eq(4)")
+  
+  firstpageBottom.after(footerIcon)
+  console.log(firstpageBottom)
+
+            
+
+
 }
 
 function findPrintY(d,printdata) {
