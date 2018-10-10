@@ -1,4 +1,4 @@
-$icon-width: 84px;
+$icon-width: 95px;
 $icon-width-buffer: 20px;
 // $bar-container-height: 150px
 // $max-bar-height: $bar-container-height - 50px;
@@ -56,15 +56,17 @@ $icon-width-buffer: 20px;
 			h1, h2 {color: #000 !important;}
 			
 			h1 {
-				font-size: 15px;
+				font-size: 18px;
 				line-height: 130%;
 				padding-top: 8px;
 			}
 
 			h2 {
-				font-size: 10px;
+				font-size: 14px;
 				margin-top: 50px;
-				line-height: 120%;
+				line-height: 130%;
+				letter-spacing: 0.2px;
+				font-weight:400;
 			}
 
 			#intro-text {
@@ -123,7 +125,7 @@ $icon-width-buffer: 20px;
 				width: 100% !important;
 
 				.ui-selectmenu-text {
-					font-size: 13px !important;
+					font-size: 14px !important;
 					line-height: 120% !important;
 					font-weight: 400 !important;
 					letter-spacing:0.05em;
@@ -154,7 +156,7 @@ $icon-width-buffer: 20px;
 			#location {
 				height: inherit;
 				font-weight: 400;
-				font-size: 12px;
+				font-size: 15px;
 				padding-left: 0px !important;
 			}
 
@@ -170,19 +172,19 @@ $icon-width-buffer: 20px;
 
 		// typography items, notes too.
 		.group-label-2 {
-			font-size: 9px;
+			font-size: 11px;
 		}
 
 		.g-text2 text {
-			font-size: 9px;
+			font-size: 11px;
 		}
 
 		#print-chart-notes {
-		line-height: 9px;
+		line-height: 11px;
 			p {
 				display: inline;
 				font-style: italic;
-				font-size: 7px;
+				font-size: 9px;
 				// line-height: 120%;
 
 
@@ -192,7 +194,7 @@ $icon-width-buffer: 20px;
 
 				sup {
 					font-weight: 700;
-					font-size: 7px !important;
+					font-size: 9px !important;
 					vertical-align: inherit;
 				}
 			}
@@ -220,12 +222,12 @@ $icon-width-buffer: 20px;
 			//     background-color: green;
 			//     margin-top:10px;		    
 			//     float: left;	
-			//     font-size: 9px;
+			//     font-size: 11px;
 			// }
 		}
 		.inner {
 			font-weight: bold;
-			font-size: 10px;		
+			font-size: 12px;		
 		}		
 	}
 
@@ -243,7 +245,7 @@ $icon-width-buffer: 20px;
 		}	
 
 		#notes-section {
-			// font-size: 7px !important;
+			// font-size: 9px !important;
 
 		}
 	}
@@ -257,12 +259,15 @@ $icon-width-buffer: 20px;
 
 		.bottom-content {
 			max-width: none;
-			padding-top: 0px;
+			padding-top: 20px;
 			width: 100% !important;
 
 			h1.bottom-header {
-				font-size: 12px;
+				font-size: 14px;
 				margin:0px;
+				text-transform: none;
+				font-weight: 400;
+				padding-top: 20px;
 			}
 
 			.footerButton {
@@ -270,8 +275,8 @@ $icon-width-buffer: 20px;
 			}
 
 			.bottom-text {
-				font-size: 9px;
-				line-height: 100% !important;
+				font-size: 11px;
+				line-height: 120% !important;
 				font-style: normal;
 				margin-bottom: 0px;
 
@@ -282,7 +287,7 @@ $icon-width-buffer: 20px;
 			}
 
 			.credit-names, .credit-header {
-				font-size: 9px;
+				font-size: 11px;
 				font-weight: 400;
 				line-height: 100%;
 			}

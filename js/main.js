@@ -1772,7 +1772,7 @@ function ready(error, us, county, state, county2, state2) {
   /*DESKTOP*/
   svg.append("rect")
     .attr("width", function() {       
-      return 1000
+      return (IS_MOBILE) ? 73: 57
     })
     .attr("class", "rect-div")
     .attr("height", 215)

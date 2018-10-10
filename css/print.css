@@ -27,45 +27,47 @@
 }
 /* line 58, ../sass/print.scss */
 .print .banner-wrapper .banner h1 {
-  font-size: 15px;
+  font-size: 18px;
   line-height: 130%;
   padding-top: 8px;
 }
 /* line 64, ../sass/print.scss */
 .print .banner-wrapper .banner h2 {
-  font-size: 10px;
+  font-size: 14px;
   margin-top: 50px;
-  line-height: 120%;
+  line-height: 130%;
+  letter-spacing: 0.2px;
+  font-weight: 400;
 }
-/* line 70, ../sass/print.scss */
+/* line 72, ../sass/print.scss */
 .print .banner-wrapper .banner #intro-text {
   background: #fff;
   padding: 0px;
 }
-/* line 74, ../sass/print.scss */
+/* line 76, ../sass/print.scss */
 .print .banner-wrapper .banner #intro-text .intro-wrap {
   font-style: normal;
   text-align: left;
   max-width: none;
 }
-/* line 79, ../sass/print.scss */
+/* line 81, ../sass/print.scss */
 .print .banner-wrapper .banner #intro-text .intro-wrap .inner {
-  padding-left: 104px;
+  padding-left: 115px;
 }
-/* line 83, ../sass/print.scss */
+/* line 85, ../sass/print.scss */
 .print .banner-wrapper .banner #intro-text .intro-wrap .full.logo {
   display: block;
   float: left;
 }
-/* line 87, ../sass/print.scss */
+/* line 89, ../sass/print.scss */
 .print .banner-wrapper .banner #intro-text .intro-wrap .full.logo img {
-  width: 84px;
+  width: 95px;
 }
-/* line 92, ../sass/print.scss */
+/* line 94, ../sass/print.scss */
 .print .banner-wrapper .banner #intro-text .intro-wrap #date {
   display: none;
 }
-/* line 103, ../sass/print.scss */
+/* line 105, ../sass/print.scss */
 .print .banner-wrapper .current-menu.dropdown {
   width: unset !important;
   max-width: none !important;
@@ -78,19 +80,19 @@
   border: 0px;
   position: absolute;
   top: 35px;
-  left: 104px;
+  left: 115px;
 }
-/* line 118, ../sass/print.scss */
+/* line 120, ../sass/print.scss */
 .print .banner-wrapper .current-menu.dropdown .dropdown-label {
   display: none;
 }
-/* line 122, ../sass/print.scss */
+/* line 124, ../sass/print.scss */
 .print .banner-wrapper .current-menu.dropdown #dropdown-header-button {
   width: 100% !important;
 }
-/* line 125, ../sass/print.scss */
+/* line 127, ../sass/print.scss */
 .print .banner-wrapper .current-menu.dropdown #dropdown-header-button .ui-selectmenu-text {
-  font-size: 13px !important;
+  font-size: 14px !important;
   line-height: 120% !important;
   font-weight: 400 !important;
   letter-spacing: 0.05em;
@@ -99,64 +101,64 @@
   text-transform: uppercase;
   color: #2397d0;
 }
-/* line 137, ../sass/print.scss */
+/* line 139, ../sass/print.scss */
 .print .banner-wrapper .current-menu.dropdown span .ui-selectmenu-icon.ui-icon.ui-icon-triangle-1-s {
   display: none;
 }
-/* line 146, ../sass/print.scss */
+/* line 148, ../sass/print.scss */
 .print .td-map {
   background-color: #fff;
   box-shadow: inset 0px 0px 0px 0px;
   padding-top: 20px;
 }
-/* line 151, ../sass/print.scss */
+/* line 153, ../sass/print.scss */
 .print .td-map .map-div {
   margin: 0px;
 }
-/* line 154, ../sass/print.scss */
+/* line 156, ../sass/print.scss */
 .print .td-map .map-div #location {
   height: inherit;
   font-weight: 400;
-  font-size: 12px;
+  font-size: 15px;
   padding-left: 0px !important;
 }
-/* line 161, ../sass/print.scss */
+/* line 163, ../sass/print.scss */
 .print .td-map .map-div .print-button {
   display: none;
 }
-/* line 166, ../sass/print.scss */
+/* line 168, ../sass/print.scss */
 .print .td-map #variable-name, .print .td-map #legend-div, .print .td-map #bar-chart {
   display: none;
 }
-/* line 172, ../sass/print.scss */
+/* line 174, ../sass/print.scss */
 .print .td-map .group-label-2 {
-  font-size: 9px;
+  font-size: 11px;
 }
-/* line 176, ../sass/print.scss */
+/* line 178, ../sass/print.scss */
 .print .td-map .g-text2 text {
-  font-size: 9px;
-}
-/* line 180, ../sass/print.scss */
-.print .td-map #print-chart-notes {
-  line-height: 9px;
+  font-size: 11px;
 }
 /* line 182, ../sass/print.scss */
+.print .td-map #print-chart-notes {
+  line-height: 11px;
+}
+/* line 184, ../sass/print.scss */
 .print .td-map #print-chart-notes p {
   display: inline;
   font-style: italic;
-  font-size: 7px;
+  font-size: 9px;
 }
-/* line 189, ../sass/print.scss */
+/* line 191, ../sass/print.scss */
 .print .td-map #print-chart-notes p b {
   font-style: normal !important;
 }
-/* line 193, ../sass/print.scss */
+/* line 195, ../sass/print.scss */
 .print .td-map #print-chart-notes p sup {
   font-weight: 700;
-  font-size: 7px !important;
+  font-size: 9px !important;
   vertical-align: inherit;
 }
-/* line 202, ../sass/print.scss */
+/* line 204, ../sass/print.scss */
 .print .td-map .print-chart {
   height: 130px;
   width: 100%;
@@ -164,61 +166,64 @@
   padding-bottom: 10px;
   border-bottom: 1px solid #D2D2D2;
 }
-/* line 210, ../sass/print.scss */
+/* line 212, ../sass/print.scss */
 .print .td-map .print-chart:last-child {
   border-bottom: 0px;
 }
-/* line 226, ../sass/print.scss */
+/* line 228, ../sass/print.scss */
 .print .td-map .inner {
   font-weight: bold;
-  font-size: 10px;
+  font-size: 12px;
 }
-/* line 236, ../sass/print.scss */
+/* line 238, ../sass/print.scss */
 .print .td-table {
   display: none;
 }
-/* line 241, ../sass/print.scss */
+/* line 243, ../sass/print.scss */
 .print .td-table #table-div, .print .td-table .search-div-main, .print .td-table .select-table {
   display: none;
 }
-/* line 254, ../sass/print.scss */
+/* line 256, ../sass/print.scss */
 .print .bottom-container {
   border-top: 0px;
   background-color: #fff;
 }
-/* line 258, ../sass/print.scss */
+/* line 260, ../sass/print.scss */
 .print .bottom-container .bottom-content {
   max-width: none;
-  padding-top: 0px;
+  padding-top: 20px;
   width: 100% !important;
 }
-/* line 263, ../sass/print.scss */
+/* line 265, ../sass/print.scss */
 .print .bottom-container .bottom-content h1.bottom-header {
-  font-size: 12px;
+  font-size: 14px;
   margin: 0px;
+  text-transform: none;
+  font-weight: 400;
+  padding-top: 20px;
 }
-/* line 268, ../sass/print.scss */
+/* line 273, ../sass/print.scss */
 .print .bottom-container .bottom-content .footerButton {
   display: none;
 }
-/* line 272, ../sass/print.scss */
+/* line 277, ../sass/print.scss */
 .print .bottom-container .bottom-content .bottom-text {
-  font-size: 9px;
-  line-height: 100% !important;
+  font-size: 11px;
+  line-height: 120% !important;
   font-style: normal;
   margin-bottom: 0px;
 }
-/* line 278, ../sass/print.scss */
+/* line 283, ../sass/print.scss */
 .print .bottom-container .bottom-content .bottom-text em {
   font-style: normal;
 }
-/* line 284, ../sass/print.scss */
+/* line 289, ../sass/print.scss */
 .print .bottom-container .bottom-content .credit-names, .print .bottom-container .bottom-content .credit-header {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 400;
   line-height: 100%;
 }
-/* line 290, ../sass/print.scss */
+/* line 295, ../sass/print.scss */
 .print .bottom-container .bottom-content #copyright {
   display: none;
 }
@@ -231,12 +236,12 @@
     margin: 15mm;
     /*margin-right: 45mm;  for compatibility with both A4 and Letter */
   }
-  /* line 306, ../sass/print.scss */
+  /* line 311, ../sass/print.scss */
   body.print a:after {
     content: none !important;
   }
 
-  /* line 314, ../sass/print.scss */
+  /* line 319, ../sass/print.scss */
   .page-break {
     height: 0;
     page-break-after: always;
@@ -244,7 +249,7 @@
     border-top: none;
   }
 
-  /* line 316, ../sass/print.scss */
+  /* line 321, ../sass/print.scss */
   .thin.logo img {
     height: 14px;
     margin-top: 30px;
