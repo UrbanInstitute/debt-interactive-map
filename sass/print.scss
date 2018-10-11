@@ -1,5 +1,5 @@
-$icon-width: 95px;
-$icon-width-buffer: 20px;
+$icon-width: 110px;
+$icon-width-buffer: 40px;
 // $bar-container-height: 150px
 // $max-bar-height: $bar-container-height - 50px;
 
@@ -56,15 +56,15 @@ $icon-width-buffer: 20px;
 			h1, h2 {color: #000 !important;}
 			
 			h1 {
-				font-size: 18px;
+				font-size: 22px;
 				line-height: 130%;
 				padding-top: 8px;
 			}
 
 			h2 {
-				font-size: 14px;
-				margin-top: 50px;
-				line-height: 130%;
+				font-size: 15px;
+				margin-top: 70px;
+				line-height: 140%;
 				letter-spacing: 0.2px;
 				font-weight:400;
 			}
@@ -113,7 +113,7 @@ $icon-width-buffer: 20px;
 		    box-shadow: none;
 		    border: 0px;
 		    position: absolute;
-    		top: 35px;
+    		top: 40px;
     		left: $icon-width + $icon-width-buffer;
 
 
@@ -125,14 +125,14 @@ $icon-width-buffer: 20px;
 				width: 100% !important;
 
 				.ui-selectmenu-text {
-					font-size: 14px !important;
+					font-size: 19px !important;
 					line-height: 120% !important;
 					font-weight: 400 !important;
 					letter-spacing:0.05em;
 					margin: 0px;
 					padding: 0px;					
 					text-transform: uppercase;
-					color: rgb(35,151,208);
+					color: #1696D2;
 				}	
 			}
 			span {
@@ -148,7 +148,7 @@ $icon-width-buffer: 20px;
 	.td-map {
 		background-color: #fff;
 		box-shadow: inset 0px 0px 0px 0px;
-		padding-top: 20px;
+		padding-top: 45px;
 
 		.map-div {
 			margin: 0px;
@@ -156,7 +156,7 @@ $icon-width-buffer: 20px;
 			#location {
 				height: inherit;
 				font-weight: 400;
-				font-size: 15px;
+				font-size: 18px;
 				padding-left: 0px !important;
 			}
 
@@ -315,7 +315,7 @@ $icon-width-buffer: 20px;
 	@page {
 		size: 210mm 297mm; /* portrait 
 		/* you can also specify margins here: */
-		margin: 5mm;	
+		margin: 10mm;	
 		margin-top:15mm;
 		margin-bottom:15mm;
 		// marigin:0mm;

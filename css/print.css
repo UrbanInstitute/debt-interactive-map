@@ -27,15 +27,15 @@
 }
 /* line 58, ../sass/print.scss */
 .print .banner-wrapper .banner h1 {
-  font-size: 18px;
+  font-size: 22px;
   line-height: 130%;
   padding-top: 8px;
 }
 /* line 64, ../sass/print.scss */
 .print .banner-wrapper .banner h2 {
-  font-size: 14px;
-  margin-top: 50px;
-  line-height: 130%;
+  font-size: 15px;
+  margin-top: 70px;
+  line-height: 140%;
   letter-spacing: 0.2px;
   font-weight: 400;
 }
@@ -52,7 +52,7 @@
 }
 /* line 81, ../sass/print.scss */
 .print .banner-wrapper .banner #intro-text .intro-wrap .inner {
-  padding-left: 115px;
+  padding-left: 150px;
 }
 /* line 85, ../sass/print.scss */
 .print .banner-wrapper .banner #intro-text .intro-wrap .full.logo {
@@ -61,7 +61,7 @@
 }
 /* line 89, ../sass/print.scss */
 .print .banner-wrapper .banner #intro-text .intro-wrap .full.logo img {
-  width: 95px;
+  width: 110px;
 }
 /* line 94, ../sass/print.scss */
 .print .banner-wrapper .banner #intro-text .intro-wrap #date {
@@ -79,8 +79,8 @@
   box-shadow: none;
   border: 0px;
   position: absolute;
-  top: 35px;
-  left: 115px;
+  top: 40px;
+  left: 150px;
 }
 /* line 120, ../sass/print.scss */
 .print .banner-wrapper .current-menu.dropdown .dropdown-label {
@@ -92,14 +92,14 @@
 }
 /* line 127, ../sass/print.scss */
 .print .banner-wrapper .current-menu.dropdown #dropdown-header-button .ui-selectmenu-text {
-  font-size: 14px !important;
+  font-size: 19px !important;
   line-height: 120% !important;
   font-weight: 400 !important;
   letter-spacing: 0.05em;
   margin: 0px;
   padding: 0px;
   text-transform: uppercase;
-  color: #2397d0;
+  color: #1696D2;
 }
 /* line 139, ../sass/print.scss */
 .print .banner-wrapper .current-menu.dropdown span .ui-selectmenu-icon.ui-icon.ui-icon-triangle-1-s {
@@ -109,7 +109,7 @@
 .print .td-map {
   background-color: #fff;
   box-shadow: inset 0px 0px 0px 0px;
-  padding-top: 20px;
+  padding-top: 45px;
 }
 /* line 153, ../sass/print.scss */
 .print .td-map .map-div {
@@ -119,7 +119,7 @@
 .print .td-map .map-div #location {
   height: inherit;
   font-weight: 400;
-  font-size: 15px;
+  font-size: 18px;
   padding-left: 0px !important;
 }
 /* line 163, ../sass/print.scss */
@@ -239,7 +239,7 @@
     size: 210mm 297mm;
                    /* portrait 
 /* you can also specify margins here: */
-    margin: 5mm;
+    margin: 10mm;
     margin-top: 15mm;
     margin-bottom: 15mm;
     /*margin-right: 45mm;  for compatibility with both A4 and Letter */
