@@ -152,6 +152,7 @@ $icon-width-buffer: 40px;
 
 		.map-div {
 			margin: 0px;
+			position: initial;
 			
 			#location {
 				height: inherit;
@@ -172,17 +173,25 @@ $icon-width-buffer: 40px;
 
 		// typography items, notes too.
 		.group-label-2 {
-			font-size: 11px;
+			font-size: 13px;
 		}
 
 		.g-text2 text {
-			font-size: 11px;
+			font-size: 13px;
 		}
 
 		.print-footer-icon {
-			padding-top: 52px;
-			// position: absolute;
-   //  		top: 240mm;
+			padding-top: 100px;
+			
+			&.icon2, &.icon3 {
+				position: absolute;
+			    top: 582mm;
+			    z-index: 10000;
+			}
+
+			&.icon3 {
+				top: 890mm;			    
+			}
 
 			img {
 				width: 476px;
@@ -190,12 +199,15 @@ $icon-width-buffer: 40px;
 		}
 
 		#print-chart-notes {
-		line-height: 11px;
+			line-height: 13px;
+			padding-top: 34px;
+			
 			p {
 				display: inline;
-				font-style: italic;
-				font-size: 9px;
-				// line-height: 120%;
+				font-style: italic !important;
+				font-size: 11px;
+				line-height: 120%;
+				color: #4d4d4d;
 
 
 				b {
@@ -212,7 +224,7 @@ $icon-width-buffer: 40px;
 
 		// d3 bar charts
 		.print-chart {
-			height:130px;
+			height:155px;
 			width:100%;
 			
 			margin-top: 20px;
@@ -221,6 +233,10 @@ $icon-width-buffer: 40px;
 
 			&:first-child {
 				border-top: 0px;
+			}
+
+			&:nth-child(6) {
+				border-top: 0px;   
 			}
 
 			svg {
@@ -237,7 +253,8 @@ $icon-width-buffer: 40px;
 		}
 		.inner {
 			font-weight: bold;
-			font-size: 12px;		
+			font-size: 15px;		
+			padding-bottom: 20px;
 		}		
 	}
 
@@ -266,6 +283,9 @@ $icon-width-buffer: 40px;
 	.bottom-container {
 		border-top: 0px;
 		background-color: #fff;
+		position: absolute;
+	    top: 611mm;
+	    width: 220mm;
 
 		.bottom-content {
 			max-width: none;
@@ -273,9 +293,10 @@ $icon-width-buffer: 40px;
 			width: 100% !important;
 
 			h1.bottom-header {
-				font-size: 14px;
+				font-size: 18px;
 				margin:0px;				
 				padding-top: 20px;
+				margin-bottom: 30px;
 			}
 
 			.footerButton {
@@ -283,8 +304,8 @@ $icon-width-buffer: 40px;
 			}
 
 			.bottom-text {
-				font-size: 11px;
-				line-height: 120% !important;
+				font-size: 14px;
+				line-height: 125% !important;
 				font-style: normal;
 				margin-bottom: 0px;
 
@@ -294,9 +315,13 @@ $icon-width-buffer: 40px;
 
 			}
 
+			.credit-list {
+				padding-top:5px;
+			}
+
 			.credit-names, .credit-header {
-				font-size: 11px;
-				font-weight: 400;
+				font-size: 14px;
+				font-weight: 400 !important;
 				line-height: 100%;
 			}
 

@@ -114,122 +114,149 @@
 /* line 153, ../sass/print.scss */
 .print .td-map .map-div {
   margin: 0px;
+  position: initial;
 }
-/* line 156, ../sass/print.scss */
+/* line 157, ../sass/print.scss */
 .print .td-map .map-div #location {
   height: inherit;
   font-weight: 400;
   font-size: 18px;
   padding-left: 0px !important;
 }
-/* line 163, ../sass/print.scss */
+/* line 164, ../sass/print.scss */
 .print .td-map .map-div .print-button {
   display: none;
 }
-/* line 168, ../sass/print.scss */
+/* line 169, ../sass/print.scss */
 .print .td-map #variable-name, .print .td-map #legend-div, .print .td-map #bar-chart {
   display: none;
 }
-/* line 174, ../sass/print.scss */
+/* line 175, ../sass/print.scss */
 .print .td-map .group-label-2 {
-  font-size: 11px;
+  font-size: 13px;
 }
-/* line 178, ../sass/print.scss */
+/* line 179, ../sass/print.scss */
 .print .td-map .g-text2 text {
-  font-size: 11px;
+  font-size: 13px;
 }
-/* line 182, ../sass/print.scss */
+/* line 183, ../sass/print.scss */
 .print .td-map .print-footer-icon {
-  padding-top: 52px;
+  padding-top: 100px;
 }
-/* line 187, ../sass/print.scss */
+/* line 186, ../sass/print.scss */
+.print .td-map .print-footer-icon.icon2, .print .td-map .print-footer-icon.icon3 {
+  position: absolute;
+  top: 582mm;
+  z-index: 10000;
+}
+/* line 192, ../sass/print.scss */
+.print .td-map .print-footer-icon.icon3 {
+  top: 890mm;
+}
+/* line 196, ../sass/print.scss */
 .print .td-map .print-footer-icon img {
   width: 476px;
 }
-/* line 192, ../sass/print.scss */
+/* line 201, ../sass/print.scss */
 .print .td-map #print-chart-notes {
-  line-height: 11px;
+  line-height: 13px;
+  padding-top: 34px;
 }
-/* line 194, ../sass/print.scss */
+/* line 205, ../sass/print.scss */
 .print .td-map #print-chart-notes p {
   display: inline;
-  font-style: italic;
-  font-size: 9px;
+  font-style: italic !important;
+  font-size: 11px;
+  line-height: 120%;
+  color: #4d4d4d;
 }
-/* line 201, ../sass/print.scss */
+/* line 213, ../sass/print.scss */
 .print .td-map #print-chart-notes p b {
   font-style: normal !important;
 }
-/* line 205, ../sass/print.scss */
+/* line 217, ../sass/print.scss */
 .print .td-map #print-chart-notes p sup {
   font-weight: 700;
   font-size: 9px !important;
   vertical-align: inherit;
 }
-/* line 214, ../sass/print.scss */
+/* line 226, ../sass/print.scss */
 .print .td-map .print-chart {
-  height: 130px;
+  height: 155px;
   width: 100%;
   margin-top: 20px;
   padding-top: 17px;
   border-top: 1px solid #D2D2D2;
 }
-/* line 222, ../sass/print.scss */
+/* line 234, ../sass/print.scss */
 .print .td-map .print-chart:first-child {
   border-top: 0px;
 }
 /* line 238, ../sass/print.scss */
+.print .td-map .print-chart:nth-child(6) {
+  border-top: 0px;
+}
+/* line 254, ../sass/print.scss */
 .print .td-map .inner {
   font-weight: bold;
-  font-size: 12px;
+  font-size: 15px;
+  padding-bottom: 20px;
 }
-/* line 248, ../sass/print.scss */
+/* line 265, ../sass/print.scss */
 .print .td-table {
   display: none;
 }
-/* line 253, ../sass/print.scss */
+/* line 270, ../sass/print.scss */
 .print .td-table #table-div, .print .td-table .search-div-main, .print .td-table .select-table {
   display: none;
 }
-/* line 266, ../sass/print.scss */
+/* line 283, ../sass/print.scss */
 .print .bottom-container {
   border-top: 0px;
   background-color: #fff;
+  position: absolute;
+  top: 611mm;
+  width: 220mm;
 }
-/* line 270, ../sass/print.scss */
+/* line 290, ../sass/print.scss */
 .print .bottom-container .bottom-content {
   max-width: none;
   padding-top: 20px;
   width: 100% !important;
 }
-/* line 275, ../sass/print.scss */
+/* line 295, ../sass/print.scss */
 .print .bottom-container .bottom-content h1.bottom-header {
-  font-size: 14px;
+  font-size: 18px;
   margin: 0px;
   padding-top: 20px;
+  margin-bottom: 30px;
 }
-/* line 281, ../sass/print.scss */
+/* line 302, ../sass/print.scss */
 .print .bottom-container .bottom-content .footerButton {
   display: none;
 }
-/* line 285, ../sass/print.scss */
+/* line 306, ../sass/print.scss */
 .print .bottom-container .bottom-content .bottom-text {
-  font-size: 11px;
-  line-height: 120% !important;
+  font-size: 14px;
+  line-height: 125% !important;
   font-style: normal;
   margin-bottom: 0px;
 }
-/* line 291, ../sass/print.scss */
+/* line 312, ../sass/print.scss */
 .print .bottom-container .bottom-content .bottom-text em {
   font-style: normal;
 }
-/* line 297, ../sass/print.scss */
+/* line 318, ../sass/print.scss */
+.print .bottom-container .bottom-content .credit-list {
+  padding-top: 5px;
+}
+/* line 322, ../sass/print.scss */
 .print .bottom-container .bottom-content .credit-names, .print .bottom-container .bottom-content .credit-header {
-  font-size: 11px;
-  font-weight: 400;
+  font-size: 14px;
+  font-weight: 400 !important;
   line-height: 100%;
 }
-/* line 303, ../sass/print.scss */
+/* line 328, ../sass/print.scss */
 .print .bottom-container .bottom-content #copyright {
   display: none;
 }
@@ -244,17 +271,17 @@
     margin-bottom: 15mm;
     /*margin-right: 45mm;  for compatibility with both A4 and Letter */
   }
-  /* line 324, ../sass/print.scss */
+  /* line 349, ../sass/print.scss */
   body.print a:after {
     content: none !important;
   }
 
-  /* line 327, ../sass/print.scss */
+  /* line 352, ../sass/print.scss */
   body.print a {
     color: #000 !important;
   }
 
-  /* line 335, ../sass/print.scss */
+  /* line 360, ../sass/print.scss */
   .page-break {
     height: 0;
     page-break-after: always;
@@ -262,7 +289,7 @@
     border-top: none;
   }
 
-  /* line 337, ../sass/print.scss */
+  /* line 362, ../sass/print.scss */
   .thin.logo img {
     height: 14px;
     margin-top: 30px;

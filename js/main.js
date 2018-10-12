@@ -490,11 +490,16 @@ function buildprint(Startquery,data) {
 
   // Add in bottom logos
   var footerIcon = '<div class="print-footer-icon"><img src="img/print-footer.png"></div>';
+  var footerIcon2 = '<div class="print-footer-icon icon2"><img src="img/print-footer.png"></div>';
+  var footerIcon3 = '<div class="print-footer-icon icon3"><img src="img/print-footer.png"></div>';
   
-  var firstpageBottom = $(".print-chart:eq(4)")
+  var firstpageBottom = $(".print-chart:eq(3)")
+  var secondpageBottom = $("#print-chart-notes")
+  var thirdpageBottom = $("#print-chart-notes")
   
   firstpageBottom.after(footerIcon)
-  console.log(firstpageBottom)
+  secondpageBottom.after(footerIcon2)
+  thirdpageBottom.after(footerIcon3)
 
             
 
