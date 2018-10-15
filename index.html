@@ -15,6 +15,9 @@
   <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic,900" rel="stylesheet" type="text/css">
   <link rel="stylesheet" type="text/css" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/flick/jquery-ui.css">
   <link href="css/jquery.tagit.css" rel="stylesheet" type="text/css">
+   
+  <link rel="stylesheet" type="text/css" href="css/print.css"/>
+
   <meta name="twitter:card" content="summary">
   <meta name="twitter:site" content="@urbaninstitute">
   <meta name="twitter:creator" content="@urbaninstitute">
@@ -49,7 +52,7 @@
 </head>
 
 
-<body>
+<body class="">
   
 <!-- Google Tag Manager -->
 <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-MKBD2W"
@@ -62,6 +65,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager -->
 
 <!--URBAN HEADER-->
+<div class="cover"></div>
+
 <div class="banner-wrapper">
   <div id="header-pinned" class="no-touch">   
     <a target="_blank" href="https://www.urban.org" title="Home" rel="home" class="site-logo"></a>
@@ -88,7 +93,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <div class="banner">
     <div id="intro-text">
       <div class="intro-wrap">
-        <h1>Debt in America: An Interactive Map</h1>
+        <div class="full logo">
+          <img src="img/print-logo-full.png">
+        </div>
+        <div class="inner">
+          <h1>Debt in America: An Interactive Map</h1>          
+        </div>        
         <h2>Credit can be a lifeline during emergencies and a bridge to education and homeownership. But debt, which can stem from credit or unpaid bills, often burdens families and communities and exacerbates wealth inequality. This map shows the geography of debt in America at the national, state, and county levels. How does your community compare?</h2>
         <div id="date">Last updated May 16, 2018</div>
       </div>
@@ -139,18 +149,16 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <td class="td-map">
         <div class="map-div">
           <div id="location"></div>
+          <div class="print-button"><h3>PRINT</h3></div>
           <div id="variable-name"></div>
           <div id="legend-div">
           </div>
           <div id="map">
           </div>
           <div id="bar-chart"></div>
-<!--         <div id="map-description">
-          <div class="title">Description of dashboard goes here</div>
-          <div class="description">
-            <p>Credit can be a lifeline during emergencies and a bridge to education and homeownership. But not all debt starts out as credit, and many people struggle with debt burdens. Debt burdens can ripple through families and communities and exacerbate wealth inequality. This map shows the geography of debt in America. How do your county and state compare? </p>
-          </div>
-        </div> -->
+              <!-- Print view charts -->
+          <div id="print-chart-container"></div>
+          <div id="print-chart-notes"></div>
         </div>
       </td>
     </tr>
@@ -192,11 +200,15 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <p class="note2"><sup><i>c</i></sup> Not available because no areas (zip codes) in the state or county are predominantly nonwhite or predominantly white.</p>
     <p class="note3"><sup><i>d</i></sup> This variable was added May 16, 2018.</p>
     <p class="note4"><sup><i>e</i></sup> This variable was relabeled on May 16, 2018.</p>
+    <div id="mobile-print-container">
+      <div class="print-button"><h3>PRINT</h3></div>
+    </div>
+    
   </div>
   <!--BOTTOM SECTION -->
   <div class="bottom-container">
     <div class="bottom-content">
-      <h1 class="bottom-header">ABOUT THE DATA</h1>
+      <h1 class="bottom-header">About the Data</h1>
       <a href = "https://apps-staging.urban.org/features/debt-interactive-map-update/downloadable-docs/Debt-in-America-Data.xlsx">
         <div class = "footerButton">Download data</div>
       </a>
@@ -209,7 +221,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <p>For more information and metric definitions, view and download the <a href="https://apps-staging.urban.org/features/debt-interactive-map-update/downloadable-docs/Debt-in-America-Appendix.pdf" target="_blank">technical appendix.</a></p>
         <p>Please contact <a href="mailto:externalaffairs@urban.org" target="_top">externalaffairs@urban.org</a> for more information.</p>
       </div>
-      <h1 class="bottom-header">PROJECT CREDITS</h1>
+      <h1 class="bottom-header">Project Credits</h1>
       <div class="credits-text bottom-text">
         <p><em>This data dashboard was funded by the <a href="http://www.aecf.org/" target="_blank">Annie E. Casey Foundation</a>, with additional support from the <a href="https://www.fordfoundation.org/" target="_blank">Ford Foundation</a>. We are grateful to them and to all our funders, who make it possible for Urban to advance its mission. The views expressed are those of the authors and should not be attributed to the Urban Institute, its trustees, or its funders. Funders do not determine research findings or the insights and recommendations of our experts. More information on our funding principles is available <a href="https://www.urban.org/aboutus/our-funding" target="_blank">here</a>. Read our terms of service <a href="https://www.urban.org/terms-service" target="_blank">here</a>.</p>
         <p>We also thank Don Baylor of the Annie E. Casey Foundation for his input and Sara Rosenthal of the Urban Institute for her excellent project management.</em></p>
