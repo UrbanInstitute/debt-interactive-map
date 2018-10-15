@@ -500,10 +500,6 @@ function buildprint(Startquery,data) {
   firstpageBottom.after(footerIcon)
   secondpageBottom.after(footerIcon2)
   thirdpageBottom.after(footerIcon3)
-
-            
-
-
 }
 
 function findPrintY(d,printdata) {
@@ -1179,6 +1175,7 @@ function ready(error, us, county, state, county2, state2) {
 
   function changeData(CATEGORY) {
     
+    // DWCut fix to allow for more than 2 things!
     var BigData = (CATEGORY === "medical") ? OverallTransformData(us,county,state,countyData,stateData) : OverallTransformData(us,county2,state2,countyData,stateData)
     var tmp_state = BigData.tmp_state,
       tmp_county = BigData.tmp_county,
@@ -1820,6 +1817,7 @@ function ready(error, us, county, state, county2, state2) {
         .attr("y",keyHeight*i + 23)
         .attr("text-anchor", "end")
         .text(function(){
+          // DWCut this area appears to run a "min" function EVERY time 
         var min = d3.min(BigData.tmp_county, function(d) { 
             if (d.properties[SELECTED_VARIABLE] == "n<50") {
                 return 1000000000000
@@ -2234,8 +2232,6 @@ function ready(error, us, county, state, county2, state2) {
   hideBars(SELECTED_VARIABLE_ph)
 
     /*DESKTOP*/
-
-// HERE DANIEL
 
     var barSvgHeight = (IS_MOBILE) ? 185 : 130;
     var barHeight = (IS_MOBILE) ? 90 : 65;
@@ -2845,6 +2841,7 @@ function ready(error, us, county, state, county2, state2) {
       updateBars(SELECTED_VARIABLE, filteredData[0])
     }
   }
+  
   function updateTable(data,type) {   
 
     var columns = ["All", "White", "NonWhite"]    
