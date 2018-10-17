@@ -28,7 +28,6 @@ var variableList = {
   }
 }
 
-
 // insert here any variables that only have 1 item, namely "Nonwhite population share" for now, and in the future, anything else similar.
 var limitedVars = ["perc_pop_nw"]      
 
@@ -1908,56 +1907,6 @@ function ready(error, us, county, state, county2, state2) {
       // .attr("d", path)
 
   /*ADD TABLE*/
-
-    $("#table-div").empty()
-    var columns = ["All", "White", "NonWhite"]
-    var rowNumbers = [1,2,3]
-    
-    if (type) {
-      var groups = variableList[type]["groups"]
-      var rowData =  variableList[type]["variables"]
-    }
-
-
-    var table = d3.select("#table-div")
-      .append("table")
-        tbody = table.selectAll('tbody')
-          .data(rowData)
-          .enter().append("tbody")
-          .attr("class", function(d, i) {
-            return type + " group group-" + i
-          })
-          .on('click', function(d) { 
-            d3.selectAll('tbody')
-              .classed('selected', false)
-            d3.select(this)
-              .classed('selected', true)           
-            d3.select(".rect-div")
-              .attr("width", function() {
-                return (IS_MOBILE) ? 73: legendWidth[d]
-              })
-              .attr('transform', 'translate(' + (width - legendWidth[d]) + ',' + (-1) + ')')
-            // }
-            setVariable(d)
-            updateMap(d)
-
-            var stateQuery;
-            var countyQuery;
-
-            // Add in the querystring
-            if (d3.select("g.counties").selectAll("path.selected")._groups["0"].length !== 0) {
-              countyQuery = d3.select("g.counties").selectAll("path.selected").datum().id;  
-            }
-
-            
-            if (d3.select("g.state-borders").selectAll("path.selected")._groups[0].length !== 0) {
-              stateQuery = d3.select("path#" + selectedState.properties.abbr).datum().id;  
-            }
-
-            updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
-          })
-    
-    table.selectAll("tbody").filter(function(d) { return d === typeVar}).classed('selected', true)
     
     var us_data = state_data[0]["values"][0]
     for (var key in us_data) {
@@ -1970,54 +1919,22 @@ function ready(error, us, county, state, county2, state2) {
         }
     }
 
-    var tr = tbody.selectAll('tr')
-        .data(rowNumbers)
-        .enter().append('tr')
-        .attr("class", function(d,i) {
-          if (i%3 == 0 ) {
-            return "cell-header"
-          }else if (i%3==2) {
-            return "cell-column"
-          }else {
-            return "cell-data"
-          }
-        })
-    d3.selectAll(".cell-header")
-      .append("th")
-      .attr("colspan", 3)
-      .each(function(d,i) {
-        d3.select(this)
-          .html(function() { 
-            return groups[i]
-          })
-      })
-    d3.selectAll(".cell-column")
-      .each(function() {
-        d3.select(this).selectAll("td")
-          .data(columns)
-          .enter().append("td")
-          .text(function(d) {
-            return d
-          })
-      })
-    d3.selectAll(".cell-data")
-      .each(function(d,i) {
-        var rowVariable = [rowData[i]],
-            rowVariable_nw = rowVariable + "_nw";
-            rowVariable_wh = rowVariable + "_wh";
-        d3.select(this).selectAll("td")
-          .data(columns)
-          .enter().append("td")
-          .text(function(d,i) {
-            if (i==0) {
-              return ((us_data[rowVariable]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable]);
-            }else if (i==1){
-              return ((us_data[rowVariable_wh]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_wh]);
-            }else if (i==2) {
-              return ((us_data[rowVariable_nw]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_nw]);
-            }
-          })
-      })
+
+    $("#table-div").empty()
+    // var columns = ["All", "White", "NonWhite"]
+    // var rowNumbers = [1,2,3]
+    
+    // if (type) {
+    //   var groups = variableList[type]["groups"]
+    //   var rowData =  variableList[type]["variables"]
+    // }
+
+    var table = d3.select("#table-div")
+      .append("table")
+
+    updateTable(us_data,type)
+    
+    table.selectAll("tbody").filter(function(d) { return d.variable === typeVar}).classed('selected', true);
  
   /*END TABLE*/
   /*BAR CHARTS*/
@@ -2841,9 +2758,8 @@ function ready(error, us, county, state, county2, state2) {
       updateBars(SELECTED_VARIABLE, filteredData[0])
     }
   }
-  
-  function updateTable(data,type) {   
 
+  function updateTable(data,type) {   
     var columns = ["All", "White", "NonWhite"]    
     var rowNumbers = [1,2,3]    
 
@@ -2853,35 +2769,31 @@ function ready(error, us, county, state, county2, state2) {
 
       // based on type, define the groups and rowdata
       var tbody = table.selectAll('tbody')
-          .data(rowData)
+          .data(variableListMaster[type])
 
       tbody.classed("medical",false)
       tbody.classed("student",false)  
       tbody.classed(type,true)
 
-        // tbody.attr("class", function(d, i) {
-        //     return type + " group group-" + i
-        //   })
-
-        tbody.enter().append("tbody")
-          .attr("class", function(d, i) {
-            return type + " new group group-" + i
-          })
-          // .merge(tbody)
-          .on('click', function(d) {             
-            d3.selectAll('tbody')
-              .classed('selected', false)
-            d3.select(this)
-              .classed('selected', true)           
-            d3.select(".rect-div")
-              .attr("width", function() {
-                return (IS_MOBILE) ? 73: legendWidth[d]
-              })
-              .attr('transform', 'translate(' + (width - legendWidth[d]) + ',' + (-1) + ')')
-            // }
-            setVariable(d)
-            updateMap(d)
-          })
+      tbody.enter().append("tbody")
+        .attr("class", function(d, i) {
+          return type + " new group group-" + i
+        })
+        // .merge(tbody)
+        .on('click', function(d) {             
+          d3.selectAll('tbody')
+            .classed('selected', false)
+          d3.select(this)
+            .classed('selected', true)           
+          d3.select(".rect-div")
+            .attr("width", function() {
+              return (IS_MOBILE) ? 73: d.legendWidth
+            })
+            .attr('transform', 'translate(' + (width - d.legendWidth) + ',' + (-1) + ')')
+          // }
+          setVariable(d)
+          updateMap(d)
+        })
     
       tbody.exit().remove();        
     
@@ -2908,36 +2820,39 @@ function ready(error, us, county, state, county2, state2) {
         .each(function(d,i) {
           d3.select(this)
             .html(function() { 
-              return groups[i]
+              return variableListMaster[type][i].desktopLabel;
             })
-        })      
+        })
 
       d3.selectAll(".cell-column")
-        .each(function() {
+        .each(function(d,i) {
+          var columns = variableListMaster[type][i].columns;
           d3.select(this).selectAll("td")
             .data(columns)
             .enter().append("td")
+            .merge(d3.select(this).selectAll("td"))
             .text(function(d) {
-              return d
+              return d;
             })
         })
       d3.selectAll(".cell-data")
         .each(function(d,i) {
-          var rowVariable = [rowData[i]],
+          var rowVariable = variableListMaster[type][i].variable,
               rowVariable_nw = rowVariable + "_nw";
               rowVariable_wh = rowVariable + "_wh";
+          var columns = variableListMaster[type][i].columns;    
           d3.select(this).selectAll("td")
             .data(columns)
             .enter().append("td")
-            // .text(function(d,i) {
-            //   if (i==0) {
-            //     return ((us_data[rowVariable]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable]);
-            //   }else if (i==1){
-            //     return ((us_data[rowVariable_wh]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_wh]);
-            //   }else if (i==2) {
-            //     return ((us_data[rowVariable_nw]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_nw]);
-            //   }
-            // })
+            .text(function(d,i) {
+              if (i==0) {
+                return ((us_data[rowVariable]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable]);
+              }else if (i==1){
+                return ((us_data[rowVariable_wh]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_wh]);
+              }else if (i==2) {
+                return ((us_data[rowVariable_nw]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_nw]);
+              }
+            })
         })
  
       // Remove things (EXIT) and remove the "new" headlines
