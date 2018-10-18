@@ -82,8 +82,8 @@ function setVariable(variable, phone) {
     WHITE = variable + "_wh"
     NONWHITE= variable + "_nw"
   }
-
 }
+
 function setZoom(national, state, county, national_st) {
   zoomNational = national;
   zoomState = state;
@@ -1921,13 +1921,6 @@ function ready(error, us, county, state, county2, state2) {
 
 
     $("#table-div").empty()
-    // var columns = ["All", "White", "NonWhite"]
-    // var rowNumbers = [1,2,3]
-    
-    // if (type) {
-    //   var groups = variableList[type]["groups"]
-    //   var rowData =  variableList[type]["variables"]
-    // }
 
     var table = d3.select("#table-div")
       .append("table")
@@ -1940,8 +1933,13 @@ function ready(error, us, county, state, county2, state2) {
   /*BAR CHARTS*/
 
   var groups = ["National", "State", "County"]
-  var groups_ph = ["County", "State", "National"]
+  // var groups_ph = ["County", "State", "National"]
   var categories = ["All", "White", "Nonwhite"]
+  var grabVar = variableListMaster[type].filter(function(d) {
+        return d.variable == SELECTED_VARIABLE_ph;
+      })
+
+
   var barData = [{data: us_data_ph[0]}, {data: us_data_ph[0]}, {data: us_data_ph[0]} ]
     /*MOBILE*/
   var barSvgHeight_ph = (IS_PHONESM) ? 200 : 173;
@@ -1967,9 +1965,11 @@ function ready(error, us, county, state, county2, state2) {
   var yAxis_ph = d3.axisLeft()
       .scale(y_ph)
       .ticks(0)
-  for (i=0; i<=groups_ph.length - 1; i++){
-    var group = groups_ph[i]
-    var category = categories[i]
+
+  for (var i = 0; i < groups.length; i++) {
+
+    var group = groups[i]
+
     d3.select(".label-" + group )
       .append("svg")
       .attr("width", 200)
@@ -1987,22 +1987,13 @@ function ready(error, us, county, state, county2, state2) {
       .attr("height", 130)
       .attr("class", "svg2")
 
-    // barLabel.append("text")
-    //   .text(function(d,i) {
-    //     return group;
-    //   })
-    //   .attr("transform", "translate(" + 74 + "," + 20 + ")")
-    //   .attr("text-anchor", "end")
-    //   .attr("class", function() {
-    //     return "group-label-ph " + group
-    //   })
     barLabel.selectAll("g")
-      .data(categories)
+      .data(grabVar[0].columns)
       .enter()
       .append("g")
       .append("text")
       .text(function(d,i) {
-        return categories[i]
+        return d
       })
       .attr("class", "category-labels-ph")
       .attr("transform", function(d,i) {
@@ -2791,8 +2782,23 @@ function ready(error, us, county, state, county2, state2) {
             })
             .attr('transform', 'translate(' + (width - d.legendWidth) + ',' + (-1) + ')')
           // }
-          setVariable(d)
-          updateMap(d)
+          setVariable(d.variable)
+          updateMap(d.variable)
+
+          var stateQuery;
+          var countyQuery;
+
+          // Add in the querystring
+          if (d3.select("g.counties").selectAll("path.selected")._groups["0"].length !== 0) {
+            countyQuery = d3.select("g.counties").selectAll("path.selected").datum().id;  
+          }
+
+          
+          if (d3.select("g.state-borders").selectAll("path.selected")._groups[0].length !== 0) {
+            stateQuery = d3.select("path#" + selectedState.properties.abbr).datum().id;  
+          }
+
+          updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
         })
     
       tbody.exit().remove();        
