@@ -1,68 +1,68 @@
 var variableListMaster = {
 	"medical":[
-			{
-				"variable":"perc_debt_collect",
-				"desktopLabel":"Share with any debt in collections<span class=\"annotation\"><sup>a</sup></span>",
-				"mobileLabel":"Share with any debt in collections<i>ᵃ</i>",
-				"breaks":[0.22, .31, .39, .49],
-				"legendWidth": 60,
-				"version":"v1",
-				"columns":["All", "White", "NonWhite"]
-			},
-			{
-				"variable":"med_debt_collect",
-				"desktopLabel":"Median debt in collections<span class=\"annotation\"><sup>a</sup></span>",
-				"mobileLabel":"Median debt in collections<i>ᵃ</i>",
-				"breaks":[1200, 1500, 1800, 2300],
-				"legendWidth": 73,
-				"version":"v1",
-				"columns":["All", "White", "NonWhite"]
-			},
-			{
-				"variable":"perc_debt_med",
-				"desktopLabel":"Share with medical debt in collections<span class=\"annotation\"><sup>a</sup></span>",
-				"mobileLabel":"Share with medical debt in collections<i>ᵃ</i>",
-				"breaks":[.11,.18,.26,.34],
-				"legendWidth": 58,
-				"version":"v1",
-				"columns":["All", "White", "NonWhite"]
-			},
-			{
-				"variable":"med_debt_med",
-				"desktopLabel":"Median medical debt in collections<span class=\"annotation\"><sup>a</sup></span>",
-				"mobileLabel":"Median medical debt in collections<i>ᵃ</i>",
-				"breaks":[500,700,950,1250],
-				"legendWidth": 70,
-				"version":"v1",
-				"columns":["All", "White", "NonWhite"]
-			},
-			{
-				"variable":"perc_pop_nw",
-				"desktopLabel":"Nonwhite population share",
-				"mobileLabel":"Nonwhite population share",
-				"breaks":[.13,.28,.46,.67],
-				"legendWidth": 63,
-				"version":"v1",
-				"columns":["All", "White", "NonWhite"]
-			},
-			{
-				"variable":"perc_pop_no_ins",
-				"desktopLabel":"Share without health insurance coverage",
-				"mobileLabel":"Share without health insurance coverage",
-				"breaks":[.08,.13,.18,.26],
-				"legendWidth": 60,
-				"version":"v1",
-				"columns":["All", "White", "NonWhite"]
-			},
-			{
-				"variable":"avg_income",
-				"desktopLabel":"Average household income",
-				"mobileLabel":"Average household income",
-				"breaks":[52650,63850,77900,101050],
-				"legendWidth": 89,
-				"version":"v1",
-				"columns":["All", "White", "NonWhite"]
-			}		
+		{
+			"variable":"perc_debt_collect",
+			"desktopLabel":"Share with any debt in collections<span class=\"annotation\"><sup>a</sup></span>",
+			"mobileLabel":"Share with any debt in collections<i>ᵃ</i>",
+			"breaks":[0.22, .31, .39, .49],
+			"legendWidth": 60,
+			"version":"v1",
+			"columns":["All", "White", "Nonwhite"]
+		},
+		{
+			"variable":"med_debt_collect",
+			"desktopLabel":"Median debt in collections<span class=\"annotation\"><sup>a</sup></span>",
+			"mobileLabel":"Median debt in collections<i>ᵃ</i>",
+			"breaks":[1200, 1500, 1800, 2300],
+			"legendWidth": 73,
+			"version":"v1",
+			"columns":["All", "White", "Nonwhite"]
+		},
+		{
+			"variable":"perc_debt_med",
+			"desktopLabel":"Share with medical debt in collections<span class=\"annotation\"><sup>a</sup></span>",
+			"mobileLabel":"Share with medical debt in collections<i>ᵃ</i>",
+			"breaks":[.11,.18,.26,.34],
+			"legendWidth": 58,
+			"version":"v1",
+			"columns":["All", "White", "Nonwhite"]
+		},
+		{
+			"variable":"med_debt_med",
+			"desktopLabel":"Median medical debt in collections<span class=\"annotation\"><sup>a</sup></span>",
+			"mobileLabel":"Median medical debt in collections<i>ᵃ</i>",
+			"breaks":[500,700,950,1250],
+			"legendWidth": 70,
+			"version":"v1",
+			"columns":["All", "White", "Nonwhite"]
+		},
+		{
+			"variable":"perc_pop_nw",
+			"desktopLabel":"Nonwhite population share",
+			"mobileLabel":"Nonwhite population share",
+			"breaks":[.13,.28,.46,.67],
+			"legendWidth": 63,
+			"version":"v1",
+			"columns":["All", "White", "Nonwhite"]
+		},
+		{
+			"variable":"perc_pop_no_ins",
+			"desktopLabel":"Share without health insurance coverage",
+			"mobileLabel":"Share without health insurance coverage",
+			"breaks":[.08,.13,.18,.26],
+			"legendWidth": 60,
+			"version":"v1",
+			"columns":["All", "White", "Nonwhite"]
+		},
+		{
+			"variable":"avg_income",
+			"desktopLabel":"Average household income",
+			"mobileLabel":"Average household income",
+			"breaks":[52650,63850,77900,101050],
+			"legendWidth": 89,
+			"version":"v1",
+			"columns":["All", "White", "Nonwhite"]
+		}		
 	],
 	"student":[
 		{
@@ -72,7 +72,7 @@ var variableListMaster = {
 			"breaks":[0.10,0.13,0.16,0.20],
 			"legendWidth":60,
 			"version":"v2",
-			"columns":["All", "White", "NonWhite"]
+			"columns":["All", "White", "Nonwhite"]
 		},
 		{
 			"variable":"med_stud_debt",
@@ -81,7 +81,7 @@ var variableListMaster = {
 			"breaks":[12550,15050,17450,20350],
 			"legendWidth":89,
 			"version":"v2",
-			"columns":["All", "White", "NonWhite"]
+			"columns":["All", "White", "Nonwhite"]
 		},
 		{
 			"variable":"perc_stud_debt_collect_STUD",
@@ -90,7 +90,7 @@ var variableListMaster = {
 			"breaks":[0.07,0.13,0.2,0.3],
 			"legendWidth":60,
 			"version":"v2",
-			"columns":["All", "White", "NonWhite"]
+			"columns":["All", "White", "Nonwhite"]
 		},
 		{
 			"variable":"med_stud_debt_collect",
@@ -99,7 +99,7 @@ var variableListMaster = {
 			"breaks":[6150,7550,9000,10700],
 			"legendWidth":89,
 			"version":"v2",
-			"columns":["All", "White", "NonWhite"]
+			"columns":["All", "White", "Nonwhite"]
 		},
 		{
 			"variable":"med_mon_pmt",
@@ -108,7 +108,7 @@ var variableListMaster = {
 			"breaks":[135,155,175,195],
 			"legendWidth":70,
 			"version":"v2",
-			"columns":["All", "White", "NonWhite"]
+			"columns":["All", "White", "Nonwhite"]
 		},
 		{
 			"variable":"perc_stud_debt_collect",
@@ -117,7 +117,7 @@ var variableListMaster = {
 			"breaks":[0.01,0.02,0.03,0.06],
 			"legendWidth":60,
 			"version":"v2",
-			"columns":["All", "White", "NonWhite"]
+			"columns":["All", "White", "Nonwhite"]
 		},
 		{
 			"variable":"perc_pop_nw",
@@ -126,7 +126,7 @@ var variableListMaster = {
 			"breaks":[.13,.28,.46,.67],
 			"legendWidth":63,
 			"version":"v1",
-			"columns":["All", "White", "NonWhite"]
+			"columns":["All", "White", "Nonwhite"]
 		},
 		{
 			"variable":"perc_no_bach",
@@ -135,7 +135,7 @@ var variableListMaster = {
 			"breaks":[0.59,0.71,0.79,0.85],
 			"legendWidth":60,
 			"version":"v2",
-			"columns":["All", "White", "NonWhite"]
+			"columns":["All", "White", "Nonwhite"]
 		},
 		{
 			"variable":"avg_income" ,
@@ -144,7 +144,7 @@ var variableListMaster = {
 			"breaks":[52650,63850,77900,101050],
 			"legendWidth":89,
 			"version":"v1",
-			"columns":["All", "White", "NonWhite"]
+			"columns":["All", "White", "Nonwhite"]
 		}
 	]
 };

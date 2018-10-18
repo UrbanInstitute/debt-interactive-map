@@ -1934,7 +1934,7 @@ function ready(error, us, county, state, county2, state2) {
 
   var groups = ["National", "State", "County"]
   // var groups_ph = ["County", "State", "National"]
-  var categories = ["All", "White", "Nonwhite"]
+  // var categories = ["All", "White", "Nonwhite"]
   var grabVar = variableListMaster[type].filter(function(d) {
         return d.variable == SELECTED_VARIABLE_ph;
       })
@@ -2027,11 +2027,11 @@ function ready(error, us, county, state, county2, state2) {
       })
 
     var subBarPh = barG_ph.selectAll("g")
-      .data(categories)
+      .data(grabVar[0].columns)
       .enter()
       .append("g")
       .attr("class", function(d,i) {
-        return "category-ph " + categories[i]
+        return "category-ph " + d
       })
       .attr("transform", function(d,i) {
         return (IS_PHONESM) ? "translate(" + 0 + "," + (52*i) + ")" : "translate(" + 0 + "," + (40*i) + ")";
@@ -2150,14 +2150,16 @@ function ready(error, us, county, state, county2, state2) {
     var y = d3.scaleLinear()
         .rangeRound([barHeight, 0]);
     county_data.forEach(function(d) { 
-      d.national = +d.values[0][SELECTED_VARIABLE]
-    })
-    county_data.forEach(function(d) { 
+      d.national = +d.values[0][SELECTED_VARIABLE];
       d.white = +d.values[0][WHITE];
+      d.nonwhite = +d.values[0][NONWHITE];
     })
-    county_data.forEach(function(d) { 
-      d.nonwhite = +d.values[0][NONWHITE]
-    })
+    // county_data.forEach(function(d) { 
+      
+    // })
+    // county_data.forEach(function(d) { 
+      
+    // })
     x.domain([[us_data].map(function(d){ 
       return d.abbr
     })]);
@@ -2210,7 +2212,7 @@ function ready(error, us, county, state, county2, state2) {
       // })
 
     var subBarG = barG.selectAll("g")
-      .data(categories)
+      .data(grabVar[0].columns)
       .enter()
       .append("g")
       .attr("class", function(d) {
@@ -2519,7 +2521,15 @@ function ready(error, us, county, state, county2, state2) {
           })
       }
 
-    
+      grabVar = variableListMaster[type].filter(function(d) {
+        return d.variable == variable;
+      })
+      
+      d3.selectAll(".category-labels-ph")
+        .text(function(d,i) {
+          return grabVar[0].columns[i % 3];
+        })
+
      hideBars(variable)
 
     }else {
@@ -3337,7 +3347,7 @@ function ready(error, us, county, state, county2, state2) {
 
         selectedLocation()
 
-        // updateBars(typeVar, filteredData[0].properties.county)
+        updateBars(typeVar, filteredData[0].properties.county)
         d3.select(".group-label-ph2.County").text(filteredData[0].properties.county)
         d3.select(".group-label-ph.County").text(filteredData[0].properties.county)      
         county = filteredData[0].properties.county;
@@ -3349,7 +3359,7 @@ function ready(error, us, county, state, county2, state2) {
 
         var stateData = BigData.tmp_state.filter(function(d){ 
           return d.properties.state == data.properties.state;
-        })   
+        })           
         updateBars(typeVar, stateData[0])
       }
 
