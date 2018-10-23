@@ -14,24 +14,13 @@
 var IS_MOBILE;
 var IS_PHONE;
 var IS_PHONESM;
-var BREAKS ={"perc_debt_collect":[0.22, .31, .39, .49],"med_debt_collect":[1200, 1500, 1800, 2300], "perc_debt_med":[.11,.18,.26,.34], "med_debt_med":[500,700,950,1250], "perc_pop_nw":[.13,.28,.46,.67], "perc_pop_no_ins":[.08,.13,.18,.26], "avg_income":[52650,63850,77900,101050],"perc_stud_debt":[0.10,0.13,0.16,0.20],"med_stud_debt": [12550,15050,17450,20350],"perc_stud_debt_collect": [0.01,0.02,0.03,0.06],"perc_stud_debt_collect_STUD": [0.07,0.13,0.2,0.3],"med_stud_debt_collect": [6150,7550,9000,10700],"med_mon_pmt": [135,155,175,195],"perc_no_bach": [0.59,0.71,0.79,0.85]};
-var legendWidth = {"perc_debt_collect": 60,"perc_debt_med": 58,"med_debt_collect": 73,"med_debt_med": 70,"perc_pop_nw": 63,"perc_pop_no_ins": 60,"avg_income": 89,"perc_stud_debt":60,"med_stud_debt":89,"perc_stud_debt_collect":60,"perc_stud_debt_collect_STUD":60,"med_stud_debt_collect":89,"med_mon_pmt":70,"perc_no_bach":60};
-
-var variableList = {
-  "medical":{
-    "groups": ["Share with any debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Median debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Share with medical debt in collections<span class=\"annotation\"><sup>a</sup></span>", "Median medical debt in collections<span class=\"annotation\"><sup>a</sup></span>","Nonwhite population share", "Share without health insurance coverage","Average household income"],
-    "variables": ["perc_debt_collect", "med_debt_collect", "perc_debt_med", "med_debt_med", "perc_pop_nw", "perc_pop_no_ins", "avg_income"]
-  },
-  "student":{
-    "groups":["Share with student loan debt<span class=\"annotation\"><sup>a</sup></span>","Median student loan debt<span class=\"annotation\"><sup>a</sup></span>","Share of student loan holders with student loan debt in collections<span class=\"annotation\"><sup>a</sup> <sup>d</sup></span>","Median student loan debt in collections<span class=\"annotation\"><sup>a</sup></span>","Median monthly student loan payment<span class=\"annotation\"><sup>a</sup></span>","Share of people with credit records who have student loan debt in collections<span class=\"annotation\"><sup>a</sup> <sup>e</sup></span>","Nonwhite population share","Share without a bachelor’s degree","Average household income"],
-    "variables":["perc_stud_debt","med_stud_debt","perc_stud_debt_collect_STUD","med_stud_debt_collect","med_mon_pmt","perc_stud_debt_collect","perc_pop_nw","perc_no_bach","avg_income"]       
-  }
-}
+// var BREAKS ={"perc_debt_collect":[0.22, .31, .39, .49],"med_debt_collect":[1200, 1500, 1800, 2300], "perc_debt_med":[.11,.18,.26,.34], "med_debt_med":[500,700,950,1250], "perc_pop_nw":[.13,.28,.46,.67], "perc_pop_no_ins":[.08,.13,.18,.26], "avg_income":[52650,63850,77900,101050],"perc_stud_debt":[0.10,0.13,0.16,0.20],"med_stud_debt": [12550,15050,17450,20350],"perc_stud_debt_collect": [0.01,0.02,0.03,0.06],"perc_stud_debt_collect_STUD": [0.07,0.13,0.2,0.3],"med_stud_debt_collect": [6150,7550,9000,10700],"med_mon_pmt": [135,155,175,195],"perc_no_bach": [0.59,0.71,0.79,0.85]};
+// var legendWidth = {"perc_debt_collect": 60,"perc_debt_med": 58,"med_debt_collect": 73,"med_debt_med": 70,"perc_pop_nw": 63,"perc_pop_no_ins": 60,"avg_income": 89,"perc_stud_debt":60,"med_stud_debt":89,"perc_stud_debt_collect":60,"perc_stud_debt_collect_STUD":60,"med_stud_debt_collect":89,"med_mon_pmt":70,"perc_no_bach":60};
 
 // insert here any variables that only have 1 item, namely "Nonwhite population share" for now, and in the future, anything else similar.
 var limitedVars = ["perc_pop_nw"]      
 
-// var legendTranslate = {"perc_debt_collect": width-60, "perc_debt_med": 644, "med_debt_collect": 628, "med_debt_med":631, "perc_pop_nw":638, "perc_pop_no_ins": 642, "avg_income":615}
+
 
 var SELECTED_VARIABLE;
 var WHITE;
@@ -439,8 +428,7 @@ function buildprint(Startquery,data) {
     }
   }
 
-  var groups = variableList[type]["groups"]
-  var rowData =  variableList[type]["variables"]
+  var rowData =  variableListMaster[type];
 
   var printContainer = d3.select("#print-chart-container")
   
@@ -471,19 +459,19 @@ function buildprint(Startquery,data) {
       .append("div")
       .attr("class","inner")
       .html(function(d,i){
-        return groups[i]
+        return d.desktopLabel;
       })
   printContainer.selectAll(".print-chart")
     .append("svg")
       .attr("class",function(d){
-        return d + " print-row"
+        return d.variable + " print-row"
       })
       .attr("width", "100%")
       .attr("height", "100%")
       .each(function(d,i){                
         // Max of d,d_wh,d_nw
-        var y = findPrintY(d,printdata)
-        buildPrintBars(this,d,groups[i],printdata,y)
+        var y = findPrintY(d.variable,printdata)
+        buildPrintBars(this,d.variable,d.desktopLabel,printdata,y)
       })
 
 
@@ -943,8 +931,9 @@ function ready(error, us, county, state, county2, state2) {
   var max = d3.max(BigData.tmp_county, function(d) { 
     return d.properties[SELECTED_VARIABLE]
   })  
+
   var quantize = d3.scaleThreshold()
-    .domain(BREAKS[SELECTED_VARIABLE])
+    .domain(variableListMaster[type].filter(function(d) {return d.variable == SELECTED_VARIABLE;})[0].breaks)
     .range(["#cfe8f3", "#73bfe2", "#1696d2", "#0a4c6a", "#000000"])  
 
  /*ADD DROPDOWNS*/
@@ -1738,7 +1727,7 @@ function ready(error, us, county, state, county2, state2) {
                 return d.properties[SELECTED_VARIABLE]
               }
           })
-          var array = BREAKS[SELECTED_VARIABLE]
+          var array = variableListMaster[type].filter(function(d) {return d.variable == SELECTED_VARIABLE;})[0].breaks
           return (i==0) ? formatNumber(min, "min") : formatNumber((array[i-1]))
         })
      }
@@ -1824,7 +1813,7 @@ function ready(error, us, county, state, county2, state2) {
                 return d.properties[SELECTED_VARIABLE]
               }
           })
-          var array = BREAKS[SELECTED_VARIABLE]
+          var array = variableListMaster[type].filter(function(d) {return d.variable == SELECTED_VARIABLE;})[0].breaks
           return (i==0) ? formatNumber(min, "min") : formatNumber((array[i-1]))
         })
      }
