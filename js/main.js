@@ -2228,6 +2228,7 @@ function ready(error, us, county, state, county2, state2) {
       .attr("transform", function(d,i) {
         return "translate(" + 0 +"," + 15+ ")"
       })
+
     rectG
       .append("g")
       .attr("class", "g-text")
@@ -2236,7 +2237,10 @@ function ready(error, us, county, state, county2, state2) {
       .attr("y", barHeight + 10)
       .attr("dy", ".71em")
       .attr("text-anchor", "start")
-      .text(function(d) { return d});
+      .text(function(d) {         
+        return d}
+      );
+
     rectG.append("g")
       .attr("class", "x axis")
       .attr("transform", function(d,i) {
@@ -2427,6 +2431,10 @@ function ready(error, us, county, state, county2, state2) {
     var NONWHITE_ph = variable + "_nw"
     var data = BigData.county_data;
 
+    grabVar = variableListMaster[type].filter(function(d) {
+      return d.variable == variable;
+    })
+
     /**MOBILE**/
     if (IS_PHONE) {   
 
@@ -2521,10 +2529,6 @@ function ready(error, us, county, state, county2, state2) {
           })
       }
 
-      grabVar = variableListMaster[type].filter(function(d) {
-        return d.variable == variable;
-      })
-      
       d3.selectAll(".category-labels-ph")
         .text(function(d,i) {
           return grabVar[0].columns[i % 3];
@@ -2534,22 +2538,26 @@ function ready(error, us, county, state, county2, state2) {
 
     }else {
       /*DESKTOP*/
+    // var start = new Date(); 
+
     var data =  BigData.county_data;
 
     // var data = (zoomCounty == true) ? county_data : state_data;
     var x = d3.scaleBand()
       .rangeRound([0, barWidth])
-    // var y = d3.scaleLinear()
-    //   .rangeRound([barHeight, 0]);
+
     data.forEach(function(d) { 
       d.national = +d.values[0][variable]
     })
+
     data.forEach(function(d) { 
       d.white = +d.values[0][WHITE];
     })
+
     data.forEach(function(d) { 
       d.nonwhite = +d.values[0][NONWHITE]
     })
+
     x.domain([[us_data].map(function(d){
       return d.abbr
     })]);
@@ -2565,6 +2573,14 @@ function ready(error, us, county, state, county2, state2) {
         return Math.max(d.white, d.nonwhite, d.national)
       }
     })])
+
+    // var end = new Date(); 
+    // console.log(end - start)
+
+    d3.selectAll(".g-text text")
+      .text(function(d,i){
+        return grabVar[0].columns[i % 3];
+      })    
 
       var National = d3.select("#National").selectAll(".category")
       
@@ -2593,7 +2609,7 @@ function ready(error, us, county, state, county2, state2) {
         })
       if ( (zoomNational == true) && selected == null) {         
         d3.selectAll("#State, #County").style("opacity", 0)
-      }else if (zoomNational_St && selected == null) {
+      } else if (zoomNational_St && selected == null) {
       } else if (zoomNational == false || selected != null) { //IF MOUSE IS OVER A STATE OR COUNTY IN WHICHEVER VIEW
         var countyID = (d3.select(".counties > path.selected").node() == null ) ? "" : d3.select(".counties > path.selected").attr("id");
         var countyIDHov = (d3.select(".counties > path.hover").node() == null) ? "" : d3.select(".counties > path.hover").attr("id");
@@ -2628,7 +2644,8 @@ function ready(error, us, county, state, county2, state2) {
                 return labelHTML(d,this,variable,NONWHITE,WHITE)              
               })
           })
-            if (countyID.slice(0,2) == state || countyIDHov.slice(0,2) == state) { 
+
+          if (countyID.slice(0,2) == state || countyIDHov.slice(0,2) == state) { 
               d3.selectAll("#National, #State, #County").style("opacity", 1)
               // var stateData = tmp_state.filter(function(d){
               //     return d.properties.abbr == state
@@ -2668,7 +2685,7 @@ function ready(error, us, county, state, county2, state2) {
                   return labelHTML(d,this,variable,NONWHITE,WHITE)              
                 })
               })
-          }else {
+          } else {
             d3.selectAll("#County").style("opacity", 0)
             d3.selectAll("#National, #State").style("opacity", 1)
           }
