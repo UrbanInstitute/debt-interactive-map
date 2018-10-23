@@ -2777,13 +2777,13 @@ function ready(error, us, county, state, county2, state2) {
     }
   }
 
-  function updateTable(data,type) {   
+  function updateTable(data,type) {
     var columns = ["All", "White", "NonWhite"]    
     var rowNumbers = [1,2,3]    
 
     if (type) {
-      var groups = variableList[type]["groups"]
-      var rowData =  variableList[type]["variables"]
+      // var groups = variableList[type]["groups"]
+      var rowData =  variableListMaster[type]
 
       // based on type, define the groups and rowdata
       var tbody = table.selectAll('tbody')
@@ -2816,7 +2816,7 @@ function ready(error, us, county, state, county2, state2) {
           var countyQuery;
 
           // Add in the querystring
-          if (d3.select("g.counties").selectAll("path.selected")._groups["0"].length !== 0) {
+          if (d3.select("g.counties").selectAll("path.selected")._groups[0].length !== 0) {
             countyQuery = d3.select("g.counties").selectAll("path.selected").datum().id;  
           }
 
@@ -2896,8 +2896,8 @@ function ready(error, us, county, state, county2, state2) {
     var data = (zoomNational == true) ? data : data["properties"];
     d3.selectAll("p.note1, p.note2").style("opacity", 1)
     d3.selectAll(".cell-data")
-      .each(function(d,i) { 
-        var rowVariable = [rowData[i]],
+      .each(function(d,i) {         
+        var rowVariable = [rowData[i].variable],
             rowVariable_nw = rowVariable + "_nw";
             rowVariable_wh = rowVariable + "_wh";
         if ((data[rowVariable]) == "n<50" || (data[rowVariable_nw]) == "n<50" || (data[rowVariable_wh]) == "n<50") { 
