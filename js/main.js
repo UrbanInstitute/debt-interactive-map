@@ -2752,7 +2752,7 @@ function ready(error, us, county1, state1, county2, state2) {
   function updateTable(data,type) {
     var columns = ["All", "White", "NonWhite"]    
     var rowNumbers = [1,2,3]    
-
+    
     if (type) {
       // var groups = variableList[type]["groups"]
       var rowData =  variableListMaster[type]
@@ -2769,7 +2769,7 @@ function ready(error, us, county1, state1, county2, state2) {
         .attr("class", function(d, i) {
           return type + " new group group-" + i
         })
-        // .merge(tbody)
+        .merge(tbody)
         .on('click', function(d) {             
           d3.selectAll('tbody')
             .classed('selected', false)
@@ -2796,7 +2796,7 @@ function ready(error, us, county1, state1, county2, state2) {
           if (d3.select("g.state-borders").selectAll("path.selected")._groups[0].length !== 0) {
             stateQuery = d3.select("path#" + selectedState.properties.abbr).datum().id;  
           }
-
+          
           updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
         })
     
