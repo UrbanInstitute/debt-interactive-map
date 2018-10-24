@@ -922,23 +922,23 @@ function ready(error, us, county1, state1, county2, state2) {
     .range(["#cfe8f3", "#73bfe2", "#1696d2", "#0a4c6a", "#000000"])  
 
  /*ADD DROPDOWNS*/
-  var categoryData = [{label: "Share with any debt in collections<i>ᵃ</i>", variable: "perc_debt_collect"},
-  {label: "Median debt in collections<i>ᵃ</i>", variable: "med_debt_collect"},
-  {label: "Share with medical debt in collections<i>ᵃ</i>", variable: "perc_debt_med"},
-  {label: "Median medical debt in collections<i>ᵃ</i>", variable: "med_debt_med"},
-  {label: "Nonwhite population share", variable: "perc_pop_nw"},
-  {label: "Share without health insurance coverage", variable: "perc_pop_no_ins" },
-  {label: "Average household income", variable: "avg_income"}]
+  // var categoryData = [{label: "Share with any debt in collections<i>ᵃ</i>", variable: "perc_debt_collect"},
+  // {label: "Median debt in collections<i>ᵃ</i>", variable: "med_debt_collect"},
+  // {label: "Share with medical debt in collections<i>ᵃ</i>", variable: "perc_debt_med"},
+  // {label: "Median medical debt in collections<i>ᵃ</i>", variable: "med_debt_med"},
+  // {label: "Nonwhite population share", variable: "perc_pop_nw"},
+  // {label: "Share without health insurance coverage", variable: "perc_pop_no_ins" },
+  // {label: "Average household income", variable: "avg_income"}]
   
-  var categoryData2 = [{label: "Share with student loan debt<i>ᵃ</i>", variable: "perc_stud_debt"},
-  {label: "Median student loan debt<i>ᵃ</i>", variable: "med_stud_debt"},
-  {label: "Share of student loan holders with student loan debt in collections<i>ᵃ ᵈ</i>", variable: "perc_stud_debt_collect_STUD"},    
-  {label: "Median student loan debt in collections<i>ᵃ</i>", variable: "med_stud_debt_collect"},
-  {label: "Median monthly student loan payment<i>ᵃ</i>", variable: "med_mon_pmt"},
-  {label: "Share of people with credit records who have student loan debt in collections<i>ᵃ ᵉ</i>", variable: "perc_stud_debt_collect"},
-  {label: "Nonwhite population share", variable: "perc_pop_nw"},
-  {label: "Share without a bachelor’s degree", variable: "perc_no_bach"},
-  {label: "Average household income", variable: "avg_income" }]
+  // var categoryData2 = [{label: "Share with student loan debt<i>ᵃ</i>", variable: "perc_stud_debt"},
+  // {label: "Median student loan debt<i>ᵃ</i>", variable: "med_stud_debt"},
+  // {label: "Share of student loan holders with student loan debt in collections<i>ᵃ ᵈ</i>", variable: "perc_stud_debt_collect_STUD"},    
+  // {label: "Median student loan debt in collections<i>ᵃ</i>", variable: "med_stud_debt_collect"},
+  // {label: "Median monthly student loan payment<i>ᵃ</i>", variable: "med_mon_pmt"},
+  // {label: "Share of people with credit records who have student loan debt in collections<i>ᵃ ᵉ</i>", variable: "perc_stud_debt_collect"},
+  // {label: "Nonwhite population share", variable: "perc_pop_nw"},
+  // {label: "Share without a bachelor’s degree", variable: "perc_no_bach"},
+  // {label: "Average household income", variable: "avg_income" }]
 
 
 // Create and populate Mobile Dropdowns options (mixing d3 and jquery...)
@@ -1011,24 +1011,15 @@ function ready(error, us, county1, state1, county2, state2) {
   
   var optionsCategory = categoryMenu
     .selectAll('option')
-    .data(function(d){
-      if (!Startquery) {
-        return categoryData2
-      } else if (Startquery["type"] === "student") {
-        return categoryData2
-      } else {
-        return categoryData
-      }
-    })
+    .data(variableListMaster[type])
   optionsCategory.enter()
     .append('option')
     .html(function(d) {
-      return d.label          
+      return d.mobileLabel;
     })
     .attr('value', function(d) {
-      return d.variable
+      return d.variable;
     })
-
 
 
 // BEGIN FUNCTIONS!
@@ -1064,8 +1055,7 @@ function ready(error, us, county1, state1, county2, state2) {
         BigData = changeData(d.item.value);
         type = d.item.value;
    
-
-        var type_category = (type == "medical") ? categoryData : categoryData2;
+        var type_category = variableListMaster[type];
         // update mobile categories        
 
         var optionsCategory = d3.select("#category-select").selectAll('option')
@@ -1074,11 +1064,11 @@ function ready(error, us, county1, state1, county2, state2) {
         optionsCategory.enter()
           .append('option')
           .merge(optionsCategory)
-          .html(function(d) {            
-            return d.label
+          .html(function(d) {
+            return d.mobileLabel;
           })
           .attr('value', function(d) {
-            return d.variable
+            return d.variable;
           })        
         
         optionsCategory.exit().remove()
@@ -1089,7 +1079,7 @@ function ready(error, us, county1, state1, county2, state2) {
 
         // DW note: this will need to get updated when we move to more than TWO variable sets. 
         // to be used when ready
-        var type_variable = (type == "medical") ? "perc_debt_collect" : "perc_stud_debt";
+        var type_variable = variableListMaster[type][0].variable;
         setVariable(type_variable)
         setVariable(type_variable,true)
         updateMap(type_variable)                    
@@ -1148,8 +1138,8 @@ function ready(error, us, county1, state1, county2, state2) {
 
   function changeData(CATEGORY) {
     
-    // DWCut fix to allow for more than 2 things!
-    var BigData = (CATEGORY === "medical") ? OverallTransformData(us,county1,state1,countyData,stateData) : OverallTransformData(us,county2,state2,countyData,stateData)
+    BigData = OverallTransformData(us,eval(variableListMaster.meta.dataSets[CATEGORY].county),eval(variableListMaster.meta.dataSets[CATEGORY].state),countyData,stateData);
+
     var tmp_state = BigData.tmp_state,
       tmp_county = BigData.tmp_county,
       filteredCounties = BigData.filteredCounties,
@@ -2752,7 +2742,7 @@ function ready(error, us, county1, state1, county2, state2) {
   function updateTable(data,type) {
     var columns = ["All", "White", "NonWhite"]    
     var rowNumbers = [1,2,3]    
-    
+
     if (type) {
       // var groups = variableList[type]["groups"]
       var rowData =  variableListMaster[type]
