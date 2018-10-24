@@ -1,10 +1,11 @@
+var Startquery = {};
 // DWCut? if it might could be cut/consolidated
 
   if (window.location.search) {    
     // If there's a url search query, do a bunch of stuff like create the beginning zoom variables
 
     // DECODE the query
-    var Startquery = decodeQuery(window.location.search)
+    Startquery = decodeQuery(window.location.search)
     
     if (Startquery["print"] === "true") {
       d3.select("body").classed("print",true)
@@ -14,13 +15,9 @@
 var IS_MOBILE;
 var IS_PHONE;
 var IS_PHONESM;
-// var BREAKS ={"perc_debt_collect":[0.22, .31, .39, .49],"med_debt_collect":[1200, 1500, 1800, 2300], "perc_debt_med":[.11,.18,.26,.34], "med_debt_med":[500,700,950,1250], "perc_pop_nw":[.13,.28,.46,.67], "perc_pop_no_ins":[.08,.13,.18,.26], "avg_income":[52650,63850,77900,101050],"perc_stud_debt":[0.10,0.13,0.16,0.20],"med_stud_debt": [12550,15050,17450,20350],"perc_stud_debt_collect": [0.01,0.02,0.03,0.06],"perc_stud_debt_collect_STUD": [0.07,0.13,0.2,0.3],"med_stud_debt_collect": [6150,7550,9000,10700],"med_mon_pmt": [135,155,175,195],"perc_no_bach": [0.59,0.71,0.79,0.85]};
-// var legendWidth = {"perc_debt_collect": 60,"perc_debt_med": 58,"med_debt_collect": 73,"med_debt_med": 70,"perc_pop_nw": 63,"perc_pop_no_ins": 60,"avg_income": 89,"perc_stud_debt":60,"med_stud_debt":89,"perc_stud_debt_collect":60,"perc_stud_debt_collect_STUD":60,"med_stud_debt_collect":89,"med_mon_pmt":70,"perc_no_bach":60};
 
 // insert here any variables that only have 1 item, namely "Nonwhite population share" for now, and in the future, anything else similar.
 var limitedVars = ["perc_pop_nw"]      
-
-
 
 var SELECTED_VARIABLE;
 var WHITE;
@@ -710,44 +707,49 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
 
 } 
 
-function ready(error, us, county, state, county2, state2) {
+function ready(error, us, county1, state1, county2, state2) {
   if (error) throw error;
   /*SETTING UP THE DATA*/
 
   // geographical data
   var countyData = us.objects.counties.geometries;
   var stateData = us.objects.states.geometries;
+
   
-  if (window.location.search) {    
-    // If there's a url search query, do a bunch of stuff like create the beginning zoom variables
-
-    // DECODE the query
-    // var Startquery = decodeQuery(window.location.search)  
-
-    var defaultFirst;
-
-    // set dataset (student vs. medical)
+  // If there's a url search query, get the type
+  if (window.location.search) {
+    // set dataset type 
     type = Startquery["type"]
-    if (type === "medical") {
-      var BigData = OverallTransformData(us,county,state,countyData,stateData);
-      defaultFirst = "perc_debt_collect"
-    } else if (type === "student") {
-      var BigData = OverallTransformData(us,county2,state2,countyData,stateData);
-      defaultFirst = "perc_stud_debt"
-    } else {
-      // in future other data types
-      var BigData = OverallTransformData(us,county2,state2,countyData,stateData);
-    }
+  } else {
+    type = variableListMaster.meta.default;    
+    Startquery["type"] = type;
+  }
 
-    // set variable
-      // NEED conditional to ensure that the wrong variable is not present    
-    if (!Startquery["variable"]) {
-      typeVar = defaultFirst
-      Startquery["variable"] = typeVar;
-      updateQueryString(type,typeVar)
-    } else {
-      typeVar  = Startquery["variable"]
-    }     
+  var defaultFirst;
+
+  // use meta data to select correct data
+  var BigData = OverallTransformData(us,eval(variableListMaster.meta.dataSets[type].county),eval(variableListMaster.meta.dataSets[type].state),countyData,stateData);
+  defaultFirst = variableListMaster[type][0].variable;
+
+  // set variable
+    // NEED conditional to ensure that the wrong variable is not present    
+  if (!Startquery["variable"]) {
+    typeVar = defaultFirst
+    Startquery["variable"] = typeVar;
+    updateQueryString(type,typeVar)
+  } else {
+    typeVar  = Startquery["variable"]
+    updateQueryString(type,typeVar)
+  }
+
+  // TRIGGER PRINT VIEW
+  if (Startquery["print"] === "true") {      
+    buildprint(Startquery,BigData)  
+  }
+  else{
+    console.log("no PRINT")
+  }
+
 
     // set left hand table variable names
       // this is done by setting "type" above. 
@@ -755,7 +757,7 @@ function ready(error, us, county, state, county2, state2) {
     // set drop down item
       // this is done below the set up of the drop down. look for refresh
 
-    // set visual variable place
+    // set visual variable placeholder
       // this is done below ADD TABLE in the 1300s of the code
 
 
@@ -763,29 +765,9 @@ function ready(error, us, county, state, county2, state2) {
     // select the county (optional)
       // DONE AT THE VERY BOTTOM OF THE ENTIRE READY/JS SCRIPT
 
-    // need to do mobile!
-    // a lot happens at the bottom
+    // lots happens at the bottom if it starts with a Startquery. 
 
-    // TRIGGER PRINT VIEW
-    if (Startquery["print"] === "true") {      
-      buildprint(Startquery,BigData)  
-    }
-    else{
-      console.log("no PRINT")
-    }
     
-  }
-
-  // If there is no query at the beginning
-  else {
-    // var Startquery = "national";
-    type = "student"
-    var BigData = OverallTransformData(us,county2,state2,countyData,stateData);    
-    typeVar = "perc_stud_debt"
-
-    // when we adjust this to a DIFFERENT student item, it changes the map AND legend, but not the spot on the left hand side in the table. (but uupper and lower end is a NaN?????)
-  }
-   
   // DWCut? or consolidate? 
   setVariable(typeVar)
   setVariable(typeVar, true)
@@ -932,6 +914,9 @@ function ready(error, us, county, state, county2, state2) {
     return d.properties[SELECTED_VARIABLE]
   })  
 
+// console.log(SELECTED_VARIABLE)
+// console.log(variableListMaster[type].filter(function(d) {return d.variable == SELECTED_VARIABLE;})[0].breaks)
+// console.log(variableListMaster[type].filter(function(d) {return d.variable == SELECTED_VARIABLE;}))
   var quantize = d3.scaleThreshold()
     .domain(variableListMaster[type].filter(function(d) {return d.variable == SELECTED_VARIABLE;})[0].breaks)
     .range(["#cfe8f3", "#73bfe2", "#1696d2", "#0a4c6a", "#000000"])  
@@ -1164,7 +1149,7 @@ function ready(error, us, county, state, county2, state2) {
   function changeData(CATEGORY) {
     
     // DWCut fix to allow for more than 2 things!
-    var BigData = (CATEGORY === "medical") ? OverallTransformData(us,county,state,countyData,stateData) : OverallTransformData(us,county2,state2,countyData,stateData)
+    var BigData = (CATEGORY === "medical") ? OverallTransformData(us,county1,state1,countyData,stateData) : OverallTransformData(us,county2,state2,countyData,stateData)
     var tmp_state = BigData.tmp_state,
       tmp_county = BigData.tmp_county,
       filteredCounties = BigData.filteredCounties,
@@ -1586,8 +1571,6 @@ function ready(error, us, county, state, county2, state2) {
       // $(".counties").css("pointer-events", "all")
       addTag(state, null, abbr)        
       zoomMap(width, d, level)        
-      console.log(SELECTED_VARIABLE)
-          console.log(d)
       updateBars(SELECTED_VARIABLE, d)
 
       var stateQuery = d.properties.id;
@@ -2304,7 +2287,7 @@ function ready(error, us, county, state, county2, state2) {
     })
 
     var quantize = d3.scaleThreshold()
-      .domain(BREAKS[variable])
+      .domain(variableListMaster[type].filter(function(d) {return d.variable == variable;})[0].breaks)
       .range(["#cfe8f3", "#73bfe2", "#1696d2", "#0a4c6a", "#000000"])        
     d3.selectAll(".legend-labels")
       .each(function(d,i) {
@@ -2326,7 +2309,7 @@ function ready(error, us, county, state, county2, state2) {
                 return d.properties[variable]  
               }              
             })
-            var array = BREAKS[variable]
+            var array = variableListMaster[type].filter(function(d) {return d.variable == variable;})[0].breaks
             
             // README because of time restraints and uncertainty in how scales are calculated, some of these are being manually set
             if (i==0) {
@@ -2377,7 +2360,7 @@ function ready(error, us, county, state, county2, state2) {
                 return d.properties[variable]  
               }              
             })
-            var array = BREAKS[variable]
+            var array = variableListMaster[type].filter(function(d) {return d.variable == variable;})[0].breaks
             if (i==0) {
               return formatNumber(min, "min")
             }else if (i==5) {
@@ -3353,7 +3336,6 @@ function ready(error, us, county, state, county2, state2) {
 
         selectedLocation()
 
-        updateBars(typeVar, filteredData[0].properties.county)
         d3.select(".group-label-ph2.County").text(filteredData[0].properties.county)
         d3.select(".group-label-ph.County").text(filteredData[0].properties.county)      
         county = filteredData[0].properties.county;
@@ -3365,7 +3347,8 @@ function ready(error, us, county, state, county2, state2) {
 
         var stateData = BigData.tmp_state.filter(function(d){ 
           return d.properties.state == data.properties.state;
-        })           
+        })          
+
         updateBars(typeVar, stateData[0])
       }
 

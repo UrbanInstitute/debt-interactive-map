@@ -146,5 +146,18 @@ var variableListMaster = {
 			"version":"v1",
 			"columns":["All", "White", "Nonwhite"]
 		}
-	]
+	],
+	"meta":{
+		"default":"student",
+		"dataSets":{
+			"medical":{
+				"county":"county1",
+				"state":"state1"
+			},
+			"student":{
+				"county":"county2",
+				"state":"state2"
+			}
+		}
+	}
 };
