@@ -295,7 +295,9 @@ d3.queue()
     .defer(d3.csv, "data/county_medical.csv")
     .defer(d3.csv, "data/state_medical.csv")
     .defer(d3.tsv, "data/county_student4.tsv")
-    .defer(d3.csv, "data/state_student4.csv")    
+    .defer(d3.csv, "data/state_student4.csv")  
+    .defer(d3.csv, "data/county_auto.csv")
+    .defer(d3.csv, "data/state_auto.csv")  
     .await(ready); 
 
 function transformData(geography){
@@ -707,7 +709,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
 
 } 
 
-function ready(error, us, county1, state1, county2, state2) {
+function ready(error, us, county1, state1, county2, state2, county3, state3) {
   if (error) throw error;
   /*SETTING UP THE DATA*/
 
@@ -739,7 +741,7 @@ function ready(error, us, county1, state1, county2, state2) {
     updateQueryString(type,typeVar)
   } else {
     typeVar  = Startquery["variable"]
-    updateQueryString(type,typeVar)
+    // updateQueryString(type,typeVar)
   }
 
   // TRIGGER PRINT VIEW
@@ -3004,7 +3006,12 @@ function ready(error, us, county1, state1, county2, state2) {
   $(window).resize(function() {
     if (!Startquery || Startquery["print"] != "true") {
       setScreenState (d3.select("#isMobile").style("display") === "block", d3.select("#isPhone").style("display") === "block", d3.select("#isPhoneSm").style("display") === "block" )
-      initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width() 
+      initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width()
+
+      console.log($("body").width())
+      console.log(initialWidth)
+
+      
       barSvgHeight = (IS_MOBILE) ? 185 : 130
       barSvgHeight_ph = (IS_PHONESM) ? 200 : 173
       barHeight = (IS_MOBILE) ? 90 : 65;

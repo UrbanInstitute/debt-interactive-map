@@ -147,8 +147,73 @@ var variableListMaster = {
 			"columns":["All", "White", "Nonwhite"]
 		}
 	],
+	"auto":[
+		{
+			"variable":"autoopen_pct",
+			"desktopLabel":"autoopen_pct",
+			"mobileLabel":"autoopen_pct",
+			"breaks":[0,1,5,5000],
+			"legendWidth":50,
+			"version":"v3",
+			"columns":["All","White","Nonwhite"]
+		},
+		{
+			"variable":"autoretopen_pct",
+			"desktopLabel":"autoretopen_pct",
+			"mobileLabel":"autoretopen_pct",
+			"breaks":[0,1,5,5000],
+			"legendWidth":50,
+			"version":"v3",
+			"columns":["All","White","Nonwhite"]
+		},
+		{
+			"variable":"autoretdelrate",
+			"desktopLabel":"autoretdelrate",
+			"mobileLabel":"autoretdelrate",
+			"breaks":[0,1,5,5000],
+			"legendWidth":50,
+			"version":"v3",
+			"columns":["All","White","Nonwhite"]
+		},
+		{
+			"variable":"autoretdelrate_sub",
+			"desktopLabel":"autoretdelrate_sub",
+			"mobileLabel":"autoretdelrate_sub",
+			"breaks":[0,1,5,5000],
+			"legendWidth":50,
+			"version":"v3",
+			"columns":["All","White","Nonwhite"]
+		},
+		{
+			"variable":"popnonwhite_pct",
+			"desktopLabel":"popnonwhite_pct",
+			"mobileLabel":"popnonwhite_pct",
+			"breaks":[0,1,5,5000],
+			"legendWidth":50,
+			"version":"v3",
+			"columns":["All","White","Nonwhite"]
+		},
+		{
+			"variable":"poprural_pct",
+			"desktopLabel":"poprural_pct",
+			"mobileLabel":"poprural_pct",
+			"breaks":[0,1,5,5000],
+			"legendWidth":50,
+			"version":"v3",
+			"columns":["All","White","Nonwhite"]
+		},
+		{
+			"variable":"HHinc_avg",
+			"desktopLabel":"HHinc_avg",
+			"mobileLabel":"HHinc_avg",
+			"breaks":[0,1,5,5000],
+			"legendWidth":50,
+			"version":"v3",
+			"columns":["All","White","Nonwhite"]
+		}
+	],
 	"meta":{
-		"default":"student",
+		"default":"auto",
 		"dataSets":{
 			"medical":{
 				"county":"county1",
@@ -157,6 +222,10 @@ var variableListMaster = {
 			"student":{
 				"county":"county2",
 				"state":"state2"
+			},
+			"auto":{
+				"county":"county3",
+				"state":"state3"
 			}
 		}
 	}
