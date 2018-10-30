@@ -17,7 +17,7 @@ var IS_PHONE;
 var IS_PHONESM;
 
 // insert here any variables that only have 1 item, namely "Nonwhite population share" for now, and in the future, anything else similar.
-var limitedVars = ["perc_pop_nw"]      
+var limitedVars = ["perc_pop_nw","poprural_pct"]      
 
 var SELECTED_VARIABLE;
 var WHITE;
@@ -319,7 +319,7 @@ function OverallTransformData(us, county, state, countyData, stateData) {
 
   county_data.forEach(function(d,i){ 
     for (var property in d["values"][0]) {
-      d[property] = d.values[0][property];
+      d[property] = d.values[0][property];      
       countyGeoMapped.get(d.key)[property] = d.values[0][property];
     }
 
@@ -2069,6 +2069,8 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
       .attr("height", y_ph.bandwidth())
       .attr("width", function(d) {        
         var parentClass = d3.select(this.parentNode).attr('class');      
+
+        // DW fix!!!!!
         if (SELECTED_VARIABLE_ph !== "perc_pop_nw") {
           if (parentClass.search("All") > -1) {      
             return x_ph(+d[SELECTED_VARIABLE_ph])
@@ -3007,10 +3009,6 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
     if (!Startquery || Startquery["print"] != "true") {
       setScreenState (d3.select("#isMobile").style("display") === "block", d3.select("#isPhone").style("display") === "block", d3.select("#isPhoneSm").style("display") === "block" )
       initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-table").width()
-
-      console.log($("body").width())
-      console.log(initialWidth)
-
       
       barSvgHeight = (IS_MOBILE) ? 185 : 130
       barSvgHeight_ph = (IS_PHONESM) ? 200 : 173
@@ -3335,7 +3333,10 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
 
         d3.select(".group-label-ph2.County").text(filteredData[0].properties.county)
         d3.select(".group-label-ph.County").text(filteredData[0].properties.county)      
-        county = filteredData[0].properties.county;
+        if (IS_PHONE) {
+          county = filteredData[0].properties.county;
+          updateBars(typeVar, county)  
+        }
       }else {
         addTag(data.properties.state,null,data.properties.abbr)
         $('.ui-widget-content.ui-autocomplete-input').attr('placeholder', '')

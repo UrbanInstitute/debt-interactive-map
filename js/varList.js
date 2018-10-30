@@ -150,63 +150,63 @@ var variableListMaster = {
 	"auto":[
 		{
 			"variable":"autoopen_pct",
-			"desktopLabel":"autoopen_pct",
-			"mobileLabel":"autoopen_pct",
-			"breaks":[0,1,5,5000],
+			"desktopLabel":"Share with auto debt",
+			"mobileLabel":"Share with auto debt",
+			"breaks":[0.17,0.26,0.31,0.37],
 			"legendWidth":50,
 			"version":"v3",
 			"columns":["All","White","Nonwhite"]
 		},
 		{
 			"variable":"autoretopen_pct",
-			"desktopLabel":"autoretopen_pct",
-			"mobileLabel":"autoretopen_pct",
-			"breaks":[0,1,5,5000],
+			"desktopLabel":"Share with auto or retail debt",
+			"mobileLabel":"Share with auto or retail debt",
+			"breaks":[0.23,0.31,0.36,0.42],
 			"legendWidth":50,
 			"version":"v3",
 			"columns":["All","White","Nonwhite"]
 		},
 		{
 			"variable":"autoretdelrate",
-			"desktopLabel":"autoretdelrate",
-			"mobileLabel":"autoretdelrate",
-			"breaks":[0,1,5,5000],
+			"desktopLabel":"Auto/retail debt delinquency rate",
+			"mobileLabel":"Auto/retail debt delinquency rate",
+			"breaks":[0.02,0.05,0.08,0.13],
 			"legendWidth":50,
 			"version":"v3",
 			"columns":["All","White","Nonwhite"]
 		},
 		{
 			"variable":"autoretdelrate_sub",
-			"desktopLabel":"autoretdelrate_sub",
-			"mobileLabel":"autoretdelrate_sub",
-			"breaks":[0,1,5,5000],
+			"desktopLabel":"Auto/retail debt delinquency rate by credit score",
+			"mobileLabel":"Auto/retail debt delinquency rate by credit score",
+			"breaks":[0.07,0.12,0.17,0.24],
 			"legendWidth":50,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"]
+			"columns":["Subprime","Near prime","Prime"]
 		},
 		{
 			"variable":"popnonwhite_pct",
-			"desktopLabel":"popnonwhite_pct",
-			"mobileLabel":"popnonwhite_pct",
-			"breaks":[0,1,5,5000],
+			"desktopLabel":"Nonwhite population share",
+			"mobileLabel":"Nonwhite population share",
+			"breaks":[0.13,0.28,0.46,0.67],
 			"legendWidth":50,
 			"version":"v3",
 			"columns":["All","White","Nonwhite"]
 		},
 		{
 			"variable":"poprural_pct",
-			"desktopLabel":"poprural_pct",
-			"mobileLabel":"poprural_pct",
-			"breaks":[0,1,5,5000],
+			"desktopLabel":"Rural population share",
+			"mobileLabel":"Rural population share",
+			"breaks":[0.21,0.43,0.63,0.86],
 			"legendWidth":50,
 			"version":"v3",
 			"columns":["All","White","Nonwhite"]
 		},
 		{
 			"variable":"HHinc_avg",
-			"desktopLabel":"HHinc_avg",
-			"mobileLabel":"HHinc_avg",
-			"breaks":[0,1,5,5000],
+			"desktopLabel":"Average household income",
+			"mobileLabel":"Average household income",
+			"breaks":[54638,67154,84014,110245],
 			"legendWidth":50,
 			"version":"v3",
 			"columns":["All","White","Nonwhite"]
