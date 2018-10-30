@@ -217,15 +217,18 @@ var variableListMaster = {
 		"dataSets":{
 			"medical":{
 				"county":"county1",
-				"state":"state1"
+				"state":"state1",
+				"publishDate": "December 6, 2017"
 			},
 			"student":{
 				"county":"county2",
-				"state":"state2"
+				"state":"state2",
+				"publishDate": "May 16, 2018"
 			},
 			"auto":{
 				"county":"county3",
-				"state":"state3"
+				"state":"state3",
+				"publishDate": "November XX, 2018"
 			}
 		}
 	}

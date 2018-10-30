@@ -651,6 +651,14 @@ path.hover {
   opacity: 0;
 }
 
+.auto.group-5 > .cell-data > td:nth-child(2), .auto.group-5 .cell-data > td:nth-child(3) {
+  opacity: 0;
+}
+.auto.group-5 > .cell-column > td:nth-child(2), .auto.group-5 .cell-column > td:nth-child(3) {
+  opacity: 0;
+}
+
+
 .left-table2 {
   float: left;
   width: 5px;

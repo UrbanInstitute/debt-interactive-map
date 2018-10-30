@@ -319,7 +319,7 @@ function OverallTransformData(us, county, state, countyData, stateData) {
 
   county_data.forEach(function(d,i){ 
     for (var property in d["values"][0]) {
-      d[property] = d.values[0][property];      
+      d[property] = d.values[0][property];
       countyGeoMapped.get(d.key)[property] = d.values[0][property];
     }
 
