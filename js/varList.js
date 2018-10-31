@@ -153,7 +153,7 @@ var variableListMaster = {
 			"desktopLabel":"Share with auto debt",
 			"mobileLabel":"Share with auto debt",
 			"breaks":[0.17,0.26,0.31,0.37],
-			"legendWidth":50,
+			"legendWidth":65,
 			"version":"v3",
 			"columns":["All","White","Nonwhite"]
 		},
@@ -162,7 +162,7 @@ var variableListMaster = {
 			"desktopLabel":"Share with auto or retail debt",
 			"mobileLabel":"Share with auto or retail debt",
 			"breaks":[0.23,0.31,0.36,0.42],
-			"legendWidth":50,
+			"legendWidth":65,
 			"version":"v3",
 			"columns":["All","White","Nonwhite"]
 		},
@@ -171,7 +171,7 @@ var variableListMaster = {
 			"desktopLabel":"Auto/retail debt delinquency rate",
 			"mobileLabel":"Auto/retail debt delinquency rate",
 			"breaks":[0.02,0.05,0.08,0.13],
-			"legendWidth":50,
+			"legendWidth":65,
 			"version":"v3",
 			"columns":["All","White","Nonwhite"]
 		},
@@ -180,7 +180,7 @@ var variableListMaster = {
 			"desktopLabel":"Auto/retail debt delinquency rate by credit score",
 			"mobileLabel":"Auto/retail debt delinquency rate by credit score",
 			"breaks":[0.07,0.12,0.17,0.24],
-			"legendWidth":50,
+			"legendWidth":65,
 			"version":"v3",
 			"columns":["Subprime","Near prime","Prime"]
 		},
@@ -189,7 +189,7 @@ var variableListMaster = {
 			"desktopLabel":"Nonwhite population share",
 			"mobileLabel":"Nonwhite population share",
 			"breaks":[0.13,0.28,0.46,0.67],
-			"legendWidth":50,
+			"legendWidth":65,
 			"version":"v3",
 			"columns":["All","White","Nonwhite"]
 		},
@@ -198,7 +198,7 @@ var variableListMaster = {
 			"desktopLabel":"Rural population share",
 			"mobileLabel":"Rural population share",
 			"breaks":[0.21,0.43,0.63,0.86],
-			"legendWidth":50,
+			"legendWidth":65,
 			"version":"v3",
 			"columns":["All","White","Nonwhite"]
 		},
@@ -207,7 +207,7 @@ var variableListMaster = {
 			"desktopLabel":"Average household income",
 			"mobileLabel":"Average household income",
 			"breaks":[54638,67154,84014,110245],
-			"legendWidth":50,
+			"legendWidth":90,
 			"version":"v3",
 			"columns":["All","White","Nonwhite"]
 		}
