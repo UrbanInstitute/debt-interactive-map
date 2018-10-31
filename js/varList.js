@@ -228,7 +228,6 @@ var variableListMaster = {
 			"auto":{
 				"county":"county3",
 				"state":"state3",
-				"publishDate": "November XX, 2018"
 			}
 		}
 	}

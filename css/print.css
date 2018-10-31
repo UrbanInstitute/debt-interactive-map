@@ -188,29 +188,29 @@
   padding-top: 17px;
   border-top: 1px solid #D2D2D2;
 }
-/* line 234, ../sass/print.scss */
+/* line 233, ../sass/print.scss */
 .print .td-map .print-chart:first-child {
   border-top: 0px;
 }
-/* line 238, ../sass/print.scss */
+/* line 237, ../sass/print.scss */
 .print .td-map .print-chart:nth-child(6) {
   border-top: 0px;
 }
-/* line 254, ../sass/print.scss */
+/* line 247, ../sass/print.scss */
 .print .td-map .inner {
   font-weight: bold;
   font-size: 15px;
   padding-bottom: 20px;
 }
-/* line 265, ../sass/print.scss */
+/* line 258, ../sass/print.scss */
 .print .td-table {
   display: none;
 }
-/* line 270, ../sass/print.scss */
+/* line 263, ../sass/print.scss */
 .print .td-table #table-div, .print .td-table .search-div-main, .print .td-table .select-table {
   display: none;
 }
-/* line 283, ../sass/print.scss */
+/* line 276, ../sass/print.scss */
 .print .bottom-container {
   border-top: 0px;
   background-color: #fff;
@@ -218,47 +218,80 @@
   top: 611mm;
   width: 220mm;
 }
-/* line 290, ../sass/print.scss */
+/* line 283, ../sass/print.scss */
 .print .bottom-container .bottom-content {
   max-width: none;
   padding-top: 20px;
   width: 100% !important;
 }
-/* line 295, ../sass/print.scss */
+/* line 288, ../sass/print.scss */
 .print .bottom-container .bottom-content h1.bottom-header {
   font-size: 18px;
   margin: 0px;
   padding-top: 20px;
   margin-bottom: 30px;
 }
-/* line 302, ../sass/print.scss */
+/* line 295, ../sass/print.scss */
 .print .bottom-container .bottom-content .footerButton {
   display: none;
 }
-/* line 306, ../sass/print.scss */
+/* line 299, ../sass/print.scss */
 .print .bottom-container .bottom-content .bottom-text {
   font-size: 14px;
   line-height: 125% !important;
   font-style: normal;
   margin-bottom: 0px;
 }
-/* line 312, ../sass/print.scss */
+/* line 305, ../sass/print.scss */
 .print .bottom-container .bottom-content .bottom-text em {
   font-style: normal;
 }
-/* line 318, ../sass/print.scss */
+/* line 311, ../sass/print.scss */
 .print .bottom-container .bottom-content .credit-list {
   padding-top: 5px;
 }
-/* line 322, ../sass/print.scss */
+/* line 315, ../sass/print.scss */
 .print .bottom-container .bottom-content .credit-names, .print .bottom-container .bottom-content .credit-header {
   font-size: 14px;
   font-weight: 400 !important;
   line-height: 100%;
 }
-/* line 328, ../sass/print.scss */
+/* line 321, ../sass/print.scss */
 .print .bottom-container .bottom-content #copyright {
   display: none;
+}
+/* line 329, ../sass/print.scss */
+.print.national #print-chart-container .print-chart {
+  width: 33%;
+  float: left;
+  border-top: 0px;
+  border-bottom: 1px solid #D2D2D2;
+  margin-top: 0px;
+  padding-bottom: 20px;
+}
+/* line 338, ../sass/print.scss */
+.print.national #print-chart-container .icon1 {
+  display: none;
+}
+/* line 343, ../sass/print.scss */
+.print.national #print-chart-notes {
+  clear: both;
+}
+/* line 347, ../sass/print.scss */
+.print.national .icon2 {
+  top: 273mm !important;
+}
+/* line 351, ../sass/print.scss */
+.print.national .icon3 {
+  top: 582mm !important;
+}
+/* line 355, ../sass/print.scss */
+.print.national .bottom-container {
+  top: 300mm !important;
+}
+/* line 362, ../sass/print.scss */
+.print.state #print-chart-container .print-chart {
+  width: 61%;
 }
 
 @media print {
@@ -271,17 +304,17 @@
     margin-bottom: 15mm;
     /*margin-right: 45mm;  for compatibility with both A4 and Letter */
   }
-  /* line 349, ../sass/print.scss */
+  /* line 385, ../sass/print.scss */
   body.print a:after {
     content: none !important;
   }
 
-  /* line 352, ../sass/print.scss */
+  /* line 388, ../sass/print.scss */
   body.print a {
     color: #000 !important;
   }
 
-  /* line 360, ../sass/print.scss */
+  /* line 396, ../sass/print.scss */
   .page-break {
     height: 0;
     page-break-after: always;
@@ -289,7 +322,7 @@
     border-top: none;
   }
 
-  /* line 362, ../sass/print.scss */
+  /* line 398, ../sass/print.scss */
   .thin.logo img {
     height: 14px;
     margin-top: 30px;

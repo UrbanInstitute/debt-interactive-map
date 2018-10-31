@@ -222,11 +222,10 @@ $icon-width-buffer: 40px;
 			}
 		}
 
-		// d3 bar charts
+		// d3 bar charts		
 		.print-chart {
 			height:155px;
-			width:100%;
-			
+			width:100%;			
 			margin-top: 20px;
 		    padding-top: 17px;
 		    border-top: 1px solid #D2D2D2;
@@ -242,15 +241,9 @@ $icon-width-buffer: 40px;
 			svg {
 		    	// background-color: LIGHTCORAL;
 		    }
-		 //    .sub-charts {
-			// 	height: 75px;
-			//     width: 33.33%;
-			//     background-color: green;
-			//     margin-top:10px;		    
-			//     float: left;	
-			//     font-size: 11px;
-			// }
+
 		}
+
 		.inner {
 			font-weight: bold;
 			font-size: 15px;		
@@ -331,8 +324,51 @@ $icon-width-buffer: 40px;
 		}	
 	}
 
+	&.national {
+		#print-chart-container {
+			.print-chart {
+				width:33%;
+				float: left;
+				border-top:0px;
+				border-bottom: 1px solid #D2D2D2;
+				margin-top:0px;
+				padding-bottom: 20px;
+			}
 
+			.icon1 {
+				display: none;
+			}
+		}
 
+		#print-chart-notes {
+			clear:both;
+		}
+
+		.icon2 {
+		    top: 273mm !important;
+		}
+
+		.icon3 {
+			top: 582mm !important;
+		}
+
+		.bottom-container {
+			top: 300mm !important;
+		}
+	}		 
+
+	&.state {
+		#print-chart-container {
+			.print-chart {
+				width:61%;				
+				// border-top:0px;
+				// border-bottom: 1px solid #D2D2D2;
+				// margin-top:0px;
+				// padding-bottom: 20px;
+				// margin: 0 auto;
+			}
+		}		
+	}		 
 }
 
 // print specific queries

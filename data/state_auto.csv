@@ -1,4 +1,4 @@
-﻿id,state,abbr,autoopen_pct,autoopen_pct_nw,autoopen_pct_wh,autoretopen_pct,autoretopen_pct_nw,autoretopen_pct_wh,autoretdelrate,autoretdelrate_wh,autoretdelrate_nw,autoretdelrate_sub,autoretdelrate_near,autoretdelrate_prime,popnonwhite_pct,poprural_pct,HHinc_avg,HHinc_avg_wh,HHinc_avg_nw
+﻿id,state,abbr,autoopen_pct,autoopen_pct_nw,autoopen_pct_wh,autoretopen_pct,autoretopen_pct_nw,autoretopen_pct_wh,autoretdelrate,autoretdelrate_wh,autoretdelrate_nw,autoretdelrate_sub,autoretdelrate_sub_wh,autoretdelrate_sub_nw,popnonwhite_pct,poprural_pct,HHinc_avg,HHinc_avg_wh,HHinc_avg_nw
 USA,USA,,0.2998843,0.2539552,0.3212453,0.3435014,0.3003459,0.364943,0.0409978,0.0306213,0.0679899,0.1252433,0.0356038,0.0047404,0.388849795,0.192690283,81346.28125,88047.16406,67096.53906
 1,Alabama,AL,0.2803523,0.2247466,0.2954473,0.3535469,0.2876689,0.3696875,0.0852966,0.0715821,0.13515,0.2143558,0.0684779,0.0087146,0.342597187,0.409631819,64631.93359,72025.33594,48610.14063
 2,Alaska,AK,0.2832796,0.1061844,0.3055121,0.3314601,0.2053676,0.3474178,0.0334338,0.0282598,0.0331492,0.1148867,0.028133,0.0014437,0.389728189,0.339802116,93312.125,100032.1406,77225.96875
