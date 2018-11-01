@@ -39,7 +39,7 @@ path.domain {
 }
 .note-table {
   font-size: 11px;
-  font-style: normal !important;
+  /*font-style: normal !important;*/
 }
 #ui-id-2 > .ui-menu-item{
   border: solid 1px #f1f1f1 !important;

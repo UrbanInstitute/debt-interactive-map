@@ -521,9 +521,9 @@ function findPrintY(d,printdata) {
 
 function buildPrintBars(dis,variable, varName, printdata,y) {
   var barSvgHeight = 110,
-      barWidth = 50,
+      barWidth = 60,
       width = 821,
-      itemwidth = (barWidth*3) + 20,
+      itemwidth = (barWidth*3) + 40,
       spacer = (width - (3*itemwidth))/2;
   
   if (printdata.length === 3) {
@@ -583,7 +583,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
         return "category " + d
       })
       .attr("transform", function(d,i) {
-        return "translate(" + (60 * i ) + "," + 10 + ")";
+        return "translate(" + (70 * i ) + "," + 10 + ")";
         // "translate(" + ((barWidth + 2) * i ) + "," + 10 + ")" 
         // "translate(" + (60 * i ) + "," + 10 + ")"
       })
@@ -592,7 +592,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
       .attr("class", function(d) { 
         return "rect-g2 " + d})
       .attr("transform", function(d,i) {
-        return "translate(" + 0 +"," + 15+ ")"
+        return "translate(" + 0 +"," + 15 + ")"
       })
 
     rectG
@@ -1107,6 +1107,12 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
         setVariable(type_variable,true)
         updateMap(type_variable)                    
 
+        // update notes at bottom
+        $(".temp").remove()
+
+        $("#notes").append(variableListMaster.meta.dataSets[type].specialNotes)
+        $("#notes-section-inner").append(variableListMaster.meta.dataSets[type].specialNotes)
+
         var stateQuery;
         var countyQuery;
 
@@ -1159,8 +1165,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
 
     });
 
-  function changeData(CATEGORY) {
-    
+  function changeData(CATEGORY) {    
     BigData = OverallTransformData(us,eval(variableListMaster.meta.dataSets[CATEGORY].county),eval(variableListMaster.meta.dataSets[CATEGORY].state),countyData,stateData);
 
     var tmp_state = BigData.tmp_state,
@@ -1898,6 +1903,11 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
   /*ADD TABLE*/
   // Build table
     
+    $(".temp").remove()
+
+    $("#notes").append(variableListMaster.meta.dataSets[type].specialNotes)
+    $("#notes-section-inner").append(variableListMaster.meta.dataSets[type].specialNotes)
+
     var us_data = state_data[0]["values"][0]
     for (var key in us_data) {
         if (us_data.hasOwnProperty(key)) { 

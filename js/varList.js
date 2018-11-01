@@ -218,17 +218,25 @@ var variableListMaster = {
 			"medical":{
 				"county":"county1",
 				"state":"state1",
-				"publishDate": "December 6, 2017"
+				"publishDate": "December 6, 2017",
+				"specialNotes":[]
 			},
 			"student":{
 				"county":"county2",
 				"state":"state2",
-				"publishDate": "May 16, 2018"
+				"publishDate": "May 16, 2018",
+				"specialNotes":[
+					"<p class='note3 temp'><sup><i>d</i></sup> This variable was added May 16, 2018.</p>",
+					"<p class='note4 temp'><sup><i>e</i></sup> This variable was relabeled on May 16, 2018.</p>"
+				]
 			},
 			"auto":{
 				"county":"county3",
 				"state":"state3",
-				"publishDate": "November XX, 2018"
+				"publishDate": "November XX, 2018",
+				"specialNotes":[
+					"<p class='note3 temp'><sup><i>d</i></sup> The VantageScore credit score ranges from 300 to 850. Subprime scores range from 300 to 600, near-prime from 601 to 660, and prime from 600 to 850.</p>"
+				]
 			}
 		}
 	}
