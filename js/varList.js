@@ -177,8 +177,8 @@ var variableListMaster = {
 		},
 		{
 			"variable":"autoretdelrate_sub",
-			"desktopLabel":"Auto/retail debt delinquency rate by credit score",
-			"mobileLabel":"Auto/retail debt delinquency rate by credit score",
+			"desktopLabel":"Auto/retail debt delinquency rate by credit score<span class='annotation'><sup>d</sup></span>",
+			"mobileLabel":"Auto/retail debt delinquency rate by credit score<i>ᵈ</i>",
 			"breaks":[0.07,0.12,0.17,0.24],
 			"legendWidth":65,
 			"version":"v3",
