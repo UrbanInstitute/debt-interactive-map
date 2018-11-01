@@ -371,6 +371,40 @@ $icon-width-buffer: 40px;
 	}		 
 }
 
+// target firefox
+@-moz-document url-prefix() {
+	.print {
+		.main-table {
+			max-height: unset !important; //change to none? or initial?
+			overflow-y: visible;
+			float: left;
+			margin-top: 0px !important;
+
+			.td-map {
+				padding-top: 10px;
+			}
+		}
+
+		.print-footer-icon {
+			display: none;
+		}
+
+		.bottom-container {
+			position: inherit;
+
+			h1.bottom-header {
+				line-height: 70px;
+			}
+
+
+			.bottom-text {
+				margin-top:-40px;
+			}
+		}
+	}
+}
+
+
 // print specific queries
 @media print{
 	@page {

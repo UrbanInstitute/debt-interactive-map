@@ -294,6 +294,35 @@
   width: 61%;
 }
 
+@-moz-document url-prefix() {
+  /* line 377, ../sass/print.scss */
+  .print .main-table {
+    max-height: unset !important;
+    overflow-y: visible;
+    float: left;
+    margin-top: 0px !important;
+  }
+  /* line 383, ../sass/print.scss */
+  .print .main-table .td-map {
+    padding-top: 10px;
+  }
+  /* line 388, ../sass/print.scss */
+  .print .print-footer-icon {
+    display: none;
+  }
+  /* line 392, ../sass/print.scss */
+  .print .bottom-container {
+    position: inherit;
+  }
+  /* line 395, ../sass/print.scss */
+  .print .bottom-container h1.bottom-header {
+    line-height: 70px;
+  }
+  /* line 400, ../sass/print.scss */
+  .print .bottom-container .bottom-text {
+    margin-top: -40px;
+  }
+}
 @media print {
   @page {
     size: 210mm 297mm;
@@ -304,17 +333,17 @@
     margin-bottom: 15mm;
     /*margin-right: 45mm;  for compatibility with both A4 and Letter */
   }
-  /* line 385, ../sass/print.scss */
+  /* line 419, ../sass/print.scss */
   body.print a:after {
     content: none !important;
   }
 
-  /* line 388, ../sass/print.scss */
+  /* line 422, ../sass/print.scss */
   body.print a {
     color: #000 !important;
   }
 
-  /* line 396, ../sass/print.scss */
+  /* line 430, ../sass/print.scss */
   .page-break {
     height: 0;
     page-break-after: always;
@@ -322,7 +351,7 @@
     border-top: none;
   }
 
-  /* line 398, ../sass/print.scss */
+  /* line 432, ../sass/print.scss */
   .thin.logo img {
     height: 14px;
     margin-top: 30px;

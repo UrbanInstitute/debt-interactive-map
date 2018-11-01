@@ -439,11 +439,14 @@ function buildprint(Startquery,data) {
   
   // Set to national, try state, if state, try county. If good, county, if bad, state, if none, national.
   printNameFinal = "National"
+  var statewatch;
 
   try {
     printNameFinal = printdata[1].state;
+    statewatch = true;
     try {
       printNameFinal = printdata[2].county + ", " + printdata[2].state;
+      statewatch = false;
     }
     catch(err) {}  
   }
@@ -451,6 +454,8 @@ function buildprint(Startquery,data) {
 
   if (printNameFinal === "National") {
     d3.select("body").classed("national",true)
+  } else if (statewatch === true){
+    d3.select("body").classed("state",true)
   }
   //add the printnamefinal at the very end of the script
 
