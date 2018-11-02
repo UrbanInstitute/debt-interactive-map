@@ -203,17 +203,38 @@ function labelY(d,dis,variable,NONWHITE,WHITE,y,barHeight) {
   }
 }
 
+function labelsuperscript(d,dis,variable,NONWHITE,WHITE) {
+  var thisvar;
+
+  var parentClass = d3.select(dis.parentNode.parentNode).attr('class');
+  if (parentClass.search("c0") > -1) {
+    thisvar = variable;
+  }else if (parentClass.search("c2") > -1) {
+    thisvar = NONWHITE;
+  }else{
+    thisvar = WHITE;
+  }
+
+  if (isNaN(d[thisvar]) != true) {
+    return "";
+  } else {
+  
+    return (d[thisvar] == "n<50") ? "b" : "c"
+  }
+  
+  
+}
+
 function labelHTML(d,dis,variable,NONWHITE,WHITE) {
-  var noData = (d[variable] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-  var noData_wh = (d[WHITE] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
-  var noData_nw = (d[NONWHITE] == "n<50") ? "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>" : "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+  
+  var noData = "n/a";
   var parentClass = d3.select(dis.parentNode).attr('class');
   if (parentClass.search("c0") > -1) {
     return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
   }else if (parentClass.search("c2") > -1) {
-    return (isNaN(d[NONWHITE]) != true) ? formatNumber(d[NONWHITE]) : noData_nw
+    return (isNaN(d[NONWHITE]) != true) ? formatNumber(d[NONWHITE]) : noData
   }else{
-    return (isNaN(d[WHITE]) != true) ? formatNumber(d[WHITE]) : noData_wh
+    return (isNaN(d[WHITE]) != true) ? formatNumber(d[WHITE]) : noData
   }
 }
 
@@ -2620,9 +2641,15 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
               .attr("y", function(d) {
                 return labelY(d,this,variable,NONWHITE,WHITE,y,barHeight)
               })
-            .html(function(d) {              
-              return labelHTML(d,this,variable,NONWHITE,WHITE)              
-            })
+              .text(function(d) { 
+                return labelHTML(d,this,variable,NONWHITE,WHITE)              
+              })
+              .append("tspan")                  
+                .attr("font-style","italic")
+                .attr("baseline-shift","super")
+                .text(function(d){
+                  return labelsuperscript(d,this,variable,NONWHITE,WHITE);
+                })
         })
       if ( (zoomNational == true) && selected == null) {         
         d3.selectAll("#State, #County").style("opacity", 0)
@@ -2657,9 +2684,15 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
               .attr("y", function(d) {
                 return labelY(d,this,variable,NONWHITE,WHITE,y,barHeight)
               })
-              .html(function(d) { 
+              .text(function(d) { 
                 return labelHTML(d,this,variable,NONWHITE,WHITE)              
               })
+              .append("tspan")                  
+                .attr("font-style","italic")
+                .attr("baseline-shift","super")
+                .text(function(d){
+                  return labelsuperscript(d,this,variable,NONWHITE,WHITE);
+                })
           })
 
           if (countyID.slice(0,2) == state || countyIDHov.slice(0,2) == state) { 
@@ -2698,9 +2731,17 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
                 .attr("y", function(d) {
                   return labelY(d,this,variable,NONWHITE,WHITE,y,barHeight)
                 })
-                .html(function(d) { 
+                .text(function(d) { 
                   return labelHTML(d,this,variable,NONWHITE,WHITE)              
                 })
+                .append("tspan")                  
+                  .attr("font-style","italic")
+                  .attr("baseline-shift","super")
+                  .text(function(d){
+                    // console.log(labelHTML(d,this,variable,NONWHITE,WHITE))
+                    // console.log(labelsuperscript(d,this,variable,NONWHITE,WHITE));
+                    return labelsuperscript(d,this,variable,NONWHITE,WHITE);
+                  })
               })
           } else {
             d3.selectAll("#County").style("opacity", 0)
@@ -2808,6 +2849,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
 
       tbody.classed("medical",false)
       tbody.classed("student",false)  
+      tbody.classed("auto",false)  
       tbody.classed(type,true)
 
       tbody.enter().append("tbody")
