@@ -160,11 +160,11 @@ function formatNumber(d, type) {
   var percent = d3.format(",.0%"),
       number = d3.format("$,.0f");
   if (type == "max") {
-    return (d<1) ? percent(Math.ceil(d * 100) / 100 ) : number( Math.ceil((d+1)/10)*10)
+    return (d<=1) ? percent(Math.ceil(d * 100) / 100 ) : number( Math.ceil((d+1)/10)*10)
   }else if (type == "min") {
-    return (d<1) ? percent(Math.floor(d * 100) / 100 ) : number( Math.floor((d+1)/10)*10)
+    return (d<=1) ? percent(Math.floor(d * 100) / 100 ) : number( Math.floor((d+1)/10)*10)
   }else {
-    return (d<1) ? percent(d) : number(d);
+    return (d<=1) ? percent(d) : number(d);
   }
 }
 
