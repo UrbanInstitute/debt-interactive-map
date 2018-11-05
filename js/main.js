@@ -686,7 +686,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
         var result;        
         if(isNaN(raw)) {          
           if (raw === undefined) {
-            return ""  
+            result = ""  
           } else {
             result = "n/a"  
           }          
@@ -716,39 +716,24 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
         .attr("baseline-shift","super")
         .text(function(d,i){
           var raw = printdata[counter5][d];
+          var result;
           if (isNaN(raw)) {        
             if (raw == "n<50") {
-              return "b"
+              result = "b"
             } else if (raw == "N/A") {
-              return "c"
+              result = "c"
             } else {
-              return ""
+              result = ""
             }
           }    
 
           if (i % 3 === 2) {
             counter5 +=1;
           }      
-          // return "b"
-
-
-        // var raw = printdata[i][d];
- 
-        
+          
+          return result;
 
         })
-        // console.log(printdata[i][d])   
-          // return "b"
-          // if (isNaN(printdata[i][d])) {
-          //   console.log(printdata[i][d])
-          //   // return "b"
-          //   return (printdata[i][d] == "n<50") ? "b" : "c"
-          // } else {
-          //   return ""
-          // }              
-          // return labelsuperscript(d,this,variable,NONWHITE,WHITE);
- 
-        
 
 
 } 
