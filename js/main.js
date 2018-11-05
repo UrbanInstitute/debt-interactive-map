@@ -644,6 +644,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
     var counter2 = 0;
     var counter3 = 0;
     var counter4 = 0;
+    var counter5 = 0;
 
     rectG
       .append("rect")
@@ -680,18 +681,17 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
 
     rectG
       .append("text")
-      .html(function(d,i) {
+      .text(function(d,i) {
         var raw = printdata[counter4][d];
-        var result;
-        if (isNaN(raw)) {
-          if (raw == "n<50") {
-            result = "n/a<tspan font-style='italic'  baseline-shift='super'>b</tspan>"
-          } else if (raw == "N/A") {
-            result = "n/a<tspan font-style='italic'  baseline-shift='super'>c</tspan>"
+        var result;        
+        if(isNaN(raw)) {          
+          if (raw === undefined) {
+            return ""  
           } else {
-            result = ""
+            result = "n/a"  
           }          
-        } else {
+        }
+        else {
           result = formatNumber(raw)
         }
 
@@ -710,46 +710,46 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
         }        
         // return (0 + (barHeight - result))
         return "translate(" + 0 + "," + (0 + (barHeight - result)) + ")";
-      });
+      })
+      .append("tspan")                
+        .attr("font-style","italic")
+        .attr("baseline-shift","super")
+        .text(function(d,i){
+          var raw = printdata[counter5][d];
+          if (isNaN(raw)) {        
+            if (raw == "n<50") {
+              return "b"
+            } else if (raw == "N/A") {
+              return "c"
+            } else {
+              return ""
+            }
+          }    
 
-// selection here is messed up..........
-// recreate selection so that you're selecting all nine bars maybe? per row? not sure. 
+          if (i % 3 === 2) {
+            counter5 +=1;
+          }      
+          // return "b"
 
 
-// var test = [0,1,2,3,4,5,6,7,8]
-//     rectG.selectAll("rect")
-//       .data([us_data])
-//       // .data(test)
-//       .enter()
-//       .append("rect")
-//       // .attr("x", function(d) { 
-//       //   return d.abbr
-//       // })
-//       .attr("class", "bar")
-//       .attr("fill", function(d,i) { 
-//         // var parentClass = d3.select(this.parentNode).attr('class');
-//         // if (parentClass.search("c0") > -1) {
-//         //   return "#fdbf11"
-//         // }else if (parentClass.search("c2") > -1) {
-//         //   return "#696969"
-//         // }else{
-//         //   return "#000000"
-//         // }
-//         // console.log(d)
-//         return "Silver"
-//       })
-//       .attr("width", x.bandwidth())
-//       .attr("y",100)
-//       .attr("height",100)
-//       .attr("width", x.bandwidth())
-//       .attr("y", function(d) { 
-//         return barY(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,y,barHeight)
-//       })
-//       .attr("height", function(d) {
-//         return barH(d,this,SELECTED_VARIABLE,NONWHITE,WHITE,y,barHeight)        
-//       })
+        // var raw = printdata[i][d];
+ 
+        
 
-//   // build the svg
+        })
+        // console.log(printdata[i][d])   
+          // return "b"
+          // if (isNaN(printdata[i][d])) {
+          //   console.log(printdata[i][d])
+          //   // return "b"
+          //   return (printdata[i][d] == "n<50") ? "b" : "c"
+          // } else {
+          //   return ""
+          // }              
+          // return labelsuperscript(d,this,variable,NONWHITE,WHITE);
+ 
+        
+
 
 } 
 
