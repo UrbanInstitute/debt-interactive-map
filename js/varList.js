@@ -227,7 +227,7 @@ var variableListMaster = {
 				"publishDate": "May 16, 2018",
 				"specialNotes":[
 					"<p class='note3 temp'><sup><i>d</i></sup> This variable was added May 16, 2018.</p>",
-					"<p class='note4 temp'><sup><i>e</i></sup> This variable was relabeled May 16, 2018.</p>"
+					" <p class='note4 temp'><sup><i>e</i></sup> This variable was relabeled May 16, 2018.</p>"
 				]
 			},
 			"auto":{

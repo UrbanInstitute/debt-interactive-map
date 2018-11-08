@@ -415,8 +415,10 @@ function OverallTransformData(us, county, state, countyData, stateData) {
 
 function buildprint(Startquery,data) {  
   //build notes
+  
   var notes = "<p><b>Notes:</b></p> " + $("#notes").html();
   $("#print-chart-notes").html(notes)
+  $("#print-chart-notes").append(variableListMaster.meta.dataSets[type].specialNotes)  
 
   // grab the correct data and variables
   var state_data;
@@ -1114,6 +1116,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
         updateMap(type_variable)                    
 
         // update notes at bottom
+
         $(".temp").remove()
 
         $("#notes").append(variableListMaster.meta.dataSets[type].specialNotes)
@@ -1909,7 +1912,8 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
   /*ADD TABLE*/
   // Build table
     
-    $(".temp").remove()
+    $("#notes.temp").remove()
+    $("#notes-section-inner.temp").remove()
 
     $("#notes").append(variableListMaster.meta.dataSets[type].specialNotes)
     $("#notes-section-inner").append(variableListMaster.meta.dataSets[type].specialNotes)
