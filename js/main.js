@@ -1780,17 +1780,19 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
         })
       }
     }
+
+  legwidth = variableListMaster[type].filter(function(d) {return d.variable == SELECTED_VARIABLE;})[0].legendWidth;
  
   /*DESKTOP*/
   svg.append("rect")
-    .attr("width", function() {       
-      return (IS_MOBILE) ? 73: 57
+    .attr("width", function() { 
+      return (IS_MOBILE) ? 73: legwidth;
     })
     .attr("class", "rect-div")
     .attr("height", 215)
     .style("fill", "#f5f5f5")
     .style("opacity", 0.8)
-    .attr('transform', 'translate(' + (width- 54) + ',' + (-1) + ')')
+    .attr('transform', 'translate(' + (width- legwidth) + ',' + (-1) + ')')
   var legend = svg
     .append("g")
     .attr("class", "g-legend")
