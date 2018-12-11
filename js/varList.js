@@ -150,8 +150,8 @@ var variableListMaster = {
 	"auto":[
 		{
 			"variable":"autoopen_pct",
-			"desktopLabel":"Share with auto debt",
-			"mobileLabel":"Share with auto debt",
+			"desktopLabel":"Share with auto loans",
+			"mobileLabel":"Share with auto loans",
 			"breaks":[0.17,0.26,0.31,0.37],
 			"legendWidth":65,
 			"version":"v3",
@@ -159,8 +159,8 @@ var variableListMaster = {
 		},
 		{
 			"variable":"autoretopen_pct",
-			"desktopLabel":"Share with auto or retail debt",
-			"mobileLabel":"Share with auto or retail debt",
+			"desktopLabel":"Share with auto or retail loans",
+			"mobileLabel":"Share with auto or retail loans",
 			"breaks":[0.23,0.31,0.36,0.42],
 			"legendWidth":65,
 			"version":"v3",
@@ -168,8 +168,8 @@ var variableListMaster = {
 		},
 		{
 			"variable":"autoretdelrate",
-			"desktopLabel":"Auto/retail debt delinquency rate",
-			"mobileLabel":"Auto/retail debt delinquency rate",
+			"desktopLabel":"Auto/retail loan delinquency rate",
+			"mobileLabel":"Auto/retail loan delinquency rate",
 			"breaks":[0.02,0.05,0.08,0.13],
 			"legendWidth":65,
 			"version":"v3",
@@ -177,8 +177,8 @@ var variableListMaster = {
 		},
 		{
 			"variable":"autoretdelrate_sub",
-			"desktopLabel":"Auto/retail debt delinquency rate by credit score<span class='annotation'><sup>d</sup></span>",
-			"mobileLabel":"Auto/retail debt delinquency rate by credit score<i>ᵈ</i>",
+			"desktopLabel":"Auto/retail loan delinquency rate by credit score<span class='annotation'><sup>d</sup></span>",
+			"mobileLabel":"Auto/retail loan delinquency rate by credit score<i>ᵈ</i>",
 			"breaks":[0.07,0.12,0.17,0.24],
 			"legendWidth":65,
 			"version":"v3",
@@ -227,7 +227,7 @@ var variableListMaster = {
 				"publishDate": "May 16, 2018",
 				"specialNotes":[
 					"<p class='note3 temp'><sup><i>d</i></sup> This variable was added May 16, 2018.</p>",
-					" <p class='note4 temp'><sup><i>e</i></sup> This variable was relabeled May 16, 2018.</p>"
+					"<p class='note4 temp'><sup><i>e</i></sup> This variable was relabeled May 16, 2018.</p>"
 				]
 			},
 			"auto":{
