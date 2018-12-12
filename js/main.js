@@ -142,9 +142,9 @@ function updateQueryString(type,variable,state,county,print){
 
 }
 
-function hidelimited(variable) {  
+function hidelimited(variable) {    
   for (var i = 0; i < limitedVars.length; i++) {           
-    if (variable == limitedVars[i]) {      
+    if (variable == limitedVars[i]) {
       d3.select("#County").selectAll(".White, .Nonwhite").style("opacity", 0)
       d3.select("#State").selectAll(".White, .Nonwhite").style("opacity", 0)
       d3.select("#National").selectAll(".White, .Nonwhite").style("opacity", 0)
@@ -2321,12 +2321,12 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
 
   // hide the words next to bars on restricted variables
           if (limitedVars.filter(function(d) {return d == SELECTED_VARIABLE;}).length != 0) {
-            $(".c1").css("display", "none")
-            $(".c2").css("display", "none")
+            $(".category.c1").css("display", "none")
+            $(".category.c2").css("display", "none")
 
           } else {
-            $(".c1").css("display", "block")
-            $(".c2").css("display", "block")
+            $(".category.c1").css("display", "block")
+            $(".category.c2").css("display", "block")
           }
 
   // Dan NOTE this hides state and county off the bat, but we will need to update this at some point. 
@@ -2878,12 +2878,12 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
 
           // hide the words next to bars on restricted variables
           if (limitedVars.filter(function(d) {return d == SELECTED_VARIABLE;}).length != 0) {
-            $(".c1").css("display", "none")
-            $(".c2").css("display", "none")
+            $(".category.c1").css("display", "none")
+            $(".category.c2").css("display", "none")
 
           } else {
-            $(".c1").css("display", "block")
-            $(".c2").css("display", "block")
+            $(".category.c1").css("display", "block")
+            $(".category.c2").css("display", "block")
           }
           
           updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
