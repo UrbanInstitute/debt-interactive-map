@@ -780,7 +780,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
     buildprint(Startquery,BigData)  
   }
   else{
-    console.log("no PRINT")
+    // console.log("no PRINT")
   }
 
 
@@ -1954,6 +1954,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
 
   var barData = [{data: us_data_ph[0]}, {data: us_data_ph[0]}, {data: us_data_ph[0]} ]
     /*MOBILE*/
+
   var barSvgHeight_ph = (IS_PHONESM) ? 200 : 173;
   var barWidth_ph = (IS_PHONESM) ? width : width*.85;
   var x_ph = d3.scaleLinear().range([0, barWidth_ph]);
@@ -2153,6 +2154,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
         }
       })
   }
+
 
   // this hides "white" and "non-white"
   hideBars(SELECTED_VARIABLE_ph)
@@ -2438,7 +2440,6 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
 
 
   function updateBars(variable, selected) { 
-
     var us_data = BigData.state_data[0]["values"][0]
     for (var key in us_data) {
         if (us_data.hasOwnProperty(key)) { 
@@ -3441,9 +3442,13 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
           return d.properties.state == data.properties.state;
         })          
 
+        // console.log('hereerere')
         updateBars(typeVar, stateData[0])
       }
 
+    }
+    else {      
+      updateBars(typeVar)
     }
 
 
