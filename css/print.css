@@ -1,0 +1,362 @@
+/* line 16, ../sass/print.scss */
+.print {
+  width: 220mm;
+  background: #fff;
+}
+/* line 21, ../sass/print.scss */
+.print .main-table {
+  display: initial;
+}
+/* line 40, ../sass/print.scss */
+.print #dropdown-div, .print #header-pinned, .print #map, .print #mobile-content, .print #notes-section {
+  display: none;
+}
+/* line 48, ../sass/print.scss */
+.print .banner-wrapper {
+  position: relative;
+}
+/* line 51, ../sass/print.scss */
+.print .banner-wrapper .banner {
+  background-image: none;
+  background: #fff;
+  margin-top: 0px;
+}
+/* line 56, ../sass/print.scss */
+.print .banner-wrapper .banner h1, .print .banner-wrapper .banner h2 {
+  color: #000 !important;
+}
+/* line 58, ../sass/print.scss */
+.print .banner-wrapper .banner h1 {
+  font-size: 22px;
+  line-height: 130%;
+  padding-top: 8px;
+}
+/* line 64, ../sass/print.scss */
+.print .banner-wrapper .banner h2 {
+  font-size: 15px;
+  margin-top: 70px;
+  line-height: 140%;
+  letter-spacing: 0.2px;
+  font-weight: 400;
+}
+/* line 72, ../sass/print.scss */
+.print .banner-wrapper .banner #intro-text {
+  background: #fff;
+  padding: 0px;
+}
+/* line 76, ../sass/print.scss */
+.print .banner-wrapper .banner #intro-text .intro-wrap {
+  font-style: normal;
+  text-align: left;
+  max-width: none;
+}
+/* line 81, ../sass/print.scss */
+.print .banner-wrapper .banner #intro-text .intro-wrap .inner {
+  padding-left: 150px;
+}
+/* line 85, ../sass/print.scss */
+.print .banner-wrapper .banner #intro-text .intro-wrap .full.logo {
+  display: block;
+  float: left;
+}
+/* line 89, ../sass/print.scss */
+.print .banner-wrapper .banner #intro-text .intro-wrap .full.logo img {
+  width: 110px;
+}
+/* line 94, ../sass/print.scss */
+.print .banner-wrapper .banner #intro-text .intro-wrap #date {
+  display: none;
+}
+/* line 105, ../sass/print.scss */
+.print .banner-wrapper .current-menu.dropdown {
+  width: unset !important;
+  max-width: none !important;
+  background-color: transparent;
+  height: 0;
+  margin-right: 0px;
+  margin: 0;
+  padding: 0px;
+  box-shadow: none;
+  border: 0px;
+  position: absolute;
+  top: 40px;
+  left: 150px;
+}
+/* line 120, ../sass/print.scss */
+.print .banner-wrapper .current-menu.dropdown .dropdown-label {
+  display: none;
+}
+/* line 124, ../sass/print.scss */
+.print .banner-wrapper .current-menu.dropdown #dropdown-header-button {
+  width: 100% !important;
+}
+/* line 127, ../sass/print.scss */
+.print .banner-wrapper .current-menu.dropdown #dropdown-header-button .ui-selectmenu-text {
+  font-size: 19px !important;
+  line-height: 120% !important;
+  font-weight: 400 !important;
+  letter-spacing: 0.05em;
+  margin: 0px;
+  padding: 0px;
+  text-transform: uppercase;
+  color: #1696D2;
+}
+/* line 139, ../sass/print.scss */
+.print .banner-wrapper .current-menu.dropdown span .ui-selectmenu-icon.ui-icon.ui-icon-triangle-1-s {
+  display: none;
+}
+/* line 148, ../sass/print.scss */
+.print .td-map {
+  background-color: #fff;
+  box-shadow: inset 0px 0px 0px 0px;
+  padding-top: 45px;
+}
+/* line 153, ../sass/print.scss */
+.print .td-map .map-div {
+  margin: 0px;
+  position: initial;
+}
+/* line 157, ../sass/print.scss */
+.print .td-map .map-div #location {
+  height: inherit;
+  font-weight: 400;
+  font-size: 18px;
+  padding-left: 0px !important;
+}
+/* line 164, ../sass/print.scss */
+.print .td-map .map-div .print-button {
+  display: none;
+}
+/* line 169, ../sass/print.scss */
+.print .td-map #variable-name, .print .td-map #legend-div, .print .td-map #bar-chart {
+  display: none;
+}
+/* line 175, ../sass/print.scss */
+.print .td-map .group-label-2 {
+  font-size: 13px;
+}
+/* line 179, ../sass/print.scss */
+.print .td-map .g-text2 text {
+  font-size: 13px;
+}
+/* line 183, ../sass/print.scss */
+.print .td-map .print-footer-icon {
+  padding-top: 100px;
+}
+/* line 186, ../sass/print.scss */
+.print .td-map .print-footer-icon.icon2, .print .td-map .print-footer-icon.icon3 {
+  position: absolute;
+  top: 582mm;
+  z-index: 10000;
+}
+/* line 192, ../sass/print.scss */
+.print .td-map .print-footer-icon.icon3 {
+  top: 890mm;
+}
+/* line 196, ../sass/print.scss */
+.print .td-map .print-footer-icon img {
+  width: 476px;
+}
+/* line 201, ../sass/print.scss */
+.print .td-map #print-chart-notes {
+  line-height: 13px;
+  padding-top: 34px;
+}
+/* line 205, ../sass/print.scss */
+.print .td-map #print-chart-notes p {
+  display: inline;
+  font-style: italic !important;
+  font-size: 11px;
+  line-height: 120%;
+  color: #4d4d4d;
+}
+/* line 213, ../sass/print.scss */
+.print .td-map #print-chart-notes p b {
+  font-style: normal !important;
+}
+/* line 217, ../sass/print.scss */
+.print .td-map #print-chart-notes p sup {
+  font-weight: 700;
+  font-size: 9px !important;
+  vertical-align: inherit;
+}
+/* line 226, ../sass/print.scss */
+.print .td-map .print-chart {
+  height: 155px;
+  width: 100%;
+  margin-top: 20px;
+  padding-top: 17px;
+  border-top: 1px solid #D2D2D2;
+}
+/* line 233, ../sass/print.scss */
+.print .td-map .print-chart:first-child {
+  border-top: 0px;
+}
+/* line 237, ../sass/print.scss */
+.print .td-map .print-chart:nth-child(6) {
+  border-top: 0px;
+}
+/* line 247, ../sass/print.scss */
+.print .td-map .inner {
+  font-weight: bold;
+  font-size: 15px;
+  padding-bottom: 20px;
+  height: 17px;
+}
+/* line 259, ../sass/print.scss */
+.print .td-table {
+  display: none;
+}
+/* line 264, ../sass/print.scss */
+.print .td-table #table-div, .print .td-table .search-div-main, .print .td-table .select-table {
+  display: none;
+}
+/* line 277, ../sass/print.scss */
+.print .bottom-container {
+  border-top: 0px;
+  background-color: #fff;
+  position: absolute;
+  top: 611mm;
+  width: 220mm;
+}
+/* line 284, ../sass/print.scss */
+.print .bottom-container .bottom-content {
+  max-width: none;
+  padding-top: 20px;
+  width: 100% !important;
+}
+/* line 289, ../sass/print.scss */
+.print .bottom-container .bottom-content h1.bottom-header {
+  font-size: 18px;
+  margin: 0px;
+  padding-top: 20px;
+  margin-bottom: 30px;
+}
+/* line 296, ../sass/print.scss */
+.print .bottom-container .bottom-content .footerButton {
+  display: none;
+}
+/* line 300, ../sass/print.scss */
+.print .bottom-container .bottom-content .bottom-text {
+  font-size: 14px;
+  line-height: 125% !important;
+  font-style: normal;
+  margin-bottom: 0px;
+}
+/* line 306, ../sass/print.scss */
+.print .bottom-container .bottom-content .bottom-text em {
+  font-style: normal;
+}
+/* line 312, ../sass/print.scss */
+.print .bottom-container .bottom-content .credit-list {
+  padding-top: 5px;
+}
+/* line 316, ../sass/print.scss */
+.print .bottom-container .bottom-content .credit-names, .print .bottom-container .bottom-content .credit-header {
+  font-size: 14px;
+  font-weight: 400 !important;
+  line-height: 100%;
+}
+/* line 322, ../sass/print.scss */
+.print .bottom-container .bottom-content #copyright {
+  display: none;
+}
+/* line 330, ../sass/print.scss */
+.print.national #print-chart-container .print-chart {
+  width: 33%;
+  float: left;
+  border-top: 0px;
+  border-bottom: 1px solid #D2D2D2;
+  margin-top: 0px;
+  padding-bottom: 20px;
+}
+/* line 339, ../sass/print.scss */
+.print.national #print-chart-container .icon1 {
+  display: none;
+}
+/* line 344, ../sass/print.scss */
+.print.national #print-chart-notes {
+  clear: both;
+}
+/* line 348, ../sass/print.scss */
+.print.national .icon2 {
+  top: 273mm !important;
+}
+/* line 352, ../sass/print.scss */
+.print.national .icon3 {
+  top: 582mm !important;
+}
+/* line 356, ../sass/print.scss */
+.print.national .bottom-container {
+  top: 300mm !important;
+}
+/* line 363, ../sass/print.scss */
+.print.state #print-chart-container .print-chart {
+  width: 61%;
+}
+
+@-moz-document url-prefix() {
+  /* line 378, ../sass/print.scss */
+  .print .main-table {
+    max-height: unset !important;
+    overflow-y: visible;
+    float: left;
+    margin-top: 0px !important;
+  }
+  /* line 384, ../sass/print.scss */
+  .print .main-table .td-map {
+    padding-top: 10px;
+  }
+  /* line 389, ../sass/print.scss */
+  .print .print-footer-icon {
+    display: none;
+  }
+  /* line 393, ../sass/print.scss */
+  .print .bottom-container {
+    position: inherit;
+  }
+  /* line 396, ../sass/print.scss */
+  .print .bottom-container h1.bottom-header {
+    line-height: 70px;
+  }
+  /* line 401, ../sass/print.scss */
+  .print .bottom-container .bottom-text {
+    margin-top: -40px;
+  }
+}
+@media print {
+  @page {
+    size: 210mm 297mm;
+                   /* portrait 
+/* you can also specify margins here: */
+    margin: 10mm;
+    margin-top: 15mm;
+    margin-bottom: 15mm;
+    /*margin-right: 45mm;  for compatibility with both A4 and Letter */
+  }
+  /* line 420, ../sass/print.scss */
+  body.print a:after {
+    content: none !important;
+  }
+
+  /* line 423, ../sass/print.scss */
+  body.print a {
+    color: #000 !important;
+  }
+
+  /* line 431, ../sass/print.scss */
+  .page-break {
+    height: 0;
+    page-break-after: always;
+    margin: 0;
+    border-top: none;
+  }
+
+  /* line 433, ../sass/print.scss */
+  .thin.logo img {
+    height: 14px;
+    margin-top: 30px;
+    position: absolute;
+    bottom: 0px;
+  }
+}
