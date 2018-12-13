@@ -4,6 +4,8 @@ Two bugs to beware of...
 
 - Make sure all state fips codes and state names/abbrev. match. Previously these have been mismatched (at the border of states, due to being off one row in copy/pasting) 
 
+| County | State | Incorrect State Code |
+| ---- | ---- | ---- |
 | Beaver County | Utah | TX |
 | Addison County | Vermont | UT |
 | Accomack County | Virginia | VT |
