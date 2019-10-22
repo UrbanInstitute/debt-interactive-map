@@ -93,6 +93,7 @@ function decodeQuery(location) {
         obj[unescape(s[0])] = s.hasOwnProperty(1) ? unescape(s[1]) : null;
       };
     }
+  console.log(obj)
   return obj;
 }
 
@@ -750,7 +751,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
 
   
   // If there's a url search query, get the type
-  if (window.location.search) {
+  if (window.location.search && Startquery.hasOwnProperty("type")) {
     // set dataset type 
     type = Startquery["type"]
   } else {
