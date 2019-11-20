@@ -326,13 +326,14 @@ var width =  tdMap,  //(IS_MOBILE && !IS_PHONE) ? tdMap : (tdMap) - margin.right
 //   if (error) throw error;
 d3.queue()
     .defer(d3.json, "data/us-10m.v1.json")
-    //.defer(d3.csv, "data/county_medical.csv")
     .defer(d3.csv, "data/201911-update/Medical_Debt_county.csv")
-    .defer(d3.csv, "data/state_medical.csv")
-    .defer(d3.tsv, "data/county_student4.tsv")
-    .defer(d3.csv, "data/state_student4.csv")  
-    .defer(d3.csv, "data/county_auto.csv")
-    .defer(d3.csv, "data/state_auto.csv")  
+    .defer(d3.csv, "data/201911-update/Medical_Debt_nation_states.csv")
+    .defer(d3.csv, "data/201911-update/Student_loan_county.csv")
+    .defer(d3.csv, "data/201911-update/Student_loan_nation_states.csv")  
+    .defer(d3.csv, "data/201911-update/Auto_loan_county.csv")
+    .defer(d3.csv, "data/201911-update/Auto_loan_nation_states.csv")
+    .defer(d3.csv, "data/201911-update/Overall_Delinquent_Debt_county.csv")  
+    .defer(d3.csv, "data/201911-update/Overall_Delinquent_Debt_nation_states.csv")
     .await(ready); 
 
 function transformData(geography){
@@ -755,7 +756,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
 
 } 
 
-function ready(error, us, county1, state1, county2, state2, county3, state3) {
+function ready(error, us, county1, state1, county2, state2, county3, state3, county4, state4) {
   if (error) throw error;
   /*SETTING UP THE DATA*/
 
