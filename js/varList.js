@@ -1,23 +1,33 @@
+//* "variable" name of column in csv - these need to be the same for state and county csv
+//* "breaks" someone went and got the Jenks breaks ahead of time
+//* "legendWidth" eyeball it I guess and put it in here
+//* "version" ? don't think this gets used. Maybe I'll make it 2 for fun!
+//* "columns" these are how he labels his bar chart instead of using key value pairs with the data 
+//* TODO - waiting for answer on jenks breaks. leaving old ones in
+//* TODO - waiting for answer on notes. leaving old ones in
+//* NB - made n/a* = n<50, n/a** = na2 ... awaiting more info here
+
+
 var variableListMaster = {
 	"medical":[
-		{
-			"variable":"perc_debt_collect",
-			"desktopLabel":"Share with any debt in collections<span class=\"annotation\"><sup>a</sup></span>",
-			"mobileLabel":"Share with any debt in collections<i>ᵃ</i>",
-			"breaks":[0.22, .31, .39, .49],
-			"legendWidth": 60,
-			"version":"v1",
-			"columns":["All", "White", "Nonwhite"]
-		},
-		{
-			"variable":"med_debt_collect",
-			"desktopLabel":"Median debt in collections<span class=\"annotation\"><sup>a</sup></span>",
-			"mobileLabel":"Median debt in collections<i>ᵃ</i>",
-			"breaks":[1200, 1500, 1800, 2300],
-			"legendWidth": 73,
-			"version":"v1",
-			"columns":["All", "White", "Nonwhite"]
-		},
+		// { GETS REPLACED BY THE NEW 'OVERALL' STUFF?
+		// 	"variable":"perc_debt_collect",
+		// 	"desktopLabel":"Share with any debt in collections<span class=\"annotation\"><sup>a</sup></span>",
+		// 	"mobileLabel":"Share with any debt in collections<i>ᵃ</i>",
+		// 	"breaks":[0.22, .31, .39, .49],
+		// 	"legendWidth": 60,
+		// 	"version":"v1",
+		// 	"columns":["All", "White", "Nonwhite"]
+		// },
+		// {
+		// 	"variable":"med_debt_collect",
+		// 	"desktopLabel":"Median debt in collections<span class=\"annotation\"><sup>a</sup></span>",
+		// 	"mobileLabel":"Median debt in collections<i>ᵃ</i>",
+		// 	"breaks":[1200, 1500, 1800, 2300],
+		// 	"legendWidth": 73,
+		// 	"version":"v1",
+		// 	"columns":["All", "White", "Nonwhite"]
+		// },
 		{
 			"variable":"perc_debt_med",
 			"desktopLabel":"Share with medical debt in collections<span class=\"annotation\"><sup>a</sup></span>",
@@ -37,15 +47,6 @@ var variableListMaster = {
 			"columns":["All", "White", "Nonwhite"]
 		},
 		{
-			"variable":"perc_pop_nw",
-			"desktopLabel":"Nonwhite population share",
-			"mobileLabel":"Nonwhite population share",
-			"breaks":[.13,.28,.46,.67],
-			"legendWidth": 63,
-			"version":"v1",
-			"columns":["All", "White", "Nonwhite"]
-		},
-		{
 			"variable":"perc_pop_no_ins",
 			"desktopLabel":"Share without health insurance coverage",
 			"mobileLabel":"Share without health insurance coverage",
@@ -55,8 +56,17 @@ var variableListMaster = {
 			"columns":["All", "White", "Nonwhite"]
 		},
 		{
+			"variable":"perc_pop_nw",
+			"desktopLabel":"Nonwhite population share",
+			"mobileLabel":"Nonwhite population share",
+			"breaks":[.13,.28,.46,.67],
+			"legendWidth": 63,
+			"version":"v1",
+			"columns":["All", "White", "Nonwhite"]
+		},
+		{
 			"variable":"avg_income",
-			"desktopLabel":"Average household income",
+			"desktopLabel":"Average household income, 2017 (ACS)",
 			"mobileLabel":"Average household income",
 			"breaks":[52650,63850,77900,101050],
 			"legendWidth": 89,

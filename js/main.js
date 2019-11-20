@@ -5,6 +5,13 @@ var Startquery = {};
     // If there's a url search query, do a bunch of stuff like create the beginning zoom variables
 
     // DECODE the query
+    //* state being managed in a few different places, gets confusing
+    //* this might be easier as a global object like 
+    // SELECTIONS = {
+    //   "state": 1,
+    //   "variable": "autoopen_pct",
+    //   "type": auto
+    // }
     Startquery = decodeQuery(window.location.search)
     
     if (Startquery["print"] === "true") {
@@ -319,7 +326,8 @@ var width =  tdMap,  //(IS_MOBILE && !IS_PHONE) ? tdMap : (tdMap) - margin.right
 //   if (error) throw error;
 d3.queue()
     .defer(d3.json, "data/us-10m.v1.json")
-    .defer(d3.csv, "data/county_medical.csv")
+    //.defer(d3.csv, "data/county_medical.csv")
+    .defer(d3.csv, "data/201911-update/Medical_Debt_county.csv")
     .defer(d3.csv, "data/state_medical.csv")
     .defer(d3.tsv, "data/county_student4.tsv")
     .defer(d3.csv, "data/state_student4.csv")  
@@ -333,54 +341,60 @@ function transformData(geography){
     .entries(geography);
   return geography_nested
 }
-
-
+  
+                          //* topo, debt data, debt data, polygons, polygons (last two were pieced out of 'us' in previous function, ready)
 function OverallTransformData(us, county, state, countyData, stateData) { 
 
   var bigbig = {}
 
   //transforms the county and state non geographical data
+  //* NESTED debt data by id (FIPS)
   var county_data = transformData(county)
-
+  //* makes the polygons availble with .get() by id (FIPS)
   var countyGeoMapped = d3.map(countyData, function(d) { return d.id; });
 
+  //* brings attributes to top of object
+  //* merges debt data into the polygons (countyGeoMapped)
   county_data.forEach(function(d,i){ 
     for (var property in d["values"][0]) {
       d[property] = d.values[0][property];
       countyGeoMapped.get(d.key)[property] = d.values[0][property];
     }
-
   })
-
+  //* NESTED debt data by id (FIPS)
   var state_data = transformData(state)
 
-    state_data.forEach(function(d,i){ 
-      for (var property in d["values"][0]) {
-        d[property] = d.values[0][property]
-      }
-      stateData.forEach(function(e, j) { 
-        if (+d.key == e.id) {
-          for (var property in d["values"][0]) {
-            // if (isNaN(+d.values[0][property]) == true && property != "state" && property != "abbr" && property != "county") {
-            //   e[property] == null
-            // }else { 
-              e[property] = d.values[0][property]
-            // }
-          }
+  state_data.forEach(function(d,i){ 
+    for (var property in d["values"][0]) {
+      d[property] = d.values[0][property]
+    }
+    //* polygons... merge debt data into state polygons
+    stateData.forEach(function(e, j) { 
+      if (+d.key == e.id) {
+        for (var property in d["values"][0]) {
+          // if (isNaN(+d.values[0][property]) == true && property != "state" && property != "abbr" && property != "county") {
+          //   e[property] == null
+          // }else { 
+            e[property] = d.values[0][property]
+          // }
         }
-      })
+      }
     })
-  
+  })
+  //* country level debt data? Why not return d.key === "USA" ? ... hmm
   var us_data_ph = state_data.filter(function(d) {
     return isNaN(+d.key)
   })
+  //* what is this? there is no USA in the county data
   var filteredCounties = county_data.filter(function(d) {
     return d.state == "USA"
   })
 
   var tmp_county = topojson.feature(us, us.objects.counties).features;
+  //* loop thru the US topo by county and add in polygons? 
   for (var i =0; i<tmp_county.length; i++){
     // var mergeID = +tmp_county[i]["id"]
+      //* FIPS
     var mergeID2 = tmp_county[i]["id"]
 
     for (var property in countyGeoMapped.get(mergeID2)) { 
@@ -431,10 +445,11 @@ function buildprint(Startquery,data) {
   for (var key in us_data) {
       if (us_data.hasOwnProperty(key)) { 
           if (+us_data[key] == NaN || +us_data[key] == 0){
+            //abbr
             us_data[key = us_data[key]]
           }else {
             us_data[key] = +us_data[key]
-          }
+          } 
       }
   } 
   printdata.push(us_data)  
@@ -749,7 +764,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
   var stateData = us.objects.states.geometries;
 
   
-  // If there's a url search query, get the type
+  // If there's a url search query, get the type or set using defaults from variableListMaster
   if (window.location.search) {
     // set dataset type 
     type = Startquery["type"]
@@ -761,7 +776,9 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
   var defaultFirst;
 
   // use meta data to select correct data
+  //* by which he means match the selected type of debt to the argument containing that type of data, opaquely named 1, 2, 3
   var BigData = OverallTransformData(us,eval(variableListMaster.meta.dataSets[type].county),eval(variableListMaster.meta.dataSets[type].state),countyData,stateData);
+  //* the first type of debt shown in each list, per hard coded varList
   defaultFirst = variableListMaster[type][0].variable;
 
   // set variable
@@ -802,6 +819,8 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
 
     
   // DWCut? or consolidate? 
+  //* sets globals SELECTED_VARIABLE, WHITE, NONWHITE to variable name 
+  //* of the datapoint with _wh/_nw appended for race, _ph for mobile
   setVariable(typeVar)
   setVariable(typeVar, true)
 
@@ -831,7 +850,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
   $( "#searchBox" ).autocomplete({
     appendTo: ".search-div",
   });
-
+  //* set up search box for state
   $('input[name="tags"]').tagit({
       availableTags: dropdown,
       allowSpaces: true,
@@ -870,12 +889,15 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
         var county = (tag.search(",") > 0) ? tag.split(",")[0] : "";
         var state = (tag.search(",") > 0) ? (tag.split(", ")[1]).slice(0,-1) : tag.slice(0,-1);
 
+        //* move into a function that updates the map, from click on 'tagit' or map itself
+
+        //* features
         var geoData = BigData.tmp_county 
         var geoType = (tag.search(",") > 0) ? "county" : "state";
         var geography = (geoType == "county") ? county : state;
         selectedLocation()
 
-        // DWCut? Dedupe? write a function somewhere?
+        //* pull out just the selected place from the features
         var filteredData = geoData.filter(function(d) {
           if (geoType == "county") {
             return d.properties["county"] == county && d.properties["abbr"] == state;
@@ -945,7 +967,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
     return d.properties[SELECTED_VARIABLE]
   })  
 
-// console.log(SELECTED_VARIABLE)
+console.log(SELECTED_VARIABLE)
 // console.log(variableListMaster[type].filter(function(d) {return d.variable == SELECTED_VARIABLE;})[0].breaks)
 // console.log(variableListMaster[type].filter(function(d) {return d.variable == SELECTED_VARIABLE;}))
   var quantize = d3.scaleThreshold()
@@ -1082,10 +1104,11 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
 
         table.selectAll('tbody').classed('selected', false);        
         table.select('tbody').classed('selected', true)
-        
+        //* this is standing in for the D3 update, instead he's redrawing the map 
         BigData = changeData(d.item.value);
+        //* type of debt, coming in from menu selection
         type = d.item.value;
-   
+        //* pulling out just the relevant object from varList
         var type_category = variableListMaster[type];
         // update mobile categories        
 
@@ -1963,14 +1986,15 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
   x_ph.domain([0, d3.max(BigData.county_data, function(d) {
     if (isNaN(d[NONWHITE_ph]) == true && isNaN(d[WHITE_ph]) == true){
       return +d[SELECTED_VARIABLE_ph]
-    }else if (isNaN(d[NONWHITE_ph]) == true && isNaN(d[WHITE_ph]) == false) {
+    } else if (isNaN(d[NONWHITE_ph]) == true && isNaN(d[WHITE_ph]) == false) {      
       return Math.max(+d[WHITE_ph], +d[SELECTED_VARIABLE_ph])
-    }else if (isNaN(d[WHITE_ph]) == true && isNaN(d[NONWHITE_ph]) == false) {
+    } else if (isNaN(d[WHITE_ph]) == true && isNaN(d[NONWHITE_ph]) == false) {      
       return Math.max(+d[NONWHITE_ph], +d[SELECTED_VARIABLE_ph])
-    }else {
+    } else {
       return Math.max(+d[WHITE_ph], +d[NONWHITE_ph], +d[SELECTED_VARIABLE_ph])
     }
   })])
+
   y_ph.domain(us_data_ph.map(function(d) { return d[SELECTED_VARIABLE_ph]; }));
   var xAxis_ph = d3.axisBottom()
       .scale(x_ph)
@@ -2118,7 +2142,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
       .attr("height", y_ph.bandwidth())
       .attr("width", function(d) {  
 
-        var parentClass = d3.select(this.parentNode).attr('class');      
+        var parentClass = d3.select(this.parentNode).attr('class');    
 
         if (limitedVars.filter(function(d) {return d == SELECTED_VARIABLE_ph;}) === []) {
           if (parentClass.search("c0") > -1) {      
@@ -2126,13 +2150,13 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
           }else if (parentClass.search("c2") > -1) {
             return x_ph(+d[NONWHITE_ph])
           }else{
-            // console.log(WHITE_ph)
-            // console.log(+d[WHITE_ph])
+            console.log(WHITE_ph)
+            console.log(+d[WHITE_ph])
             return x_ph(+d[WHITE_ph])
           }          
         } else {
           if (parentClass.search("c0") > -1) {
-            // console.log(SELECTED_VARIABLE_ph)
+            console.log(SELECTED_VARIABLE_ph)
             return x_ph(+d[SELECTED_VARIABLE_ph])
           }
           else {
@@ -2274,7 +2298,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
       .enter()
       .append("rect")
       .attr("x", function(d) { 
-        return d.abbr
+        return x(d.abbr)
       })
       .attr("class", "bar")
       .attr("fill", function(d) { 
@@ -2453,11 +2477,12 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
 
     d3.select("#notes-section").selectAll("p.note2, p.note1").style("opacity", 1)
     // d3.selectAll(".note-header").html("<b>Note:</b>")
-
+    //* this seems messy - updating global vars all over the place, and here using 'var'!
+    //* also not forward thinking - what if there's another category down the line
     var WHITE_ph = variable + "_wh"
     var NONWHITE_ph = variable + "_nw"
     var data = BigData.county_data;
-
+    //* just the object of info for selected variable
     grabVar = variableListMaster[type].filter(function(d) {
       return d.variable == variable;
     })
@@ -2609,6 +2634,8 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
 
     d3.selectAll(".g-text text")
       .text(function(d,i){
+        //* this would be more like D3 if you were using key/value and could simply label with the key and draw with the value :)
+        //* i % 3 could also be i - 1, for reference... he's using order to find the sub variable (race, in this case)
         return grabVar[0].columns[i % 3];
       })    
 
@@ -2970,8 +2997,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
         d3.select(this).selectAll("td")
           .html(function(d,i) { 
             if (i==0) { 
-              if (isNaN(data[rowVariable]) == true) {
-                return (data[rowVariable] == "n<50") ? "n/a<sup><i>b</i></sup>" : "n/a<sup><i>c</i></sup>"
+              if (isNaN(data[rowVariable]) == true) {return (data[rowVariable] == "n<50") ? "n/a<sup><i>b</i></sup>" : "n/a<sup><i>c</i></sup>"
               }else {
                 return formatNumber(data[rowVariable]);
               }
@@ -3459,3 +3485,6 @@ function ready(error, us, county1, state1, county2, state2, county3, state3) {
     d3.select("#location").html(printNameFinal)    
   }
 };
+
+
+
