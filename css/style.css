@@ -7,7 +7,7 @@
 
 body {
   font-family: "Lato", sans-serif;
-  font-size: 13px;
+  font-size: 14px;
   background-color: #f3f3f3;
 }
 
@@ -163,7 +163,7 @@ a:hover {
     width: 115px;
     border: 1px solid #333;
     cursor: pointer;
-    font: 13px Lato;
+    font: 14px Lato;
     font-weight: bold;
     text-align: center;
     padding: 10px;
@@ -227,10 +227,6 @@ h1.bottom-header{
     font-style: italic;
 }
 
-
-.bottom-section {
-
-}
 .bottom-container {
   background-color: #ececec;
   border-top: 1px solid rgb(173, 171, 172);
@@ -501,7 +497,7 @@ ul.tagit li.tagit-choice-editable {
 .ui-icon.ui-icon-triangle-1-s {
   margin-top: 9.5px !important;
   margin-right: 0 !important;
-  width: 13px !important;
+  width: 14px !important;
   height: 8px !important;
   background-position: 0px 0px !important;
 }
@@ -530,11 +526,31 @@ path.hide {
   opacity: 0.3 !important;
   stroke-width: 1px !important;
 }
-#location {
+
+#debt-caption {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+#measure {
+  font-style: italic;
+  border-bottom: 1px solid #D2D2D2;
+  padding-bottom: 10px;
+  visibility: hidden;
+}
+
+#measure > span {
+  padding-left: 6px;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: bold;
+}
+
+#debt-type {
   font-size: 18px;
   font-weight: 700;
   height: 29px;
-  text-transform: uppercase;
 }
 
 .print-button { 
@@ -560,7 +576,7 @@ path.hide {
 }
 
 #variable-name {
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   height: 20px;
   text-transform: uppercase;
@@ -660,6 +676,9 @@ path.hover {
   opacity: 0;
 }
 
+.spacer {
+  border-top: 30px solid #f3f3f3;
+}
 
 .left-table2 {
   float: left;
@@ -895,7 +914,7 @@ html .ui-button.ui-state-disabled:active {
     width: 120px !important;
   }
   .tagit-label {
-    font-size: 13px !important;
+    font-size: 14px !important;
   }
 }
 
@@ -921,7 +940,7 @@ html .ui-button.ui-state-disabled:active {
     display: block;
   }
   .left-table table tbody tr:last-child td {
-    padding-bottom: 13px;
+    padding-bottom: 14px;
   }
   .cell-column > td {
     vertical-align: unset !important;
@@ -936,8 +955,9 @@ html .ui-button.ui-state-disabled:active {
   .search-div {
     height: 90px;
   }
-  #location {
+  #debt-type {
     font-size: 16px;
+    padding-left: 10px;
   }
   .image-div img {
     padding-right: 10px;
@@ -946,9 +966,7 @@ html .ui-button.ui-state-disabled:active {
 .tagit-label {
   font-size: 12px !important;
 }
-#location {
-  padding-left: 10px;
-}
+
 .left-table table tbody .cell-data > td {
   font-size: 13.5px;
 }
@@ -969,6 +987,8 @@ html .ui-button.ui-state-disabled:active {
     margin: 20px 0px 30px 0px;
   }
 }
+
+
 #bar-chart {
   padding-left: 10px;
   float: left;
@@ -1035,15 +1055,15 @@ html .ui-button.ui-state-disabled:active {
   }
   .ui-button .ui-icon {
     background-image: url("../img/arrow.png") !important;
-    background-size: 13px !important;
+    background-size: 14px !important;
   }
   .ui-button .ui-icon.greyed {
     background-image: url("../img/arrow-grey.png") !important;
-    background-size: 13px !important;
+    background-size: 14px !important;
   }
   .ui-button .ui-icon.arrow-up {
     background-image: url("../img/arrow-up.png") !important;
-    background-size: 13px !important;
+    background-size: 14px !important;
   }
 
   #dropdown-header-button {
@@ -1217,10 +1237,10 @@ html .ui-button.ui-state-disabled:active {
     font-size: 20px;
   }
   .bottom-text {
-    font-size: 13px;
+    font-size: 14px;
   }
   .credit-header, .credit-names {
-    font-size: 13px;
+    font-size: 14px;
   }
   .bottom-text, .credits-text {
     line-height: 18px;

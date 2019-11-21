@@ -794,7 +794,8 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
   }
 
   // TRIGGER PRINT VIEW
-  if (Startquery["print"] === "true") {      
+  if (Startquery["print"] === "true") {
+
     buildprint(Startquery,BigData)  
   }
   else{
@@ -838,6 +839,18 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
 
   setZoom(true,false, false)
 
+  d3.select("#debt-type").text(function(){ 
+    return variableListMaster[type][0].desktopLabel;
+  })
+  //just doing this once here so user doesn't see text fragment before other stuff shows up
+  d3.select("#measure").style("visibility", "visible")
+
+  d3.select("#debt-caption").text(function(d){ 
+    return variableListMaster.meta.dataSets[type].caption
+  })
+
+
+
 
   /*END*/
 
@@ -846,7 +859,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
   // Begin change jquery UI items in the DOM
 
   // DWCut? because we do it later on if print...could do no matter what?
-  $("#location").html("National")
+  
 
   $( "#searchBox" ).autocomplete({
     appendTo: ".search-div",
@@ -929,7 +942,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
             .classed("selected", false)
           setZoom(false, true, false)
          }else { 
-          $("#location").html("National")
+          
           d3.selectAll(".state-borders > path.selected")
             .classed("selected", false)
           setZoom(true, false, false)
@@ -1139,6 +1152,9 @@ console.log(SELECTED_VARIABLE)
         setVariable(type_variable,true)
         updateMap(type_variable)                    
 
+        d3.select("#debt-caption").text(function(d){ 
+          return variableListMaster.meta.dataSets[type].caption
+        })
         // update notes at bottom
 
         $(".temp").remove()
@@ -1447,6 +1463,8 @@ console.log(SELECTED_VARIABLE)
         selectedLocation()
         updateBars(selectedCategory, selectedStatePh)
         setVariable(selectedCategory, true)
+
+
         
         // var countyQuery = $("#county-select")[0].selectedOptions[0].__data__.key;
         // stateQuery = $("#state-select")[0].selectedOptions[0].__data__.key      
@@ -1581,7 +1599,7 @@ console.log(SELECTED_VARIABLE)
         var abbr = d3.select(".counties > path.selected").datum().properties.abbr
         d3.selectAll(".state-borders > path").classed("hide", true)
         d3.select(".state-borders > path#" + abbr).classed("hide", false)
-        d3.select("#location").html(county + ", " + abbr )
+        
         d3.selectAll("path.selected").moveToFront()
         d3.selectAll(".hover")
           .classed("hover", false)
@@ -1593,7 +1611,7 @@ console.log(SELECTED_VARIABLE)
         var abbr = d3.select(".state-borders > path.selected").datum().properties.abbr
         d3.selectAll(".state-borders > path").classed("hide", true)
         d3.select(".state-borders > path#" + abbr).classed("hide", false)
-        d3.select("#location").html(state)
+        
         d3.selectAll("path.selected").moveToFront()
         d3.selectAll(".hover")
         .classed("hover", false)
@@ -1649,7 +1667,7 @@ console.log(SELECTED_VARIABLE)
       if (zoomNational==true || zoomNational_St == true) {
         if (d3.select(".state-borders > path.selected").node() != undefined && zoomNational_St != true) {
           var state = d3.select(".state-borders > path.selected").datum().properties.state
-          d3.select("#location").html(state)
+          
           d3.selectAll("path.selected").moveToFront()
         }else if (zoomNational_St == true){ 
           d3.selectAll(".hover")
@@ -1658,10 +1676,10 @@ console.log(SELECTED_VARIABLE)
           d3.selectAll("path.selected").moveToFront()
           var selected = (d3.select(".counties > path.selected").size() > 0) ? d3.select(".counties > path.selected").datum() : d3.select(".state-borders > path.selected").datum()
           var geography = (d3.select(".counties > path.selected").size() > 0) ? selected.properties["county"] + ", " + selected.properties["abbr"] : selected.properties["state"];
-          d3.select('#location').html(geography)
+          
           updateBars(SELECTED_VARIABLE, selected)
         }else { 
-          d3.select('#location').html("National")
+          
           d3.selectAll(".hover")
             .classed("hover", false)
             .classed("hoverNational", false)
@@ -1674,7 +1692,7 @@ console.log(SELECTED_VARIABLE)
       if (zoomNational==true || zoomNational_St == true) {
         if (d3.select(".state-borders > path.selected").node() != undefined && zoomNational_St != true) {
           var state = d3.select(".state-borders > path.selected").datum().properties.state
-          d3.select("#location").html(state)
+          
           d3.selectAll("path.selected").moveToFront()
         }else if (zoomNational_St == true){ 
           d3.selectAll(".hover")
@@ -1683,10 +1701,10 @@ console.log(SELECTED_VARIABLE)
           d3.selectAll("path.selected").moveToFront()
           var selected = (d3.select(".counties > path.selected").size() > 0) ? d3.select(".counties > path.selected").datum() : d3.select(".state-borders > path.selected").datum()
           var geography = (d3.select(".counties > path.selected").size() > 0) ? selected.properties["county"] + ", " + selected.properties["abbr"] : selected.properties["state"];
-          d3.select('#location').html(geography)
+          
           updateBars(SELECTED_VARIABLE, selected)
         }else { 
-          d3.select('#location').html("National")
+          
           d3.selectAll(".hover")
             .classed("hover", false)
             .classed("hoverNational", false)
@@ -1915,9 +1933,7 @@ console.log(SELECTED_VARIABLE)
         return d.properties.abbr == state
       }
     })
-    d3.select("#location").html(function() { 
-      return (geography=="county") ?  filteredData[0]["properties"]["county"] + ", " + filteredData[0]["properties"]["abbr"] : filteredData[0]["properties"]["state"] 
-    })
+
     var id = (geography == "county") ? filteredData[0]["id"] : ""
     if ( d3.select("path#" + filteredData[0]["properties"]["abbr"] + id).classed("hover") == true) {
     }else {
@@ -2800,7 +2816,7 @@ console.log(SELECTED_VARIABLE)
         });
         d3.selectAll("path.selected")
           .classed("selected", false)
-        d3.select("#location").html("National")
+        
         setZoom(true,false, false)
         zoomMap(width, null, "national")
         createSearchArray("")
@@ -2838,7 +2854,7 @@ console.log(SELECTED_VARIABLE)
         });
         setZoom(false,true, false)
         d3.select(this).remove()
-        d3.select("#location").html( state )
+        
         d3.selectAll(".counties > path.selected")
           .classed("selected", false)
         updateBars(SELECTED_VARIABLE, filteredData[0])    
@@ -2876,6 +2892,11 @@ console.log(SELECTED_VARIABLE)
         .attr("class", function(d, i) {
           return type + " new group group-" + i
         })
+        .style("border-top", function(d){ 
+          if ( d.nondebtfirst ){
+            return "30px solid #f3f3f3"
+          }
+        })
         .merge(tbody)
         .on('click', function(d) {             
           d3.selectAll('tbody')
@@ -2891,6 +2912,12 @@ console.log(SELECTED_VARIABLE)
           setVariable(d.variable)
           updateMap(d.variable)
 
+          d3.select("#debt-type").text(function(){ 
+            return variableListMaster[type].filter(function(d){
+              return d.variable === SELECTED_VARIABLE 
+            })[0].desktopLabel;
+          })
+          
           var stateQuery;
           var countyQuery;
 
@@ -3039,7 +3066,7 @@ console.log(SELECTED_VARIABLE)
       d3.select("path#" + d["properties"]["abbr"])
         .classed("selected", true)
         .moveToFront()
-      d3.select("#location").html(d["properties"]["state"] )
+      
       setZoom(false, true, false)
       for (var i = 0; i < tmp_state.length; i++) {
         if (tmp_state[i]["properties"]["state"] == d.properties.state){
@@ -3071,7 +3098,7 @@ console.log(SELECTED_VARIABLE)
 
       if (zoomLevel == "county") {
           setZoom(false, true, true)
-          d3.select("#location").html(d["properties"]["county"] + ", " + d["properties"]["abbr"] )
+          
           d3.selectAll("g.counties > path").classed("selected", false)
           d3.select("path#" + d["properties"]["abbr"] + d.id)
             .classed("selected", true)
@@ -3483,7 +3510,7 @@ console.log(SELECTED_VARIABLE)
     $("#category-select").selectmenu("refresh")
 
   } else if (Startquery["print"] === "true") {
-    d3.select("#location").html(printNameFinal)    
+    d3.select("#debt-type").html(printNameFinal)    
   }
 };
 

@@ -16,7 +16,8 @@ var variableListMaster = {
 			"breaks":[0.09,0.16,0.23,0.32],
 			"legendWidth": 58,
 			"version":"v1",
-			"columns":["All", "White", "Nonwhite"]
+			"columns":["All", "White", "Nonwhite"],
+			"nondebtfirst": false
 		},
 		{
 			"variable":"med_debt_med",
@@ -25,7 +26,8 @@ var variableListMaster = {
 			"breaks":[540,778,1031,1376],
 			"legendWidth": 70,
 			"version":"v1",
-			"columns":["All", "White", "Nonwhite"]
+			"columns":["All", "White", "Nonwhite"],
+			"nondebtfirst": false
 		},
 		{
 			"variable":"perc_pop_no_ins",
@@ -34,7 +36,8 @@ var variableListMaster = {
 			"breaks":[0.07,0.11,0.16,0.25],
 			"legendWidth": 60,
 			"version":"v1",
-			"columns":["All", "White", "Nonwhite"]
+			"columns":["All", "White", "Nonwhite"],
+			"nondebtfirst": true
 		},
 		{
 			"variable":"perc_pop_nw",
@@ -43,7 +46,8 @@ var variableListMaster = {
 			"breaks":[0.13,0.28,0.47,0.68],
 			"legendWidth": 63,
 			"version":"v1",
-			"columns":["All", "White", "Nonwhite"]
+			"columns":["All", "White", "Nonwhite"],
+			"nondebtfirst": false
 		},
 		{
 			"variable":"avg_income",
@@ -52,7 +56,8 @@ var variableListMaster = {
 			"breaks":[55898,68416,84677,111775],
 			"legendWidth": 89,
 			"version":"v1",
-			"columns":["All", "White", "Nonwhite"]
+			"columns":["All", "White", "Nonwhite"],
+			"nondebtfirst": false
 		}		
 	],
 	"student":[
@@ -63,7 +68,8 @@ var variableListMaster = {
 			"breaks":[0.07,0.14,0.21,0.34],
 			"legendWidth":60,
 			"version":"v2",
-			"columns":["All", "White", "Nonwhite"]
+			"columns":["All", "White", "Nonwhite"],
+			"nondebtfirst": false
 		},
 		{
 			"variable":"med_stud_debt_collect",
@@ -72,7 +78,8 @@ var variableListMaster = {
 			"breaks":[7327,9286,11271,13907],
 			"legendWidth":89,
 			"version":"v2",
-			"columns":["All", "White", "Nonwhite"]
+			"columns":["All", "White", "Nonwhite"],
+			"nondebtfirst": false
 		},
 		{
 			"variable":"perc_stud_debt",
@@ -81,7 +88,8 @@ var variableListMaster = {
 			"breaks":[0.09,0.12,0.15,0.19],
 			"legendWidth":60,
 			"version":"v2",
-			"columns":["All", "White", "Nonwhite"]
+			"columns":["All", "White", "Nonwhite"],
+			"nondebtfirst": false
 		},
 		{
 			"variable":"med_stud_debt",
@@ -90,9 +98,9 @@ var variableListMaster = {
 			"breaks":[13732,16512,19170,22399],
 			"legendWidth":89,
 			"version":"v2",
-			"columns":["All", "White", "Nonwhite"]
+			"columns":["All", "White", "Nonwhite"],
+			"nondebtfirst": false
 		},
-
 		{
 			"variable":"med_mon_pmt",
 			"desktopLabel":"Median monthly student loan payment",
@@ -100,7 +108,8 @@ var variableListMaster = {
 			"breaks":[138,161,183,209],
 			"legendWidth":70,
 			"version":"v2",
-			"columns":["All", "White", "Nonwhite"]
+			"columns":["All", "White", "Nonwhite"],
+			"nondebtfirst": false
 		},
 		{
 			"variable":"perc_no_bach",
@@ -109,7 +118,8 @@ var variableListMaster = {
 			"breaks":[0.58,0.70,0.78,0.84],
 			"legendWidth":60,
 			"version":"v2",
-			"columns":["All", "White", "Nonwhite"]
+			"columns":["All", "White", "Nonwhite"],
+			"nondebtfirst": true
 		},
 		{
 			"variable":"perc_pop_nw",
@@ -118,7 +128,8 @@ var variableListMaster = {
 			"breaks":[0.13,0.28,0.47,0.68],
 			"legendWidth":63,
 			"version":"v1",
-			"columns":["All", "White", "Nonwhite"]
+			"columns":["All", "White", "Nonwhite"],
+			"nondebtfirst": false
 		},
 		{
 			"variable":"avg_income" ,
@@ -127,7 +138,8 @@ var variableListMaster = {
 			"breaks":[55899,68417,84678,111775],
 			"legendWidth":89,
 			"version":"v1",
-			"columns":["All", "White", "Nonwhite"]
+			"columns":["All", "White", "Nonwhite"],
+			"nondebtfirst": false
 		}
 	],
 	"auto":[
@@ -138,7 +150,8 @@ var variableListMaster = {
 			"breaks":[0.01, 0.03, 0.05, 0.09],
 			"legendWidth":65,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"]
+			"columns":["All","White","Nonwhite"],
+			"nondebtfirst": false
 		},
 		{
 			"variable":"autoretdelrate_sub",
@@ -147,7 +160,8 @@ var variableListMaster = {
 			"breaks":[0.10,0.16,0.21,0.29],
 			"legendWidth":65,
 			"version":"v3",
-			"columns":["Subprime","Near prime","Prime"]
+			"columns":["Subprime","Near prime","Prime"],
+			"nondebtfirst": false
 		},
 		{
 			"variable":"autoopen_pct",
@@ -156,7 +170,8 @@ var variableListMaster = {
 			"breaks":[0.22,0.28,0.32,0.37],
 			"legendWidth":65,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"]
+			"columns":["All","White","Nonwhite"],
+			"nondebtfirst": false
 		},
 		{
 			"variable":"autoretopen_pct",
@@ -165,7 +180,8 @@ var variableListMaster = {
 			"breaks":[0.30,0.35,0.39,0.44],
 			"legendWidth":65,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"]
+			"columns":["All","White","Nonwhite"],
+			"nondebtfirst": false
 		},
 		{
 			"variable":"poprural_pct",
@@ -174,7 +190,8 @@ var variableListMaster = {
 			"breaks":[0.2,0.42,0.63,0.86],
 			"legendWidth":65,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"]
+			"columns":["All","White","Nonwhite"],
+			"nondebtfirst": true
 		},
 		{
 			"variable":"popnonwhite_pct",
@@ -183,7 +200,8 @@ var variableListMaster = {
 			"breaks":[0.13,0.28,0.47,0.68],
 			"legendWidth":65,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"]
+			"columns":["All","White","Nonwhite"],
+			"nondebtfirst": false
 		},
 		{
 			"variable":"HHinc_avg",
@@ -192,7 +210,8 @@ var variableListMaster = {
 			"breaks":[55898,68416,84677,111775],
 			"legendWidth":90,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"]
+			"columns":["All","White","Nonwhite"],
+			"nondebtfirst": false
 		}
 	],
 	"overall":[
@@ -203,7 +222,8 @@ var variableListMaster = {
 			"breaks":[0.20,0.29,0.37,0.47],
 			"legendWidth":90,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"]
+			"columns":["All","White","Nonwhite"],
+			"nondebtfirst": false
 		},
 		{
 			"variable":"median_debt_in_collections",
@@ -212,7 +232,8 @@ var variableListMaster = {
 			"breaks":[1333,1716,2115,2754],
 			"legendWidth":90,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"]
+			"columns":["All","White","Nonwhite"],
+			"nondebtfirst": false
 		},
 		{
 			"variable":"pct_w_medical_debt_in_collections",
@@ -221,7 +242,8 @@ var variableListMaster = {
 			"breaks":[0.09,0.16,0.23,0.32],
 			"legendWidth":90,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"]
+			"columns":["All","White","Nonwhite"],
+			"nondebtfirst": false
 		},
 		{
 			"variable":"pct_student_holders_in_default",
@@ -230,7 +252,8 @@ var variableListMaster = {
 			"breaks":[0.07,0.14,0.21,0.34],
 			"legendWidth":90,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"]
+			"columns":["All","White","Nonwhite"],
+			"nondebtfirst": false
 		},
 		{
 			"variable":"auto_retail_loan_delinquency_rate",
@@ -239,7 +262,8 @@ var variableListMaster = {
 			"breaks":[0.01,0.03,0.05,0.09],
 			"legendWidth":90,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"]
+			"columns":["All","White","Nonwhite"],
+			"nondebtfirst": false
 		},
 		{
 			"variable":"credit_card_debt_delinquency_rate",
@@ -248,7 +272,8 @@ var variableListMaster = {
 			"breaks":[0.02,0.04,0.06,0.10],
 			"legendWidth":90,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"]
+			"columns":["All","White","Nonwhite"],
+			"nondebtfirst": false
 		},
 		{
 			"variable":"median_credit_card_delinquent_debt",
@@ -257,7 +282,8 @@ var variableListMaster = {
 			"breaks":[560,710,881,1251],
 			"legendWidth":90,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"]
+			"columns":["All","White","Nonwhite"],
+			"nondebtfirst": false
 		},
 		{
 			"variable":"pct_poc",
@@ -266,7 +292,8 @@ var variableListMaster = {
 			"breaks":[0.13,0.28,0.47,0.68],
 			"legendWidth":90,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"]
+			"columns":["All","White","Nonwhite"],
+			"nondebtfirst": true
 		},
 		{
 			"variable":"avg_household_income",
@@ -275,7 +302,8 @@ var variableListMaster = {
 			"breaks":[55898,68416,84677,111775],
 			"legendWidth":90,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"]
+			"columns":["All","White","Nonwhite"],
+			"nondebtfirst": false
 		}
 	],
 	"meta":{
@@ -284,12 +312,14 @@ var variableListMaster = {
 			"medical":{
 				"county":"county1",
 				"state":"state1",
+				"caption": "Medical Debt",
 				"publishDate": "",
 				"specialNotes":[]
 			},
 			"student":{
 				"county":"county2",
 				"state":"state2",
+				"caption": "Student Loan Debt",
 				"publishDate": "",
 				"specialNotes":[
 					"<p class='note3 temp'><sup><i>d</i></sup> This variable was added May 16, 2018.</p>",
@@ -299,6 +329,7 @@ var variableListMaster = {
 			"auto":{
 				"county":"county3",
 				"state":"state3",
+				"caption": "Auto Loan Debt",
 				"publishDate": "",
 				"specialNotes":[
 					"<p class='note3 temp'><sup><i>d</i></sup> The VantageScore credit score ranges from 300 to 850. Subprime scores range from 300 to 600, near-prime from 601 to 660, and prime from 600 to 850.</p>"
@@ -306,6 +337,7 @@ var variableListMaster = {
 			},			
 			"overall":{
 				"county":"county4",
+				"caption": "Overall Delinquent Debt",
 				"state":"state4",
 				"publishDate": "",
 				"specialNotes":[]
