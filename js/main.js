@@ -1102,47 +1102,38 @@ console.log(SELECTED_VARIABLE)
         window.open(window.location.search + "&print=true") 
       })  
 
-  // CHANGE DATA SET on dropdown at header
-  $( "#dropdown-header" ).selectmenu({
-      open: function( event, ui ) {
+  // CHANGE DATA SET 
+  $( ".categories" ).on("click", function(evt){
 
-      },
-      close: function(event, ui){
-
-      },
-      create: function(event, ui){
-        // type = "student"
-
-      },
-      change: function(event, d){
+        var userChoice = this.getAttribute("data-cat");
 
         table.selectAll('tbody').classed('selected', false);        
         table.select('tbody').classed('selected', true)
         //* this is standing in for the D3 update, instead he's redrawing the map 
-        BigData = changeData(d.item.value);
+        BigData = changeData(userChoice);
         //* type of debt, coming in from menu selection
-        type = d.item.value;
+        type = userChoice;
         //* pulling out just the relevant object from varList
         var type_category = variableListMaster[type];
         // update mobile categories        
 
-        var optionsCategory = d3.select("#category-select").selectAll('option')
-          .data(type_category)
+        // var optionsCategory = d3.select("#category-select").selectAll('option')
+        //   .data(type_category)
 
-        optionsCategory.enter()
-          .append('option')
-          .merge(optionsCategory)
-          .html(function(d) {
-            return d.mobileLabel;
-          })
-          .attr('value', function(d) {
-            return d.variable;
-          })        
+        // optionsCategory.enter()
+        //   .append('option')
+        //   .merge(optionsCategory)
+        //   .html(function(d) {
+        //     return d.mobileLabel;
+        //   })
+        //   .attr('value', function(d) {
+        //     return d.variable;
+        //   })        
         
-        optionsCategory.exit().remove()
+        // optionsCategory.exit().remove()
 
-        $('#category-select').val(type_category[0].variable);
-        $("#category-select").selectmenu("refresh")
+        // $('#category-select').val(type_category[0].variable);
+        // $("#category-select").selectmenu("refresh")
 
 
         // DW note: this will need to get updated when we move to more than TWO variable sets. 
@@ -1208,11 +1199,11 @@ console.log(SELECTED_VARIABLE)
         } 
 
         updateQueryString(type,type_variable,stateQuery,countyQuery)
-      }
+      
     
     
 
-    });
+    }); // END NAV CLICK CATEGORY CHANGE STUFF
 
   function changeData(CATEGORY) {    
     BigData = OverallTransformData(us,eval(variableListMaster.meta.dataSets[CATEGORY].county),eval(variableListMaster.meta.dataSets[CATEGORY].state),countyData,stateData);
@@ -3415,8 +3406,8 @@ console.log(SELECTED_VARIABLE)
   })
 
   // Update the currently viewing section in the event that its been updated by the query string on load
-  $('#dropdown-header').val(type)
-  $('#dropdown-header').selectmenu("refresh")
+  // $('#dropdown-header').val(type)
+  // $('#dropdown-header').selectmenu("refresh")
 
   // Zoom the map if the urlquery contains state and/or county
   if (Startquery && Startquery["print"] != "true") {
