@@ -322,8 +322,8 @@ var variableListMaster = {
 				"caption": "Student Loan Debt",
 				"publishDate": "",
 				"specialNotes":[
-					"<p class='note3 temp'><sup><i>d</i></sup> This variable was added May 16, 2018.</p>",
-					"<p class='note4 temp'><sup><i>e</i></sup> This variable was relabeled May 16, 2018.</p>"
+					// "<p class='note3 temp'><sup><i>d</i></sup> This variable was added May 16, 2018.</p>",
+					// "<p class='note4 temp'><sup><i>e</i></sup> This variable was relabeled May 16, 2018.</p>"
 				]
 			},
 			"auto":{
@@ -332,7 +332,7 @@ var variableListMaster = {
 				"caption": "Auto Loan Debt",
 				"publishDate": "",
 				"specialNotes":[
-					"<p class='note3 temp'><sup><i>d</i></sup> The VantageScore credit score ranges from 300 to 850. Subprime scores range from 300 to 600, near-prime from 601 to 660, and prime from 600 to 850.</p>"
+					// "<p class='note3 temp'><sup><i>d</i></sup> The VantageScore credit score ranges from 300 to 850. Subprime scores range from 300 to 600, near-prime from 601 to 660, and prime from 600 to 850.</p>"
 				]
 			},			
 			"overall":{

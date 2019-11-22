@@ -2892,9 +2892,9 @@ console.log(SELECTED_VARIABLE)
         .attr("class", function(d, i) {
           return type + " new group group-" + i
         })
-        .style("border-top", function(d){ 
+        .classed("begin-non-debt-info", function(d){ 
           if ( d.nondebtfirst ){
-            return "30px solid #f3f3f3"
+            return true
           }
         })
         .merge(tbody)

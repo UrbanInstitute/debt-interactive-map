@@ -257,10 +257,29 @@ td.td-table {
   background-color: #fff;
 }
 td.td-map {
-  background-color: #f3f3f3;
-  box-shadow: inset 2px -3px 9px -6px;
+  /*background-color: #f3f3f3;*/
+  /*box-shadow: inset 2px -3px 9px -6px;*/
  vertical-align: top;
 }
+
+tbody.begin-non-debt-info {
+  border-top: 30px solid #f3f3f3;
+  position: relative;
+}
+
+tbody.begin-non-debt-info::before {
+  content: '';
+  position: absolute;
+  background-color: #f3f3f3;
+  width: 110%;
+  height: 30px;
+  bottom: -95px;
+}
+
+td.td-table {
+  box-shadow: 3px 0px 2px #d2d2d2;
+}
+
 table {
   max-height: 480px !important;
   border-collapse: collapse;
@@ -676,10 +695,6 @@ path.hover {
   opacity: 0;
 }
 
-.spacer {
-  border-top: 30px solid #f3f3f3;
-}
-
 .left-table2 {
   float: left;
   width: 5px;
@@ -828,11 +843,31 @@ th {
 #intro-mobile {
   display: none;
   margin: 70px 30px 30px 30px;
-
 }
+
 #dropdown-div {
   display: none;
 }
+
+#cat-nav {
+  background-color: #000000;
+  height: 40px;
+}
+
+div#cat-nav > ul > li {
+  color: #ffffff !important;
+  display: inline;
+  font-size: 16px;
+  padding: 10px 20px;
+  position: relative;
+  top: 10px;
+}
+
+div#cat-nav > ul {
+  text-align: left;
+
+}
+
 
 /**DROPDOWN **/
 .ui-state-default,
