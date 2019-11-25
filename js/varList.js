@@ -16,7 +16,7 @@ var variableListMaster = {
 			"breaks":[0.09,0.16,0.23,0.32],
 			"legendWidth": 58,
 			"version":"v1",
-			"columns":["All", "White", "Nonwhite"],
+			"columns":["All", "White communities", "Communities of color"],
 			"nondebtfirst": false
 		},
 		{
@@ -26,7 +26,7 @@ var variableListMaster = {
 			"breaks":[540,778,1031,1376],
 			"legendWidth": 70,
 			"version":"v1",
-			"columns":["All", "White", "Nonwhite"],
+			"columns":["All", "White communities", "Communities of color"],
 			"nondebtfirst": false
 		},
 		{
@@ -36,7 +36,7 @@ var variableListMaster = {
 			"breaks":[0.07,0.11,0.16,0.25],
 			"legendWidth": 60,
 			"version":"v1",
-			"columns":["All", "White", "Nonwhite"],
+			"columns":["All", "White communities", "Communities of color"],
 			"nondebtfirst": true
 		},
 		{
@@ -46,7 +46,7 @@ var variableListMaster = {
 			"breaks":[0.13,0.28,0.47,0.68],
 			"legendWidth": 63,
 			"version":"v1",
-			"columns":["All", "White", "Nonwhite"],
+			"columns":["All", "White communities", "Communities of color"],
 			"nondebtfirst": false
 		},
 		{
@@ -56,7 +56,7 @@ var variableListMaster = {
 			"breaks":[55898,68416,84677,111775],
 			"legendWidth": 89,
 			"version":"v1",
-			"columns":["All", "White", "Nonwhite"],
+			"columns":["All", "White communities", "Communities of color"],
 			"nondebtfirst": false
 		}		
 	],
@@ -68,7 +68,7 @@ var variableListMaster = {
 			"breaks":[0.07,0.14,0.21,0.34],
 			"legendWidth":60,
 			"version":"v2",
-			"columns":["All", "White", "Nonwhite"],
+			"columns":["All", "White communities", "Communities of color"],
 			"nondebtfirst": false
 		},
 		{
@@ -78,7 +78,7 @@ var variableListMaster = {
 			"breaks":[7327,9286,11271,13907],
 			"legendWidth":89,
 			"version":"v2",
-			"columns":["All", "White", "Nonwhite"],
+			"columns":["All", "White communities", "Communities of color"],
 			"nondebtfirst": false
 		},
 		{
@@ -88,7 +88,7 @@ var variableListMaster = {
 			"breaks":[0.09,0.12,0.15,0.19],
 			"legendWidth":60,
 			"version":"v2",
-			"columns":["All", "White", "Nonwhite"],
+			"columns":["All", "White communities", "Communities of color"],
 			"nondebtfirst": false
 		},
 		{
@@ -98,7 +98,7 @@ var variableListMaster = {
 			"breaks":[13732,16512,19170,22399],
 			"legendWidth":89,
 			"version":"v2",
-			"columns":["All", "White", "Nonwhite"],
+			"columns":["All", "White communities", "Communities of color"],
 			"nondebtfirst": false
 		},
 		{
@@ -108,7 +108,7 @@ var variableListMaster = {
 			"breaks":[138,161,183,209],
 			"legendWidth":70,
 			"version":"v2",
-			"columns":["All", "White", "Nonwhite"],
+			"columns":["All", "White communities", "Communities of color"],
 			"nondebtfirst": false
 		},
 		{
@@ -118,7 +118,7 @@ var variableListMaster = {
 			"breaks":[0.58,0.70,0.78,0.84],
 			"legendWidth":60,
 			"version":"v2",
-			"columns":["All", "White", "Nonwhite"],
+			"columns":["All", "White communities", "Communities of color"],
 			"nondebtfirst": true
 		},
 		{
@@ -128,7 +128,7 @@ var variableListMaster = {
 			"breaks":[0.13,0.28,0.47,0.68],
 			"legendWidth":63,
 			"version":"v1",
-			"columns":["All", "White", "Nonwhite"],
+			"columns":["All", "White communities", "Communities of color"],
 			"nondebtfirst": false
 		},
 		{
@@ -138,7 +138,7 @@ var variableListMaster = {
 			"breaks":[55899,68417,84678,111775],
 			"legendWidth":89,
 			"version":"v1",
-			"columns":["All", "White", "Nonwhite"],
+			"columns":["All", "White communities", "Communities of color"],
 			"nondebtfirst": false
 		}
 	],
@@ -150,7 +150,7 @@ var variableListMaster = {
 			"breaks":[0.01, 0.03, 0.05, 0.09],
 			"legendWidth":65,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"],
+			"columns":["All","White communities","Communities of color"],
 			"nondebtfirst": false
 		},
 		{
@@ -170,7 +170,7 @@ var variableListMaster = {
 			"breaks":[0.22,0.28,0.32,0.37],
 			"legendWidth":65,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"],
+			"columns":["All","White communities","Communities of color"],
 			"nondebtfirst": false
 		},
 		{
@@ -180,7 +180,7 @@ var variableListMaster = {
 			"breaks":[0.30,0.35,0.39,0.44],
 			"legendWidth":65,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"],
+			"columns":["All","White communities","Communities of color"],
 			"nondebtfirst": false
 		},
 		{
@@ -190,7 +190,7 @@ var variableListMaster = {
 			"breaks":[0.2,0.42,0.63,0.86],
 			"legendWidth":65,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"],
+			"columns":["All","White communities","Communities of color"],
 			"nondebtfirst": true
 		},
 		{
@@ -200,7 +200,7 @@ var variableListMaster = {
 			"breaks":[0.13,0.28,0.47,0.68],
 			"legendWidth":65,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"],
+			"columns":["All","White communities","Communities of color"],
 			"nondebtfirst": false
 		},
 		{
@@ -210,7 +210,7 @@ var variableListMaster = {
 			"breaks":[55898,68416,84677,111775],
 			"legendWidth":90,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"],
+			"columns":["All","White communities","Communities of color"],
 			"nondebtfirst": false
 		}
 	],
@@ -222,7 +222,7 @@ var variableListMaster = {
 			"breaks":[0.20,0.29,0.37,0.47],
 			"legendWidth":90,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"],
+			"columns":["All","White communities","Communities of color"],
 			"nondebtfirst": false
 		},
 		{
@@ -232,7 +232,7 @@ var variableListMaster = {
 			"breaks":[1333,1716,2115,2754],
 			"legendWidth":90,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"],
+			"columns":["All","White communities","Communities of color"],
 			"nondebtfirst": false
 		},
 		{
@@ -242,7 +242,7 @@ var variableListMaster = {
 			"breaks":[0.09,0.16,0.23,0.32],
 			"legendWidth":90,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"],
+			"columns":["All","White communities","Communities of color"],
 			"nondebtfirst": false
 		},
 		{
@@ -252,7 +252,7 @@ var variableListMaster = {
 			"breaks":[0.07,0.14,0.21,0.34],
 			"legendWidth":90,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"],
+			"columns":["All","White communities","Communities of color"],
 			"nondebtfirst": false
 		},
 		{
@@ -262,7 +262,7 @@ var variableListMaster = {
 			"breaks":[0.01,0.03,0.05,0.09],
 			"legendWidth":90,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"],
+			"columns":["All","White communities","Communities of color"],
 			"nondebtfirst": false
 		},
 		{
@@ -272,7 +272,7 @@ var variableListMaster = {
 			"breaks":[0.02,0.04,0.06,0.10],
 			"legendWidth":90,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"],
+			"columns":["All","White communities","Communities of color"],
 			"nondebtfirst": false
 		},
 		{
@@ -282,7 +282,7 @@ var variableListMaster = {
 			"breaks":[560,710,881,1251],
 			"legendWidth":90,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"],
+			"columns":["All","White communities","Communities of color"],
 			"nondebtfirst": false
 		},
 		{
@@ -292,7 +292,7 @@ var variableListMaster = {
 			"breaks":[0.13,0.28,0.47,0.68],
 			"legendWidth":90,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"],
+			"columns":["All","White communities","Communities of color"],
 			"nondebtfirst": true
 		},
 		{
@@ -302,7 +302,7 @@ var variableListMaster = {
 			"breaks":[55898,68416,84677,111775],
 			"legendWidth":90,
 			"version":"v3",
-			"columns":["All","White","Nonwhite"],
+			"columns":["All","White communities","Communities of color"],
 			"nondebtfirst": false
 		}
 	],

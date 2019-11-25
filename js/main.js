@@ -774,6 +774,10 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
     Startquery["type"] = type;
   }
 
+  d3.selectAll("[data-cat]").classed("selected-nav", false);
+  d3.select('[data-cat="auto"]').classed("selected-nav",true);
+
+
   var defaultFirst;
 
   // use meta data to select correct data
@@ -825,6 +829,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
   //* of the datapoint with _wh/_nw appended for race, _ph for mobile
   setVariable(typeVar)
   setVariable(typeVar, true)
+
 
   var tmp_state = BigData.tmp_state,
     tmp_county = BigData.tmp_county,
@@ -1106,6 +1111,9 @@ console.log(SELECTED_VARIABLE)
   $( ".categories" ).on("click", function(evt){
 
         var userChoice = this.getAttribute("data-cat");
+
+        d3.selectAll("[data-cat]").classed("selected-nav", false);
+        d3.select('[data-cat="' + userChoice + '"]').classed("selected-nav",true);
 
         table.selectAll('tbody').classed('selected', false);        
         table.select('tbody').classed('selected', true)
@@ -2862,11 +2870,12 @@ console.log(SELECTED_VARIABLE)
     }
   }
 
-  function updateTable(data,type) {
+  function updateTable(data,type){
+
     var columns = ["All", "White", "NonWhite"]    
     var rowNumbers = [1,2,3]    
 
-    if (type) {
+    if (type){
       // var groups = variableList[type]["groups"]
       var rowData =  variableListMaster[type]
 
@@ -2885,9 +2894,12 @@ console.log(SELECTED_VARIABLE)
         })
         .classed("begin-non-debt-info", function(d){ 
           if ( d.nondebtfirst ){
+            
+            this.previousElementSibling.className += " end-debt-info"
             return true
           }
         })
+
         .merge(tbody)
         .on('click', function(d) {             
           d3.selectAll('tbody')
@@ -2903,6 +2915,7 @@ console.log(SELECTED_VARIABLE)
           setVariable(d.variable)
           updateMap(d.variable)
 
+          // PURPOSE: above map replace header w/ debt type
           d3.select("#debt-type").text(function(){ 
             return variableListMaster[type].filter(function(d){
               return d.variable === SELECTED_VARIABLE 
@@ -2912,15 +2925,14 @@ console.log(SELECTED_VARIABLE)
           var stateQuery;
           var countyQuery;
 
-          // Add in the querystring
+          // PURPOSE: add selections to querystring
           if (d3.select("g.counties").selectAll("path.selected")._groups[0].length !== 0) {
             countyQuery = d3.select("g.counties").selectAll("path.selected").datum().id;  
           }
-
-          
           if (d3.select("g.state-borders").selectAll("path.selected")._groups[0].length !== 0) {
             stateQuery = d3.select("path#" + selectedState.properties.abbr).datum().id;  
           }
+          updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
 
           // hide the words next to bars on restricted variables
           if (limitedVars.filter(function(d) {return d == SELECTED_VARIABLE;}).length != 0) {
@@ -2931,9 +2943,7 @@ console.log(SELECTED_VARIABLE)
             $(".category.c1").css("display", "block")
             $(".category.c2").css("display", "block")
           }
-          
-          updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
-        })
+        }) //ends on 'click'
     
       tbody.exit().remove();        
     
@@ -2998,8 +3008,10 @@ console.log(SELECTED_VARIABLE)
       // Remove things (EXIT) and remove the "new" headlines
 
       // create a means. (ABOVE) for passing through new data to the tables. 
-    }
+    } // ends if (type)
 
+
+    // PURPOSE: if there's a 'type' or not, you must rewrite the footnotes and annotation letters
     var data = (zoomNational == true) ? data : data["properties"];
     d3.selectAll("p.note1, p.note2").style("opacity", 1)
     d3.selectAll(".cell-data")
@@ -3034,8 +3046,8 @@ console.log(SELECTED_VARIABLE)
               }
             }
           })
-      })
-  }
+      }) //close .cell-data
+  } // ends updateTable
 
 
 
