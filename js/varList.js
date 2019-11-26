@@ -155,8 +155,8 @@ var variableListMaster = {
 		},
 		{
 			"variable":"autoretdelrate_sub",
-			"desktopLabel":"Auto/retail loan delinquency rate by credit score",
-			"mobileLabel":"Auto/retail loan delinquency rate by credit score",
+			"desktopLabel":"Auto/retail loan delinquency rate by credit score<sup><i>c</i></sup>",
+			"mobileLabel":"Auto/retail loan delinquency rate by credit score<sup><i>c</i></sup>",
 			"breaks":[0.10,0.16,0.21,0.29],
 			"legendWidth":65,
 			"version":"v3",
@@ -332,7 +332,7 @@ var variableListMaster = {
 				"caption": "Auto Loan Debt",
 				"publishDate": "",
 				"specialNotes":[
-					// "<p class='note3 temp'><sup><i>d</i></sup> The VantageScore credit score ranges from 300 to 850. Subprime scores range from 300 to 600, near-prime from 601 to 660, and prime from 600 to 850.</p>"
+					"<p class='note3 temp'><sup><i>c</i></sup> The VantageScore credit score ranges from 300 to 850. Subprime scores range from 300 to 600, near-prime from 601 to 660, and prime from 661to 850</p>"
 				]
 			},			
 			"overall":{

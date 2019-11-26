@@ -601,12 +601,6 @@ path.hide {
   right: auto
 }
 
-#variable-name {
-  font-size: 14px;
-  font-weight: 600;
-  height: 20px;
-  text-transform: uppercase;
-}
 .tick > line {
   stroke: none;
 }
@@ -1037,17 +1031,33 @@ html .ui-button.ui-state-disabled:active {
     display: block;
   }
   .map-div {
-    margin: 20px 0px 30px 0px;
+    margin: 20px 0px 30px 15px;
   }
 }
 
 #bar-chart {
-  padding-left: 10px;
+  padding-top: 30px;
   float: left;
 }
 
 .bar-group > text {
   font-weight: bold;
+}
+
+#bar-chart-legend > ul > li {
+  display: inline;
+  padding: 0 10px 0 30px;
+}
+
+#bar-chart-legend > ul > li.desktop-bar-legend-0 {
+  padding-left: 0;
+}
+
+#bar-chart-legend > ul {
+  margin: 0;
+  padding-left: 0;
+  padding-top: 14px;
+  text-align: left;
 }
 
 

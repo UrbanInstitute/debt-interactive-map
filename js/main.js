@@ -775,7 +775,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
   }
 
   d3.selectAll("[data-cat]").classed("selected-nav", false);
-  d3.select('[data-cat="auto"]').classed("selected-nav",true);
+  d3.select('[data-cat="' + type + '"]').classed("selected-nav",true);
 
 
   var defaultFirst;
@@ -986,31 +986,9 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
     return d.properties[SELECTED_VARIABLE]
   })  
 
-console.log(SELECTED_VARIABLE)
-// console.log(variableListMaster[type].filter(function(d) {return d.variable == SELECTED_VARIABLE;})[0].breaks)
-// console.log(variableListMaster[type].filter(function(d) {return d.variable == SELECTED_VARIABLE;}))
   var quantize = d3.scaleThreshold()
     .domain(variableListMaster[type].filter(function(d) {return d.variable == SELECTED_VARIABLE;})[0].breaks)
     .range(["#cfe8f3", "#73bfe2", "#1696d2", "#0a4c6a", "#000000"])  
-
- /*ADD DROPDOWNS*/
-  // var categoryData = [{label: "Share with any debt in collections<i>ᵃ</i>", variable: "perc_debt_collect"},
-  // {label: "Median debt in collections<i>ᵃ</i>", variable: "med_debt_collect"},
-  // {label: "Share with medical debt in collections<i>ᵃ</i>", variable: "perc_debt_med"},
-  // {label: "Median medical debt in collections<i>ᵃ</i>", variable: "med_debt_med"},
-  // {label: "Nonwhite population share", variable: "perc_pop_nw"},
-  // {label: "Share without health insurance coverage", variable: "perc_pop_no_ins" },
-  // {label: "Average household income", variable: "avg_income"}]
-  
-  // var categoryData2 = [{label: "Share with student loan debt<i>ᵃ</i>", variable: "perc_stud_debt"},
-  // {label: "Median student loan debt<i>ᵃ</i>", variable: "med_stud_debt"},
-  // {label: "Share of student loan holders with student loan debt in collections<i>ᵃ ᵈ</i>", variable: "perc_stud_debt_collect_STUD"},    
-  // {label: "Median student loan debt in collections<i>ᵃ</i>", variable: "med_stud_debt_collect"},
-  // {label: "Median monthly student loan payment<i>ᵃ</i>", variable: "med_mon_pmt"},
-  // {label: "Share of people with credit records who have student loan debt in collections<i>ᵃ ᵉ</i>", variable: "perc_stud_debt_collect"},
-  // {label: "Nonwhite population share", variable: "perc_pop_nw"},
-  // {label: "Share without a bachelor’s degree", variable: "perc_no_bach"},
-  // {label: "Average household income", variable: "avg_income" }]
 
 
 // Create and populate Mobile Dropdowns options (mixing d3 and jquery...)
@@ -1123,26 +1101,6 @@ console.log(SELECTED_VARIABLE)
         type = userChoice;
         //* pulling out just the relevant object from varList
         var type_category = variableListMaster[type];
-        // update mobile categories        
-
-        // var optionsCategory = d3.select("#category-select").selectAll('option')
-        //   .data(type_category)
-
-        // optionsCategory.enter()
-        //   .append('option')
-        //   .merge(optionsCategory)
-        //   .html(function(d) {
-        //     return d.mobileLabel;
-        //   })
-        //   .attr('value', function(d) {
-        //     return d.variable;
-        //   })        
-        
-        // optionsCategory.exit().remove()
-
-        // $('#category-select').val(type_category[0].variable);
-        // $("#category-select").selectmenu("refresh")
-
 
         // DW note: this will need to get updated when we move to more than TWO variable sets. 
         // to be used when ready
@@ -1515,7 +1473,7 @@ console.log(SELECTED_VARIABLE)
   var g = svg.append("g")
     .attr("class", "map-g")
     .attr("transform", "translate(" + (-10) + "," + (translateHeight) + ")scale(" +mapScale + ")")
-
+//*BOOKMARK
   g.append("g")
     .attr("class", "counties")
     .selectAll("path")
@@ -1583,14 +1541,18 @@ console.log(SELECTED_VARIABLE)
         if (geography == "state") { 
           hoverLocation(county, state, geography)
           updateBars(SELECTED_VARIABLE, d3.select("path#" + hoveredState).datum())
+          d3.select("#National").attr("transform", function() {
+              return "translate(" + ( (width/3.1 + 5) * 1 ) + ", 20)";
+          })
+          d3.select("#State").attr("transform", function() {
+              return "translate(0, 20)";
+          })
         }else {
           hoverLocation(county, state, geography)
           updateBars(SELECTED_VARIABLE, d)
         }
-        // $(".state-borders").css("pointer-events", "none")
-        // $(".counties").css("pointer-events", "all")
-
       }
+
     })
     .on('mouseout', function(d) { 
       if (d3.select(".counties > path.selected").node() != undefined) { //IF A COUNTY IS SELECTED
@@ -1618,6 +1580,7 @@ console.log(SELECTED_VARIABLE)
         setZoom(false, true, false)
         updateBars(SELECTED_VARIABLE, d3.select(".state-borders > path.selected").datum())
       }
+      d3.select("#State").attr("transform", "translate(0, 20)")
     })  
 
   g.append("g")
@@ -1648,7 +1611,6 @@ console.log(SELECTED_VARIABLE)
       var stateQuery = d.properties.id;
       var countyQuery;
       updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
-
     })
     .on('mouseover', function(d) {         
 
@@ -1658,15 +1620,17 @@ console.log(SELECTED_VARIABLE)
       }else {
         // $(".state-borders").css("pointer-events", "none")
         // $(".counties").css("pointer-events", "all")
-
       }
+      d3.select("#National").attr("transform", function(d,i) {
+            return "translate(" + ( (width/3.1 + 5) * 1 ) + ", 20)";
+        })
     })
     .on('mouseleave', function(d) {         
 
       if (zoomNational==true || zoomNational_St == true) {
         if (d3.select(".state-borders > path.selected").node() != undefined && zoomNational_St != true) {
           var state = d3.select(".state-borders > path.selected").datum().properties.state
-          
+           
           d3.selectAll("path.selected").moveToFront()
         }else if (zoomNational_St == true){ 
           d3.selectAll(".hover")
@@ -1675,9 +1639,9 @@ console.log(SELECTED_VARIABLE)
           d3.selectAll("path.selected").moveToFront()
           var selected = (d3.select(".counties > path.selected").size() > 0) ? d3.select(".counties > path.selected").datum() : d3.select(".state-borders > path.selected").datum()
           var geography = (d3.select(".counties > path.selected").size() > 0) ? selected.properties["county"] + ", " + selected.properties["abbr"] : selected.properties["state"];
-          
+         
           updateBars(SELECTED_VARIABLE, selected)
-        }else { 
+        } else { 
           
           d3.selectAll(".hover")
             .classed("hover", false)
@@ -1687,7 +1651,6 @@ console.log(SELECTED_VARIABLE)
       }
     })
     .on('mouseout', function(d) {         
-
       if (zoomNational==true || zoomNational_St == true) {
         if (d3.select(".state-borders > path.selected").node() != undefined && zoomNational_St != true) {
           var state = d3.select(".state-borders > path.selected").datum().properties.state
@@ -1737,6 +1700,9 @@ console.log(SELECTED_VARIABLE)
       .on('click', function() {
         setZoom(false, false, false, true)
         zoomMap(width, null, "national")
+        d3.select("#National").attr("transform", function() {
+            return "translate(" + ( (width/3.1 + 5) * 1 ) + ", 20)";
+        })
       })
 
   /*LEGEND*/
@@ -1983,7 +1949,7 @@ console.log(SELECTED_VARIABLE)
   /*END TABLE*/
   /*BAR CHARTS*/
 
-  var groups = ["National", "State", "County"]
+  var groups = ["County", "State", "National"]
   // var groups_ph = ["County", "State", "National"]
   // var categories = ["All", "White", "Nonwhite"]
   var grabVar = variableListMaster[type].filter(function(d) {
@@ -2251,7 +2217,10 @@ console.log(SELECTED_VARIABLE)
       .enter()
       .append('g')
       .attr("transform", function(d,i) {
-        return "translate(" + ( (width/3.1 + 5) * i) + "," + (20) + ")";
+        //* BOOKMARK
+        var levelOfZoom = [zoomNational, zoomState, zoomCounty].indexOf(true);
+        return "translate(" + ( (width/3.1 + 5) * levelOfZoom ) + ", 20)";
+        // return "translate(" + ( (width/3.1 + 5) * i) + "," + (20) + ")";
       })
       .attr("id", function(d) { 
         return d
@@ -2288,18 +2257,6 @@ console.log(SELECTED_VARIABLE)
       .attr("transform", function(d,i) {
         return "translate(" + 0 +"," + 15+ ")"
       })
-
-    rectG
-      .append("g")
-      .attr("class", "g-text")
-      .append("text")
-      .attr("x", 0)
-      .attr("y", barHeight + 10)
-      .attr("dy", ".71em")
-      .attr("text-anchor", "start")
-      .text(function(d) {         
-        return d}
-      );
 
     rectG.append("g")
       .attr("class", "x axis")
@@ -2358,6 +2315,26 @@ console.log(SELECTED_VARIABLE)
           }
         })
       })
+
+      //legend for the bar charts on desktop
+      var barDataLabels = variableListMaster[type].filter(function(d){
+        return d.variable === SELECTED_VARIABLE })[0].columns
+
+      var legendColors = ["#fdbf11","#000000", "#696969"]  // :(
+
+      d3.select("#bar-chart-legend").append("ul")
+      .selectAll("li")
+        .data(barDataLabels)
+        .enter()
+        .append("li")
+        .text(function(d){ return d })
+        .attr("class", function(d,i){
+          return "key desktop-bar-legend-" + i;
+        })
+        .style("border-right", function(d,i){
+          return "15px solid" + legendColors[i]
+        })
+
 
   // hide the words next to bars on restricted variables
           if (limitedVars.filter(function(d) {return d == SELECTED_VARIABLE;}).length != 0) {
@@ -2618,15 +2595,9 @@ console.log(SELECTED_VARIABLE)
       .rangeRound([0, barWidth])
 
     data.forEach(function(d) { 
-      d.national = +d.values[0][variable]
-    })
-
-    data.forEach(function(d) { 
+      d.national = +d.values[0][variable];
       d.white = +d.values[0][WHITE];
-    })
-
-    data.forEach(function(d) { 
-      d.nonwhite = +d.values[0][NONWHITE]
+      d.nonwhite = +d.values[0][NONWHITE];
     })
 
     x.domain([[us_data].map(function(d){
@@ -2645,15 +2616,7 @@ console.log(SELECTED_VARIABLE)
       }
     })])
 
-    // var end = new Date(); 
-    // console.log(end - start)
-
-    d3.selectAll(".g-text text")
-      .text(function(d,i){
-        //* this would be more like D3 if you were using key/value and could simply label with the key and draw with the value :)
-        //* i % 3 could also be i - 1, for reference... he's using order to find the sub variable (race, in this case)
-        return grabVar[0].columns[i % 3];
-      })    
+  
 
       var National = d3.select("#National").selectAll(".category")
       
@@ -2686,7 +2649,9 @@ console.log(SELECTED_VARIABLE)
                   return labelsuperscript(d,this,variable,NONWHITE,WHITE);
                 })
         })
-      if ( (zoomNational == true) && selected == null) {         
+
+
+      if ( (zoomNational == true) && selected == null) {              
         d3.selectAll("#State, #County").style("opacity", 0)
       } else if (zoomNational_St && selected == null) {
       } else if (zoomNational == false || selected != null) { //IF MOUSE IS OVER A STATE OR COUNTY IN WHICHEVER VIEW
@@ -2729,21 +2694,10 @@ console.log(SELECTED_VARIABLE)
                   return labelsuperscript(d,this,variable,NONWHITE,WHITE);
                 })
           })
-
+//BOOKMARK: if county selected?
           if (countyID.slice(0,2) == state || countyIDHov.slice(0,2) == state) { 
               d3.selectAll("#National, #State, #County").style("opacity", 1)
-              // var stateData = tmp_state.filter(function(d){
-              //     return d.properties.abbr == state
-              // })
-              // state_data.forEach(function(d) { 
-              //   d.national = +d.values[0][variable]
-              // })
-              // state_data.forEach(function(d) { 
-              //   d.white = +d.values[0][WHITE];
-              // })
-              // state_data.forEach(function(d) { 
-              //   d.nonwhite = +d.values[0][NONWHITE]
-              // })
+
             var County = d3.select("#County").selectAll(".category")
             var countyData = selected["properties"]
             d3.select("#County").select(".group-label-2").text(countyData["county"])
@@ -2778,9 +2732,19 @@ console.log(SELECTED_VARIABLE)
                     return labelsuperscript(d,this,variable,NONWHITE,WHITE);
                   })
               })
+
+            d3.select("#National").attr("transform", function() {
+                return "translate(" + ( (width/3.1 + 5) * 2 ) + ", 20)";
+            })
+            d3.select("#State").attr("transform", function() {
+                return "translate(" + ( (width/3.1 + 5) * 1 ) + ", 20)";
+            })
           } else {
             d3.selectAll("#County").style("opacity", 0)
             d3.selectAll("#National, #State").style("opacity", 1)
+            d3.select("#National").attr("transform", function() {
+                return "translate(" + ( (width/3.1 + 5) * 1 ) + ", 20)";
+            })
           }
         }
     }
@@ -3060,7 +3024,7 @@ console.log(SELECTED_VARIABLE)
     if (zoomLevel != "national") { 
       $('.zoomBtn').css("display", "block")
       $('.tagit-new > input').attr('placeholder', '')
-      d3.select(".state-borders").selectAll("path:not(#" + d.properties.abbr+ ")")
+      d3.select(".state-borders").selectAll("path:not(#" + d.properties.abbr + ")")
         .classed("hide", true)
       d3.selectAll("path.hoverNational").classed("hoverNational", false)
       $(".state-borders").css("pointer-events", "none")
@@ -3312,8 +3276,7 @@ console.log(SELECTED_VARIABLE)
               return (IS_MOBILE) ? "translate(" + ((barWidth+2) * i ) + "," + 10 + ")" : "translate(" + (60 * i ) + "," + 10 + ")"
             })
           })
-        d3.selectAll(".g-text > text")
-        .attr("y", barHeight + 10)
+
         d3.selectAll(".x.axis")
         .attr("transform", function(d,i) {
           return "translate(" + 0 +"," + barHeight+ ")"
