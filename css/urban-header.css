@@ -14,7 +14,6 @@ body{
     left: 0;
     width: 100%;
     background: #fff;
-    border-bottom: 2px solid #eee;
     z-index: 999999;
     -webkit-transition: top 0.25s linear;
     -moz-transition: top 0.25s linear;

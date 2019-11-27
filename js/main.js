@@ -1473,7 +1473,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
   var g = svg.append("g")
     .attr("class", "map-g")
     .attr("transform", "translate(" + (-10) + "," + (translateHeight) + ")scale(" +mapScale + ")")
-//*BOOKMARK
+
   g.append("g")
     .attr("class", "counties")
     .selectAll("path")
@@ -2217,7 +2217,6 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
       .enter()
       .append('g')
       .attr("transform", function(d,i) {
-        //* BOOKMARK
         var levelOfZoom = [zoomNational, zoomState, zoomCounty].indexOf(true);
         return "translate(" + ( (width/3.1 + 5) * levelOfZoom ) + ", 20)";
         // return "translate(" + ( (width/3.1 + 5) * i) + "," + (20) + ")";
@@ -2694,7 +2693,6 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
                   return labelsuperscript(d,this,variable,NONWHITE,WHITE);
                 })
           })
-//BOOKMARK: if county selected?
           if (countyID.slice(0,2) == state || countyIDHov.slice(0,2) == state) { 
               d3.selectAll("#National, #State, #County").style("opacity", 1)
 
