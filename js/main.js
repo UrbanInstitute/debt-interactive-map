@@ -643,20 +643,33 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
       .attr("dy", ".71em")
       .attr("text-anchor", "start")
       .text(function(d,i) { 
-        // console.log(cat)
-        // console.log(cat[i])
         for (var j = 0; j < limitedVars.length; j++) {
           if (d === limitedVars[j] + "_wh" || d === limitedVars[j] + "_nw") {
             return ""  
           }
         }
-        return cat[i]  
-        // if (d === "perc_pop_nw_wh" || d === "perc_pop_nw_nw") {
-          
-        // } else {
-          
-        // }        
-      });      
+        var label = cat[i]
+        return label.substr(0,label.indexOf(' '))
+      }); 
+
+    rectG.append("text")
+    .attr("x", 0)
+      .attr("y", barHeight + 21)
+      .attr("dy", ".71em")
+      .attr("text-anchor", "start")
+      .text(function(d,i) { 
+        for (var j = 0; j < limitedVars.length; j++) {
+          if (d === limitedVars[j] + "_wh" || d === limitedVars[j] + "_nw") {
+            return ""  
+          }
+        }
+        var label = cat[i]
+        return label.substr(label.indexOf(' ')+1);
+      }); 
+
+
+
+
 
     var counter1 = 0;
     var counter2 = 0;
@@ -1686,9 +1699,9 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
           var geography = (d3.select(".counties > path.selected").size() > 0) ? selected.properties["county"] + ", " + selected.properties["abbr"] : selected.properties["state"];
 
           updateBars(SELECTED_VARIABLE, selected)
-          d3.select("#State").attr("transform", function(d,i) {
-            return "translate(" + ( (width/3.1 + 5) * 1 ) + ", 20)";
-          })
+          // d3.select("#State").attr("transform", function(d,i) {
+          //   return "translate(" + ( (width/3.1 + 5) * 1 ) + ", 20)";
+          // })
         } else { 
           
           d3.selectAll(".hover")
@@ -1751,12 +1764,8 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
         zoomMap(width, null, "national")
 
         // state selected, not county
-        if (d3.select(".state-borders > path.selected").node() != null && d3.select(".counties > path.selected").node() === undefined ){
-          d3.select("#National").attr("transform", function() {
-            return "translate(" + ( width/3.1 + 5 ) * 1 + ", 20)";
-          })
+        if (d3.select(".state-borders > path.selected").node() != null && d3.select(".counties > path.selected").node() === null ){
           d3.select("#State").attr("transform", "translate(0, 20)");
-
         }
 
         // county selected 
@@ -3100,7 +3109,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
 
 
 
-  function zoomMap(width, d,zoomLevel) { 
+  function zoomMap(width, d,zoomLevel){ 
     var x, y, k;
     d3.select(".state-borders").selectAll("path")
       .classed("hide", false)
@@ -3157,14 +3166,16 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
             .moveToFront()
           // updateTable(data)
       }
-    }else { 
+    } else { 
       if (IS_MOBILE == true) {
         d3.selectAll(".hover").classed("hover", false)
       }
       //ZOOM OUT TO NATIONAL VIEW
       if (zoomNational_St == true) {
         updateBars(SELECTED_VARIABLE, null)
-
+        if (d3.select(".state-borders > path.selected").node() != null && d3.select(".counties > path.selected").node() === null ){
+          d3.select("#State").attr("transform", "translate(0, 20)");
+        }
       }else {
         setZoom(true, false, false)
         // reset zoom to US
@@ -3177,7 +3188,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
                   us_data[key] = +us_data[key]
                 }
             }
-        }      
+        }    
 
         updateTable(us_data,type)
         updateBars(SELECTED_VARIABLE, d)

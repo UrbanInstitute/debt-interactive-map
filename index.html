@@ -105,7 +105,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           <h1>Debt in America: An Interactive Map</h1>   
           <h2>Last updated December TK, 2019</h2>       
         </div>        
-        <h2>Credit can be a lifeline during emergencies and a bridge to education and homeownership. But debt, which can stem from credit or unpaid bills, often burdens families and communities and exacerbates wealth inequality. This map shows the geography of debt in America at the national, state, and county levels. How does your community compare?</h2>
+        <h2>
+          Credit can be a lifeline during emergencies and a bridge to education and homeownership. But debt, which can stem from credit or unpaid bills, often burdens families’ and communities’ financial well-being. This map shows the geography of debt in America and the <a href="https://www.urban.org/urban-wire/past-due-medical-debt-problem-especially-black-americans">debt differences</a> that can <a href="https://www.urban.org/urban-wire/50-years-after-martin-luther-kings-death-structural-racism-still-drives-racial-wealth-gap">reinforce</a> the <a href="http://apps.urban.org/features/wealth-inequality-charts/">wealth gap</a> between white communities and communities of color. 
+        </h2>
       </div>
     </div>
   </div>
@@ -130,7 +132,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             </div>
           </div>
         </div>
-        <p class="select-table">Click on the variables below to see how debt affects people across the US</p>
+        <p class="select-table">Click on the variables below to see how debt affects communities across the US <span class="note-header"><i><sup>a</sup></i></span> </p>
         <div id="table-div" class="left-table">
         </div>
         <div id="notes-div">
@@ -195,14 +197,12 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     <!-- mobiel notes -->
   <div id="notes-section">
     <div id="notes-section-inner">
-<!--       <div class="note-table"><span class="note-header"><sup><i>a</i></sup></span> White and nonwhite values are based on county or state zip codes that are predominantly white (at least 60 percent of the population is white) or predominantly nonwhite (at least 60 percent of the population is nonwhite).</div>
-      <p class="note1"><sup><i>b</i></sup> Not available because sample size is too small.</p>
-      <p class="note2"><sup><i>c</i></sup> Not available because no areas (zip codes) in the state or county are predominantly nonwhite or predominantly white.</p>
-    </div> -->
-    <div id="mobile-print-container">
-      <div class="print-button"><h3>PRINT</h3></div>
-    </div>
+
+      <div id="mobile-print-container">
+        <div class="print-button"><h3>PRINT</h3></div>
+      </div>
     
+    </div>
   </div>
   <!--BOTTOM SECTION -->
   <div class="bottom-container">
@@ -215,23 +215,42 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div class = "footerButton appendixButton">Appendix</div>
       </a>
       <div class="about-text bottom-text">
-        <p>This dashboard contains 2016 and 2017 data derived from a random sample of deidentified, consumer-level records from a major credit bureau as well as estimates from summary tables of the US Census Bureau’s American Community Survey (2015 or 2011–15 and 2016 or 2012–16). We define the nonwhite population as those who are African American, Hispanic, Asian or Pacific Islander, American Indian or Alaska Native, another race, or multiracial. The auto loan debt map uses more recent American Community Survey data to define nonwhite population share and average household income than the medical debt and student loan debt maps do. Debt in collections includes past-due credit lines that have been closed and charged-off on the creditor’s books as well as unpaid bills reported to the credit bureaus that the creditor is attempting to collect. For example, credit card accounts enter collections once they are 180 days past due. Retail installment loans are retail purchases with installment terms—for example, a loan from a furniture store to buy a couch. The map breaks are determined using the <a href="http://pro.arcgis.com/en/pro-app/help/mapping/layer-properties/data-classification-methods.htm" target="_blank">Jenks Natural Breaks method</a>.</p>
-
-        <p>The medical debt map was released December 6, 2017. The student loan debt map was added April 5, 2018. The share of student loan holders with student loan debt in collections was added May 16, 2018; the label for the share of people with credit records who have student loan debt in collections was also clarified at that time. The auto loan debt map was released December 12, 2018.</p>
-        <p>For more information and metric definitions, view and download the <a href="https://apps.urban.org/features/debt-interactive-map-update/downloadable-docs/Debt-in-America-Appendix.pdf" target="_blank">technical appendix.</a></p>
-        <p>Please contact <a href="mailto:externalaffairs@urban.org" target="_top">externalaffairs@urban.org</a> for more information.</p>
+        <p>
+          This dashboard contains information derived from a random sample of deidentified, consumer-level records from a major credit bureau. The credit bureau data are from 2018 and contain more than 5 million records. We also incorporate estimates from summary tables of the US Census Bureau’s American Community Survey (ACS). We use ACS one-year estimates (2017) where possible, but for areas with smaller populations and for metrics that incorporate zip code–level information, we use the ACS five-year estimates (2013–17).
+        </p>
+        <p>
+          We define people of color as those who are African American, Hispanic, Asian or Pacific Islander, American Indian or Alaska Native, another race other than white, or multiracial. Debt in collections includes past-due credit lines that have been closed and charged-off on the creditor’s books as well as unpaid bills reported to the credit bureaus that the creditor is attempting to collect. For example, credit card accounts enter collections once they are 180 days past due. Retail installment loans are retail purchases with installment terms—for example, a loan from a furniture store to buy a couch. The map breaks are determined using the <a href="https://pro.arcgis.com/en/pro-app/help/mapping/layer-properties/data-classification-methods.htm">Jenks Natural Breaks method</a>.
+        </p>
+        <p>
+          Please contact <a href="mailto:externalaffairs@urban.org">externalaffairs@urban.org</a> for more information about this dashboard.  
+        </p>
       </div>
+
+
+      <h1 class="bottom-header">Additional Resources</h1>
+
+      <div class="about-text bottom-text">
+        <a href="http://apps.urban.org/features/wealth-inequality-charts/">Nine Charts about Wealth Inequality in America</a><br>
+        <a href="https://www.urban.org/urban-wire/50-years-after-martin-luther-kings-death-structural-racism-still-drives-racial-wealth-gap">50 Years after Martin Luther King’s Death, Structural Racism Still Drives the Racial Wealth Gap</a><br>
+        <a href="https://www.urban.org/urban-wire/71-million-us-adults-have-debt-collections">71 Million US Adults Have Debt in Collections</a><br>
+        <a href="https://www.urban.org/urban-wire/past-due-medical-debt-problem-especially-black-americans">Past-Due Medical Debt a Problem, Especially for Black Americans</a><br>
+        <a href="https://www.urban.org/research/publication/where-student-debt-highest">Where Is Student Debt Highest?</a><br>
+        <a href="https://www.urban.org/urban-wire/what-regions-have-more-delinquent-auto-loan-debt">What Regions Have More Delinquent Auto Loan Debt</a>
+      </div>
+
+
       <h1 class="bottom-header">Project Credits</h1>
       <div class="credits-text bottom-text">
-        <p><em>This data dashboard was funded by the <a href="http://www.aecf.org/" target="_blank">Annie E. Casey Foundation</a>, with additional support from the <a href="https://www.fordfoundation.org/" target="_blank">Ford Foundation</a>. We are grateful to them and to all our funders, who make it possible for Urban to advance its mission. The views expressed are those of the authors and should not be attributed to the Urban Institute, its trustees, or its funders. Funders do not determine research findings or the insights and recommendations of our experts. More information on our funding principles is available <a href="www.urban.org/fundingprinciples" target="_blank">here</a>. Read our terms of service <a href="https://www.urban.org/terms-service" target="_blank">here</a>.</p>
-        <p>We thank John van Alst,  Henry Chen, and Chris Kukla for helpful counsel in finalizing the auto loan variables and developing the narrative. We also thank Don Baylor and Velvet Bryant of the Annie E. Casey Foundation for their input and Sara Rosenthal of the Urban Institute for her excellent project management.</em></p>
+        <p><em>This data dashboard was funded by the <a href="http://www.aecf.org/" target="_blank">Annie E. Casey Foundation</a>, with additional support from the <a href="https://www.fordfoundation.org/" target="_blank">Ford Foundation</a> in 2017. We are grateful to them and to all our funders, who make it possible for Urban to advance its mission. The views expressed are those of the authors and should not be attributed to the Urban Institute, its trustees, or its funders. Funders do not determine research findings or the insights and recommendations of our experts. More information on our funding principles is available <a href="www.urban.org/fundingprinciples" target="_blank">here</a>. Read our terms of service <a href="https://www.urban.org/terms-service" target="_blank">here</a>.</p>
+        <p>Caroline Ratcliffe and Signe-Mary McKernan had the original vision for Debt in America. We are grateful to Caroline, Cary Lou, and Hannah Hassani for their work on previous versions of this dashboard.
+We thank John van Alst, Henry Chen, and Chris Kuklafor helpful counsel in finalizing the auto loan variables and developing the narrative. We also thank Don Baylor and Velvet Bryant of the Annie E. Casey Foundation;John Howat, Chi Chi Wu, Heidi Goldberg, and Michael Best of the National Consumer Law Center;and Sue Berkowitz of SC Appleseed for their input. </em></p>
       </div>
       <div class="credit-list">
          <div class="credit-header">
             RESEARCH
           </div>
           <div class="credit-names">
-            <a href="https://www.urban.org/author/caroline-ratcliffe" target="_blank">Caroline Ratcliffe</a>, <a href="https://www.urban.org/author/signe-mary-mckernan" target="_blank">Signe-Mary McKernan</a>, <a href="https://www.urban.org/author/cary-lou" target="_blank">Cary Lou</a>, <a href="https://www.urban.org/author/hannah-hassani" target="_blank">Hannah Hassani</a>, and <a href="https://www.urban.org/author/caleb-quakenbush" target="_blank">Caleb Quakenbush</a>
+            <a href="https://www.urban.org/author/breno-braga" target="_blank">Breno Braga</a>, <a href="https://www.urban.org/author/signe-mary-mckernan" target="_blank">Signe-Mary McKernan</a>, and <a href="https://www.urban.org/author/caleb-quakenbush" target="_blank">Caleb Quakenbush</a>
           </div>
           <div class="credit-header">
             DESIGN
@@ -244,13 +263,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             DEVELOPMENT
           </div>
           <div class="credit-names">
-            Vivian Hou and <a href="https://www.urban.org/author/daniel-j-wood" target="_blank">Daniel Wood</a> 
+            Vivian Hou, <a href="https://www.urban.org/author/daniel-j-wood" target="_blank">Daniel Wood</a>, and JoElla Carman
           </div>
           <div class="credit-header">
             EDITING
           </div>
           <div class="credit-names">
-            <a href="https://www.urban.org/author/fiona-blackshaw" target="_blank">Fiona Blackshaw</a> 
+            <a href="https://www.urban.org/author/fiona-blackshaw" target="_blank">Fiona Blackshaw and Liza Hagerman</a> 
           </div>
           <div class="credit-header">
             WRITING
