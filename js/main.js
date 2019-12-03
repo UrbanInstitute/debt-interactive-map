@@ -959,7 +959,6 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
         createSearchArray("")
 
         $('.ui-widget-content.ui-autocomplete-input').attr('placeholder', 'Search for a state or county')
-
       }
   });
 
@@ -1527,17 +1526,20 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
       updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
     })
     .on('mouseover', function(d) {
+          //if a state is already selected, store its abbreviation
       var previousState = (d3.select(".state-borders > path.selected").node() != null) ? d3.select(".state-borders > path.selected").attr("id") : ""
       var hoveredState = d.properties.abbr
+          //what type of place is highlighted on hover?
       var geography = (zoomState == true && previousState == hoveredState) ? "county" : "state";
       var county = (geography == "county") ? d.properties.county : ""
       var state = d.properties.abbr
+      
       if (zoomNational == true ) { 
         $(".state-borders").css("pointer-events", "all")
         $(".counties").css("pointer-events", "none")
         hoverLocation("", d.properties.abbr, "state");
         updateBars(SELECTED_VARIABLE, d) 
-      }else{
+      } else {
         if (geography == "state") { 
           hoverLocation(county, state, geography)
           updateBars(SELECTED_VARIABLE, d3.select("path#" + hoveredState).datum())
@@ -1547,7 +1549,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
           d3.select("#State").attr("transform", function() {
               return "translate(0, 20)";
           })
-        }else {
+        } else {
           hoverLocation(county, state, geography)
           updateBars(SELECTED_VARIABLE, d)
         }
@@ -1567,7 +1569,18 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
           .classed("hoverNational", false)
         setZoom(false, true, true)
         updateBars(SELECTED_VARIABLE, d3.select(".counties > path.selected").datum())
-      }else if (d3.select(".state-borders > path.selected").node() != undefined) { //IF A STATE IS SELECTED
+        d3.select("#State").attr("transform", function(d,i) {
+          return "translate(" + ( (width/3.1 + 5) * 1 ) + ", 20)";
+        })
+      } else if (zoomNational && d3.select(".counties > path.selected").node() != undefined){//map is at national & county selected
+          d3.select("#County").attr("transform", "translate(0, 20)")
+          d3.select("#State").attr("transform", function(d,i) {
+            return "translate(" + ( (width/3.1 + 5) * 1 ) + ", 20)";
+          })
+          d3.select("#Nation").attr("transform", function(d,i) {
+            return "translate(" + ( (width/3.1 + 5) * 2 ) + ", 20)";
+          })
+      } else if (d3.select(".state-borders > path.selected").node() != undefined) { //IF A STATE IS SELECTED
         var state = d3.select(".state-borders > path.selected").datum().properties.state
         var abbr = d3.select(".state-borders > path.selected").datum().properties.abbr
         d3.selectAll(".state-borders > path").classed("hide", true)
@@ -1579,8 +1592,13 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
         .classed("hoverNational", false)
         setZoom(false, true, false)
         updateBars(SELECTED_VARIABLE, d3.select(".state-borders > path.selected").datum())
+        d3.select("#State").attr("transform", "translate(0, 20)")
+      } else if (zoomNational && d3.select(".state-borders > path.selected").node() != undefined){
+          d3.select("#State").attr("transform", "translate(0, 20)")
+          d3.select("#Nation").attr("transform", function(d,i) {
+            return "translate(" + ( (width/3.1 + 5) * 1 ) + ", 20)";
+          })
       }
-      d3.select("#State").attr("transform", "translate(0, 20)")
     })  
 
   g.append("g")
@@ -1613,24 +1631,23 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
       updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
     })
     .on('mouseover', function(d) {         
-
       if (zoomNational == true || zoomNational_St == true) {                 
         hoverLocation("", d.properties.abbr, "state");
         updateBars(SELECTED_VARIABLE, d) 
-      }else {
+        // TODO need to be sure county is labeled 
+      } else {
         // $(".state-borders").css("pointer-events", "none")
         // $(".counties").css("pointer-events", "all")
-      }
-      d3.select("#National").attr("transform", function(d,i) {
+        d3.select("#National").attr("transform", function(d,i) {
             return "translate(" + ( (width/3.1 + 5) * 1 ) + ", 20)";
         })
+      }
     })
     .on('mouseleave', function(d) {         
-
       if (zoomNational==true || zoomNational_St == true) {
         if (d3.select(".state-borders > path.selected").node() != undefined && zoomNational_St != true) {
           var state = d3.select(".state-borders > path.selected").datum().properties.state
-           
+          d3.select("#National").attr("transform", "translate(0, 20)");
           d3.selectAll("path.selected").moveToFront()
         }else if (zoomNational_St == true){ 
           d3.selectAll(".hover")
@@ -1639,8 +1656,11 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
           d3.selectAll("path.selected").moveToFront()
           var selected = (d3.select(".counties > path.selected").size() > 0) ? d3.select(".counties > path.selected").datum() : d3.select(".state-borders > path.selected").datum()
           var geography = (d3.select(".counties > path.selected").size() > 0) ? selected.properties["county"] + ", " + selected.properties["abbr"] : selected.properties["state"];
-         
+
           updateBars(SELECTED_VARIABLE, selected)
+          d3.select("#State").attr("transform", function(d,i) {
+            return "translate(" + ( (width/3.1 + 5) * 1 ) + ", 20)";
+          })
         } else { 
           
           d3.selectAll(".hover")
@@ -1649,6 +1669,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
           updateBars(SELECTED_VARIABLE, undefined)
         }
       }
+      
     })
     .on('mouseout', function(d) {         
       if (zoomNational==true || zoomNational_St == true) {
@@ -1700,9 +1721,28 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
       .on('click', function() {
         setZoom(false, false, false, true)
         zoomMap(width, null, "national")
-        d3.select("#National").attr("transform", function() {
-            return "translate(" + ( (width/3.1 + 5) * 1 ) + ", 20)";
-        })
+
+        // state selected, not county
+        if (d3.select(".state-borders > path.selected").node() != null && d3.select(".counties > path.selected").node() === undefined ){
+          d3.select("#National").attr("transform", function() {
+            return "translate(" + ( width/3.1 + 5 ) * 1 + ", 20)";
+          })
+          d3.select("#State").attr("transform", "translate(0, 20)");
+
+        }
+
+        // county selected 
+        if (d3.select(".counties > path.selected").node() != undefined){
+          //position the things you’re showing
+          d3.select("#National").attr("transform", function() {
+            return "translate(" + ( width/3.1 + 5 ) * 2 + ", 20)";
+          })
+          d3.select("#State").attr("transform", function() {
+            return "translate(" + ( width/3.1 + 5 ) * 1 + ", 20)";
+          })
+          d3.select("#County").attr("transform", "translate(0, 20)");
+        }
+
       })
 
   /*LEGEND*/
@@ -2346,7 +2386,8 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
           }
 
   // Dan NOTE this hides state and county off the bat, but we will need to update this at some point. 
-  d3.selectAll("#State, #County").style("opacity", 0)  
+  d3.selectAll("#State, #County").style("opacity", 0)
+  d3.select("#Nation").attr("transform", "translate(0, 20)")  
 
   function updateMap(variable) {
     
@@ -2652,6 +2693,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
 
       if ( (zoomNational == true) && selected == null) {              
         d3.selectAll("#State, #County").style("opacity", 0)
+        d3.select("#Nation").attr("transform", "translate(0, 20)")
       } else if (zoomNational_St && selected == null) {
       } else if (zoomNational == false || selected != null) { //IF MOUSE IS OVER A STATE OR COUNTY IN WHICHEVER VIEW
         var countyID = (d3.select(".counties > path.selected").node() == null ) ? "" : d3.select(".counties > path.selected").attr("id");
@@ -2662,7 +2704,12 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
         var State = d3.select("#State").selectAll(".category")
         var selectedState = d3.select("path#" + selected["properties"]["abbr"]).datum()
         var stateData = selectedState["properties"]
+
         d3.select("#State").select(".group-label-2").text(stateData["state"])
+        
+        d3.select("#National").attr("transform", function() {
+            return "translate(" + ( (width/3.1 + 5) * 2 ) + ", 20)";
+        })
         
         State
           .each(function() {
@@ -2694,11 +2741,24 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
                 })
           })
           if (countyID.slice(0,2) == state || countyIDHov.slice(0,2) == state) { 
-              d3.selectAll("#National, #State, #County").style("opacity", 1)
+            d3.selectAll("#National, #State, #County").style("opacity", 1)
+
+            //position the things you're showing
+            d3.select("#National").attr("transform", function() {
+                return "translate(" + ( (width/3.1 + 5) * 2 ) + ", 20)";
+            })
+            d3.select("#State").attr("transform", function() {
+                return "translate(" + ( (width/3.1 + 5) * 1 ) + ", 20)";
+            })
+            d3.select("#County").attr("transform", "translate(0, 20)")
 
             var County = d3.select("#County").selectAll(".category")
             var countyData = selected["properties"]
+            //this is sometimes empty ... when 'selected' is a state
+            //so if there's a county in the URL rewrite teh variable countyData to have correct deets
+
             d3.select("#County").select(".group-label-2").text(countyData["county"])
+
 
             County
               .each(function() {
@@ -2730,19 +2790,14 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
                     return labelsuperscript(d,this,variable,NONWHITE,WHITE);
                   })
               })
-
-            d3.select("#National").attr("transform", function() {
-                return "translate(" + ( (width/3.1 + 5) * 2 ) + ", 20)";
-            })
-            d3.select("#State").attr("transform", function() {
-                return "translate(" + ( (width/3.1 + 5) * 1 ) + ", 20)";
-            })
           } else {
             d3.selectAll("#County").style("opacity", 0)
             d3.selectAll("#National, #State").style("opacity", 1)
+            //position the things you're showing
             d3.select("#National").attr("transform", function() {
                 return "translate(" + ( (width/3.1 + 5) * 1 ) + ", 20)";
             })
+            d3.select("#State").attr("transform", "translate(0, 20)")
           }
         }
     }
@@ -2820,6 +2875,10 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
           .classed("selected", false)
         updateBars(SELECTED_VARIABLE, filteredData[0])    
 
+        d3.select("#State").attr("transform", "translate(0, 20)")
+        d3.select("#Nation").attr("transform", function(d,i) {
+          return "translate(" + ( (width/3.1 + 5) * 1 ) + ", 20)";
+        })
 
         updateTable(stateData[0],type)
         var stateQuery = stateData[0].id;
