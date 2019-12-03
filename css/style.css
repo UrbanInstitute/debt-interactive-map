@@ -272,8 +272,8 @@ tbody.begin-non-debt-info::before {
   display: block;
   position: relative;
   height: 20px;
-  width: 310%;
-  z-index: 10;
+  width: 420%;
+  z-index: 0;
 }
 
 tbody.end-debt-info {
