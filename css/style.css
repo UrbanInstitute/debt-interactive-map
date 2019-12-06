@@ -262,11 +262,33 @@ td.td-map {
  vertical-align: top;
 }
 
-tbody.begin-non-debt-info {
-  /*border-top: 30px solid #f3f3f3;*/
+tbody.spacer > tr > th {
+  padding: 0;
 }
 
-tbody.begin-non-debt-info::before {
+tbody.spacer > tr.cell-data {
+  height: 0px;
+}
+
+tbody.spacer > tr.cell-column {
+  height: 0px;
+}
+
+td.td-table > #table-div > table > tbody.spacer::after {
+  content: ' ';
+  background-color: #f3f3f3;
+  display: block;
+  height: 20px;
+  width: 390%;
+}
+
+
+/*tbody.spacer {
+  background-color: #f3f3f3 !important;
+  height: 20px;
+}*/
+
+/*tbody.begin-non-debt-info::before {
   content: '';
   background-color: #f3f3f3;
   display: block;
@@ -278,7 +300,7 @@ tbody.begin-non-debt-info::before {
 
 tbody.end-debt-info {
   border-bottom: 2px solid #ececec !important;
-}
+}*/
 
 td.td-table {
   box-shadow: 3px 0px 2px #d2d2d2;

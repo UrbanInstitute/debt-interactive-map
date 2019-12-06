@@ -30,6 +30,16 @@ var variableListMaster = {
 			"nondebtfirst": false
 		},
 		{
+			"variable":"spacer",
+			"desktopLabel":"",
+			"mobileLabel":"",
+			"breaks":[],
+			"legendWidth": [],
+			"version":"v3",
+			"columns":[],
+			"nondebtfirst": false
+		},
+		{
 			"variable":"perc_pop_no_ins",
 			"desktopLabel":"Share without health insurance coverage",
 			"mobileLabel":"Share without health insurance coverage",
@@ -112,6 +122,16 @@ var variableListMaster = {
 			"nondebtfirst": false
 		},
 		{
+			"variable":"spacer",
+			"desktopLabel":"",
+			"mobileLabel":"",
+			"breaks":[],
+			"legendWidth": [],
+			"version":"v3",
+			"columns":[],
+			"nondebtfirst": false
+		},
+		{
 			"variable":"perc_no_bach",
 			"desktopLabel":"Share without a bachelor’s degree",
 			"mobileLabel": "Share without a bachelor’s degree",
@@ -181,6 +201,16 @@ var variableListMaster = {
 			"legendWidth":65,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
+			"nondebtfirst": false
+		},
+		{
+			"variable":"spacer",
+			"desktopLabel":"",
+			"mobileLabel":"",
+			"breaks":[],
+			"legendWidth": [],
+			"version":"v3",
+			"columns":[],
 			"nondebtfirst": false
 		},
 		{
@@ -283,6 +313,16 @@ var variableListMaster = {
 			"legendWidth":90,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
+			"nondebtfirst": false
+		},
+		{
+			"variable":"spacer",
+			"desktopLabel":"",
+			"mobileLabel":"",
+			"breaks":[],
+			"legendWidth": [],
+			"version":"v3",
+			"columns":[],
 			"nondebtfirst": false
 		},
 		{

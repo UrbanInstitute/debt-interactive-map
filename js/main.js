@@ -2948,14 +2948,11 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
 
       tbody.enter().append("tbody")
         .attr("class", function(d, i) {
-          return type + " new group group-" + i
-        })
-        .classed("begin-non-debt-info", function(d){ 
-          if ( d.nondebtfirst ){
-            
-            this.previousElementSibling.className += " end-debt-info"
-            return true
+          var newClass = type
+          if (d.variable === "spacer"){
+            newClass += " spacer"
           }
+          return newClass + " new group group-" + i
         })
 
         .merge(tbody)
