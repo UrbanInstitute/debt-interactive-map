@@ -2878,6 +2878,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
         var countyQuery;
 
         updateQueryString(type,SELECTED_VARIABLE,stateQuery,countyQuery)
+        d3.select("#National").attr("transform", "translate(0, 20)");
       })
 
     if (county != undefined) { 
@@ -2948,11 +2949,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
 
       tbody.enter().append("tbody")
         .attr("class", function(d, i) {
-          var newClass = type
-          if (d.variable === "spacer"){
-            newClass += " spacer"
-          }
-          return newClass + " new group group-" + i
+          return type + " " + d.nondebtfirst + " " + " new group group-" + i
         })
 
         .merge(tbody)
@@ -2970,7 +2967,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
           setVariable(d.variable)
           updateMap(d.variable)
 
-          // PURPOSE: above map replace header w/ debt type
+          // above map replace header w/ debt type
           d3.select("#debt-type").text(function(){ 
             return variableListMaster[type].filter(function(d){
               return d.variable === SELECTED_VARIABLE 
@@ -2980,7 +2977,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
           var stateQuery;
           var countyQuery;
 
-          // PURPOSE: add selections to querystring
+          // add selections to querystring
           if (d3.select("g.counties").selectAll("path.selected")._groups[0].length !== 0) {
             countyQuery = d3.select("g.counties").selectAll("path.selected").datum().id;  
           }
@@ -2998,6 +2995,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
             $(".category.c1").css("display", "block")
             $(".category.c2").css("display", "block")
           }
+          
         }) //ends on 'click'
     
       tbody.exit().remove();        
@@ -3066,7 +3064,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
     } // ends if (type)
 
 
-    // PURPOSE: if there's a 'type' or not, you must rewrite the footnotes and annotation letters
+    // whether there's a 'type' or not, you must rewrite the footnotes and annotation letters
     var data = (zoomNational == true) ? data : data["properties"];
     d3.selectAll("p.note1, p.note2").style("opacity", 1)
     d3.selectAll(".cell-data")

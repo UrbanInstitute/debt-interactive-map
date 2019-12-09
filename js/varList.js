@@ -17,7 +17,7 @@ var variableListMaster = {
 			"legendWidth": 58,
 			"version":"v1",
 			"columns":["All", "White communities", "Communities of color"],
-			"nondebtfirst": false
+			"nondebtfirst": ""
 		},
 		{
 			"variable":"med_debt_med",
@@ -27,17 +27,7 @@ var variableListMaster = {
 			"legendWidth": 70,
 			"version":"v1",
 			"columns":["All", "White communities", "Communities of color"],
-			"nondebtfirst": false
-		},
-		{
-			"variable":"spacer",
-			"desktopLabel":"",
-			"mobileLabel":"",
-			"breaks":[],
-			"legendWidth": [],
-			"version":"v3",
-			"columns":[],
-			"nondebtfirst": false
+			"nondebtfirst": "end-debt-info"
 		},
 		{
 			"variable":"perc_pop_no_ins",
@@ -47,7 +37,7 @@ var variableListMaster = {
 			"legendWidth": 60,
 			"version":"v1",
 			"columns":["All", "White communities", "Communities of color"],
-			"nondebtfirst": true
+			"nondebtfirst": "begin-non-debt-info"
 		},
 		{
 			"variable":"perc_pop_nw",
@@ -57,7 +47,7 @@ var variableListMaster = {
 			"legendWidth": 63,
 			"version":"v1",
 			"columns":["All", "White communities", "Communities of color"],
-			"nondebtfirst": false
+			"nondebtfirst": ""
 		},
 		{
 			"variable":"avg_income",
@@ -67,7 +57,7 @@ var variableListMaster = {
 			"legendWidth": 89,
 			"version":"v1",
 			"columns":["All", "White communities", "Communities of color"],
-			"nondebtfirst": false
+			"nondebtfirst": ""
 		}		
 	],
 	"student":[
@@ -79,7 +69,7 @@ var variableListMaster = {
 			"legendWidth":60,
 			"version":"v2",
 			"columns":["All", "White communities", "Communities of color"],
-			"nondebtfirst": false
+			"nondebtfirst": ""
 		},
 		{
 			"variable":"med_stud_debt_collect",
@@ -89,7 +79,7 @@ var variableListMaster = {
 			"legendWidth":89,
 			"version":"v2",
 			"columns":["All", "White communities", "Communities of color"],
-			"nondebtfirst": false
+			"nondebtfirst": ""
 		},
 		{
 			"variable":"perc_stud_debt",
@@ -99,7 +89,7 @@ var variableListMaster = {
 			"legendWidth":60,
 			"version":"v2",
 			"columns":["All", "White communities", "Communities of color"],
-			"nondebtfirst": false
+			"nondebtfirst": ""
 		},
 		{
 			"variable":"med_stud_debt",
@@ -109,7 +99,7 @@ var variableListMaster = {
 			"legendWidth":89,
 			"version":"v2",
 			"columns":["All", "White communities", "Communities of color"],
-			"nondebtfirst": false
+			"nondebtfirst": ""
 		},
 		{
 			"variable":"med_mon_pmt",
@@ -119,17 +109,7 @@ var variableListMaster = {
 			"legendWidth":70,
 			"version":"v2",
 			"columns":["All", "White communities", "Communities of color"],
-			"nondebtfirst": false
-		},
-		{
-			"variable":"spacer",
-			"desktopLabel":"",
-			"mobileLabel":"",
-			"breaks":[],
-			"legendWidth": [],
-			"version":"v3",
-			"columns":[],
-			"nondebtfirst": false
+			"nondebtfirst": "end-debt-info"
 		},
 		{
 			"variable":"perc_no_bach",
@@ -139,7 +119,7 @@ var variableListMaster = {
 			"legendWidth":60,
 			"version":"v2",
 			"columns":["All", "White communities", "Communities of color"],
-			"nondebtfirst": true
+			"nondebtfirst": "begin-non-debt-info"
 		},
 		{
 			"variable":"perc_pop_nw",
@@ -149,7 +129,7 @@ var variableListMaster = {
 			"legendWidth":63,
 			"version":"v1",
 			"columns":["All", "White communities", "Communities of color"],
-			"nondebtfirst": false
+			"nondebtfirst": ""
 		},
 		{
 			"variable":"avg_income" ,
@@ -159,7 +139,7 @@ var variableListMaster = {
 			"legendWidth":89,
 			"version":"v1",
 			"columns":["All", "White communities", "Communities of color"],
-			"nondebtfirst": false
+			"nondebtfirst": ""
 		}
 	],
 	"auto":[
@@ -171,7 +151,7 @@ var variableListMaster = {
 			"legendWidth":65,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
-			"nondebtfirst": false
+			"nondebtfirst": ""
 		},
 		{
 			"variable":"autoretdelrate_sub",
@@ -181,7 +161,7 @@ var variableListMaster = {
 			"legendWidth":65,
 			"version":"v3",
 			"columns":["Subprime","Near prime","Prime"],
-			"nondebtfirst": false
+			"nondebtfirst": ""
 		},
 		{
 			"variable":"autoopen_pct",
@@ -191,7 +171,7 @@ var variableListMaster = {
 			"legendWidth":65,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
-			"nondebtfirst": false
+			"nondebtfirst": ""
 		},
 		{
 			"variable":"autoretopen_pct",
@@ -201,17 +181,7 @@ var variableListMaster = {
 			"legendWidth":65,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
-			"nondebtfirst": false
-		},
-		{
-			"variable":"spacer",
-			"desktopLabel":"",
-			"mobileLabel":"",
-			"breaks":[],
-			"legendWidth": [],
-			"version":"v3",
-			"columns":[],
-			"nondebtfirst": false
+			"nondebtfirst": "end-debt-info"
 		},
 		{
 			"variable":"poprural_pct",
@@ -221,7 +191,7 @@ var variableListMaster = {
 			"legendWidth":65,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
-			"nondebtfirst": true
+			"nondebtfirst": "begin-non-debt-info"
 		},
 		{
 			"variable":"popnonwhite_pct",
@@ -231,7 +201,7 @@ var variableListMaster = {
 			"legendWidth":65,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
-			"nondebtfirst": false
+			"nondebtfirst": ""
 		},
 		{
 			"variable":"HHinc_avg",
@@ -241,7 +211,7 @@ var variableListMaster = {
 			"legendWidth":90,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
-			"nondebtfirst": false
+			"nondebtfirst": ""
 		}
 	],
 	"overall":[
@@ -253,7 +223,7 @@ var variableListMaster = {
 			"legendWidth":90,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
-			"nondebtfirst": false
+			"nondebtfirst": ""
 		},
 		{
 			"variable":"median_debt_in_collections",
@@ -263,7 +233,7 @@ var variableListMaster = {
 			"legendWidth":90,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
-			"nondebtfirst": false
+			"nondebtfirst": ""
 		},
 		{
 			"variable":"pct_w_medical_debt_in_collections",
@@ -273,7 +243,7 @@ var variableListMaster = {
 			"legendWidth":90,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
-			"nondebtfirst": false
+			"nondebtfirst": ""
 		},
 		{
 			"variable":"pct_student_holders_in_default",
@@ -283,7 +253,7 @@ var variableListMaster = {
 			"legendWidth":90,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
-			"nondebtfirst": false
+			"nondebtfirst": ""
 		},
 		{
 			"variable":"auto_retail_loan_delinquency_rate",
@@ -293,7 +263,7 @@ var variableListMaster = {
 			"legendWidth":90,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
-			"nondebtfirst": false
+			"nondebtfirst": ""
 		},
 		{
 			"variable":"credit_card_debt_delinquency_rate",
@@ -303,7 +273,7 @@ var variableListMaster = {
 			"legendWidth":90,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
-			"nondebtfirst": false
+			"nondebtfirst": ""
 		},
 		{
 			"variable":"median_credit_card_delinquent_debt",
@@ -313,17 +283,7 @@ var variableListMaster = {
 			"legendWidth":90,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
-			"nondebtfirst": false
-		},
-		{
-			"variable":"spacer",
-			"desktopLabel":"",
-			"mobileLabel":"",
-			"breaks":[],
-			"legendWidth": [],
-			"version":"v3",
-			"columns":[],
-			"nondebtfirst": false
+			"nondebtfirst": "end-debt-info"
 		},
 		{
 			"variable":"pct_poc",
@@ -333,7 +293,7 @@ var variableListMaster = {
 			"legendWidth":90,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
-			"nondebtfirst": true
+			"nondebtfirst": "begin-non-debt-info"
 		},
 		{
 			"variable":"avg_household_income",
@@ -343,7 +303,7 @@ var variableListMaster = {
 			"legendWidth":90,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
-			"nondebtfirst": false
+			"nondebtfirst": ""
 		}
 	],
 	"meta":{
