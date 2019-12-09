@@ -1120,7 +1120,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
         setVariable(type_variable)
         setVariable(type_variable,true)
         updateMap(type_variable)                    
-
+// bookmark
         d3.select("#debt-caption").text(function(d){ 
           return variableListMaster.meta.dataSets[type].caption
         })
@@ -1153,6 +1153,8 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
           updateTable(d3.select("g.counties").selectAll("path.selected").datum(),type)
         } else if (zoomState == true) {
           stateQuery = d3.select("path#" + selectedState.properties.abbr).datum().id;
+          updateTable(d3.select("path#" + selectedState.properties.abbr).datum(),type);
+        } else if (zoomNational_St == true){
           updateTable(d3.select("path#" + selectedState.properties.abbr).datum(),type);
         }
 
