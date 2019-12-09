@@ -1684,7 +1684,9 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
       }
     })
     .on('mouseleave', function(d) {   
-
+      if (d3.select(".state-borders > path.selected").node() == undefined){
+        d3.select("#National").attr("transform", "translate(0, 20)");
+      }
       if (zoomNational==true || zoomNational_St == true) {
         if (d3.select(".state-borders > path.selected").node() != undefined && zoomNational_St != true) {
           var state = d3.select(".state-borders > path.selected").datum().properties.state
@@ -1695,6 +1697,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
             .classed("hover", false)
             .classed("hoverNational", false)
           d3.selectAll("path.selected").moveToFront()
+          d3.select("#National").attr("transform", "translate(0, 20)");
           var selected = (d3.select(".counties > path.selected").size() > 0) ? d3.select(".counties > path.selected").datum() : d3.select(".state-borders > path.selected").datum()
           var geography = (d3.select(".counties > path.selected").size() > 0) ? selected.properties["county"] + ", " + selected.properties["abbr"] : selected.properties["state"];
 
@@ -2947,6 +2950,8 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
       tbody.classed("auto",false)  
       tbody.classed(type,true)
 
+            tbody.exit().remove(); 
+
       tbody.enter().append("tbody")
         .attr("class", function(d, i) {
           return type + " " + d.nondebtfirst + " " + " new group group-" + i
@@ -2998,7 +3003,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
           
         }) //ends on 'click'
     
-      tbody.exit().remove();        
+       
     
       var tr = table.selectAll('tbody.new').selectAll('tr')
           .data(rowNumbers)
