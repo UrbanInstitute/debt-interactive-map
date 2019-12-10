@@ -282,15 +282,9 @@ td.td-table > #table-div > table > tbody.spacer::after {
   width: 390%;
 }
 
-/*TODO: these classes are to add a space before the contextual, non-debt info
-  I think they are not being applied the way I intend because of how the 
-  update is working... but I haven't solved it yet. */
-/*tbody.spacer {
-  background-color: #f3f3f3 !important;
-  height: 20px;
-}*/
+/*insert a space before the contextual, non-debt info*/
 
-/*tbody.begin-non-debt-info::before {
+tbody.begin-non-debt-info::before {
   content: '';
   background-color: #f3f3f3;
   display: block;
@@ -302,7 +296,7 @@ td.td-table > #table-div > table > tbody.spacer::after {
 
 tbody.end-debt-info {
   border-bottom: 2px solid #ececec !important;
-}*/
+}
 
 td.td-table {
   box-shadow: 3px 0px 2px #d2d2d2;
@@ -697,33 +691,51 @@ path.hover {
   pointer-events: all;
 }
 
-.group-4 > .cell-data > td:nth-child(2), .group-4 .cell-data > td:nth-child(3) {
-  opacity: 0;
-}
-.group-4 > .cell-column > td:nth-child(2), .group-4 .cell-column > td:nth-child(3) {
+/*Actually, yes. Today is fine, Satan: */
+
+.overall.group-7 > .cell-data > td:nth-child(2), .overall.group-7 > .cell-data > td:nth-child(3){
   opacity: 0;
 }
 
-.student.group-4 > .cell-data > td:nth-child(2), .student.group-4 .cell-data > td:nth-child(3) {
-  opacity: 1;
-}
-.student.group-4 > .cell-column > td:nth-child(2), .student.group-4 .cell-column > td:nth-child(3) {
-  opacity: 1;
-}
-
-.student.group-6 > .cell-data > td:nth-child(2), .student.group-6 .cell-data > td:nth-child(3) {
+.overall.group-7 > .cell-column > td:nth-child(2), .overall.group-7 > .cell-column > td:nth-child(3){
   opacity: 0;
-}
-.student.group-6 > .cell-column > td:nth-child(2), .student.group-6 .cell-column > td:nth-child(3) {
+} 
+
+.medical.group-3 > .cell-data > td:nth-child(2), .medical.group-3 > .cell-data > td:nth-child(3){
   opacity: 0;
 }
 
-.auto.group-5 > .cell-data > td:nth-child(2), .auto.group-5 .cell-data > td:nth-child(3) {
+.medical.group-3 > .cell-column > td:nth-child(2), .medical.group-3 > .cell-column > td:nth-child(3){
   opacity: 0;
 }
-.auto.group-5 > .cell-column > td:nth-child(2), .auto.group-5 .cell-column > td:nth-child(3) {
+
+.student.group-6 > .cell-column > td:nth-child(2), .student.group-6 > .cell-column > td:nth-child(3){
   opacity: 0;
 }
+
+.student.group-6 > .cell-data > td:nth-child(2), .student.group-6 > .cell-data > td:nth-child(3){
+  opacity: 0;
+}
+
+.auto.group-4  > .cell-data > td:nth-child(2), .auto.group-4 > .cell-data > td:nth-child(3){
+  opacity: 0;
+}
+
+.auto.group-4  > .cell-column > td:nth-child(2), .auto.group-4 > .cell-column > td:nth-child(3){
+  opacity: 0;
+}
+
+.auto.group-5  > .cell-data > td:nth-child(2), .auto.group-5 > .cell-data > td:nth-child(3){
+  opacity: 0;
+}
+
+.auto.group-5  > .cell-column > td:nth-child(2), .auto.group-5 > .cell-column > td:nth-child(3){
+  opacity: 0;
+}
+
+
+
+
 
 .left-table2 {
   float: left;

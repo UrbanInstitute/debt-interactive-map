@@ -24,7 +24,7 @@ var IS_PHONE;
 var IS_PHONESM;
 
 // insert here any variables that only have 1 item, namely "Nonwhite population share" for now, and in the future, anything else similar.
-var limitedVars = ["perc_pop_nw","poprural_pct","popnonwhite_pct"]      
+var limitedVars = ["perc_pop_nw","poprural_pct","popnonwhite_pct", "pct_poc"]      
 
 var SELECTED_VARIABLE;
 var WHITE;
@@ -857,7 +857,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
 
   setZoom(true,false, false)
 
-  d3.select("#debt-type").text(function(){ 
+  d3.select("#debt-type").html(function(){ 
     return variableListMaster[type][0].desktopLabel;
   })
   //just doing this once here so user doesn't see text fragment before other stuff shows up
@@ -1120,9 +1120,15 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
         setVariable(type_variable)
         setVariable(type_variable,true)
         updateMap(type_variable)                    
-// bookmark
+
         d3.select("#debt-caption").text(function(d){ 
           return variableListMaster.meta.dataSets[type].caption
+        })
+
+        d3.select("#debt-type").html(function(){ 
+          return variableListMaster[type].filter(function(d){
+            return d.variable === SELECTED_VARIABLE 
+          })[0].desktopLabel;
         })
         // update notes at bottom
 
@@ -2952,14 +2958,13 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
       tbody.classed("auto",false)  
       tbody.classed(type,true)
 
-            tbody.exit().remove(); 
 
       tbody.enter().append("tbody")
+
+        .merge(tbody)
         .attr("class", function(d, i) {
           return type + " " + d.nondebtfirst + " " + " new group group-" + i
         })
-
-        .merge(tbody)
         .on('click', function(d) {             
           d3.selectAll('tbody')
             .classed('selected', false)
@@ -2975,7 +2980,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
           updateMap(d.variable)
 
           // above map replace header w/ debt type
-          d3.select("#debt-type").text(function(){ 
+          d3.select("#debt-type").html(function(){ 
             return variableListMaster[type].filter(function(d){
               return d.variable === SELECTED_VARIABLE 
             })[0].desktopLabel;
@@ -3004,9 +3009,8 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
           }
           
         }) //ends on 'click'
-    
+      tbody.exit().remove(); 
        
-    
       var tr = table.selectAll('tbody.new').selectAll('tr')
           .data(rowNumbers)
       

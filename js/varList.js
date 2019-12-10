@@ -3,8 +3,6 @@
 //* "legendWidth" eyeball it I guess and put it in here
 //* "version" ? don't think this gets used. Maybe I'll make it 2 for fun!
 //* "columns" these are how he labels his bar chart instead of using key value pairs with the data 
-//* TODO - waiting for answer on jenks breaks. leaving old ones in
-//* TODO - waiting for answer on notes. leaving old ones in
 
 
 var variableListMaster = {
