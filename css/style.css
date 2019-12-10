@@ -1086,16 +1086,16 @@ html .ui-button.ui-state-disabled:active {
   font-weight: bold;
 }
 
-#bar-chart-legend > ul > li {
+ul#bar-chart-legend > li {
   display: inline;
   padding: 0 10px 0 30px;
 }
 
-#bar-chart-legend > ul > li.desktop-bar-legend-0 {
+ul#bar-chart-legend > li.desktop-bar-legend-0 {
   padding-left: 0;
 }
 
-#bar-chart-legend > ul {
+ul#bar-chart-legend {
   margin: 0;
   padding-left: 0;
   padding-top: 14px;

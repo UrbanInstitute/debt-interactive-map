@@ -310,6 +310,7 @@ function hideBars(variable) {
     d3.selectAll(".bar-group-ph").selectAll(".category-ph.Nonwhite").attr("display", "block")
     d3.selectAll(".bar_ph").select("svg").attr("height", bar_phHeight)
     d3.selectAll(".label").select(".svg2").attr("height", 130)
+
   }
 }
 
@@ -2402,26 +2403,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
           }
         })
       })
-
-      //legend for the bar charts on desktop
-      var barDataLabels = variableListMaster[type].filter(function(d){
-        return d.variable === SELECTED_VARIABLE })[0].columns
-
-      var legendColors = ["#fdbf11","#000000", "#696969"]  // :(
-
-      d3.select("#bar-chart-legend").append("ul")
-      .selectAll("li")
-        .data(barDataLabels)
-        .enter()
-        .append("li")
-        .text(function(d){ return d })
-        .attr("class", function(d,i){
-          return "key desktop-bar-legend-" + i;
-        })
-        .style("border-right", function(d,i){
-          return "15px solid" + legendColors[i]
-        })
-
+      
 
   // hide the words next to bars on restricted variables
           if (limitedVars.filter(function(d) {return d == SELECTED_VARIABLE;}).length != 0) {
@@ -2543,8 +2525,41 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
 
   }
 
+//legend for the bar charts on desktop  
+  function updateBarLegend(labels){
+
+    d3.selectAll("li.key").remove()
+    d3.selectAll("#bar-chart-legend > li").style("opacity", 1)
+    var legendColors = ["#fdbf11","#000000", "#696969"]  // :(
+
+    d3.select("#bar-chart-legend")
+      .selectAll("li")
+        .data(labels)
+          .enter()
+        .append("li")
+        .text(function(d){ return d })
+        .attr("class", function(d,i){
+          return "key desktop-bar-legend-" + i;
+        })
+        .style("border-right", function(d,i){
+          return "15px solid" + legendColors[i]
+        })
+
+      if ( limitedVars.indexOf(SELECTED_VARIABLE) > -1 ){
+        d3.selectAll("#bar-chart-legend > li").style("opacity", 0)
+      }
+  }
+
+    var barDataLabels = variableListMaster[type].filter(function(d){
+      return d.variable === SELECTED_VARIABLE })[0].columns
+    updateBarLegend(barDataLabels)
 
   function updateBars(variable, selected) { 
+
+    var barDataLabels = variableListMaster[type].filter(function(d){
+      return d.variable === SELECTED_VARIABLE })[0].columns
+    updateBarLegend(barDataLabels)
+
     var us_data = BigData.state_data[0]["values"][0]
     for (var key in us_data) {
         if (us_data.hasOwnProperty(key)) { 
