@@ -335,7 +335,7 @@ var variableListMaster = {
 			},			
 			"overall":{
 				"county":"county4",
-				"caption": "Overall Delinquent Debt",
+				"caption": "Debt Delinquency",
 				"state":"state4",
 				"publishDate": "",
 				"specialNotes":[]

@@ -865,7 +865,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
   d3.select("#measure").style("visibility", "visible")
 
   d3.select("#debt-caption").text(function(d){ 
-    return variableListMaster.meta.dataSets[type].caption
+    return variableListMaster.meta.dataSets[type].caption;
   })
 
 
@@ -1310,10 +1310,12 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
     .selectmenu({
       open: function(event,ui) {
         var dropdownWidth = $("#dropdown-div").width()
-        var dropdownTop = $(".banner").height() + 143
+        //TODO this height could be finessed, but doesn't look super broken as is
+        var dropdownTop = $(".banner").height() + $(".state-menu").outerHeight(true)
         $(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").css("top", dropdownTop + "px")
+        $(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").css("left", "0px")
         $("ul#state-select-menu").css("width", dropdownWidth + "px")
-        $("ul#state-select-menu").css("margin-left", "-137px")
+        // $("ul#state-select-menu").css("margin-left", "-137px")
         d3.select(".state-menu").select(".ui-icon")
           .classed("arrow-up", true)
 
@@ -1379,10 +1381,12 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
     .selectmenu({
       open: function(event,ui) {
         var dropdownWidth = $("#dropdown-div").width()
-        var dropdownTop = $(".banner").height() + 202
+        //TODO this height could be finessed, but doesn't look super broken as is
+        var dropdownTop = $(".banner").height() + $(".county-menu").outerHeight(true) + $(".state-menu").outerHeight(true)
         $(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").css("top", dropdownTop + "px")
         $("ul#county-select-menu").css("width", dropdownWidth + "px")
-        $("ul#county-select-menu").css("margin-left", "-137px")
+        $(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").css("left", "0px")
+        // $("ul#county-select-menu").css("margin-left", "-137px")
         d3.select(".county-menu").select(".ui-icon")
           .classed("arrow-up", true)
       },
@@ -1421,10 +1425,14 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
     .selectmenu({
       open: function(event,ui) {
         var dropdownWidth = $("#dropdown-div").width()
-        var dropdownTop = $(".banner").height() + 263
+        //TODO this height could be finessed, but doesn't look super broken as is
+        var dropdownTop = $(".banner").height() + $(".category-menu").outerHeight(true) + $(".county-menu").outerHeight(true) + $(".state-menu").outerHeight(true)
+
+        $(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").css("width", "100%")
         $(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").css("top", dropdownTop + "px")
-        $("ul#category-select-menu").css("width", dropdownWidth + "px")
-        $("ul#category-select-menu").css("margin-left", "-137px")
+        $("ul#category-select-menu").css("width", dropdownWidth)
+        $(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").css("left", "0px")
+        // $("ul#category-select-menu").css("margin-left", "-137px")
         d3.select(".category-menu").select(".ui-icon")
           .classed("arrow-up", true)
       },
