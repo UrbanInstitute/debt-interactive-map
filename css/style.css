@@ -240,6 +240,12 @@ h1.bottom-header{
 
 }
 
+  .additional-resources > a {
+    display: block;
+    line-height: 1.2;
+  }
+
+
 .description {
   opacity: 0.5;
   font-family: Lato;
@@ -1307,7 +1313,6 @@ ul#bar-chart-legend {
     padding: 30px 15px;
     padding-bottom: 45px;
   }
-
 }
 
 @media screen and (max-width: 387px) {
@@ -1364,6 +1369,7 @@ ul#bar-chart-legend {
   .bottom-text {
     font-size: 14px;
   }
+
   .credit-header, .credit-names {
     font-size: 14px;
   }

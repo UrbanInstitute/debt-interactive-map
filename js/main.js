@@ -2222,24 +2222,21 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
       .attr("width", function(d) {  
 
         var parentClass = d3.select(this.parentNode).attr('class');    
-
+                // if looking for the selected variable in limitedVars returns an empty array, bc selected != limitedVar
         if (limitedVars.filter(function(d) {return d == SELECTED_VARIABLE_ph;}) === []) {
           if (parentClass.search("c0") > -1) {      
             return x_ph(+d[SELECTED_VARIABLE_ph])
           }else if (parentClass.search("c2") > -1) {
             return x_ph(+d[NONWHITE_ph])
           }else{
-            console.log(WHITE_ph)
-            console.log(+d[WHITE_ph])
             return x_ph(+d[WHITE_ph])
-          }          
+          }    
+          // else if it is a limitedVar just assign a length to the first bar, not the white/poc bars      
         } else {
           if (parentClass.search("c0") > -1) {
-            console.log(SELECTED_VARIABLE_ph)
             return x_ph(+d[SELECTED_VARIABLE_ph])
           }
           else {
-
             return 0;
           }
           
