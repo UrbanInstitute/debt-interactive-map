@@ -330,7 +330,7 @@ var variableListMaster = {
 				"caption": "Auto Loan Debt",
 				"publishDate": "",
 				"specialNotes":[
-					"<p class='note3 temp'><sup><i>c</i></sup> The VantageScore credit score ranges from 300 to 850. Subprime scores range from 300 to 600, near-prime from 601 to 660, and prime from 661to 850</p>"
+					"<p class='note3 temp'><sup><i>c</i></sup> The VantageScore credit score ranges from 300 to 850. Subprime scores range from 300 to 600, near-prime from 601 to 660, and prime from 661 to 850</p>"
 				]
 			},			
 			"overall":{

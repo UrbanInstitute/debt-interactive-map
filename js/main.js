@@ -1325,7 +1325,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
   var selectedLocation = function() { 
     selectedCountyPh = d3.select("#county-select-button").select(".ui-selectmenu-text").text()
     selectedStatePh = d3.select("#state-select-button").select(".ui-selectmenu-text").text()
-    //$(".ui-widget-content.ui-autocomplete-input").blur()
+    $(".ui-widget-content.ui-autocomplete-input").blur()
   }
 
   $("#state-select")
