@@ -1115,6 +1115,26 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
         //* pulling out just the relevant object from varList
         var type_category = variableListMaster[type];
 
+                // update mobile categories        
+
+        var optionsCategory = d3.select("#category-select").selectAll('option')
+          .data(type_category)
+
+        optionsCategory.enter()
+          .append('option')
+          .merge(optionsCategory)
+          .html(function(d) {
+            return d.mobileLabel;
+          })
+          .attr('value', function(d) {
+            return d.variable;
+          })        
+        
+        optionsCategory.exit().remove()
+
+        $('#category-select').val(type_category[0].variable);
+        $("#category-select").selectmenu("refresh")
+
         // DW note: this will need to get updated when we move to more than TWO variable sets. 
         // to be used when ready
         var type_variable = variableListMaster[type][0].variable;
@@ -1170,6 +1190,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
           // need to set statequery and county query differently for the currently viewing updatequery
 
         if (IS_PHONE === true) {
+
           stateQuery = $("#state-select")[0].selectedOptions[0].__data__.key          
           if (stateQuery != "USA") {
             if ($("#county-select")[0].length > 0 && $("#county-select")[0].selectedOptions[0].value != "") {
@@ -1259,6 +1280,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
         .attr("transform", "");
   }
 
+
   function filterCountyMenu(selectedState) {
 
     var filteredCounties = county_data.filter(function(d) {
@@ -1303,7 +1325,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
   var selectedLocation = function() { 
     selectedCountyPh = d3.select("#county-select-button").select(".ui-selectmenu-text").text()
     selectedStatePh = d3.select("#state-select-button").select(".ui-selectmenu-text").text()
-    $(".ui-widget-content.ui-autocomplete-input").blur()
+    //$(".ui-widget-content.ui-autocomplete-input").blur()
   }
 
   $("#state-select")
@@ -2201,7 +2223,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
       .attr("y", -13)
       .attr("dy", ".71em")
       .attr("text-anchor", "start")
-      .text(function(d,i) { return d});
+      .text(function(d,i) { return d });
     rectG_ph.append("g")
       .attr("class", "x axis")
       .attr("transform", function(d,i) {
@@ -2618,9 +2640,11 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
         return xxxx
       })])
 
-      var National = d3.select(".bar-group-ph.National").selectAll(".category-ph")
+      var National = d3.select(".bar-group-ph.National").selectAll(".category-ph");
+      var counter = -1;
       National
         .each(function() {
+          
           d3.select(this).select(".bar-ph")
             .data(BigData.us_data_ph)
             .transition()
@@ -2640,9 +2664,22 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
             .html(function(d) { 
               return labelHTML_ph(d,this,variable,NONWHITE_ph,WHITE_ph)
             })
+           
+          d3.select(this).select(".g-text-ph > text").text(function(){ 
+            var creditScores = ["Subprime","Near prime","Prime"]
+            var communities = ["All","White communities","Communities of color"]
+            counter += 1
+            if (variable === "autoretdelrate_sub"){
+              return creditScores[counter]
+            } else {
+              return communities[counter]
+            }
+          })
+
         })
 
       var State = d3.select(".bar-group-ph.State").selectAll(".category-ph")
+      var stateCounter = -1
       State
         .each(function() {
           d3.select(this).select(".bar-ph")
@@ -2662,9 +2699,21 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
             .html(function(d) { 
               return labelHTML_ph(d,this,variable,NONWHITE_ph,WHITE_ph)
             })
+
+          d3.select(this).select(".g-text-ph > text").text(function(){ 
+            var creditScores = ["Subprime","Near prime","Prime"]
+            var communities = ["All","White communities","Communities of color"]
+            stateCounter += 1
+            if (variable === "autoretdelrate_sub"){
+              return creditScores[stateCounter]
+            } else {
+              return communities[stateCounter]
+            }
+          })
         })
       if (selectedCountyPh != "") {
         var County = d3.select(".bar-group-ph.County").selectAll(".category-ph")
+        var countyCounter = -1
         County
           .each(function() {
             d3.select(this).select(".bar-ph")
@@ -2683,6 +2732,16 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
               .html(function(d) { 
                 return labelHTML_ph(d,this,variable,NONWHITE_ph,WHITE_ph,"yes")
               })
+            d3.select(this).select(".g-text-ph > text").text(function(){ 
+              var creditScores = ["Subprime","Near prime","Prime"]
+              var communities = ["All","White communities","Communities of color"]
+              countyCounter += 1
+              if (variable === "autoretdelrate_sub"){
+                return creditScores[countyCounter]
+              } else {
+                return communities[countyCounter]
+              }
+            })
           })
       }
 
@@ -2690,6 +2749,8 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
         .text(function(d,i) {
           return grabVar[0].columns[i % 3];
         })
+
+
 
      hideBars(variable)
 
