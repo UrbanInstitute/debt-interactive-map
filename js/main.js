@@ -2113,7 +2113,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
 
     d3.select(".label-" + group )
       .append("svg")
-      .attr("width", 200)
+      .attr("width", 400)
       .attr("height", 20)
       .append("text")
       .text(group)
@@ -2124,7 +2124,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
       .attr("text-anchor", "start")
     var barLabel = d3.select(".label-" + group )
       .append("svg")
-      .attr("width", 82)
+      .attr("width", 182)
       .attr("height", 130)
       .attr("class", "svg2")
 
@@ -2138,7 +2138,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
       })
       .attr("class", "category-labels-ph")
       .attr("transform", function(d,i) {
-        return (IS_PHONESM) ? "translate(" + 0 + "," + (52*i + 57) + ")" : "translate(" + 74 + "," + (40*i + 25) + ")";
+        return (IS_PHONESM) ? "translate(" + 0 + "," + (52*i + 57) + ")" : "translate(" + 174 + "," + (40*i + 25) + ")";
       })
       .attr("text-anchor", "end")
 
@@ -2151,7 +2151,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
         return "bar-group-ph " + group
       })
       .attr("transform", function(d,i) {
-        return (IS_PHONESM) ? "translate(" + 0 + "," + (20) + ")" : "translate(" + 0 + "," + 0 + ")";
+        return (IS_PHONESM) ? "translate(" + 0 + "," + (20) + ")" : "translate(" + 100 + "," + 0 + ")";
       })
     barG_ph.append("text")
       .text(function(d,i) {
@@ -3353,14 +3353,14 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
           .each(function(d,i) {
             d3.select(this)
               .attr("transform", function() {
-                return (IS_PHONESM) ? "translate(" + 0 + "," + (52*i) + ")" : "translate(" + 0 + "," + (40*i) + ")";
+                return (IS_PHONESM) ? "translate(" + 0 + "," + (52*i) + ")" : "translate(" + 50 + "," + (40*i) + ")";
               })
           })
         d3.selectAll("g.bar-group-ph")
           .each(function(d,i) {
             d3.select(this)
               .attr("transform", function() {
-                return (IS_PHONESM) ? "translate(" + 0 + "," + (20) + ")" : "translate(" + 0 + "," + 0 + ")";
+                return (IS_PHONESM) ? "translate(" + 0 + "," + (20) + ")" : "translate(" + 50 + "," + 0 + ")";
               })
           })
 
@@ -3368,7 +3368,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
           .each(function(d,i) {
             d3.select(this)
             .attr("transform", function() {
-              return (IS_PHONESM) ? "translate(" + 0 + "," + (52*i + 57) + ")" : "translate(" + 74 + "," + (40*i + 25) + ")";
+              return (IS_PHONESM) ? "translate(" + 0 + "," + (52*i + 57) + ")" : "translate(" + 174 + "," + (40*i + 25) + ")";
 
             })
           })
