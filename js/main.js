@@ -466,7 +466,8 @@ function buildprint(Startquery,data) {
     }
     if (Startquery["county"]) {
      county_data = data.county_data.filter(function(d) {
-        return d.key == Startquery["county"] && d.state_id == Startquery["state"]
+      
+        return d.key == Startquery["county"] //&& d.state_id == Startquery["state"]
       })
 
      printdata.push(county_data[0])
@@ -3147,7 +3148,6 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
               }else if (i==1){
                 return ((us_data[rowVariable_wh]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_wh]);
               }else if (i==2) {
-                console.log(rowVariable_nw + " " + us_data[rowVariable_nw])
                 return ((us_data[rowVariable_nw]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_nw]);
               }
             })
