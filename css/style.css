@@ -350,6 +350,11 @@ h2 {
   color: #ffffff;
   font-weight: 400;
 }
+
+h2#print-debt-caption {
+  display: none;
+}
+
 .banner {
   background-image: url(../img/banner-image3.png);
   background-size: cover;
@@ -1114,6 +1119,10 @@ ul#bar-chart-legend {
 }
 
 @media screen and (max-width: 700px) {
+  .superscriptme {
+    vertical-align: super;
+  }
+
   .ui-selectmenu-menu .ui-menu {
     max-height: 340px !important;
     overflow: auto !important;

@@ -3,6 +3,38 @@
   width: 220mm;
   background: #fff;
 }
+
+.print #measure {
+  display: none;
+}
+
+.print #debt-caption {
+  display: none;
+}
+
+.print h1 {
+  margin-bottom: 0;
+}
+
+.print ul#bar-chart-legend {
+  display: none;
+}
+
+.print h2#print-debt-caption {
+  display: block;
+  font-size: 27px !important;
+  line-height: 120% !important;
+  font-weight: 700 !important;
+  letter-spacing: 0.05em;
+  margin: 0px;
+  padding: 0px;
+  color: #1696D2 !important;
+}
+
+.print .intro-text div.inner {
+  margin-bottom: 30px;
+}
+
 /* line 21, ../sass/print.scss */
 .print .main-table {
   display: initial;
@@ -27,14 +59,15 @@
 }
 /* line 58, ../sass/print.scss */
 .print .banner-wrapper .banner h1 {
-  font-size: 22px;
+  font-size: 18px;
   line-height: 130%;
-  padding-top: 8px;
+  padding: 0;
 }
 /* line 64, ../sass/print.scss */
 .print .banner-wrapper .banner h2 {
-  font-size: 15px;
-  margin-top: 70px;
+  color: #5d5d5d !important;
+  font-size: 13px;
+  margin-top: 5px;
   line-height: 140%;
   letter-spacing: 0.2px;
   font-weight: 400;
@@ -109,7 +142,6 @@
 .print .td-map {
   background-color: #fff;
   box-shadow: inset 0px 0px 0px 0px;
-  padding-top: 45px;
 }
 /* line 153, ../sass/print.scss */
 .print .td-map .map-div {
@@ -134,10 +166,13 @@
 /* line 175, ../sass/print.scss */
 .print .td-map .group-label-2 {
   font-size: 13px;
+  font-weight: 400;
 }
+
+
 /* line 179, ../sass/print.scss */
-.print .td-map .g-text2 text {
-  font-size: 13px;
+.g-text2 text, text.g-text2 {
+  font-size: 11px;
 }
 /* line 183, ../sass/print.scss */
 .print .td-map .print-footer-icon {
@@ -180,12 +215,17 @@
   font-size: 9px !important;
   vertical-align: inherit;
 }
+
+#print-chart-container > div:nth-child(1) {
+  padding-top: 0;
+}
+
 /* line 226, ../sass/print.scss */
 .print .td-map .print-chart {
   height: 155px;
   width: 100%;
-  margin-top: 20px;
-  padding-top: 17px;
+  margin-top: 30px;
+  padding-top: 24px;
   border-top: 1px solid #D2D2D2;
 }
 /* line 233, ../sass/print.scss */

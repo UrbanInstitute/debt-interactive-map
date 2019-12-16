@@ -431,7 +431,7 @@ function OverallTransformData(us, county, state, countyData, stateData) {
 
 function buildprint(Startquery,data) {  
   //build notes
-  
+
   var notes = "<p><b>Notes:</b></p> " + $("#notes").html();
   $("#print-chart-notes").html(notes)
   $("#print-chart-notes").append(variableListMaster.meta.dataSets[type].specialNotes)  
@@ -658,6 +658,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
       .attr("y", barHeight + 21)
       .attr("dy", ".71em")
       .attr("text-anchor", "start")
+      .attr("class", "g-text2")
       .text(function(d,i) { 
         for (var j = 0; j < limitedVars.length; j++) {
           if (d === limitedVars[j] + "_wh" || d === limitedVars[j] + "_nw") {
@@ -864,7 +865,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
   //just doing this once here so user doesn't see text fragment before other stuff shows up
   d3.select("#measure").style("visibility", "visible")
 
-  d3.select("#debt-caption").text(function(d){ 
+  d3.selectAll("#debt-caption, #print-debt-caption").text(function(d){ 
     return variableListMaster.meta.dataSets[type].caption;
   })
 
@@ -1095,7 +1096,8 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
           updateQueryString(type,SELECTED_VARIABLE)  
         }
 
-        window.open(window.location.search + "&print=true") 
+        window.open(window.location.search + "&print=true")
+
       })  
 
   // CHANGE DATA SET 
@@ -3145,6 +3147,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
               }else if (i==1){
                 return ((us_data[rowVariable_wh]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_wh]);
               }else if (i==2) {
+                console.log(rowVariable_nw + " " + us_data[rowVariable_nw])
                 return ((us_data[rowVariable_nw]) == undefined) ? "N/A" : formatNumber(us_data[rowVariable_nw]);
               }
             })
