@@ -305,7 +305,7 @@ var variableListMaster = {
 		}
 	],
 	"meta":{
-		"default":"auto",
+		"default":"overall",
 		"dataSets":{
 			"medical":{
 				"county":"county1",
