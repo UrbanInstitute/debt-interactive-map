@@ -1119,6 +1119,7 @@ ul#bar-chart-legend {
 }
 
 @media screen and (max-width: 700px) {
+
   .superscriptme {
     vertical-align: super;
   }
@@ -1301,6 +1302,7 @@ ul#bar-chart-legend {
 }
 
 @media screen and (max-width: 550px) {
+
   .ui-icon {
     padding-right: 0px;
   }
@@ -1336,6 +1338,19 @@ ul#bar-chart-legend {
 @media screen and (max-width: 387px) {
   .appendixButton {
     margin-top: 0px;
+  }
+}
+
+@media screen and (max-width: 320px){
+  div#cat-nav > ul > li {
+    background: #000000;
+    border-bottom: 0.5px solid #484848;
+    display: block;
+    top: 0;
+  }
+
+  .banner {
+    margin-top: 165px;
   }
 }
 
