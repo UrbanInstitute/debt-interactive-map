@@ -13,7 +13,7 @@ var Startquery = {};
     //   "type": auto
     // }
     Startquery = decodeQuery(window.location.search)
-    
+
     if (Startquery["print"] === "true") {
       d3.select("body").classed("print",true)
     }
@@ -88,6 +88,8 @@ var initialWidth = (IS_PHONE) ? $('body').width() : $("body").width() - $(".td-t
 setWidth(initialWidth, IS_MOBILE, IS_PHONE)
 
 function decodeQuery(location) {
+
+  var validParams = ["county", "variable", "print", "state", "type"]
   
   var Startquery = location.split("?")
   var obj = {},
@@ -97,9 +99,12 @@ function decodeQuery(location) {
     if (qPos !== -1 || query.indexOf("=") !== -1) {
       for (; i >= 0; i--) {
         var s = tokens[i].split('=');
-        obj[unescape(s[0])] = s.hasOwnProperty(1) ? unescape(s[1]) : null;
+        if(validParams.indexOf(s[0]) != -1){
+          obj[unescape(s[0])] = s.hasOwnProperty(1) ? unescape(s[1]) : null;
+        }
       };
     }
+  console.log(obj)
   return obj;
 }
 
@@ -780,9 +785,9 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
   var countyData = us.objects.counties.geometries;
   var stateData = us.objects.states.geometries;
 
-  
+  console.log(Startquery)
   // If there's a url search query, get the type or set using defaults from variableListMaster
-  if (window.location.search) {
+  if (Object.keys(Startquery).length > 0) {
     // set dataset type 
     type = Startquery["type"]
   } else {
