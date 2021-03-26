@@ -1939,6 +1939,8 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
   legend.append("text")
   var keyWidth =   10;
   var keyHeight =  25;
+  var selectedMeasureExtent = d3.extent(BigData.tmp_county, function(d){ if (!isNaN(d.properties[SELECTED_VARIABLE])) {return d.properties[SELECTED_VARIABLE] } })
+
   for (i=0; i<=6; i++){
     if(i <5){  
       legend.append("rect")
@@ -1955,16 +1957,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
         .attr("y",keyHeight*i + 23)
         .attr("text-anchor", "end")
         .text(function(){
-          // DWCut this area appears to run a "min" function EVERY time 
-        var min = d3.min(BigData.tmp_county, function(d) { 
-              if ( isNaN(d.properties[SELECTED_VARIABLE]) ){
-            // I don't *think* you should rely on researchers putting n<50 in each datasheet so isNaN seems like a better test ...
-            // if (d.properties[SELECTED_VARIABLE] == "n<50") {
-                return 1000000000000
-              } else {
-                return d.properties[SELECTED_VARIABLE]
-              }
-          })
+          var min = selectedMeasureExtent[0]
           var array = variableListMaster[type].filter(function(d) {return d.variable == SELECTED_VARIABLE;})[0].breaks
           return (i==0) ? formatNumber(min, "min") : formatNumber((array[i-1]))
         })
@@ -2467,7 +2460,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
     var max = d3.max(BigData.tmp_county, function(d) { 
       return d.properties[variable]
     })
-
+    var selectedMeasureExtent = d3.extent(BigData.tmp_county, function(d){ if (!isNaN(d.properties[SELECTED_VARIABLE])) {return d.properties[SELECTED_VARIABLE] } })
     var quantize = d3.scaleThreshold()
       .domain(variableListMaster[type].filter(function(d) {return d.variable == variable;})[0].breaks)
       .range(["#cfe8f3", "#73bfe2", "#1696d2", "#0a4c6a", "#000000"])        
@@ -2476,21 +2469,23 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
         if (i != 6) {
         d3.select(this)
           .text(function(){
-            var min = d3.min(BigData.tmp_county, function(d) {
-              if (d.properties[variable] == "n<50") {
-                return 10000000
-              } else {
-                return d.properties[variable]  
-              }
-              return d.properties[variable]
-            })
-            var max = d3.max(BigData.tmp_county, function(d) {
-              if (d.properties[variable] == "n<50") {
-                return 0
-              } else {
-                return d.properties[variable]  
-              }              
-            })
+            var min = selectedMeasureExtent[0]
+            // = d3.min(BigData.tmp_county, function(d) {
+            //   if (d.properties[variable] == "n<50") {
+            //     return 10000000
+            //   } else {
+            //     return d.properties[variable]  
+            //   }
+            //   return d.properties[variable]
+            // })
+            var max = selectedMeasureExtent[1]
+            // = d3.max(BigData.tmp_county, function(d) {
+            //   if (d.properties[variable] == "n<50") {
+            //     return 0
+            //   } else {
+            //     return d.properties[variable]  
+            //   }              
+            // })
             var array = variableListMaster[type].filter(function(d) {return d.variable == variable;})[0].breaks
             
             // README because of time restraints and uncertainty in how scales are calculated, some of these are being manually set
