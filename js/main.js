@@ -332,14 +332,14 @@ var width =  tdMap,  //(IS_MOBILE && !IS_PHONE) ? tdMap : (tdMap) - margin.right
 //   if (error) throw error;
 d3.queue()
     .defer(d3.json, "data/us-10m.v1.json")
-    .defer(d3.csv, "data/201911-update/Medical_Debt_county.csv")
-    .defer(d3.csv, "data/201911-update/Medical_Debt_nation_states.csv")
-    .defer(d3.csv, "data/201911-update/Student_loan_county.csv")
-    .defer(d3.csv, "data/201911-update/Student_loan_nation_states.csv")  
-    .defer(d3.csv, "data/201911-update/Auto_loan_county.csv")
-    .defer(d3.csv, "data/201911-update/Auto_loan_nation_states.csv")
-    .defer(d3.csv, "data/201911-update/Overall_Delinquent_Debt_county.csv")  
-    .defer(d3.csv, "data/201911-update/Overall_Delinquent_Debt_nation_states.csv")
+    .defer(d3.csv, "data/20210323update/county_medical.csv")
+    .defer(d3.csv, "data/20210323update/state_national_medical.csv")
+    .defer(d3.csv, "data/20210323update/county_student.csv")
+    .defer(d3.csv, "data/20210323update/state_national_student.csv")  
+    .defer(d3.csv, "data/20210323update/county_auto.csv")
+    .defer(d3.csv, "data/20210323update/state_national_auto.csv")
+    .defer(d3.csv, "data/20210323update/county_overall.csv")  
+    .defer(d3.csv, "data/20210323update/state_national_overall.csv")
     .await(ready); 
 
 function transformData(geography){
@@ -1957,7 +1957,9 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
         .text(function(){
           // DWCut this area appears to run a "min" function EVERY time 
         var min = d3.min(BigData.tmp_county, function(d) { 
-            if (d.properties[SELECTED_VARIABLE] == "n<50") {
+              if ( isNaN(d.properties[SELECTED_VARIABLE]) ){
+            // I don't *think* you should rely on researchers putting n<50 in each datasheet so isNaN seems like a better test ...
+            // if (d.properties[SELECTED_VARIABLE] == "n<50") {
                 return 1000000000000
               } else {
                 return d.properties[SELECTED_VARIABLE]
@@ -1991,7 +1993,9 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
         .attr("y",keyHeight*i + 23)
         .text(function(){
           var max = d3.max(BigData.tmp_county, function(d) { 
-              if (d.properties[SELECTED_VARIABLE] == "n<50") {
+            // I don't *think* you should rely on researchers putting n<50 in each datasheet so isNaN seems like a better test ...
+              // if (d.properties[SELECTED_VARIABLE] == "n<50") {
+              if ( isNaN(d.properties[SELECTED_VARIABLE]) ){
                 return -100
               } else {
                 return d.properties[SELECTED_VARIABLE]
@@ -3181,19 +3185,23 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
         d3.select(this).selectAll("td")
           .html(function(d,i) { 
             if (i==0) { 
-              if (isNaN(data[rowVariable]) == true) {return (data[rowVariable] == "n<50") ? "n/a<sup><i>b</i></sup>" : "n/a<sup><i>c</i></sup>"
+              if (isNaN(data[rowVariable]) == true) {
+                return "n/a<sup><i>b</i></sup>"
+                // return (data[rowVariable] == "n<50") ? "n/a<sup><i>b</i></sup>" : "n/a<sup><i>c</i></sup>"
               }else {
                 return formatNumber(data[rowVariable]);
               }
             }else if (i==1){ 
               if (isNaN(data[rowVariable_wh]) == true) {
-                return (data[rowVariable_wh] == "n<50") ? "n/a<sup><i>b</i></sup>" : "n/a<sup><i>c</i></sup>"
+                return "n/a<sup><i>b</i></sup>"
+                // return (data[rowVariable_wh] == "n<50") ? "n/a<sup><i>b</i></sup>" : "n/a<sup><i>c</i></sup>"
               }else {
                 return formatNumber(data[rowVariable_wh]);
               }
             }else if (i==2) {
               if (isNaN(data[rowVariable_nw]) == true) {
-                return (data[rowVariable_nw] == "n<50") ? "n/a<sup><i>b</i></sup>" : "n/a<sup><i>c</i></sup>"
+                return "n/a<sup><i>b</i></sup>"
+                // return (data[rowVariable_nw] == "n<50") ? "n/a<sup><i>b</i></sup>" : "n/a<sup><i>c</i></sup>"
               }else {
                 return formatNumber(data[rowVariable_nw]);
               }
@@ -3326,6 +3334,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
         .rangeRound([0, barWidth])
       var xAxis = d3.axisBottom()
           .scale(x)
+          .ticks(0)
       //    margin = (IS_PHONE) ? {top: 10, right: 30, bottom: 10, left: 30} : {top: 10, right: 31, bottom: 10, left: 55}
       setWidth(initialWidth, IS_MOBILE, IS_PHONE)
       var mobilePadding = (IS_MOBILE) ? 0 : 15;
