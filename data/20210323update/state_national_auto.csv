@@ -1,4 +1,4 @@
-﻿id,state,abbr,autoretdelrate,autoretdelrate_nw,autoretdelrate_wh,autoretdelrate_sub,autoretdelrate_sub_wh,autoretdelrate_sub_nw,autoopen_pct,autoopen_pct_nw,autoopen_pct_wh,autoretopen_pct,autoretopen_pct_nw,autoretopen_pct_nw,poprural_pct,popnonwhite_pct,HHinc_avg,HHinc_avg_nw,HHinc_avg_wh
+id,state,abbr,autoretdelrate,autoretdelrate_nw,autoretdelrate_wh,autoretdelrate_sub,autoretdelrate_sub_wh,autoretdelrate_sub_nw,autoopen_pct,autoopen_pct_nw,autoopen_pct_wh,autoretopen_pct,autoretopen_pct_nw,autoretopen_pct_wh,poprural_pct,popnonwhite_pct,HHinc_avg,HHinc_avg_nw,HHinc_avg_wh
 USA,USA,,.03576,.0568293,.0273664,.1826513,.0123053,.0008945,.3110241,.2714685,.3308435,.3611749,.3247014,.380513,.1926903,.3977581,87864,73435,94972
 01,Alabama,AL,.0600355,.1069519,.0495543,.2314164,.0158063,.0011411,.2981621,.2601134,.3097764,.3802527,.3388822,.3923786,.4096318,.3469204,69091,49055,78702
 02,Alaska,AK,.0208571,.005618,.0188375,.1355599,.005891,0,.28625,.1403974,.2954965,.3347116,.2357616,.341639,.3398021,.3988593,96080,77081,104992
