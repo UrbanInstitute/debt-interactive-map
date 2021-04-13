@@ -230,8 +230,8 @@ function labelsuperscript(d,dis,variable,NONWHITE,WHITE) {
   if (isNaN(d[thisvar]) != true) {
     return "";
   } else {
-  
-    return (d[thisvar] == "n<50") ? "b" : "c"
+    return "b"
+    // return (d[thisvar] == "n<50") ? "b" : "c"
   }
   
   
@@ -757,13 +757,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
           var raw = printdata[counter5][d];
           var result;
           if (isNaN(raw)) {        
-            if (raw == "n<50") {
-              result = "b"
-            } else if (raw == "N/A") {
-              result = "c"
-            } else {
-              result = ""
-            }
+            result = "b"
           }    
 
           if (i % 3 === 2) {
