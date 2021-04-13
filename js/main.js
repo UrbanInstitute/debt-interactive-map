@@ -19,6 +19,7 @@ var Startquery = {};
     }
 }
 
+
 var IS_MOBILE;
 var IS_PHONE;
 var IS_PHONESM;
