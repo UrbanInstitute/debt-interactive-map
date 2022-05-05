@@ -17,7 +17,7 @@ hr {
   border: none;
 }
 .dagger {
-  vertical-align: super;    
+  vertical-align: super;
   font-style: normal;
 }
 .legend-title {
@@ -69,7 +69,7 @@ td sup {
 }
 
 text tspan {
- font-size: 10px; 
+ font-size: 10px;
 }
 
 .highlightChange{
@@ -90,7 +90,7 @@ text tspan {
   margin-right: 4px !important;
 }
 
-.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-state-active.ui-button:hover{ 
+.ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-state-active.ui-button:hover{
   color: #000 !important;
   font-size: 14px !important;
   background: #f1f1f1 !important;
@@ -405,7 +405,7 @@ h2#print-debt-caption {
 }
 
 .ui-icon {
-  padding-right: 20px;  
+  padding-right: 20px;
 }
 
 .ui-icon-close {
@@ -420,7 +420,7 @@ h2#print-debt-caption {
 .ui-button .ui-icon {
   background-image: url("../img/arrow.png") !important;
   background-size: 16px !important;
-  
+
 }
 .ui-button .ui-icon.greyed {
   background-image: url("../img/arrow-grey.png") !important;
@@ -616,7 +616,7 @@ path.hide {
   height: 29px;
 }
 
-.print-button { 
+.print-button {
   height: 45px;
   width: 93px;
   background-color: #000;
@@ -713,7 +713,7 @@ path.hover {
 
 .overall.group-7 > .cell-column > td:nth-child(2), .overall.group-7 > .cell-column > td:nth-child(3){
   opacity: 0;
-} 
+}
 
 .medical.group-3 > .cell-data > td:nth-child(2), .medical.group-3 > .cell-data > td:nth-child(3){
   opacity: 0;
@@ -782,7 +782,7 @@ table {
 .left-table tbody.selected {
     border-right: 5px solid #fdbf11;
     border-collapse: separate;
-    border-spacing: 4px; 
+    border-spacing: 4px;
 
 }
 .left-table > tbody:hover {
@@ -983,7 +983,7 @@ html .ui-button.ui-state-disabled:active {
   display: block;
 }
 @media (min-width : 1201px) {
-  .print-button { 
+  .print-button {
     right: 0px;
   }
 
@@ -1116,7 +1116,7 @@ ul#bar-chart-legend {
 
 @media (max-width: 800px){
 
-  
+
 }
 
 @media screen and (max-width: 700px) {
@@ -1130,7 +1130,7 @@ ul#bar-chart-legend {
     overflow: auto !important;
     left: 0 !important;
   }
-  .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-state-active.ui-button:hover{ 
+  .ui-state-active, .ui-widget-content .ui-state-active, .ui-widget-header .ui-state-active, a.ui-button:active, .ui-button:active, .ui-state-active.ui-button:hover{
     color: #fff !important;
     font-size: 14px !important;
     background: #000 !important;
@@ -1236,7 +1236,7 @@ ul#bar-chart-legend {
     height: unset;
   }
 
-  .current-menu .dropdown-label {    
+  .current-menu .dropdown-label {
     padding: 0;
   }
 
@@ -1277,10 +1277,10 @@ ul#bar-chart-legend {
 
   }
 * {
-    -webkit-tap-highlight-color: rgba(255, 255, 255, 0) !important; 
-    -webkit-focus-ring-color: rgba(255, 255, 255, 0) !important; 
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0) !important;
+    -webkit-focus-ring-color: rgba(255, 255, 255, 0) !important;
     outline: none !important;
-} 
+}
 
   #dropdown-div, #topdrop-div {
     display: block;
@@ -1298,6 +1298,10 @@ ul#bar-chart-legend {
     display: block;
     float: left;
   }
+}
+
+.x.axis {
+  display: none;
 }
 
 @media screen and (max-width: 550px) {
