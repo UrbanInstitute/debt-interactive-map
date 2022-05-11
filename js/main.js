@@ -1,6 +1,5 @@
 // TODO
-// 1. write a rule overwrite the nw wh thing. It should be a function with a variable parameter that returns "nw", "wh", or the other thing
-// 2. rewrite name of variable in varList
+// Recalculate breaks
 
 
 function thisVariable(thisVar) {
@@ -209,12 +208,23 @@ function barY(d,dis,variable,NONWHITE,WHITE,y,barHeight) {
 }
 
 function barH(d,dis,variable,NONWHITE,WHITE,y,barHeight) {
+  //PROBLEM HERE BREAKS
   var parentClass = d3.select(dis.parentNode).attr('class');
+  // console.log(y(0), y(d[variable]), d[variable])
   if (parentClass.search("c0") > -1) {
+    // if(isNaN(d[variable]) === false) {
+    //   console.log(1, y(d[variable]), d[variable])
+    // }
     return (isNaN(d[variable]) != true) ? barHeight - y(d[variable]) : 0;
   }else if (parentClass.search("c2") > -1){
-    return (isNaN(d[NONWHITE]) != true) ? barHeight - y(d[NONWHITE]) : 0;
+    // if(isNaN(d[NONWHITE]) === false) {
+    //   console.log(2, y(+d[NONWHITE]), d[NONWHITE])
+    // }
+    return (isNaN(+d[NONWHITE]) != true) ? barHeight - y(d[NONWHITE]) : 0;
   }else {
+    // if(isNaN(d[WHITE]) === false) {
+    //   console.log(3, y(+d[WHITE]), d[WHITE])
+    // }
     return (isNaN(d[WHITE]) != true) ? barHeight - y(d[WHITE]) : 0;
   }
 }
