@@ -1,8 +1,4 @@
-// TODO
-// Recalculate breaks
-
-
-function thisVariable(thisVar) {
+ function isDelinquency(thisVar) {
   var filters = []
   if(thisVar === "delinquency_by_credit") {
     filters = ["_near", "_pr"]
@@ -83,12 +79,12 @@ setScreenState (d3.select("#isMobile").style("display") == "block", d3.select("#
 function setVariable(variable, phone) {
   if (phone == true) {
     SELECTED_VARIABLE_ph = variable;
-    WHITE_ph = variable + thisVariable(variable)[0]
-    NONWHITE_ph = variable + thisVariable(variable)[1]
+    WHITE_ph = variable + isDelinquency(variable)[0]
+    NONWHITE_ph = variable + isDelinquency(variable)[1]
   } else {
     SELECTED_VARIABLE = variable;
-    WHITE = variable + thisVariable(variable)[0]
-    NONWHITE = variable + thisVariable(variable)[1]
+    WHITE = variable + isDelinquency(variable)[0]
+    NONWHITE = variable + isDelinquency(variable)[1]
   }
 }
 
@@ -576,8 +572,8 @@ function buildprint(Startquery,data) {
 function findPrintY(d,printdata) {
   var nums = []
 
-  var value1 = d + thisVariable(d)[0],
-  value2 = d + thisVariable(d)[1]
+  var value1 = d + isDelinquency(d)[0],
+  value2 = d + isDelinquency(d)[1]
 
   for (var i = 0; i < printdata.length; i++) {
     var items = [+printdata[i][d],+printdata[i][value1],+printdata[i][value2]]
@@ -608,8 +604,8 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
     var places =   ["National"]
   }
   // populate the svg
-  var WHITE = variable + thisVariable(variable)[0]
-  var NONWHITE = variable + thisVariable(variable)[1]
+  var WHITE = variable + isDelinquency(variable)[0]
+  var NONWHITE = variable + isDelinquency(variable)[1]
   // var data = bigdata.county_data;
   var categories = [variable, WHITE, NONWHITE]
   var grabVar = variableListMaster[type].filter(function(d) {
@@ -2627,8 +2623,8 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
                 // d3.selectAll(".note-header").html("<b>Note:</b>")
                 //* this seems messy - updating global vars all over the place, and here using 'var'!
                 //* also not forward thinking - what if there's another category down the line
-                var WHITE_ph = variable + thisVariable(variable)[0]
-                var NONWHITE_ph = variable + thisVariable(variable)[1]
+                var WHITE_ph = variable + isDelinquency(variable)[0]
+                var NONWHITE_ph = variable + isDelinquency(variable)[1]
                 var data = BigData.county_data;
                 //* just the object of info for selected variable
                 grabVar = variableListMaster[type].filter(function(d) {
@@ -3153,8 +3149,8 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
                   .each(function(d,i) {
 
                     var rowVariable = variableListMaster[type][i].variable,
-                    rowVariable_nw = rowVariable + thisVariable(rowVariable)[1];
-                    rowVariable_wh = rowVariable + thisVariable(rowVariable)[0];
+                    rowVariable_nw = rowVariable + isDelinquency(rowVariable)[1];
+                    rowVariable_wh = rowVariable + isDelinquency(rowVariable)[0];
                     var columns = variableListMaster[type][i].columns;
 
                     d3.select(this).selectAll("td")
@@ -3183,8 +3179,8 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
                 d3.selectAll(".cell-data")
                 .each(function(d,i) {
                   var rowVariable = [rowData[i].variable]
-                  rowVariable_nw = rowVariable + thisVariable(rowVariable[0])[1];
-                  rowVariable_wh = rowVariable + thisVariable(rowVariable[0])[0];
+                  rowVariable_nw = rowVariable + isDelinquency(rowVariable[0])[1];
+                  rowVariable_wh = rowVariable + isDelinquency(rowVariable[0])[0];
 
                   if ((data[rowVariable]) == "n<50" || (data[rowVariable_nw]) == "n<50" || (data[rowVariable_wh]) == "n<50") {
                     d3.select("p.note1").style("opacity", 1)
