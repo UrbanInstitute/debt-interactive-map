@@ -206,20 +206,17 @@ function barY(d,dis,variable,NONWHITE,WHITE,y,barHeight) {
 function barH(d,dis,variable,NONWHITE,WHITE,y,barHeight) {
   //PROBLEM HERE BREAKS
   var parentClass = d3.select(dis.parentNode).attr('class');
-  // console.log(y(0), y(d[variable]), d[variable])
   if (parentClass.search("c0") > -1) {
     // if(isNaN(d[variable]) === false) {
-    //   console.log(1, y(d[variable]), d[variable])
     // }
     return (isNaN(d[variable]) != true) ? barHeight - y(d[variable]) : 0;
   }else if (parentClass.search("c2") > -1){
     // if(isNaN(d[NONWHITE]) === false) {
-    //   console.log(2, y(+d[NONWHITE]), d[NONWHITE])
     // }
     return (isNaN(+d[NONWHITE]) != true) ? barHeight - y(d[NONWHITE]) : 0;
   }else {
     // if(isNaN(d[WHITE]) === false) {
-    //   console.log(3, y(+d[WHITE]), d[WHITE])
+
     // }
     return (isNaN(d[WHITE]) != true) ? barHeight - y(d[WHITE]) : 0;
   }
@@ -451,8 +448,6 @@ function OverallTransformData(us, county, state, countyData, stateData) {
   bigbig.us_data_ph = us_data_ph;
   bigbig.state_data = state_data;
   bigbig.county_data = county_data;
-
-  console.log(bigbig)
 
   return bigbig;
 }
@@ -966,7 +961,6 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
         updateBars(SELECTED_VARIABLE, data)
         zoomMap(width, data, geoType)
         if (geoType == "county") {
-          console.log("5: ", data["properties"]["state"], county, state)
           addTag(data["properties"]["state"], county, state)
         }else {
           var filter = data["properties"]["abbr"]
@@ -1594,8 +1588,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
       }else {
         reset()
         var county = (level == "state") ? null : county;
-        countyQuery = (level == "state") ? null : d.properties.id
-        console.log("3: ", state, county, abbr)
+        countyQuery = (level == "state") ? null : d.properties.id;
         addTag(state, county, abbr)
         zoomMap(width, d, level)
         updateBars(SELECTED_VARIABLE, d)
@@ -1699,7 +1692,6 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
       setZoom(false, true, false)
       // $(".state-borders").css("pointer-events", "none")
       // $(".counties").css("pointer-events", "all")
-      console.log("4: ", state, null, abbr)
       addTag(state, null, abbr)
       zoomMap(width, d, level)
       updateBars(SELECTED_VARIABLE, d)
@@ -3243,9 +3235,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
                   .moveToFront()
 
                   setZoom(false, true, false)
-                  console.log(d.properties.state, tmp_state)
                   for (var i = 0; i < tmp_state.length; i++) {
-                    console.log(tmp_state[i]["properties"]["state"], d.properties.state)
                     if (tmp_state[i]["properties"]["state"] == d.properties.state){
                       selectedState = tmp_state[i]
                     }
@@ -3255,7 +3245,6 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
                   // y = centroid[1];
                   // k = 4;
                   // centered = selectedState.properties.state;
-                  console.log(zoomLevel == "state")
                   var data = (zoomLevel == "state") ? d3.select("path#" + selectedState.properties.abbr).datum() : d;
 
                   updateTable(data,type)
@@ -3647,7 +3636,6 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
                   $("#county-select").selectmenu("refresh")
                   var county = null;
                   if (geoType == "county") {
-                    console.log("1: ", data.properties.state)
                     addTag(data.properties.state,data.properties.county,data.properties.abbr)
 
                     // do stuff for county and mobile
@@ -3667,7 +3655,6 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
                       updateBars(typeVar, county)
                     }
                   }else {
-                    console.log("2: ", data.properties.state)
                     addTag(data.properties.state,null,data.properties.abbr)
                     $('.ui-widget-content.ui-autocomplete-input').attr('placeholder', '')
                     var filter = data["properties"]["abbr"]
@@ -3676,8 +3663,6 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
                     var stateData = BigData.tmp_state.filter(function(d){
                       return d.properties.state == data.properties.state;
                     })
-
-                    console.log(stateData)
 
                     updateBars(typeVar, stateData[0])
                   }
