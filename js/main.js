@@ -1,3 +1,5 @@
+var pathFiles = "data/20220501-update/"
+
  function isDelinquency(thisVar) {
   var filters = []
   if(thisVar === "delinquency_by_credit") {
@@ -34,7 +36,7 @@ var IS_MOBILE;
 var IS_PHONE;
 var IS_PHONESM;
 
-// insert here any variables that only have 1 item, namely "Nonwhite population share" for now, and in the future, anything else similar.
+// insert here any variables that only have 1 item, namely "Nonwhite population share" and rural population, and in the future, anything else similar.
 var limitedVars = ["poc","poprural"]
 
 var SELECTED_VARIABLE;
@@ -350,14 +352,14 @@ selectedCountyPh
 //   if (error) throw error;
 d3.queue()
 .defer(d3.json, "data/us-10m.v1.json")
-.defer(d3.csv, "data/20220501-update/county_medical.csv")
-.defer(d3.csv, "data/20220501-update/state_national_medical.csv")
-.defer(d3.csv, "data/20220501-update/county_student.csv")
-.defer(d3.csv, "data/20220501-update/state_national_student.csv")
-.defer(d3.csv, "data/20220501-update/county_auto.csv")
-.defer(d3.csv, "data/20220501-update/state_national_auto.csv")
-.defer(d3.csv, "data/20220501-update/county_overall.csv")
-.defer(d3.csv, "data/20220501-update/state_national_overall.csv")
+.defer(d3.csv, pathFiles + "county_medical.csv")
+.defer(d3.csv, pathFiles + "state_national_medical.csv")
+.defer(d3.csv, pathFiles + "county_student.csv")
+.defer(d3.csv, pathFiles + "state_national_student.csv")
+.defer(d3.csv, pathFiles + "county_auto.csv")
+.defer(d3.csv, pathFiles + "state_national_auto.csv")
+.defer(d3.csv, pathFiles + "county_overall.csv")
+.defer(d3.csv, pathFiles + "state_national_overall.csv")
 .await(ready);
 
 function transformData(geography){
@@ -828,6 +830,49 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
       updateQueryString(type,typeVar)
     } else {
       typeVar  = Startquery["variable"]
+      // if(typeVar === "perc_debt_med" || typeVar === "pct_w_medical_debt_in_collections") {
+      //   typeVar = "medcoll"
+      // } else if(typeVar === "med_debt_med") {
+      //   typeVar = "medcollpos_p50"
+      // } else if(typeVar === "perc_pop_no_ins") {
+      //   typeVar = "nohealthinsurance"
+      // } else if(typeVar === "perc_pop_nw" || typeVar === "popnonwhite_pct" || typeVar === "pct_poc") {
+      //   typeVar = "poc"
+      // } else if(typeVar === "avg_income" || typeVar === "HHinc_avg" || typeVar === "avg_household_income") {
+      //   typeVar = "household_income_avg"
+      // } else if(typeVar === "perc_stud_debt_collect_STUD" || typeVar === "pct_student_holders_in_default") {
+      //   typeVar = "stdcollofstdtot"
+      // } else if(typeVar === "med_stud_debt_collect") {
+      //   typeVar = "stdcollpos_p50"
+      // } else if(typeVar === "perc_stud_debt") {
+      //   typeVar = "stdtot"
+      // } else if(typeVar === "med_stud_debt") {
+      //   typeVar = "stdtotpos_p50"
+      // } else if(typeVar === "med_mon_pmt") {
+      //   typeVar = "stdmonthpos_p50"
+      // } else if(typeVar === "perc_no_bach") {
+      //   typeVar = "educ_ltBA"
+      // } else if(typeVar === "autoretdelrate_sub") {
+      //   typeVar = "delinquency_by_credit"
+      // } else if(typeVar === "autoopen_pct") {
+      //   typeVar = "autoopen"
+      // } else if(typeVar === "autoretopen_pct") {
+      //   typeVar = "autoretopen"
+      // } else if(typeVar === "poprural_pct") {
+      //   typeVar = "poprural"
+      // } else if(typeVar === "pct_debt_collections") {
+      //   typeVar = "totcoll"
+      // } else if(typeVar === "median_debt_in_collections") {
+      //   typeVar = "totcollpos_p50"
+      // } else if(typeVar === "auto_retail_loan_delinquency_rate") {
+      //   typeVar = "autoretdelrate"
+      // } else if(typeVar === "credit_card_debt_delinquency_rate") {
+      //   typeVar = "carddelrate"
+      // } else if(typeVar === "median_credit_card_delinquent_debt") {
+      //   typeVar = "carddelpos_p50"
+      // } else {
+      //   typeVar = typeVar
+      // }
       // updateQueryString(type,typeVar)
     }
 
@@ -877,7 +922,10 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
     setZoom(true,false, false)
 
     d3.select("#debt-type").html(function(){
-      return variableListMaster[type][0].desktopLabel;
+      // return variableListMaster[type][0].desktopLabel;
+      return variableListMaster[type].filter(function(d){
+        return d.variable === SELECTED_VARIABLE
+      })[0].desktopLabel;
     })
     //just doing this once here so user doesn't see text fragment before other stuff shows up
     d3.select("#measure").style("visibility", "visible")
@@ -3577,8 +3625,6 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
                       return (IS_MOBILE) ? 73: 65
                     })
                     .attr('transform', 'translate(' + (width- 64) + ',' + (-1) + ')')
-
-
                   }
                 }
               })
