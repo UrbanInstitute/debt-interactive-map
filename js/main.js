@@ -35,7 +35,7 @@ var IS_PHONE;
 var IS_PHONESM;
 
 // insert here any variables that only have 1 item, namely "Nonwhite population share" for now, and in the future, anything else similar.
-var limitedVars = ["perc_pop_nw","poprural_pct","popnonwhite_pct", "pct_poc"]
+var limitedVars = ["poc","poprural"]
 
 var SELECTED_VARIABLE;
 var WHITE;
