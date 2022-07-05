@@ -1992,7 +1992,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
     legend.append("text")
     .text(function() {
       if(SELECTED_VARIABLE === "delinquency_by_credit") {
-        return "Subprime"
+        return "All"
       } else {
         return "All"
       }
