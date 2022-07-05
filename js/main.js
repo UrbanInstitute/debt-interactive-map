@@ -1990,7 +1990,13 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
     .attr("class", "g-legend")
     .attr('transform', 'translate(' + (width- 55) + ',' + 20 + ')')
     legend.append("text")
-    .text("All")
+    .text(function() {
+      if(SELECTED_VARIABLE === "delinquency_by_credit") {
+        return "Subprime"
+      } else {
+        return "All"
+      }
+    })
     .attr("class", " ftitle")
     .attr("x", 33)
     .attr("text-anchor", "end")
@@ -2731,7 +2737,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
                       var creditScores = ["Subprime","Near prime","Prime"]
                       var communities = ["All","White communities","Communities of color"]
                       counter += 1
-                      if (variable === "autoretdelrate_sub"){
+                      if (variable === "delinquency_by_credit"){
                         return creditScores[counter]
                       } else {
                         return communities[counter]
@@ -2765,7 +2771,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
                       var creditScores = ["Subprime","Near prime","Prime"]
                       var communities = ["All","White communities","Communities of color"]
                       stateCounter += 1
-                      if (variable === "autoretdelrate_sub"){
+                      if (variable === "delinquency_by_credit"){
                         return creditScores[stateCounter]
                       } else {
                         return communities[stateCounter]
@@ -2797,7 +2803,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
                         var creditScores = ["Subprime","Near prime","Prime"]
                         var communities = ["All","White communities","Communities of color"]
                         countyCounter += 1
-                        if (variable === "autoretdelrate_sub"){
+                        if (variable === "delinquency_by_credit"){
                           return creditScores[countyCounter]
                         } else {
                           return communities[countyCounter]
