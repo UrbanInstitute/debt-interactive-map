@@ -927,6 +927,11 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
         return d.variable === SELECTED_VARIABLE
       })[0].desktopLabel;
     })
+
+    // var mapLegendTitle = d3.select("#ftitle");
+    //
+    // mapLegendTitle.text("All")
+
     //just doing this once here so user doesn't see text fragment before other stuff shows up
     d3.select("#measure").style("visibility", "visible")
 
@@ -1182,6 +1187,9 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
       //* pulling out just the relevant object from varList
       var type_category = variableListMaster[type];
 
+      var mapLegendTitle = d3.select("#ftitle");
+      mapLegendTitle.text("All")
+
       // update mobile categories
 
       var optionsCategory = d3.select("#category-select").selectAll('option')
@@ -1218,6 +1226,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
           return d.variable === SELECTED_VARIABLE
         })[0].desktopLabel;
       })
+
       // update notes at bottom
 
       $(".temp").remove()
@@ -1992,12 +2001,12 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
     legend.append("text")
     .text(function() {
       if(SELECTED_VARIABLE === "delinquency_by_credit") {
-        return "All"
+        return "Subprime"
       } else {
         return "All"
       }
     })
-    .attr("class", " ftitle")
+    .attr("id", "ftitle")
     .attr("x", 33)
     .attr("text-anchor", "end")
     legend.append("text")
@@ -3131,6 +3140,16 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
                       return variableListMaster[type].filter(function(d){
                         return d.variable === SELECTED_VARIABLE
                       })[0].desktopLabel;
+                    })
+                    //here
+                    var mapLegendTitle = d3.select("#ftitle");
+
+                    mapLegendTitle.text(function() {
+                      if(SELECTED_VARIABLE === "delinquency_by_credit") {
+                        return "Subprime"
+                      } else {
+                        return "All"
+                      }
                     })
 
                     var stateQuery;
