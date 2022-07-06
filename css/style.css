@@ -20,7 +20,7 @@ hr {
   vertical-align: super;
   font-style: normal;
 }
-.legend-title {
+#legend-title {
   font-weight: bold;
   font-size: 15px;
 }
@@ -1028,7 +1028,7 @@ html .ui-button.ui-state-disabled:active {
   #bar-chart{
     width: unset;
   }
-  .legend-title {
+  #legend-title {
     font-size: 16px;
     font-weight: 400;
     font-style: italic;

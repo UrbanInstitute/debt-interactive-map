@@ -1909,16 +1909,20 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
     var legendPh = svgPh
     .append("g")
     .attr("class", "g-legend-ph")
-    // .attr('transform', function() {
-    //   return (IS_MOBILE) ? 'translate(' + (width- 68) + ',' + 10 + ')' : 'translate(' + (width- 55) + ',' + 20 + ')';
-    // })
+
     legendPh.append("text")
-    .text("All:")
-    .attr("class", "legend-title")
+    .text(function() {
+      if(SELECTED_VARIABLE === "delinquency_by_credit") {
+        return "Subprime:"
+      } else {
+        return "All:"
+      }
+    })
+    .attr("id", "legend-title")
     .attr("x", 12)
     .attr("y", 17)
-    // legendPh.append("text")
-    var keyWidthPh =   keyWidthPhMaster/8;
+    var selectedMeasureExtent = d3.extent(BigData.tmp_county, function(d){ if (!isNaN(d.properties[SELECTED_VARIABLE])) {return d.properties[SELECTED_VARIABLE] } })
+    var keyWidthPh =   keyWidthPhMaster/9;
     var keyHeightPh =  15;
     for (i=0; i<=6; i++){
       if(i  < 5){
@@ -1926,22 +1930,16 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
         .attr("width",keyWidthPh)
         .attr("height",keyHeightPh)
         .attr("class","rect"+i)
-        .attr("x",keyWidthPh*i + 50)
+        .attr("x",keyWidthPh*i + 90)
         .attr("y", 5)
         .style("fill", COLORRANGE[i])
         legendPh.append("text")
         .attr("y", 34)
         .attr("class","legend-labels-ph legend-labels-ph" + i)
-        .attr("x",keyWidthPh*i + 55)
+        .attr("x", keyWidthPh*i + 92)
         .attr("text-anchor", "middle")
         .text(function(){
-          var min = d3.min(BigData.tmp_county, function(d) {
-            if (d.properties[SELECTED_VARIABLE] == "n<50") {
-              return 1000000000000
-            } else {
-              return d.properties[SELECTED_VARIABLE]
-            }
-          })
+          var min = selectedMeasureExtent[0];
           var array = variableListMaster[type].filter(function(d) {return d.variable == SELECTED_VARIABLE;})[0].breaks
           return (i==0) ? formatNumber(min, "min") : formatNumber((array[i-1]))
         })
@@ -1951,13 +1949,13 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
         .attr("width",keyWidthPh)
         .attr("height",keyHeightPh)
         .attr("class","rect"+i)
-        .attr("x",keyWidthPh*i + 17)
+        .attr("x",keyWidthPh*i + 65)
         .attr("y", 5)
         .style("fill","#ADABAC")
         legendPh.append("text")
         .attr("y", 34)
         .attr("class","legend-labels-ph legend-labels-ph" + i)
-        .attr("x",keyWidthPh*i + 45)
+        .attr("x",keyWidthPh*i + 85)
         .attr("text-anchor", "middle")
         .text("n/a")
 
@@ -1967,16 +1965,10 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
         .attr("y", 34)
         .attr("class","legend-labels-ph legend-labels-ph" + i)
         .attr("text-anchor", "end")
-        .attr("x",keyWidthPh*i + 55 )
+        .attr("x",keyWidthPh*i + 90 )
         .attr("text-anchor", "middle")
         .text(function(){
-          var max = d3.max(BigData.tmp_county, function(d) {
-            if (d.properties[SELECTED_VARIABLE] == "n<50") {
-              return -100
-            } else {
-              return d.properties[SELECTED_VARIABLE]
-            }
-          })
+          var max = selectedMeasureExtent[1]
           return formatNumber(max,"max")
         })
       }
@@ -2595,21 +2587,9 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
             if (i != 6) {
               d3.select(this)
               .text(function(){
-                var min = d3.min(BigData.tmp_county, function(d) {
-                  if (d.properties[variable] == "n<50") {
-                    return 10000000
-                  } else {
-                    return d.properties[variable]
-                  }
-                  return d.properties[variable]
-                })
-                var max = d3.max(BigData.tmp_county, function(d) {
-                  if (d.properties[variable] == "n<50") {
-                    return 0
-                  } else {
-                    return d.properties[variable]
-                  }
-                })
+                var min = selectedMeasureExtent[0];
+
+                var max = selectedMeasureExtent[1];
                 var array = variableListMaster[type].filter(function(d) {return d.variable == variable;})[0].breaks
                 if (i==0) {
                   return formatNumber(min, "min")
@@ -2621,6 +2601,16 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
               })
             }
           })
+
+          var legendTitleTablet = d3.select("#legend-title")
+          .text(function() {
+            if(SELECTED_VARIABLE === "delinquency_by_credit") {
+              return "Subprime:"
+            } else {
+              return "All:"
+            }
+          })
+
           d3.select(".counties").selectAll("path")
           .transition()
           .duration(800)
