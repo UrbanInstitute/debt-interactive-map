@@ -12,6 +12,8 @@ The R script `data-prep.R`, inside **source**, cleans the data of the original e
 
 With every update, create a new folder in **data** naming it as YYYYMMDD-update. Move the new CSV files to that folder and change the route in the variable pathFiles in the first line of `main.js` –within **js**.
 
+Also, with new data it might be necessary to recalculate the breaks variables for each category in within the [`js/varList.js`](https://github.com/UrbanInstitute/debt-interactive-map/blob/master/js/varList.js) file. [At the bottom](https://github.com/UrbanInstitute/debt-interactive-map/blob/master/source/data-prep.R#L225) of the R script, there are a few functions (that should be refactored) to recalculate those breaks using the natural break method.
+
 **DISCLOSURE**
 1. Original files built by the researchers might be named differently with every new update. Double-check the files' names and change, if necessary, in `data-prep.R`.
 2. `data-prep.R` was originally written to be run within an [R project](https://r4ds.had.co.nz/workflow-projects.html) and using a folder structure with three folders:

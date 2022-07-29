@@ -2443,12 +2443,13 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
           return "translate(" + 0 +"," + 15+ ")"
         })
 
-        rectG.append("g")
-        .attr("class", "x axis")
-        .attr("transform", function(d,i) {
-          return "translate(" + 0 +"," + barHeight+ ")"
-        })
-        .call(xAxis)
+        //remove this
+        // rectG.append("g")
+        // .attr("class", "x axis")
+        // .attr("transform", function(d,i) {
+        //   return "translate(" + 0 +"," + barHeight+ ")"
+        // })
+        // .call(xAxis)
 
         //add bars
         rectG.selectAll("rect")
