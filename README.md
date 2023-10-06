@@ -3,6 +3,7 @@
 [Dashboard](https://apps.urban.org/features/debt-interactive-map/) showing Americans' level of debt by different categories (auto debt, medical debt, student debt, and overall). The data can be explored at the county, state, and national levels.
 
 ## How to update
+Refer to the file `debtflow2.png` if you want a visual walkthrough of `main.js`.
 
 ### Data inputs
 The researchers will share 12 excel files.
@@ -25,3 +26,35 @@ You can replicate that folder structure and create an R project –or use the [h
 
 ### Hosting the staging version
 For clarity and order, host the staging code inside the **features/tpm/debt-in-america-updates** folder. There, create a new folder **YYYYMM** and clone the repo.
+
+## Changes in structure from July 2023
+This update brought in the `youth` data tab comparing debt types amoung young adults. Youth data differed from other data in that it did not include any county data, only state data. Because this project assumes, in many cases, that new tabs would include county information, some surgery was required to make it region-agnostic. 
+
+### No county data
+First, in the [varList.js](https://github.com/UI-Research/debt-interactive-map/blob/dev/js/varList.js) file, we added a section for youth configuration data, as well as some configuration for youth in the `meta` object at the bottom. We did not include a variable name for `county` because we are dealing with no county data. 
+
+In `main.js`, we [added](https://github.com/UI-Research/debt-interactive-map/blob/dev/js/main.js#L363) the read-in point for the csv of state and national youth data, which gets read into the `state5` variable and is passed to the [`ready` function](https://github.com/UI-Research/debt-interactive-map/blob/dev/js/main.js#L813). 
+
+One of the first things to happen in the `ready` function is to transform the data. Because there is no county data and the `overallTransformData` function expects it, we put in a [noninvasive check](https://github.com/UI-Research/debt-interactive-map/blob/dev/js/main.js#L839C1-L840C129) that will instead feed it data from the `overall` category, just so it can get geometries figured out. Otherwise, this transform function was not edited. This hack was installed in the `changeData` function as well as in the `ready` function so that anytime `overallTransformData` is called, it is getting some kind of data when there is none.
+
+### No county behaviors
+Next, we had to get the code to believe that when the youth tab is clicked, counties don't exist. That means when we switch to the youth tab, we [update the sidebar table](https://github.com/UI-Research/debt-interactive-map/blob/dev/js/main.js#L1272C7-L1282C6) with state, rather than county, data and we [remove](https://github.com/UI-Research/debt-interactive-map/blob/dev/js/main.js#L1285) any currently present county bars.
+
+We also [set the scale](https://github.com/UI-Research/debt-interactive-map/blob/dev/js/main.js#L2621) for the youth legend to use the extents for state data rather than county data. [Bars for youth counties](https://github.com/UI-Research/debt-interactive-map/blob/dev/js/main.js#L2621) are completely avoided.
+
+Because we don't mess with tags and searches, you can select a county, go to the youth tab, go to a different tag and still have your same county selected-- it just won't be visible or have personal data available while in the youth tab.
+
+### New state shape behaviors
+In other tabs, if we're in the country-wide view, all counties are colored with data and there are state borders without any internal color. If you click on the map, it highlights the state, zooms in close, and puts a `hide` class on all other state shapes, which introduces a translucency to their county colorations. When the mouse hovers over a county and it's within the selected state, that county is clickable and will update bars and tables. If that county is outside the selected state, it actually uncovers the county data for that other state, and if clicked, it remove `hide` on that state, move the map to that other state and add `hide` to the last one.
+
+When the only data we have is state data, we fill the state borders instead of the county shapes and we have to still use these county events but remove the actual relevant shapes visible. We do not deal with the `hide` class at all. 
+
+First, when the `counties` svgs are created, we [set their opacity](https://github.com/UI-Research/debt-interactive-map/blob/dev/js/main.js#L1663) to 0 or 1 based on the youth tab. When the `state-borders` svgs are created, they get [filled or not](https://github.com/UI-Research/debt-interactive-map/blob/dev/js/main.js#L1804C3-L1806C5) based on youth tab active. This also happens when we call [`updateMap`](https://github.com/UI-Research/debt-interactive-map/blob/dev/js/main.js#L2621).
+
+Next, instead of `hide`, we set opacities to state borders directly, like [here](https://github.com/UI-Research/debt-interactive-map/blob/dev/js/main.js#L1285), when the youth tab is just selected. We also [hijack the `hoverLocation` function](https://github.com/UI-Research/debt-interactive-map/blob/dev/js/main.js#L2174C7-L2177C8) to set opacity instead of `hide` class. In the `counties` shapes click handler, we treat all [youth map clicks](https://github.com/UI-Research/debt-interactive-map/blob/dev/js/main.js#L1680) as inital state clicks. 
+
+### Mobile view
+For mobile, we [remove](https://github.com/UI-Research/debt-interactive-map/blob/dev/js/main.js#L1316C1-L1321C8) the county search bar and we [remove](https://github.com/UI-Research/debt-interactive-map/blob/dev/js/main.js#L2938C7-L2941C8) any existant county bars.
+
+### Bug fixes
+There were two bugs we came across during this update. One was that the much-used and often-filtered variable `stateData` was getting passed in filtered form through this `overallTransformData` function, which left our map without data for any shapes but the selected one. A quick revision to its original form fixed that [here](https://github.com/UI-Research/debt-interactive-map/blob/dev/js/main.js#L1334). The second was that the `buildPrint` function was only ever passing USA arguments in for its state bar charts rather than data for the selected state, which uproots the point of the print page. Remarkably, this bug was caused by [missing parentheses](https://github.com/UI-Research/debt-interactive-map/blob/dev/js/main.js#L507) around a tertiary clause in a filter function, so the zeroth index in all state_data (USA) was passed rather than the index which matches the relevant state. 
