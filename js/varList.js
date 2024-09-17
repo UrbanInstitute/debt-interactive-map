@@ -11,7 +11,7 @@ var variableListMaster = {
 			"variable":"medcoll",
 			"desktopLabel":"Share with medical debt in collections",
 			"mobileLabel":"Share with medical debt in collections",
-			"breaks":[0.08, 0.14, 0.20, 0.27],
+			"breaks":[0.03, 0.06, 0.10, 0.15],
 			"legendWidth": 58,
 			"version":"v1",
 			"columns":["All", "White communities", "Communities of color"],
@@ -21,7 +21,7 @@ var variableListMaster = {
 			"variable":"medcollpos_p50",
 			"desktopLabel":"Median medical debt in collections",
 			"mobileLabel":"Median medical debt in collections",
-			"breaks":[564, 803, 1080, 1482],
+			"breaks":[1281, 1586, 1985, 2735],
 			"legendWidth": 70,
 			"version":"v1",
 			"columns":["All", "White communities", "Communities of color"],
@@ -31,7 +31,7 @@ var variableListMaster = {
 			"variable":"nohealthinsurance",
 			"desktopLabel":"Share without health insurance coverage",
 			"mobileLabel":"Share without health insurance coverage",
-			"breaks":[0.07, 0.11, 0.16, 0.23],
+			"breaks":[0.06, 0.10, 0.15, 0.22],
 			"legendWidth": 60,
 			"version":"v1",
 			"columns":["All", "White communities", "Communities of color"],
@@ -41,7 +41,7 @@ var variableListMaster = {
 			"variable":"poc",
 			"desktopLabel":"Share of people of color",
 			"mobileLabel":"Share of people of color",
-			"breaks":[ 0.15, 0.30, 0.48, 0.68],
+			"breaks":[ 0.15, 0.31, 0.48, 0.68],
 			"legendWidth": 63,
 			"version":"v1",
 			"columns":["All", "White communities", "Communities of color"],
@@ -51,7 +51,7 @@ var variableListMaster = {
 			"variable":"household_income_avg",
 			"desktopLabel":"Average household income",
 			"mobileLabel":"Average household income",
-			"breaks":[64737, 79666, 99590, 132140],
+			"breaks":[69989, 86127, 107567, 142499],
 			"legendWidth": 89,
 			"version":"v1",
 			"columns":["All", "White communities", "Communities of color"],
@@ -59,26 +59,6 @@ var variableListMaster = {
 		}
 	],
 	"student":[
-		{
-			"variable":"stdcollofstdtot",
-			"desktopLabel":"Share of student loan holders with student loan debt in default",
-			"mobileLabel": "Share of student loan holders with student loan debt in default",
-			"breaks":[0.06, 0.09, 0.11, 0.15],
-			"legendWidth":60,
-			"version":"v2",
-			"columns":["All", "White communities", "Communities of color"],
-			"nondebtfirst": ""
-		},
-		{
-			"variable":"stdcollpos_p50",
-			"desktopLabel":"Median student loan debt in default",
-			"mobileLabel": "Median student loan debt in default",
-			"breaks":[8457, 10646, 12636, 15445],
-			"legendWidth":89,
-			"version":"v2",
-			"columns":["All", "White communities", "Communities of color"],
-			"nondebtfirst": ""
-		},
 		{
 			"variable":"stdtot",
 			"desktopLabel":"Share with student loan debt",
@@ -93,17 +73,38 @@ var variableListMaster = {
 			"variable":"stdtotpos_p50",
 			"desktopLabel":"Median student loan debt",
 			"mobileLabel": "Median student loan debt",
-			"breaks":[13826, 17016, 19912, 23292],
+			"breaks":[15288, 18326, 21149, 24667],
 			"legendWidth":89,
 			"version":"v2",
 			"columns":["All", "White communities", "Communities of color"],
 			"nondebtfirst": ""
 		},
 		{
+			"variable":"stdcollofstdtot",
+			"desktopLabel":"Share of student loan holders with student loan debt in default",
+			"mobileLabel": "Share of student loan holders with student loan debt in default",
+			"breaks":[0.006, 0.015, 0.026, 0.047],
+			"legendWidth":60,
+			"version":"v2",
+			"columns":["All", "White communities", "Communities of color"],
+			"nondebtfirst": ""
+		},
+		{
+			"variable":"stdcollpos_p50",
+			"desktopLabel":"Median student loan debt in default",
+			"mobileLabel": "Median student loan debt in default",
+			"breaks":[2566, 4026, 5924, 9120],
+			"legendWidth":89,
+			"version":"v2",
+			"columns":["All", "White communities", "Communities of color"],
+			"nondebtfirst": ""
+		},
+		
+		{
 			"variable":"stdmonthpos_p50",
 			"desktopLabel":"Median monthly student loan payment",
 			"mobileLabel": "Median monthly student loan payment",
-			"breaks":[116, 136, 155, 178],
+			"breaks":[125, 146, 166, 189],
 			"legendWidth":70,
 			"version":"v2",
 			"columns":["All", "White communities", "Communities of color"],
@@ -113,7 +114,7 @@ var variableListMaster = {
 			"variable":"educ_ltBA",
 			"desktopLabel":"Share without a bachelor’s degree",
 			"mobileLabel": "Share without a bachelor’s degree",
-			"breaks":[0.56, 0.68, 0.77, 0.83],
+			"breaks":[0.53, 0.66, 0.75, 0.82],
 			"legendWidth":60,
 			"version":"v2",
 			"columns":["All", "White communities", "Communities of color"],
@@ -123,7 +124,7 @@ var variableListMaster = {
 			"variable":"poc",
 			"desktopLabel":"Share of people of color",
 			"mobileLabel": "Share of people of color",
-			"breaks":[0.15, 0.30, 0.48, 0.68],
+			"breaks":[0.15, 0.31, 0.48, 0.68],
 			"legendWidth":63,
 			"version":"v1",
 			"columns":["All", "White communities", "Communities of color"],
@@ -133,7 +134,7 @@ var variableListMaster = {
 			"variable":"household_income_avg" ,
 			"desktopLabel":"Average household income",
 			"mobileLabel": "Average household income",
-			"breaks":[64737, 79666, 99590, 132140],
+			"breaks":[69989, 86127, 107567, 142499],
 			"legendWidth":89,
 			"version":"v1",
 			"columns":["All", "White communities", "Communities of color"],
@@ -145,7 +146,7 @@ var variableListMaster = {
 			"variable":"autoretdelrate",
 			"desktopLabel":"Auto/retail loan delinquency rate",
 			"mobileLabel":"Auto/retail loan delinquency rate",
-			"breaks":[0.03, 0.04, 0.07, 0.10],
+			"breaks":[0.03, 0.05, 0.08, 0.11],
 			"legendWidth":65,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
@@ -153,9 +154,9 @@ var variableListMaster = {
 		},
 		{
 			"variable":"delinquency_by_credit",
-			"desktopLabel":"Auto/retail loan delinquency rate by credit score<sup><i>c</i></sup>",
-			"mobileLabel":"Auto/retail loan delinquency rate by credit score<sup><i>c</i></sup>",
-			"breaks":[0.16, 0.20, 0.25, 0.31],
+			"desktopLabel":"Auto/retail loan delinquency rate by credit score<sup><i>d</i></sup>",
+			"mobileLabel":"Auto/retail loan delinquency rate by credit score<sup><i>d</i></sup>",
+			"breaks":[0.19, 0.23, 0.28, 0.33],
 			"legendWidth":90,
 			"version":"v3",
 			"columns":["Subprime","Near prime","Prime"], //guessing these use _wh and _nw in the data, and should just follow the sequence
@@ -165,7 +166,7 @@ var variableListMaster = {
 			"variable":"autoopen",
 			"desktopLabel":"Share with auto loans",
 			"mobileLabel":"Share with auto loans",
-			"breaks":[0.23, 0.29, 0.33, 0.37],
+			"breaks":[0.22, 0.28, 0.32, 0.38],
 			"legendWidth":65,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
@@ -175,7 +176,7 @@ var variableListMaster = {
 			"variable":"autoretopen",
 			"desktopLabel":"Share with auto/retail loan debt",
 			"mobileLabel":"Share with auto/retail loan debt",
-			"breaks":[0.28, 0.35, 0.49, 0.43],
+			"breaks":[0.29, 0.35, 0.40, 0.44],
 			"legendWidth":65,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
@@ -195,7 +196,7 @@ var variableListMaster = {
 			"variable":"poc",
 			"desktopLabel":"Share of people of color",
 			"mobileLabel":"Share of people of color",
-			"breaks":[0.15, 0.30, 0.48, 0.68],
+			"breaks":[0.15, 0.31, 0.48, 0.68],
 			"legendWidth":65,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
@@ -205,7 +206,7 @@ var variableListMaster = {
 			"variable":"household_income_avg",
 			"desktopLabel":"Average household income",
 			"mobileLabel":"Average household income",
-			"breaks":[64737, 79666, 99590, 132140],
+			"breaks":[69989, 86127, 107567, 142499],
 			"legendWidth":90,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
@@ -217,7 +218,7 @@ var variableListMaster = {
 			"variable":"totcoll",
 			"desktopLabel":"Share with any debt in collections",
 			"mobileLabel":"Share with any debt in collections",
-			"breaks":[0.18, 0.26, 0.34, 0.43],
+			"breaks":[0.15, 0.21, 0.28, 0.37],
 			"legendWidth":60,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
@@ -227,7 +228,7 @@ var variableListMaster = {
 			"variable":"totcollpos_p50",
 			"desktopLabel":"Median debt in collections",
 			"mobileLabel":"Median debt in collections",
-			"breaks":[1356, 1686, 2023, 2552],
+			"breaks":[1658, 2036, 2442, 3177],
 			"legendWidth":75,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
@@ -237,7 +238,7 @@ var variableListMaster = {
 			"variable":"medcoll",
 			"desktopLabel":"Share with medical debt in collections",
 			"mobileLabel":"Share with medical debt in collections",
-			"breaks":[0.08,0.14,0.20,0.27],
+			"breaks":[0.03,0.06,0.10,0.15],
 			"legendWidth":60,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
@@ -247,7 +248,7 @@ var variableListMaster = {
 			"variable":"stdcollofstdtot",
 			"desktopLabel":"Share of student loan holders with student loan debt in default",
 			"mobileLabel":"Share of student loan holders with student loan debt in default",
-			"breaks":[0.06,0.09,0.11,0.15],
+			"breaks":[0.006,0.014,0.026,0.046],
 			"legendWidth":60,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
@@ -257,7 +258,7 @@ var variableListMaster = {
 			"variable":"autoretdelrate",
 			"desktopLabel":"Auto/retail loan delinquency rate",
 			"mobileLabel":"Auto/retail loan delinquency rate",
-			"breaks":[0.03, 0.04 ,0.07, 0.1],
+			"breaks":[0.03, 0.05 ,0.08, 0.11],
 			"legendWidth":60,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
@@ -267,7 +268,7 @@ var variableListMaster = {
 			"variable":"carddelrate",
 			"desktopLabel":"Credit card debt delinquency rate",
 			"mobileLabel":"Credit card debt delinquency rate",
-			"breaks":[0.03,0.04,0.06,0.09],
+			"breaks":[0.04,0.06,0.08,0.12],
 			"legendWidth":60,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
@@ -277,7 +278,7 @@ var variableListMaster = {
 			"variable":"carddelpos_p50",
 			"desktopLabel":"Median credit card delinquent debt",
 			"mobileLabel":"Median credit card delinquent debt",
-			"breaks":[304, 378, 444, 533],
+			"breaks":[545, 653, 777, 1015],
 			"legendWidth":70,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
@@ -287,7 +288,7 @@ var variableListMaster = {
 			"variable":"poc",
 			"desktopLabel":"Share of people of color",
 			"mobileLabel":"Share of people of color",
-			"breaks":[0.15,0.30,0.48,0.68],
+			"breaks":[0.15,0.31,0.48,0.68],
 			"legendWidth":60,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
@@ -297,7 +298,7 @@ var variableListMaster = {
 			"variable":"household_income_avg",
 			"desktopLabel":"Average household income",
 			"mobileLabel":"Average household income",
-			"breaks":[64737, 79666, 99590, 132140],
+			"breaks":[69989, 86127, 107567, 142499],
 			"legendWidth":90,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
@@ -309,7 +310,7 @@ var variableListMaster = {
 			"variable":"totcoll",
 			"desktopLabel":"Share of young adults with any debt in collections",
 			"mobileLabel":"Share of young adults with any debt in collections",
-			"breaks":[0.13, 0.17, 0.21, 0.27],
+			"breaks":[0.10, 0.13, 0.16, 0.20],
 			"legendWidth":60,
 			"version":"v3",
 			"columns":["All","White communities","Communities of color"],
@@ -319,7 +320,7 @@ var variableListMaster = {
 			"variable":"totcollpos_p50",
 			"desktopLabel":"Median debt in collections for young adults",
 			"mobileLabel": "Median debt in collections for young adults",
-			"breaks":[811, 978, 1094, 1234],
+			"breaks":[1081, 1256, 1439, 1601],
 			"legendWidth":75,
 			"version":"v3",
 			"columns":["All", "White communities", "Communities of color"],
@@ -329,7 +330,7 @@ var variableListMaster = {
 			"variable":"medcoll",
 			"desktopLabel":"Share of young adults with medical debt in collections",
 			"mobileLabel": "Share of young adults with medical debt in collections",
-			"breaks":[0.05, 0.08, 0.12, 0.15],
+			"breaks":[0.01, 0.02, 0.04, 0.06],
 			"legendWidth":60,
 			"version":"v3",
 			"columns":["All", "White communities", "Communities of color"],
@@ -339,7 +340,7 @@ var variableListMaster = {
 			"variable":"stdcollofstdtot",
 			"desktopLabel":"Share of young adult student loan holders with student loan debt in default",
 			"mobileLabel": "Share of young adult student loan holders with student loan debt in default",
-			"breaks":[0.02, 0.02, 0.03, 0.04],
+			"breaks":[0.005, 0.009, 0.013, 0.022],
 			"legendWidth":50,
 			"version":"v3",
 			"columns":["All", "White communities", "Communities of color"],
@@ -349,7 +350,7 @@ var variableListMaster = {
 			"variable":"autoretdelrate",
 			"desktopLabel":"Auto/retail loan delinquency rate among young adults",
 			"mobileLabel": "Auto/retail loan delinquency rate among young adults",
-			"breaks":[0.04, 0.06, 0.08, 0.10],
+			"breaks":[0.05, 0.07, 0.08, 0.11],
 			"legendWidth":60,
 			"version":"v3",
 			"columns":["All", "White communities", "Communities of color"],
@@ -359,7 +360,7 @@ var variableListMaster = {
 			"variable":"carddelrate",
 			"desktopLabel":"Credit card debt delinquency rate among young adults",
 			"mobileLabel": "Credit card debt delinquency rate among young adults",
-			"breaks":[0.03, 0.04, 0.05, 0.06],
+			"breaks":[0.05, 0.06, 0.07, 0.09],
 			"legendWidth":50,
 			"version":"v3",
 			"columns":["All", "White communities", "Communities of color"],
@@ -369,7 +370,7 @@ var variableListMaster = {
 			"variable":"carddelpos_p50",
 			"desktopLabel":"Median credit card delinquent debt among young adults",
 			"mobileLabel": "Median credit card delinquent debt among young adults",
-			"breaks":[227, 259, 283, 299],
+			"breaks":[336, 376, 419, 449],
 			"legendWidth":65,
 			"version":"v3",
 			"columns":["All", "White communities", "Communities of color"],
@@ -385,7 +386,9 @@ var variableListMaster = {
 				"caption": "Medical Debt",
 				"caption-extra": "",
 				"publishDate": "",
-				"specialNotes":[]
+				"specialNotes":[
+					"<p class='note4 temp'><sup><i>d</i></sup> Not available because American Community Survey geographic data for Connecticut do not align with credit bureau county boundaries.</p>"
+				]
 			},
 			"student":{
 				"county":"county2",
@@ -396,6 +399,7 @@ var variableListMaster = {
 				"specialNotes":[
 					// "<p class='note3 temp'><sup><i>d</i></sup> This variable was added May 16, 2018.</p>",
 					// "<p class='note4 temp'><sup><i>e</i></sup> This variable was relabeled May 16, 2018.</p>"
+					"<p class='note4 temp'><sup><i>d</i></sup> Not available because American Community Survey geographic data for Connecticut do not align with credit bureau county boundaries.</p>"
 				]
 			},
 			"auto":{
@@ -405,7 +409,8 @@ var variableListMaster = {
 				"caption-extra": "",
 				"publishDate": "",
 				"specialNotes":[
-					"<p class='note3 temp'><sup><i>c</i></sup> The VantageScore credit score ranges from 300 to 850. Subprime scores range from 300 to 600, near-prime from 601 to 660, and prime from 661 to 850.</p>"
+					"<p class='note3 temp'><sup><i>c</i></sup> The VantageScore credit score ranges from 300 to 850. Subprime scores range from 300 to 600, near prime from 601 to 660, and prime from 661 to 850.</p>",
+					"<p class='note4 temp'><sup><i>d</i></sup> Not available because American Community Survey geographic data for Connecticut do not align with credit bureau county boundaries.</p>"
 				]
 			},
 			"overall":{
@@ -415,7 +420,8 @@ var variableListMaster = {
 				"state":"state4",
 				"publishDate": "",
 				"specialNotes":[
-					"<p class='note3 temp'><sup><i>c</i></sup> County-level data are not available for debt carried by young adults.</p>"
+					"<p class='note3 temp'><sup><i>c</i></sup> County-level data are not available for debt carried by young adults.</p>",
+					"<p class='note4 temp'><sup><i>d</i></sup> Not available because American Community Survey geographic data for Connecticut do not align with credit bureau county boundaries.</p>"
 				]
 			},
 			"youth":{
@@ -425,7 +431,8 @@ var variableListMaster = {
 				"state":"state5",
 				"publishDate": "",
 				"specialNotes":[
-					"<p class='note3 temp'><sup><i>c</i></sup> County-level data are not available for debt carried by young adults.</p>"
+					"<p class='note3 temp'><sup><i>c</i></sup> County-level data are not available for debt carried by young adults.</p>",
+					"<p class='note4 temp'><sup><i>d</i></sup> Not available because American Community Survey geographic data for Connecticut do not align with credit bureau county boundaries.</p>"
 				]
 			},
 		}

@@ -24,6 +24,12 @@ Also, with new data it might be necessary to recalculate the breaks variables fo
 
 You can replicate that folder structure and create an R project –or use the [here](https://here.r-lib.org/) package instead. You can also rewrite the paths to make it work following whatever system you prefer.
 
+### Working locally
+Open a port (sometimes called "Go Live") from within your IDE to bypass CORS restrictions. Be sure to minify `main.js` to see changes.
+```
+uglifyjs js/main.js --mangle -o js/minified-main.js
+```
+
 ### Hosting the staging version
 For clarity and order, host the staging code inside the **features/tpm/debt-in-america-updates** folder. There, create a new folder **YYYYMM** and clone the repo.
 

@@ -787,12 +787,12 @@ path.hide {
 }
 path.hover {
   stroke: #fdbf11;
-  stroke-width: 1.3px;
+  stroke-width: 0.6px;
 }
 
  .counties > path.selected {
   stroke: #fdbf11;
-  stroke-width: 1.2px;
+  stroke-width: 1.1px;
 }
  .state-borders > path.selected {
   stroke: #fdbf11;

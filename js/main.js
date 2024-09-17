@@ -1,7 +1,7 @@
 //js minified with this line:
-//uglifyjs main.js --mangle -o minified-main.js
+//uglifyjs js/main.js --mangle -o js/minified-main.js
 
-var pathFiles = "data/20230914-update/"
+var pathFiles = "data/20240715-update/"
 
 function isDelinquency(thisVar) {
   var filters = []
@@ -12,6 +12,14 @@ function isDelinquency(thisVar) {
   }
   return filters
 }
+
+
+// function toTitleCase(str) {
+//   return str.replace(
+//     /\w\S*/g,
+//     text => text.charAt(0).toUpperCase() + text.substring(1).toLowerCase()
+//   );
+// }
 
 var Startquery = {};
 // DWCut? if it might could be cut/consolidated
@@ -79,8 +87,12 @@ function setScreenState(mobile, phone, phonesm){
   IS_PHONESM = phonesm
 }
 
-d3.select(".youth-banner-close").on("click",function () {d3.select(".youth-banner").classed("hidden",true)})
-setScreenState (d3.select("#isMobile").style("display") == "block", d3.select("#isPhone").style("display") == "block", d3.select("#isPhoneSm").style("display") == "block" )
+//d3.select(".youth-banner-close").on("click",function () {d3.select(".youth-banner").classed("hidden",true)})
+setScreenState(d3.select("#isMobile").style("display") == "block", d3.select("#isPhone").style("display") == "block", d3.select("#isPhoneSm").style("display") == "block" )
+
+// hide ct notes
+d3.select("#notes-section > p.note4").style("display", "none")
+d3.select("#notes > p.note4").style("display", "none")
 
 function setVariable(variable, phone) {
   if (phone == true) {
@@ -150,9 +162,10 @@ function updateQueryString(type,variable,state,county,print){
     if (county.toString().length === 4) {
       county = "0" + county.toString();
     }
-
+    selectedCounty = county;
     queryString += "&county=" + county;
   } else {
+    selectedCounty = "";
     queryString += "";
   }
 
@@ -253,8 +266,10 @@ function labelsuperscript(d,dis,variable,NONWHITE,WHITE) {
 
   if (isNaN(d[thisvar]) != true) {
     return "";
+  } else if (needsConnecticutACSnote(variable).superscript){
+    return "d";
   } else {
-    return "b"
+    return "b";
     // return (d[thisvar] == "n<50") ? "b" : "c"
   }
 
@@ -312,6 +327,9 @@ function labelHTML_ph(d,dis,variable,NONWHITE_ph,WHITE_ph,yes) {
   if ((d[variable]) == "N/A" || (d[NONWHITE_ph]) == "N/A" || (d[WHITE_ph]) == "N/A") {
     d3.select("#notes-section > p.note2").style("opacity", 1)
   }
+  let CTnote = needsConnecticutACSnote(variable)
+  d3.select("#notes-section > p.note4").style("display", CTnote.note ? "block" : "none")
+  d3.select("#notes > p.note4").style("display", CTnote.note ? "block" : "none")
   if (parentClass.search("c0") > -1) {
     return (isNaN(d[variable]) != true) ? formatNumber(d[variable]) : noData
   }else if (parentClass.search("c2") > -1) {
@@ -343,6 +361,35 @@ function hideBars(variable) {
   }
 }
 
+/**
+* this is used in updateTable() and in labelsuperscript().
+* we need to show a superscript only when ACS variables are visible for connecticut in 2023
+* because geoids do not match those in our credit database.
+* @param {string} varName
+* @returns {Object} {note, superscript} -- note: whether the footnote is needed in the notes section. superscript: whether the 'd' is needed on the datapoint. 
+*/
+function needsConnecticutACSnote(varName){
+  //check that a state is active
+  let stateActive = selectedState
+  if (!stateActive) return {note: false, superscript: false};
+
+  //check that active state is CT
+  if (selectedState.id != "09") return {note: false, superscript: false};
+
+  //check that county is active (hover works but selected doesn't but it's ok bc it happens at click)
+  let countyActive = d3.select("g.counties").selectAll("path.hover")._groups[0].length !== 0 || selectedCounty != ""
+  if (!countyActive) return {note: false, superscript: false};
+
+  //check that we have an ACS variable
+  //if we're using this function to decide whether to show the note itself, 
+  //it's sufficient to show the note for any CT county. 
+  //if we're using this to show superscripts on the datapoints, 
+  //it matters which variable we're dealing with. 
+  return ["household_income_avg","poc","educ_ltBA","nohealthinsurance"].includes(varName) ? 
+          {note: true, superscript: true} : 
+          {note: true, superscript: false};
+}
+
 
 
 var setHeight = tdMap*.7;
@@ -351,6 +398,7 @@ height = (IS_PHONE) ? (width) - margin.top-margin.bottom :  setHeight,//(width*.
 centered,
 selectedState,
 selectedStatePh,
+selectedCounty, //set in updateQueryString
 selectedCountyPh
 // d3.json("https://d3js.org/us-10m.v1.json", function(error, us) {
 //   if (error) throw error;
@@ -659,7 +707,7 @@ function buildPrintBars(dis,variable, varName, printdata,y) {
     } else if (d=="State") {
       return printdata[1]["state"]
     } else {
-      return printdata[2]["county"]
+      return printdata[2]["county"];//toTitleCase(printdata[2]["county"])
     }
   })
   .attr("class", function(d) {
@@ -1622,8 +1670,8 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
       var selectedCategory = $("#category-select").val()
 
       updateBars(selectedCategory, selectedPlace)
-      d3.select(".group-label-ph2.County").text(selectedPlace)
-      d3.select(".group-label-ph.County").text(selectedPlace)
+      d3.select(".group-label-ph2.County").text(selectedPlace)//toTitleCase(selectedPlace))
+      d3.select(".group-label-ph.County").text(selectedPlace)//toTitleCase(selectedPlace))
 
       // add county/state to query string
       var countyQuery = ui.item.element.context.__data__.key;
@@ -2284,7 +2332,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
   updateTable(us_data,type)
 
   table.selectAll("tbody").filter(function(d) { return d.variable === typeVar}).classed('selected', true);
-  console.log(typeVar)
+  //console.log(typeVar)
 
   /*END TABLE*/
   /*BAR CHARTS*/
@@ -2869,6 +2917,9 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
     }
 
     d3.select("#notes-section").selectAll("p.note2, p.note1").style("opacity", 1)
+    let CTnote = needsConnecticutACSnote(variable)
+    d3.select("#notes-section > p.note4").style("display", CTnote.note ? "block" : "none")
+    d3.select("#notes > p.note4").style("display", CTnote.note ? "block" : "none")
     // d3.selectAll(".note-header").html("<b>Note:</b>")
     //* this seems messy - updating global vars all over the place, and here using 'var'!
     //* also not forward thinking - what if there's another category down the line
@@ -3155,7 +3206,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
           //this is sometimes empty ... when 'selected' is a state
           //so if there's a county in the URL rewrite teh variable countyData to have correct deets
 
-          d3.select("#County").select(".group-label-2").text(countyData["county"])
+          d3.select("#County").select(".group-label-2").text(countyData["county"])//toTitleCase(countyData["county"]))
 
 
           County
@@ -3245,7 +3296,7 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
     if (county != undefined) {
 
       var newTag = $("ul.tagit").append('<li id="county" class="tagit-choice ui-widget-content ui-state-default ui-corner-all tagit-choice-editable"></li>')
-      $('li#county').insertBefore(".tagit-new").append('<span class="tagit-label">' + county + '</span>')
+      $('li#county').insertBefore(".tagit-new").append('<span class="tagit-label">' + county /*toTitleCase(county)*/ + '</span>')
       $('li#county').append('<a class="tagit-close"</a>')
       $("li#county > a.tagit-close").append('<span class="text-icon"</span>')
       $("li#county > a.tagit-close").append('<span class="ui-icon ui-icon-close"</span>')
@@ -3454,25 +3505,33 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
       if ((data[rowVariable]) == "N/A" || (data[rowVariable_nw]) == "N/A" || (data[rowVariable_wh]) == "N/A") {
         d3.select("p.note2").style("opacity", 1)
       }
+
+      let CTnote = needsConnecticutACSnote(rowVariable[0])
+      d3.select("#notes-section > p.note4").style("display", CTnote.note ? "block" : "none")
+      d3.select("#notes > p.note4").style("display", CTnote.note ? "block" : "none")
+
       d3.select(this).selectAll("td")
       .html(function(d,i) {
         if (i==0) {
           if (isNaN(data[rowVariable]) == true) {
-            return "n/a<sup><i>b</i></sup>"
+            //return  "n/a<sup><i>b</i></sup>"
+            return  CTnote.superscript ? "n/a<sup><i>d</i></sup>" : "n/a<sup><i>b</i></sup>"
             // return (data[rowVariable] == "n<50") ? "n/a<sup><i>b</i></sup>" : "n/a<sup><i>c</i></sup>"
           }else {
             return formatNumber(data[rowVariable]);
           }
         }else if (i==1){
           if (isNaN(data[rowVariable_wh]) == true) {
-            return "n/a<sup><i>b</i></sup>"
+            //return "n/a<sup><i>b</i></sup>"
+            return  CTnote.superscript ? "n/a<sup><i>d</i></sup>" : "n/a<sup><i>b</i></sup>"
             // return (data[rowVariable_wh] == "n<50") ? "n/a<sup><i>b</i></sup>" : "n/a<sup><i>c</i></sup>"
           }else {
             return formatNumber(data[rowVariable_wh]);
           }
         }else if (i==2) {
           if (isNaN(data[rowVariable_nw]) == true) {
-            return "n/a<sup><i>b</i></sup>"
+            //return "n/a<sup><i>b</i></sup>"
+            return  CTnote.superscript ? "n/a<sup><i>d</i></sup>" : "n/a<sup><i>b</i></sup>"
             // return (data[rowVariable_nw] == "n<50") ? "n/a<sup><i>b</i></sup>" : "n/a<sup><i>c</i></sup>"
           }else {
             return formatNumber(data[rowVariable_nw]);
@@ -3930,8 +3989,8 @@ function ready(error, us, county1, state1, county2, state2, county3, state3, cou
 
         selectedLocation()
 
-        d3.select(".group-label-ph2.County").text(filteredData[0].properties.county)
-        d3.select(".group-label-ph.County").text(filteredData[0].properties.county)
+        d3.select(".group-label-ph2.County").text(filteredData[0].properties.county) //toTitleCase(filteredData[0].properties.county))
+        d3.select(".group-label-ph.County").text(filteredData[0].properties.county) //toTitleCase(filteredData[0].properties.county))
         if (IS_PHONE) {
           county = filteredData[0].properties.county;
           updateBars(typeVar, county)

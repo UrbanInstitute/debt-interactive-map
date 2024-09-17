@@ -47,6 +47,10 @@ natOrder <- function(df) {
     select(id, state, abbr, everything())
 }
 
+getBreaks <- function(df) {
+  print(getJenksBreaks(as.numeric(x), 6))
+}
+
 # CSV file including state abbreviations that will be used with the county data
 statesAbbr <- read_csv("data-in/states_abbr_names.csv")
 
@@ -55,7 +59,7 @@ statesAbbr <- read_csv("data-in/states_abbr_names.csv")
 #### auto ####
 
 # auto county data
-autoCounty <- read_excel("data-in/june2022/county_dia_auto_ 7 Jun 2022.xlsx") %>%
+autoCounty <- read.csv("data-in/july2024/dia_vars_all_autoretail_county_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
   mutate(
     state_name = case_when(
       state_name == "District Of Columbia" ~ "District of Columbia",
@@ -66,11 +70,11 @@ autoCounty <- read_excel("data-in/june2022/county_dia_auto_ 7 Jun 2022.xlsx") %>
   cleanColNames()
 
 # auto state + national
-autoNational <- read_excel("data-in/june2022/usa_dia_auto_ 7 Jun 2022.xlsx") %>%
+autoNational <- read.csv("data-in/july2024/dia_vars_all_autoretail_usa_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
   cleanColNames() %>%
   natOrder()
 
-autoState <- read_excel("data-in/june2022/state_dia_auto_ 7 Jun 2022.xlsx") %>%
+autoState <- read.csv("data-in/july2024/dia_vars_all_autoretail_state_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
   cleanColNames() %>%
   rename_with(~str_replace(., 'fips', 'id')) %>%
   rename_with(~str_replace(., 'state_abb', 'abbr'))
@@ -81,11 +85,10 @@ autoNationalState <- autoNational %>%
 write.csv(autoCounty, "data-out/county_auto.csv", row.names = FALSE)
 write.csv(autoNationalState, "data-out/state_national_auto.csv", row.names = FALSE)
 
-
 #### medical ####
 
 #county
-medCounty <- read_excel("data-in/june2022/county_dia_medical_ 7 Jun 2022.xlsx") %>%
+medCounty <- read.csv("data-in/july2024/dia_vars_all_medical_county_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
   mutate(
     state_name = case_when(
       state_name == "District Of Columbia" ~ "District of Columbia",
@@ -99,7 +102,7 @@ medCounty <- read_excel("data-in/june2022/county_dia_medical_ 7 Jun 2022.xlsx") 
 # cleanColNames()
 
 # medical state + national
-medNational <- read_excel("data-in/June2022/usa_dia_medical_ 7 Jun 2022.xlsx") %>%
+medNational <- read.csv("data-in/july2024/dia_vars_all_medical_usa_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
   # mutate(
   #   state = 'USA',
   #   abbr = NA
@@ -124,7 +127,7 @@ medNational <- read_excel("data-in/June2022/usa_dia_medical_ 7 Jun 2022.xlsx") %
   cleanColNames() %>%
   natOrder()
 
-medState <- read_excel("data-in/june2022/state_dia_medical_ 7 Jun 2022.xlsx") %>%
+medState <- read.csv("data-in/july2024/dia_vars_all_medical_state_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
   # rename_with(~str_replace(., 'state', 'abbr')) %>%
   # rename_with(~str_replace(., 'NAME', 'county')) %>%
   # rename_with(~str_replace(., 'GEOID', 'id')) %>%
@@ -157,15 +160,11 @@ medNationalState <- medNational %>%
 write.csv(medCounty, "data-out/county_medical.csv", row.names = FALSE)
 write.csv(medNationalState, "data-out/state_national_medical.csv", row.names = FALSE)
 
-getBreaks <- function(df) {
-  print(getJenksBreaks(as.numeric(x), 6))
-}
-
 
 #### delinquency ####
 
 # overall county
-overallCounty <- read_excel("data-in/june2022/county_dia_delinquency_ 7 Jun 2022.xlsx") %>%
+overallCounty <- read.csv("data-in/july2024/dia_vars_all_overall_county_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
   mutate(
     state_name = case_when(
       state_name == "District Of Columbia" ~ "District of Columbia",
@@ -176,11 +175,11 @@ overallCounty <- read_excel("data-in/june2022/county_dia_delinquency_ 7 Jun 2022
   cleanColNames()
 
 # overall state + national
-overallNational <- read_excel("data-in/june2022/usa_dia_delinquency_ 7 Jun 2022.xlsx") %>%
+overallNational <- read.csv("data-in/july2024/dia_vars_all_overall_usa_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
   cleanColNames() %>%
   natOrder()
 
-overallState <- read_excel("data-in/june2022/state_dia_delinquency_ 7 Jun 2022.xlsx") %>%
+overallState <- read.csv("data-in/july2024/dia_vars_all_overall_state_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
   cleanColNames() %>%
   rename_with(~str_replace(., 'fips', 'id')) %>%
   rename_with(~str_replace(., 'state_abb', 'abbr'))
@@ -195,7 +194,7 @@ write.csv(overallNationalState, "data-out/state_national_overall.csv", row.names
 #### student ####
 
 # county
-studentCounty <- read_excel("data-in/june2022/county_dia_student_ 7 Jun 2022.xlsx") %>%
+studentCounty <- read.csv("data-in/july2024/dia_vars_all_student_county_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
   mutate(
     state_name = case_when(
       state_name == "District Of Columbia" ~ "District of Columbia",
@@ -206,11 +205,11 @@ studentCounty <- read_excel("data-in/june2022/county_dia_student_ 7 Jun 2022.xls
   cleanColNames()
 
 # students state + national
-studentNational <- read_excel("data-in/june2022/usa_dia_student_ 7 Jun 2022.xlsx") %>%
+studentNational <- read.csv("data-in/july2024/dia_vars_all_student_usa_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
   cleanColNames() %>%
   natOrder()
 
-studentState <- read_excel("data-in/june2022/state_dia_student_ 7 Jun 2022.xlsx") %>%
+studentState <- read.csv("data-in/july2024/dia_vars_all_student_state_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
   cleanColNames() %>%
   rename_with(~str_replace(., 'fips', 'id')) %>%
   rename_with(~str_replace(., 'state_abb', 'abbr'))
@@ -220,6 +219,25 @@ studentNationalState <- studentNational %>%
 
 write.csv(studentCounty, "data-out/county_student.csv", row.names = FALSE)
 write.csv(studentNationalState, "data-out/state_national_student.csv", row.names = FALSE)
+
+
+#### youth ####
+
+# state + national only
+youthNational <- read.csv("data-in/july2024/dia_vars_young_overall_usa_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
+  cleanColNames() %>%
+  natOrder()
+
+youthState <- read.csv("data-in/july2024/dia_vars_young_overall_state_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
+  cleanColNames() %>%
+  rename_with(~str_replace(., 'fips', 'id')) %>%
+  rename_with(~str_replace(., 'state_abb', 'abbr'))
+
+youthNationalState <- youthNational %>%
+  rbind(youthState)
+
+write.csv(youthNationalState, "data-out/state_national_youth.csv", row.names = FALSE)
+
 
 
 #### breaks ####
@@ -237,6 +255,9 @@ medicalNames <- selectNames(medCounty)
 studentNames <- selectNames(studentCounty)
 autoNames <- selectNames(autoCounty)
 overallNames <- selectNames(overallCounty)
+youthNames <- selectNames(youthNationalState)
+
+youthTotColl <- c("totcoll")
 
 lapply(medCounty[medicalNames], function(x) {
   print(getJenksBreaks(as.numeric(x), 6))
@@ -253,3 +274,13 @@ lapply(autoCounty[autoNames], function(x) {
 lapply(overallCounty[overallNames], function(x) {
   print(getJenksBreaks(as.numeric(x), 6))
 })
+
+lapply(youthNationalState[youthNames], function(x) {
+  print(getJenksBreaks(as.numeric(x), 6))
+})
+
+lapply(youthNationalState[youthTotColl], function(x) {
+  print(getJenksBreaks(as.numeric(x), 6))
+})
+
+

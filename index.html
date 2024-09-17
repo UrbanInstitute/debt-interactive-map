@@ -7,7 +7,7 @@
    <link rel="shortcut icon" href="img/favicon.ico" type="img/x-icon">
    <title>Debt in America: An Interactive Map</title>
    <link rel="stylesheet" type="text/css" href="css/jquery-ui.css"/>
-   <link rel="stylesheet" type="text/css" href="css/style.css"/>
+   <link rel="stylesheet" type="text/css" href="css/main-style.css"/>
 
    <!-- Google Tag Manager -->
   <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -109,10 +109,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       </div>
     </div>
   </div> <!-- end header-pinned -->
-  <div class="youth-banner">
+  <!--div class="youth-banner">
     <div class="youth-banner-text">Young adult filter now available<span class="hide-on-mobile"> in All Debt tab</span></div>
     <span class="youth-banner-close"><img src="img/icon-close.svg"/></span>
-  </div>
+  </div-->
 <div class="banner">
   <div id="intro-text">
     <div class="intro-wrap">
@@ -122,10 +122,19 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <div class="inner">
         <h1>Debt in America: An Interactive Map</h1>
         <h2 id="print-debt-caption"></h2>
-        <h2>Last updated October 10, 2023; credit data from February 2022</h2>
+        <h2>Last updated September 2024; credit data from August 2023</h2>
       </div>
       <h2>
-        Credit can be a lifeline during emergencies and a bridge to education and homeownership. But debt, which can stem from credit or unpaid bills, often burdens families’ and communities’ financial well-being. <a href="https://www.urban.org/research/publication/what-can-policymakers-do-help-young-adults-cope-debt" target="_blank">Young adults</a> ages 18 to 24 in particular may be vulnerable to certain debt types. This map shows the geography of debt in America and the <a href="https://www.urban.org/research/publication/medical-debt-fell-during-pandemic-how-can-decline-be-sustained" target="_blank">debt differences</a> that can <a href="https://www.urban.org/urban-wire/50-years-after-martin-luther-kings-death-structural-racism-still-drives-racial-wealth-gap" target="_blank">reinforce</a> the <a href="https://www.urban.org/research/publication/minding-wealth-gap-putting-policy-place-increase-black-wealth" target="_blank">wealth gap</a> between white communities and communities of color. To explore types of debt, use the tabs above the map. To see debt among young adults at the state level, you can use the young adult filter under the “All Debt” tab.
+        Credit can be a lifeline during emergencies and a bridge to education and homeownership. But debt,
+which can stem from credit or unpaid bills, often burdens families’ and communities’ financial well-
+being. <a href = "https://www.urban.org/research/publication/what-can-policymakers-do-help-young-adults-cope-debt" target="_blank">Young adults</a>
+ ages 18 to 24 in particular may be vulnerable to certain debt types. This map shows
+the geography of debt in America and the <a href = "https://www.urban.org/research/publication/medical-debt-fell-during-pandemic-how-can-decline-be-sustained" target="_blank">debt differences</a> 
+that can <a href = "https://www.urban.org/urban-wire/50-years-after-martin-luther-kings-death-structural-racism-still-drives-racial-wealth-gap" target = "_blank">reinforce</a> 
+the <a href= "https://apps.urban.org/features/wealth-inequality-charts/" target="_blank">wealth gap</a> between
+white communities and communities of color. To explore types of debt, use the tabs above the map. To
+see debt among young adults at the state level, you can use the young adult filter under the “All Debt”
+tab.
       </h2>
     </div>
   </div>
@@ -157,7 +166,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         <div id="notes-div">
           <div id="notes">
             <p class="note-table"><span class="note-header"><i><sup>a</sup></i></span>
-              White communities and communities of color are based on zip codes where most residents are white (at least 60 percent of the population is white) or most residents are people of color (at least 60 percent of the population is of color).
+              White communities and communities of color are based on zip codes where most residents
+              are white (at least 50 percent of the population is white) or most residents are people of color (at least 50
+              percent of the population is of color).
             </p>
             <p class="note1">
               <sup>b</sup> Not available because sample size is too small.
@@ -272,10 +283,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <!-- mobiel notes -->
   <div id="notes-section">
     <div id="notes-section-inner">
-      <div class="note-table"><span class="note-header"><sup><i>a</i></sup></span> White communities and communities of color are based on zip codes where most residents are white (at least 60 percent of the population is white) or most residents are people of color (at least 60 percent of the population is of color).
+      <div class="note-table"><span class="note-header"><sup><i>a</i></sup></span> White communities and communities of color are based on zip codes where most residents
+        are white (at least 50 percent of the population is white) or most residents are people of color (at least 50
+        percent of the population is of color).
       </div>
       <p class="note1"><sup><i>b</i></sup> Not available because sample size is too small.</p>
-
     </div>
     <div id="mobile-print-container">
       <div class="print-button"><h3>PRINT</h3></div>
@@ -285,21 +297,42 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   <div class="bottom-container">
     <div class="bottom-content">
       <h1 class="bottom-header">About the Data</h1>
-      <a href = "https://datacatalog.urban.org/dataset/debt-america-2023">
+      <a href = "https://datacatalog.urban.org/dataset/debt-america-2024">
         <div class = "footerButton">Download data</div>
       </a>
-      <a href = "downloadable-docs/debt_interactive_technical_appendix_2023.pdf" target="_blank">
+      <a href = "downloadable-docs/debt_interactive_technical_appendix_2024.pdf" target="_blank">
         <div class = "footerButton appendixButton">Appendix</div>
       </a>
       <div class="about-text bottom-text">
         <p>
-          This data tool was first published in 2017 and has been regularly updated since. In October 2023, we continued using credit bureau data from February 2022, but we added the young adult filter for “All Debt,” updated the ACS and decennial census data, and made data-processing improvements.
+          This data tool was first published in 2017 and has been regularly updated since. In September 2024, we
+          updated the data and changed the threshold for white communities and communities of color from at
+          least 60 percent of a given zip code’s population to at least 50 percent. As a result, the data for white
+          communities and communities of color are not directly comparable with prior data releases. Starting in 2022, 
+          the three nationwide credit-reporting companies made <a href="https://www.urban.org/urban-wire/medical-debt-was-erased-credit-records-most-consumers-potentially-improving-many" target="_blank">significant changes to medical debt reporting</a>. 
+          These changes reduced the share of people with medical debt in collections reported on their credit records
+           but not necessarily the share of people with medical debt in collections.
         </p>
         <p>
-          This dashboard contains information derived from a 4 percent nationally representative panel of deidentified, consumer-level records from a major credit bureau. The credit bureau data are from February 2022 and contain more than 10 million records. We also incorporate estimates from summary tables of the US Census Bureau’s American Community Survey (ACS). We use ACS one-year estimates (2021) where possible, but for areas with smaller populations and for metrics that incorporate zip code–level information, we use the ACS five-year estimates (2017‒21). We also incorporate estimates from the 2020 Decennial Census.
+          This dashboard contains information derived from a 4 percent nationally representative panel of
+          deidentified, consumer-level records from a major credit bureau. The credit bureau data are from August
+          2023 and contain more than 10 million records. We also incorporate estimates from summary tables of
+          the US Census Bureau’s American Community Survey (ACS). We use ACS one-year estimates (2022)
+          where possible, but for areas with smaller populations and for metrics that incorporate zip code–level
+          information, we use the ACS five-year estimates (2018‒22). We report credit bureau but not ACS data at
+          the county level for Connecticut because the Census Bureau implemented significant changes to county
+          boundaries for <a href="https://www.federalregister.gov/documents/2022/06/06/2022-12063/change-to-county-equivalents-in-the-state-of-connecticut" target="_blank">Connecticut</a> 
+          in 2022 and our credit bureau data provider has not yet updated these
+          boundaries. We also incorporate estimates from the 2020 Decennial Census.
         </p>
         <p>
-         We define people of color as those who are African American, Hispanic, Asian or Pacific Islander, American Indian or Alaska Native, another race other than white, or multiracial. Debt in collections includes past-due credit lines that have been closed and charged-off on the creditor’s books as well as unpaid bills reported to the credit bureaus that the creditor is attempting to collect. For example, credit card accounts enter collections once they are 180 days past due. Retail installment loans are retail purchases with installment terms—for example, a loan from a furniture store to buy a couch. The map breaks are determined using the <a href="https://pro.arcgis.com/en/pro-app/help/mapping/layer-properties/data-classification-methods.htm">Jenks Natural Breaks method</a>.
+          We define people of color as those who are African American, Hispanic, Asian or Pacific Islander,
+          American Indian or Alaska Native, another race other than white, or multiracial. Debt in collections
+          includes past-due credit lines that have been closed and charged-off on the creditor’s books as well as
+          unpaid bills reported to the credit bureau that the creditor is attempting to collect. For example, credit
+          card accounts enter collections once they are 180 days past due. Retail installment loans are retail
+          purchases with installment terms—for example, a loan from a furniture store to buy a couch. The map
+          breaks are determined using the <a href="https://pro.arcgis.com/en/pro-app/latest/help/mapping/layer-properties/data-classification-methods.htm">Jenks Natural Breaks method</a>.
         </p>
         <p>
           Please contact <a href="mailto:externalaffairs@urban.org">externalaffairs@urban.org</a> for more information about this dashboard.
@@ -310,31 +343,42 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
       <h1 class="bottom-header">Additional Resources</h1>
 
       <div class="about-text bottom-text additional-resources">
-        <a href="https://apps.urban.org/features/financial-health-wealth-dashboard/">Financial Health and Wealth Dashboard</a><br>
-        <a href="https://www.urban.org/research/publication/what-can-policymakers-do-help-young-adults-cope-debt">What Can Policymakers Do to Help Young Adults Cope with Debt?</a><br>
-        <a href="https://www.urban.org/urban-wire/young-adults-credit-trajectories-vary-widely-race-and-ethnicity">Young Adults’ Credit Trajectories Vary Widely by Race and Ethnicity</a><br>
-        <a href="https://apps.urban.org/features/credit-health-during-pandemic/index.html">Credit Health during the COVID-19 Pandemic</a><br>
+        <a href="https://apps.urban.org/features/wealth-inequality-charts/">Nine Charts about Wealth Inequality</a><br>
+        <a href="https://www.urban.org/urban-wire/native-communities-face-sustained-challenges-building-financial-resilience">Financial Health and Wealth Dashboard</a><br>
+        <a href="https://upward-mobility.urban.org/community-level-racial-inequities-young-adults-credit-scores-are-likely-driven-differences-wealth">Community-Level Racial Inequities in Young Adults’ Credit Scores Are Likely Driven by Differences in Wealth-Building Opportunities</a><br>
+        <a href="https://www.urban.org/research/publication/how-can-states-help-young-adults-weather-recession">How Can States Help Young Adults Weather a Recession?</a><br>
+        <a href="https://apps.urban.org/features/medical-debt-over-time/">The Changing Medical Debt Landscape in the United States</a><br>
+        <a href="https://www.urban.org/urban-wire/ensuring-americans-can-retire-free-student-loan-debt">Ensuring Americans Can Retire Free from Student Loan Debt</a><br>
+        <a href="https://www.urban.org/urban-wire/what-regions-have-more-delinquent-auto-loan-debt">What Regions Have More Delinquent Auto Loan Debt?</a><br>
         <a href="https://www.urban.org/urban-wire/native-communities-face-sustained-challenges-building-financial-resilience">Native Communities Face Sustained Challenges to Building Financial Resilience</a><br>
-        <a href="https://www.urban.org/research/publication/minding-wealth-gap-putting-policy-place-increase-black-wealth">Minding the Wealth Gap: Putting Policy in Place to Increase Black Wealth</a><br>
-        <a href="https://www.urban.org/research/publication/student-loan-debt-and-access-homeownership-borrowers-color">Student Loan Debt and Access to Homeownership for Borrowers of Color</a><br>
-        <a href="https://www.urban.org/research/publication/medical-debt-fell-during-pandemic-how-can-decline-be-sustained">Medical Debt Fell during the Pandemic. How Can the Decline Be Sustained?</a><br>
-        <a href="https://www.urban.org/urban-wire/what-regions-have-more-delinquent-auto-loan-debt">What Regions Have More Delinquent Auto Loan Debt?</a>
+        <a href="https://apps.urban.org/features/credit-health-during-pandemic/">Credit Health during the COVID-19 Pandemic</a>
       </div>
 
 
       <h1 class="bottom-header">Project Credits</h1>
       <div class="credits-text bottom-text">
-        <p><em>This data dashboard was funded by the <a href="http://www.aecf.org/" target="_blank">Annie E. Casey Foundation</a>, with additional support from the <a href="https://www.fordfoundation.org/" target="_blank">Ford Foundation</a> in 2017. We are grateful to them and to all our funders, who make it possible for Urban to advance its mission. The views expressed are those of the authors and should not be attributed to the Urban Institute, its trustees, or its funders. Funders do not determine research findings or the insights and recommendations of our experts. More information on our funding principles is available <a href="https://www.urban.org/aboutus/our-funding/funding-principles" target="_blank">here</a>. Read our terms of service <a href="https://www.urban.org/terms-service" target="_blank">here</a>.</p>
-        <p>Caroline Ratcliffe and Signe-Mary McKernan had the original vision for Debt in America. We are grateful to Caroline Ratcliffe, Caleb Quakenbush, Cary Lou, Alexander Carther, and Hannah Hassani for their work on previous versions of this dashboard. We thank John van Alst, Henry Chen, and Chris Kukla for helpful counsel in finalizing the auto loan variables and developing the narrative. We also thank Don Baylor and Velvet Bryant (previously) and Irene Lee of the Annie E. Casey Foundation; John Howat, Chi Chi Wu, and Michael Best of the National Consumer Law Center; Heidi Goldberg of the National League of Cities; and Sue Berkowitz of SC Appleseed for their input.</em></p>
+        <p><em>This data dashboard was funded by the <a href="https://www.aecf.org/" target="_blank">Annie E. Casey Foundation</a>, 
+          with additional support from the
+          <a href="https://www.fordfoundation.org/" target="_blank">Ford Foundation</a> in 2017. We are grateful to them and to all our funders, who make it possible for Urban
+          to advance its mission. The views expressed are those of the authors and should not be attributed to the
+          Urban Institute, its trustees, or its funders. Funders do not determine research findings or the insights
+          and recommendations of our experts. More information on our funding principles is available <a href="https://www.urban.org/about/organizational-principles" target="_blank">here</a>. Read
+          our terms of service <a href="https://www.urban.org/terms-service" target="_blank">here</a>.</p>
+        <p>Caroline Ratcliffe and Signe-Mary McKernan had the original vision for Debt in America. We are grateful
+          to Caroline Ratcliffe, Caleb Quakenbush, Cary Lou, Alexander Carther, Jennifer Andre, and Hannah
+          Hassani for their work on previous versions of this dashboard. We thank John van Alst, Henry Chen, and
+          Chris Kukla for helpful counsel in finalizing the auto loan variables and developing the narrative. We also
+          thank Don Baylor and Velvet Bryant (previously) and Irene Lee of the Annie E. Casey Foundation; John
+          Howat, Chi Chi Wu, and Michael Best of the National Consumer Law Center; Heidi Goldberg of the
+          National League of Cities; and Sue Berkowitz of SC Appleseed for their input.</em></p>
       </div>
       <div class="credit-list">
          <div class="credit-header">
             RESEARCH
           </div>
           <div class="credit-names">
-            <a href="https://www.urban.org/author/jennifer-andre" target="_blank">Jennifer&nbsp;Andre</a>, 
-            <a href="https://www.urban.org/author/miranda-santillo" target="_blank">Miranda&nbsp;Santillo</a>, 
             <a href="https://www.urban.org/author/kassandra-martinchek" target="_blank">Kassandra&nbsp;Martinchek</a>,
+            <a href="https://www.urban.org/author/miranda-santillo" target="_blank">Miranda&nbsp;Santillo</a>, 
             <a href="https://www.urban.org/author/breno-braga" target="_blank">Breno&nbsp;Braga</a>, and 
             <a href="https://www.urban.org/author/signe-mary-mckernan" target="_blank">Signe-Mary&nbsp;McKernan</a>
           </div>
@@ -342,14 +386,14 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             DESIGN
           </div>
           <div class="credit-names">
-           <a href="" target="_blank">George Railean</a> and <a href="https://www.urban.org/author/christina-baird" target="_blank">Christina&nbsp;Baird</a>
+           <a href="https://www.georgerailean.com/" target="_blank">George Railean</a> and <a href="https://www.urban.org/author/christina-baird" target="_blank">Christina&nbsp;Baird</a>
           </div>
 
           <div class="credit-header">
             DEVELOPMENT
           </div>
           <div class="credit-names">
-            <a href="https://www.urban.org/author/vivian-hou" target="_blank">Vivian&nbsp;Hou</a>, <a href="https://www.urban.org/author/daniel-wood" target="_blank">Daniel&nbsp;Wood</a>, <a href="https://www.urban.org/author/joella-carman" target="_blank">JoElla&nbsp;Carman</a>, <a href="https://www.urban.org/author/luis-melgar" target="_blank">Luis&nbsp;Melgar</a>, and <a href="https://www.urban.org/author/rachel-logan" target="_blank">Rachel&nbsp;Logan</a>
+            <a href="https://www.urban.org/author/vivian-hou" target="_blank">Vivian&nbsp;Hou</a>, <a href="https://www.urban.org/author/daniel-wood" target="_blank">Daniel&nbsp;Wood</a>, <a href="https://www.urban.org/author/joella-carman" target="_blank">JoElla&nbsp;Carman</a>, <a href="https://www.urban.org/author/luis-melgar" target="_blank">Luis&nbsp;Melgar</a>, and <a href="https://www.urban.org/author/rachel-marconi" target="_blank">Rachel&nbsp;Marconi</a>
           </div>
           <div class="credit-header">
             EDITING
