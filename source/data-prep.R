@@ -2,38 +2,73 @@
 library(tidyverse)
 library(readxl)
 library(BAMMtools)
+library(janitor)
 
 #### functions ####
 
-# cleanColnames() renames the column names from the researchers. There's usually a variable that reflects the average value for all the population for a given category -i.e., median student debt,- and another two for communities of color and white population. The latter can be idenfied because they include at the end _com_col or _nw, _white or _wnh (all of these might change with new updates, if researchers aren't consistent). This function unifies all to _com_col and _white.
+# cleanColnames() renames the column names from the researchers. There's usually a variable that reflects the average value for all the population for a given category -i.e., median student debt,- and another two for communities of color and white population. The latter can be identified because they include at the end _com_col or _nw, _white or _wnh (all of these might change with new updates, if researchers aren't consistent). This function unifies all to _com_col and _white.
 
-# the only category that is not broken down by racial composition is autoretdelr, which includes delinquency by credit category: subprime, near prime, prime. cleanColnames() renames it as delinquency_by_credit. delinquency_by_credit refers to the subprime variable, delinquency_by_credit_near to near prime, and delinquency_by_pr to prime. Because of how the javascript code is built, the name for the subrpime category can't be delinquency_by_credit_sub
+# the only category that is not broken down by racial composition is autoretdelr, which includes delinquency by credit category: subprime, near prime, prime. cleanColnames() renames it as delinquency_by_credit. delinquency_by_credit refers to the subprime variable, delinquency_by_credit_near to near prime, and delinquency_by_credit_pr to prime. Because of how the javascript code is built, the name for the subrpime category can't be delinquency_by_credit_sub
 cleanColNames <- function(df) {
   temp <- df %>%
+    clean_names() %>% 
     rename_with(~str_replace(., '_pct_all', '')) %>%
     rename_with(~str_replace(., '_pct', '')) %>%
     rename_with(~str_replace(., '_all', '')) %>%
-    rename_with(~str_replace(., 'autoretdelr_', 'delinquency_by_credit_')) %>%
+
+    rename_with(~str_replace(., 'auto_retail_loan_delinquency_rate_by_credit_score','delinquency_by_credit')) %>% 
+    rename_with(~str_replace(., 'auto_retail_loan_delinquency_rate', 'autoretdelrate')) %>%
+    rename_with(~str_replace(., 'auto_loans', 'autoopen')) %>%
+    rename_with(~str_replace(., 'auto_retail_loan_debt', 'autoretopen')) %>%
+
+    rename_with(~str_replace(., 'share_with_medical_debt_in_collections', 'medcoll')) %>%  
+    rename_with(~str_replace(., 'median_medical_debt_in_collections', 'medcollpos_p50')) %>%
+    rename_with(~str_replace(., 'share_without_health_insurance_coverage', 'nohealthinsurance')) %>%
+      
+    rename_with(~str_replace(., 'share_with_student_loan_debt', 'stdtot')) %>%
+    rename_with(~str_replace(., 'median_student_loan_debt', 'stdtotpos_p50')) %>%
+    rename_with(~str_replace(., 'student_loan_delinquency_rate_60+', 'stddelderogofstdtot')) %>%
+    rename_with(~str_replace(., 'median_student_loan_deliquent_debt', 'stddelderogpos_p50')) %>%
+    rename_with(~str_replace(., 'median_monthly_student_loan_payment', 'stdmonthpos_p50')) %>% 
+    rename_with(~str_replace(., 'share_without_a_bachelors_degree', 'educ_ltBA')) %>%
+    
+    rename_with(~str_replace(., 'median_debt_in_collections', 'totcollpos_p50')) %>%
+    rename_with(~str_replace(., 'any_debt_in_collections', 'totcoll')) %>%
+    rename_with(~str_replace(., 'median_credit_card_delinquent_debt', 'carddelpos_p50')) %>%
+    rename_with(~str_replace(., 'credit_card_debt_delinquency_rate', 'carddelrate')) %>%
+    
+    rename_with(~str_replace(., 'share_of_', '')) %>%
+    rename_with(~str_replace(., 'share_with_', '')) %>%
+    rename_with(~str_replace(., '_subprime', '')) %>%
     rename_with(~str_replace(., '_sub', '')) %>%
+    rename_with(~str_replace(., '_near_prime', '_near')) %>%
+    rename_with(~str_replace(., '_prime', '_pr')) %>%
     rename_with(~str_replace(., 'county_name', 'county')) %>%
     rename_with(~str_replace(., 'state_name', 'state')) %>%
-    rename_with(~str_replace(., 'county_name', 'county')) %>%
     rename_with(~str_replace(., 'HHinc', 'household_income')) %>%
     rename_with(~str_replace(., 'nw', 'com_col')) %>%
-    rename_with(~str_replace(., 'wnh', 'white'))
+    rename_with(~str_replace(., 'wnh', 'white')) %>% 
+    rename_with(~str_replace(., 'comm_of_color', 'com_col')) %>% 
+    rename_with(~str_replace(., 'white_comm', 'white')) %>% 
+    
+    rename_with(~str_replace(., 'average_household_income', 'household_income_avg')) %>%
+    rename_with(~str_replace(., 'people_of_color', 'poc')) %>%
+    rename_with(~str_replace(., 'people_in_rural_areas_white', 'poprural'))
+      
 }
 
 # (For the county data) countyOrder() includes the states' name abbreviations, removes the state name from the county name and gives an id to the states, that it will be used later in the JS code.
 countyOrder <- function(df) {
   temp <- df %>%
     mutate(
-      county_name = gsub(",.*", "", county_name),
-      id = fips,
-      state_id = substr(fips, 1, 2)
+      county_name = gsub(",.*", "", county),
+      id = county_fips,
+      state_id = substr(county_fips, 1, 2)
     ) %>%
-    left_join(statesAbbr, by = c("state_name" = "state")) %>%
-    select(county_name, id, fips, abbr, state_name, state_id, everything()) %>%
-    select(-fips)
+    select(-county) %>% 
+    left_join(statesAbbr, by = c("state")) %>%
+    select(county = county_name, id, county_fips, abbr, state, state_id, everything()) %>%
+    select(-county_fips)
 }
 
 # (For the US data). natOrder() does some basic tweaks and reorders of columns.
@@ -43,7 +78,7 @@ natOrder <- function(df) {
       state = 'USA',
       abbr = NA
     ) %>%
-    rename_with(~str_replace(., 'fips', 'id')) %>%
+    rename_with(~str_replace(., 'usa', 'id')) %>%
     select(id, state, abbr, everything())
 }
 
@@ -59,96 +94,58 @@ statesAbbr <- read_csv("data-in/states_abbr_names.csv")
 #### auto ####
 
 # auto county data
-autoCounty <- read.csv("data-in/july2024/dia_vars_all_autoretail_county_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
-  mutate(
-    state_name = case_when(
-      state_name == "District Of Columbia" ~ "District of Columbia",
-      TRUE ~ state_name
-    )
-  ) %>%
-  countyOrder() %>%
-  cleanColNames()
+autoCounty <- read_xlsx("data-in/oct2026/dia_lbls_all_autoretail_county_2026_7Oct2026.xlsx", col_types=c("fips"="text")) %>%
+  # mutate(
+  #   state_name = case_when(
+  #     state_name == "District Of Columbia" ~ "District of Columbia",
+  #     TRUE ~ state_name
+  #   )
+  # ) %>%
+  cleanColNames() %>% 
+  countyOrder()
 
 # auto state + national
-autoNational <- read.csv("data-in/july2024/dia_vars_all_autoretail_usa_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
+autoNational <- read_xlsx("data-in/oct2026/dia_lbls_all_autoretail_usa_2026_7Oct2026.xlsx", col_types=c("fips"="text")) %>%
   cleanColNames() %>%
   natOrder()
 
-autoState <- read.csv("data-in/july2024/dia_vars_all_autoretail_state_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
+autoState <- read_xlsx("data-in/oct2026/dia_lbls_all_autoretail_state_2026_7Oct2026.xlsx", col_types=c("fips"="text")) %>%
   cleanColNames() %>%
-  rename_with(~str_replace(., 'fips', 'id')) %>%
-  rename_with(~str_replace(., 'state_abb', 'abbr'))
+  rename_with(~str_replace(., 'state_fips', 'id')) %>%
+  rename_with(~str_replace(., 'state_abbreviation', 'abbr'))
 
 autoNationalState <- autoNational %>%
   rbind(autoState)
 
-write.csv(autoCounty, "data-out/county_auto.csv", row.names = FALSE)
-write.csv(autoNationalState, "data-out/state_national_auto.csv", row.names = FALSE)
+write.csv(autoCounty, "data-out/oct_2026_out/county_auto.csv", row.names = FALSE)
+write.csv(autoNationalState, "data-out/oct_2026_out/state_national_auto.csv", row.names = FALSE)
 
 #### medical ####
 
 #county
-medCounty <- read.csv("data-in/july2024/dia_vars_all_medical_county_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
-  mutate(
-    state_name = case_when(
-      state_name == "District Of Columbia" ~ "District of Columbia",
-      TRUE ~ state_name
-    )
-  ) %>%
-  countyOrder() %>%
-  cleanColNames()
-
-# countyOrder() %>%
-# cleanColNames()
+medCounty <- read_xlsx("data-in/oct2026/dia_lbls_all_medical_county_2026_7Oct2026.xlsx", col_types=c("fips"="text")) %>%
+  # mutate(
+  #   state_name = case_when(
+  #     state_name == "District Of Columbia" ~ "District of Columbia",
+  #     TRUE ~ state_name
+  #   )
+  # ) %>%
+  cleanColNames() %>% 
+  countyOrder()
 
 # medical state + national
-medNational <- read.csv("data-in/july2024/dia_vars_all_medical_usa_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
+medNational <- read_xlsx("data-in/oct2026/dia_lbls_all_medical_usa_2026_7Oct2026.xlsx", col_types=c("fips"="text")) %>%
   # mutate(
   #   state = 'USA',
   #   abbr = NA
   # ) %>%
-  # rename_with(~str_replace(., 'NAME', 'county')) %>%
-  # rename_with(~str_replace(., 'GEOID', 'id')) %>%
-  # rename_with(~str_replace(., 'state_name', 'state')) %>%
-  # rename_with(~str_replace(., 'Share with Medical Debt in Collections, Communities of Color', 'medcoll_com_col')) %>%
-  # rename_with(~str_replace(., 'Share with Medical Debt in Collections, Majority White Communities', 'medcoll_white')) %>%
-  # rename_with(~str_replace(., 'Share with Medical Debt in Collections', 'medcoll')) %>%
-  # rename_with(~str_replace(., fixed('% population without health insurance, 2019 (ACS)'), 'nohealthinsurance')) %>%
-  # rename_with(~str_replace(., fixed('% white, non-Hispanic population without health insurance, 2019 (ACS)'), 'nohealthinsurance_white')) %>%
-  # rename_with(~str_replace(., fixed('% non-white population without health insurance, 2019 (ACS)'), 'nohealthinsurance_com_col')) %>%
-  # rename_with(~str_replace(., 'Median Medical Debt in Collections, All', 'medcollpos_p50')) %>%
-  # rename_with(~str_replace(., 'Median Medical Debt in Collections, Communities of Color', 'medcollpos_p50_com_col')) %>%
-  # rename_with(~str_replace(., 'Median Medical Debt in Collections, Majority White Communities', 'medcollpos_p50_white')) %>%
-  # rename_with(~str_replace(., 'poc_pct', 'poc')) %>%
-  # rename_with(~str_replace(., fixed('Average household income, 2019 (ACS)'), 'household_income_avg')) %>%
-  # rename_with(~str_replace(., fixed('Average non-white household income, 2019 (ACS)'), 'household_income_avg_com_col')) %>%
-  # rename_with(~str_replace(., fixed('Average white, non-Hispanic household income, 2019 (ACS)'), 'household_income_avg_white')) %>%
-  # select(id, state, abbr, everything())
   cleanColNames() %>%
   natOrder()
 
-medState <- read.csv("data-in/july2024/dia_vars_all_medical_state_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
-  # rename_with(~str_replace(., 'state', 'abbr')) %>%
-  # rename_with(~str_replace(., 'NAME', 'county')) %>%
-  # rename_with(~str_replace(., 'GEOID', 'id')) %>%
-  # rename_with(~str_replace(., 'abbr_name', 'state')) %>%
-  # rename_with(~str_replace(., 'Share with Medical Debt in Collections, Communities of Color', 'medcoll_com_col')) %>%
-  # rename_with(~str_replace(., 'Share with Medical Debt in Collections, Majority White Communities', 'medcoll_white')) %>%
-  # rename_with(~str_replace(., 'Share with Medical Debt in Collections', 'medcoll')) %>%
-  # rename_with(~str_replace(., fixed('% population without health insurance, 2019 (ACS)'), 'nohealthinsurance')) %>%
-  # rename_with(~str_replace(., fixed('% white, non-Hispanic population without health insurance, 2019 (ACS)'), 'nohealthinsurance_white')) %>%
-  # rename_with(~str_replace(., fixed('% non-white population without health insurance, 2019 (ACS)'), 'nohealthinsurance_com_col')) %>%
-  # rename_with(~str_replace(., 'Median Medical Debt in Collections, All', 'medcollpos_p50')) %>%
-  # rename_with(~str_replace(., 'Median Medical Debt in Collections, Communities of Color', 'medcollpos_p50_com_col')) %>%
-  # rename_with(~str_replace(., 'Median Medical Debt in Collections, Majority White Communities', 'medcollpos_p50_white')) %>%
-  # rename_with(~str_replace(., 'poc_pct', 'poc')) %>%
-  # rename_with(~str_replace(., fixed('Average household income, 2019 (ACS)'), 'household_income_avg')) %>%
-  # rename_with(~str_replace(., fixed('Average non-white household income, 2019 (ACS)'), 'household_income_avg_com_col')) %>%
-  # rename_with(~str_replace(., fixed('Average white, non-Hispanic household income, 2019 (ACS)'), 'household_income_avg_white')) %>%
-  # rename_with(~str_replace(., 'fips', 'id'))
+medState <- read_xlsx("data-in/oct2026/dia_lbls_all_medical_state_2026_7Oct2026.xlsx", col_types=c("fips"="text")) %>%
   cleanColNames() %>%
-  rename_with(~str_replace(., 'fips', 'id')) %>%
-  rename_with(~str_replace(., 'state_abb', 'abbr'))
+  rename_with(~str_replace(., 'state_fips', 'id')) %>%
+  rename_with(~str_replace(., 'state_abbreviation', 'abbr'))
 
 # namesCounty <- names(medCounty)
 # namesState <- names(medState)
@@ -157,86 +154,88 @@ medState <- read.csv("data-in/july2024/dia_vars_all_medical_state_2023_1Jul2024.
 medNationalState <- medNational %>%
   rbind(medState)
 
-write.csv(medCounty, "data-out/county_medical.csv", row.names = FALSE)
-write.csv(medNationalState, "data-out/state_national_medical.csv", row.names = FALSE)
+write.csv(medCounty, "data-out/oct_2026_out/county_medical.csv", row.names = FALSE)
+write.csv(medNationalState, "data-out/oct_2026_out/state_national_medical.csv", row.names = FALSE)
 
 
 #### delinquency ####
 
 # overall county
-overallCounty <- read.csv("data-in/july2024/dia_vars_all_overall_county_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
-  mutate(
-    state_name = case_when(
-      state_name == "District Of Columbia" ~ "District of Columbia",
-      TRUE ~ state_name
-    )
-  ) %>%
-  countyOrder() %>%
-  cleanColNames()
+overallCounty <- read_xlsx("data-in/oct2026/dia_lbls_all_overall_county_2026_7Oct2026.xlsx", col_types=c("fips"="text")) %>%
+  # mutate(
+  #   state_name = case_when(
+  #     state_name == "District Of Columbia" ~ "District of Columbia",
+  #     TRUE ~ state_name
+  #   )
+  # ) %>%
+  cleanColNames() %>% 
+  countyOrder()
+
 
 # overall state + national
-overallNational <- read.csv("data-in/july2024/dia_vars_all_overall_usa_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
+overallNational <- read_xlsx("data-in/oct2026/dia_lbls_all_overall_usa_2026_7Oct2026.xlsx", col_types=c("fips"="text")) %>%
   cleanColNames() %>%
   natOrder()
 
-overallState <- read.csv("data-in/july2024/dia_vars_all_overall_state_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
+overallState <- read_xlsx("data-in/oct2026/dia_lbls_all_overall_state_2026_7Oct2026.xlsx", col_types=c("fips"="text")) %>%
   cleanColNames() %>%
-  rename_with(~str_replace(., 'fips', 'id')) %>%
-  rename_with(~str_replace(., 'state_abb', 'abbr'))
+  rename_with(~str_replace(., 'state_fips', 'id')) %>%
+  rename_with(~str_replace(., 'state_abbreviation', 'abbr'))
 
 overallNationalState <- overallNational %>%
   rbind(overallState)
 
-write.csv(overallCounty, "data-out/county_overall.csv", row.names = FALSE)
-write.csv(overallNationalState, "data-out/state_national_overall.csv", row.names = FALSE)
+write.csv(overallCounty, "data-out/oct_2026_out/county_overall.csv", row.names = FALSE)
+write.csv(overallNationalState, "data-out/oct_2026_out/state_national_overall.csv", row.names = FALSE)
 
 
 #### student ####
 
 # county
-studentCounty <- read.csv("data-in/july2024/dia_vars_all_student_county_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
-  mutate(
-    state_name = case_when(
-      state_name == "District Of Columbia" ~ "District of Columbia",
-      TRUE ~ state_name
-    )
-  ) %>%
-  countyOrder() %>%
-  cleanColNames()
+studentCounty <- read_xlsx("data-in/oct2026/dia_lbls_all_student_county_2026_7Oct2026.xlsx", col_types=c("fips"="text")) %>%
+  # mutate(
+  #   state_name = case_when(
+  #     state_name == "District Of Columbia" ~ "District of Columbia",
+  #     TRUE ~ state_name
+  #   )
+  # ) %>%
+  cleanColNames() %>% 
+  countyOrder()
+
 
 # students state + national
-studentNational <- read.csv("data-in/july2024/dia_vars_all_student_usa_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
+studentNational <- read_xlsx("data-in/oct2026/dia_lbls_all_student_usa_2026_7Oct2026.xlsx", col_types=c("fips"="text")) %>%
   cleanColNames() %>%
   natOrder()
 
-studentState <- read.csv("data-in/july2024/dia_vars_all_student_state_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
+studentState <- read_xlsx("data-in/oct2026/dia_lbls_all_student_state_2026_7Oct2026.xlsx", col_types=c("fips"="text")) %>%
   cleanColNames() %>%
-  rename_with(~str_replace(., 'fips', 'id')) %>%
-  rename_with(~str_replace(., 'state_abb', 'abbr'))
+  rename_with(~str_replace(., 'state_fips', 'id')) %>%
+  rename_with(~str_replace(., 'state_abbreviation', 'abbr'))
 
 studentNationalState <- studentNational %>%
   rbind(studentState)
 
-write.csv(studentCounty, "data-out/county_student.csv", row.names = FALSE)
-write.csv(studentNationalState, "data-out/state_national_student.csv", row.names = FALSE)
+write.csv(studentCounty, "data-out/oct_2026_out/county_student.csv", row.names = FALSE)
+write.csv(studentNationalState, "data-out/oct_2026_out/state_national_student.csv", row.names = FALSE)
 
 
 #### youth ####
 
 # state + national only
-youthNational <- read.csv("data-in/july2024/dia_vars_young_overall_usa_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
+youthNational <- read_xlsx("data-in/oct2026/dia_lbls_young_overall_usa_2026_7Oct2026.xlsx", col_types=c("fips"="text")) %>%
   cleanColNames() %>%
   natOrder()
 
-youthState <- read.csv("data-in/july2024/dia_vars_young_overall_state_2023_1Jul2024.csv", colClasses=c("fips"="character")) %>%
+youthState <- read_xlsx("data-in/oct2026/dia_lbls_young_overall_state_2026_7Oct2026.xlsx", col_types=c("fips"="text")) %>%
   cleanColNames() %>%
-  rename_with(~str_replace(., 'fips', 'id')) %>%
-  rename_with(~str_replace(., 'state_abb', 'abbr'))
+  rename_with(~str_replace(., 'state_fips', 'id')) %>%
+  rename_with(~str_replace(., 'state_abbreviation', 'abbr'))
 
 youthNationalState <- youthNational %>%
   rbind(youthState)
 
-write.csv(youthNationalState, "data-out/state_national_youth.csv", row.names = FALSE)
+write.csv(youthNationalState, "data-out/oct_2026_out/state_national_youth.csv", row.names = FALSE)
 
 
 
@@ -275,12 +274,12 @@ lapply(overallCounty[overallNames], function(x) {
   print(getJenksBreaks(as.numeric(x), 6))
 })
 
-lapply(youthNationalState[youthNames], function(x) {
+lapply(youthNationalState[youthTotColl], function(x) {
   print(getJenksBreaks(as.numeric(x), 6))
 })
 
-lapply(youthNationalState[youthTotColl], function(x) {
-  print(getJenksBreaks(as.numeric(x), 6))
+lapply(youthNationalState[youthNames], function(x) {
+	print(getJenksBreaks(as.numeric(x), 6))
 })
 
 
